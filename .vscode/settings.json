@@ -1,0 +1,22 @@
+{
+	"editor.tabSize": 2,
+	"editor.detectIndentation": false,
+	"jest.autoEnable": false,
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.quickSuggestions": {
+		"strings": true
+	},
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"editor.codeActionsOnSave": [
+		"source.addMissingImports",
+		"source.fixAll.format",
+		"source.fixAll.eslint",
+		"source.fixAll.stylelint"
+	],
+	"css.validate": false,
+	"less.validate": false,
+	"scss.validate": false
+}

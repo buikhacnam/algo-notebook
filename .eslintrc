@@ -1,0 +1,40 @@
+{
+	"root": true,
+	"extends": [
+		"airbnb-typescript",
+		"plugin:tailwindcss/recommended",
+		"next",
+		"prettier"
+	],
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"project": "./tsconfig.eslint.json",
+		"ecmaVersion": 2021,
+		"sourceType": "module",
+		"ecmaFeatures": {
+			"jsx": true
+		}
+	},
+	"settings": {
+		"react": {
+			"version": "detect"
+		}
+	},
+	"rules": {
+		"react/react-in-jsx-scope": "off",
+		"tailwindcss/no-custom-classname": "off",
+		"react/require-default-props": "off",
+		"newline-after-var": 0,
+
+		"import/prefer-default-export": "off",
+		"@typescript-eslint/no-throw-literal": 0,
+		"@typescript-eslint/no-useless-constructor": "off",
+		"@typescript-eslint/no-unused-vars": "off",
+		"@typescript-eslint/no-unused-expressions": "off",
+		"@typescript-eslint/no-shadow": "off",
+		"no-use-before-define": "off",
+		"@typescript-eslint/no-use-before-define": "off",
+		"import/no-extraneous-dependencies": "off"
+	},
+	"plugins": ["tailwindcss"]
+}
