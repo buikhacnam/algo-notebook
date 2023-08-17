@@ -16,7 +16,14 @@ export const problemsConfig: ProblemsConfig = {
 		},
 		{
 			title: 'Two Pointers',
-			items: [],
+			items: [
+				{
+					title: 'Valid Palindrome',
+					href: '/problems/two-pointers/valid-palindrome',
+					mdId: 'two-pointers/valid-palindrome',
+					level: ProblemLevel.Easy,
+				},
+			],
 		},
 		{
 			title: 'Sliding Window',
