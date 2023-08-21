@@ -27,7 +27,14 @@ export const problemsConfig: ProblemsConfig = {
 		},
 		{
 			title: 'Sliding Window',
-			items: [],
+			items: [
+				{
+					title: 'Best Time to Buy and Sell Stock',
+					href: '/problems/sliding-window/best-time-to-buy-and-sell-stock',
+					mdId: 'sliding-window/best-time-to-buy-and-sell-stock',
+					level: ProblemLevel.Easy,
+				},
+			],
 		},
 		{
 			title: 'Stack',

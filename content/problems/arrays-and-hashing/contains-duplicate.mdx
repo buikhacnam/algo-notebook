@@ -1,12 +1,12 @@
 ---
 title: Contains Duplicate
 category: Arrays and Hashing
-difficulty: Hard
+difficulty: Easy
 ---
 
 <Callout>
 
-[217. Contains Duplicate | Easy](https://leetcode.com/problems/contains-duplicate/)
+[Leetcode link](https://leetcode.com/problems/contains-duplicate/)
 
 </Callout>
 Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.
@@ -131,4 +131,40 @@ class Solution:
         return False
 ```
 
----
+### C++
+
+```cpp
+class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        unordered_set<int> s;
+
+        for (int i = 0; i < nums.size(); i++) {
+            if (s.find(nums[i]) != s.end()) {
+                return true;
+            }
+            s.insert(nums[i]);
+        }
+
+        return false;
+    }
+};
+```
+
+### Java
+
+```java
+class Solution {
+
+  public boolean containsDuplicate(int[] nums) {
+      Set<Integer> uniques = new HashSet<>();
+      for (int i = 0; i < nums.length; i++) {
+          if (uniques.contains(nums[i])) {
+              return true;
+          }
+          uniques.add(nums[i]);
+      }
+      return false;
+  }
+}
+```
