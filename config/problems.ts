@@ -38,7 +38,14 @@ export const problemsConfig: ProblemsConfig = {
 		},
 		{
 			title: 'Stack',
-			items: [],
+			items: [
+				{
+					title: 'Valid Parentheses',
+					href: '/problems/stack/valid-parentheses',
+					mdId: 'stack/valid-parentheses',
+					level: ProblemLevel.Easy,
+				},
+			],
 		},
 		{
 			title: 'Binary Search',
