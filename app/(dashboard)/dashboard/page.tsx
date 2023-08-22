@@ -2,7 +2,6 @@ import { db } from '@/lib/db'
 import { getCurrentUser } from '@/lib/session'
 import { EmptyPlaceholder } from '@/components/empty-placeholder'
 import { DashboardHeader } from '@/components/header'
-import { PostItem } from '@/components/post-item'
 import { DashboardShell } from '@/components/shell'
 import { problemsConfig } from '@/config/problems'
 import {
@@ -78,13 +77,7 @@ export default async function DashboardPage() {
 						</Accordion>
 					</div>
 				) : (
-					<EmptyPlaceholder>
-						<EmptyPlaceholder.Icon name="post" />
-						<EmptyPlaceholder.Title>No posts created</EmptyPlaceholder.Title>
-						<EmptyPlaceholder.Description>
-							You don&apos;t have any posts yet. Start creating content.
-						</EmptyPlaceholder.Description>
-					</EmptyPlaceholder>
+					<EmptyPlaceholder></EmptyPlaceholder>
 				)}
 			</div>
 		</DashboardShell>
