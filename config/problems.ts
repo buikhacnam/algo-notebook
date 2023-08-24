@@ -49,7 +49,14 @@ export const problemsConfig: ProblemsConfig = {
 		},
 		{
 			title: 'Binary Search',
-			items: [],
+			items: [
+				{
+					title: 'Binary Search',
+					href: '/problems/binary-search/binary-search',
+					mdId: 'binary-search/binary-search',
+					level: ProblemLevel.Easy,
+				},
+			],
 		},
 		{
 			title: 'Linked List',

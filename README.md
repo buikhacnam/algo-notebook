@@ -89,7 +89,7 @@ To generate a new problem markdown template, you can use our snippet by followin
 - Two Pointers `(1)`
 - Sliding Window `(1)`
 - Stack `(1)`
-- Binary Search (0)
+- Binary Search `(1)`
 - Linked List `(1)`
 - Trees (0)
 - Tries (0)
