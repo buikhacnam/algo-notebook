@@ -1,18 +1,23 @@
 const path = require('path')
 const fs = require('fs')
 
+const leetCodeGraphqlUrl = 'https://leetcode.com/graphql'
+
 const leetCodeRequestBody = {
 	query:
-		'\n    query questionContent($titleSlug: String!) {\n  question(titleSlug: $titleSlug) {\n    content\n    mysqlSchemas\n    dataSchemas\n  }\n}\n    ',
+		'\n    query questionContent($titleSlug: String!) {\n  question(titleSlug: $titleSlug) {\n    content\n    questionFrontendId\n    title\n  difficulty\n }\n}\n    ',
 	variables: {
 		titleSlug: 'binary-search',
 	},
 	operationName: 'questionContent',
 }
 
+const neetCodeRepo =
+	'https://raw.githubusercontent.com/neetcode-gh/leetcode/main/'
+
 process.argv.forEach(async function (val, index, arr) {
 	if (arr[2] === undefined || arr[3] === undefined) {
-		console.log('Please provide a leetcode link and a category folder name')
+		console.log('Please provide leetcode link and category folder name')
 		return
 	}
 
@@ -63,9 +68,8 @@ process.argv.forEach(async function (val, index, arr) {
 		}
 
 		leetCodeRequestBody.variables.titleSlug = problemName
-		const apiUrl = 'https://leetcode.com/graphql'
 
-		const response = await fetch(apiUrl, {
+		const response = await fetch(leetCodeGraphqlUrl, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -76,12 +80,61 @@ process.argv.forEach(async function (val, index, arr) {
 
 		const data = await response.json()
 		const contentFromApi = data.data.question.content
+		const questionFrontendId = data.data.question.questionFrontendId
+		const title = data.data.question.title
+		const difficulty = data.data.question.difficulty
 
 		if (!contentFromApi) {
 			console.log(
 				'Failed to fetch problem from leetcode. Please check the leetcode link',
 			)
 			return
+		}
+		const javascriptUrl = `${neetCodeRepo}javascript/${neetCodePadNumber(
+			questionFrontendId,
+		)}-${problemName}.js`
+		const pythonUrl = `${neetCodeRepo}python/${neetCodePadNumber(
+			questionFrontendId,
+		)}-${problemName}.py`
+		const cppUrl = `${neetCodeRepo}cpp/${neetCodePadNumber(
+			questionFrontendId,
+		)}-${problemName}.cpp`
+		const javaUrl = `${neetCodeRepo}java/${neetCodePadNumber(
+			questionFrontendId,
+		)}-${problemName}.java`
+
+		let javascriptSolution = 'javascript solution here'
+		let pythonSolution = 'puthon solution here'
+		let cppSolution = 'c++ solution here'
+		let javaSolution = 'java solution here'
+
+		// fetch the solutions from neetcode repo
+		try {
+			const javascriptResponse = await fetch(javascriptUrl)
+			javascriptSolution = await javascriptResponse.text()
+		} catch (error) {
+			console.log(`Failed to fetch javascript solution from ${javascriptUrl}`)
+		}
+
+		try {
+			const pythonResponse = await fetch(pythonUrl)
+			pythonSolution = await pythonResponse.text()
+		} catch (error) {
+			console.log(`Failed to fetch python solution from ${pythonUrl}`)
+		}
+
+		try {
+			const cppResponse = await fetch(cppUrl)
+			cppSolution = await cppResponse.text()
+		} catch (error) {
+			console.log(`Failed to fetch cpp solution from ${cppUrl}`)
+		}
+
+		try {
+			const javaResponse = await fetch(javaUrl)
+			javaSolution = await javaResponse.text()
+		} catch (error) {
+			console.log(`Failed to fetch java solution from ${javaUrl}`)
 		}
 
 		//transform the contentFromApi to mdx format:
@@ -104,13 +157,12 @@ process.argv.forEach(async function (val, index, arr) {
 			.replace(/<br>/g, '\n')
 			.replace(/&nbsp;/g, ' ')
 
-		const solutionTemplate =
-			'### Javascript\n ```javascript\n  javascript solution here\n ```\n### Python\n ```python\n python solutuion here\n ```\n### C++\n ```cpp\n c++ solution here\n ```\n### Java\n ```java\n java solution here\n ```\n'
+		const solutionTemplate = `### Javascript\n\`\`\`javascript\n${javascriptSolution}\n\`\`\`\n### Python\n\`\`\`python\n${pythonSolution}\n\`\`\`\n### C++\n\`\`\`cpp\n${cppSolution}\n\`\`\`\n### Java\n\`\`\`java\n${javaSolution}\n\`\`\`\n`
 
 		const problemTemplate = `---
-title: ${problemName}
+title: ${title}
 category: ${folderName}
-difficulty: Easy
+difficulty: ${difficulty}
 ---
 
 <Callout>
@@ -135,4 +187,11 @@ ${solutionTemplate}
 		console.log(error)
 	}
 })
+
+function neetCodePadNumber(input: number | string): string {
+	const num = typeof input === 'string' ? parseInt(input) : input
+	const formatted = num.toString().padStart(4, '0')
+	return formatted
+}
+
 // Run the script by running `yarn ts-node scripts/leetcode.ts [leetcode link] [category folder name]`
