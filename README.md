@@ -50,7 +50,33 @@ yarn contentlayer build
 yarn dev
 ```
 
-## Add new content (problem)
+## Add new content
+
+Run the following script to add new content:
+
+```sh
+yarn leetcode [leetcode link / problem slug] [category]
+```
+
+For example:
+
+```sh
+yarn leetcode https://leetcode.com/problems/reverse-linked-list/ linked-list
+```
+
+or
+
+```sh
+yarn leetcode reverse-linked-list linked-list
+```
+
+This will create a new markdown file in the `content/problems/[category]` folder.
+
+Now you can visit `http://localhost:3000/problems/[category]/[problem-slug]` to see the new problem.
+
+For example: https://algonotebook.vercel.app/problems/linked-list/reverse-linked-list
+
+## Add new content manually
 
 1. In folder `content/problems` there are folders for each category. Inside each category folder there are markdown files for each problem. To add a new problem, create a new markdown file (named as the problem separated by `dashes` and with the extension `.mdx`)
    inside the category folder and add the following frontmatter, for example:
@@ -65,9 +91,7 @@ yarn dev
 
    Or you can use our [snippet](#snippet) to generate the markdown template.
 
-2. Add new problem to `config/problem.ts`.
-
-3. Run `yarn contentlayer build` to generate the static data.
+2. Run `yarn contentlayer build` to generate the static data.
 
 ## Snippet
 
