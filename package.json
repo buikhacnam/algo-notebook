@@ -6,7 +6,8 @@
 		"dev": "next dev",
 		"build": "contentlayer build && next build",
 		"start": "next start",
-		"lint": "next lint"
+		"lint": "next lint",
+		"leetcode": "ts-node scripts/leetcode.ts"
 	},
 	"dependencies": {
 		"@editorjs/code": "^2.8.0",

@@ -1,13 +1,12 @@
 const path = require('path')
 const fs = require('fs')
-
 const leetCodeGraphqlUrl = 'https://leetcode.com/graphql'
 
 const leetCodeRequestBody = {
 	query:
 		'\n    query questionContent($titleSlug: String!) {\n  question(titleSlug: $titleSlug) {\n    content\n    questionFrontendId\n    title\n  difficulty\n }\n}\n    ',
 	variables: {
-		titleSlug: 'binary-search',
+		titleSlug: '',
 	},
 	operationName: 'questionContent',
 }
@@ -16,12 +15,11 @@ const neetCodeRepo =
 	'https://raw.githubusercontent.com/neetcode-gh/leetcode/main/'
 
 process.argv.forEach(async function (val, index, arr) {
-	if (arr[2] === undefined || arr[3] === undefined) {
-		console.log('Please provide leetcode link and category folder name')
+	if (index < 3) {
 		return
 	}
-
-	if (index < 2) {
+	if (arr[2] === undefined || arr[3] === undefined) {
+		console.log('Please provide leetcode link and category folder name')
 		return
 	}
 
@@ -104,7 +102,7 @@ process.argv.forEach(async function (val, index, arr) {
 		)}-${problemName}.java`
 
 		let javascriptSolution = 'javascript solution here'
-		let pythonSolution = 'puthon solution here'
+		let pythonSolution = 'python solution here'
 		let cppSolution = 'c++ solution here'
 		let javaSolution = 'java solution here'
 
@@ -167,7 +165,7 @@ difficulty: ${difficulty}
 
 <Callout>
 
-[Leetcode Link](${leetcodeLink})
+[Leetcode Link](https://leetcode.com/problems/${problemName})
 
 </Callout>
 
