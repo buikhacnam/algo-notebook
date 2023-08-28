@@ -115,7 +115,7 @@ To generate a new problem markdown template, you can use our snippet by followin
 - Stack `(1)`
 - Binary Search `(1)`
 - Linked List `(1)`
-- Trees (0)
+- Trees `(1)`
 - Tries (0)
 - Heap and Priority Queue (0)
 - Backtracking (0)

@@ -71,7 +71,14 @@ export const problemsConfig: ProblemsConfig = {
 		},
 		{
 			title: 'Trees',
-			items: [],
+			items: [
+				{
+					title: 'Invert Binary Tree',
+					href: '/problems/trees/invert-binary-tree',
+					mdId: 'trees/invert-binary-tree',
+					level: ProblemLevel.Easy,
+				},
+			],
 		},
 		{
 			title: 'Tries',
