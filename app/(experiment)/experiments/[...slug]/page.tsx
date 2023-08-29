@@ -3,6 +3,7 @@ import React, { CSSProperties } from 'react'
 import { parse, HTMLChild } from 'himalaya'
 import Image from 'next/image'
 import { ProblemLevel } from '@/constants/problem'
+import { CodeBlock } from '@/components/code-block'
 
 const leetCodeGraphqlUrl = 'https://leetcode.com/graphql'
 
@@ -128,7 +129,7 @@ export default async function ExperimentPage({
 	}
 	const children = mapElements(parse(problem.body))
 	return (
-		<div className="p-4">
+		<div className="px-8 py-4">
 			<h1 className="text-4xl font-bold tracking-tight">
 				{problem.questionFrontendId}. {problem.title}
 			</h1>
@@ -146,16 +147,14 @@ export default async function ExperimentPage({
 
 			<ProblemContent>{children}</ProblemContent>
 
-			<h2 className="text-2xl font-semibold tracking-tight">Solutions</h2>
+			<h2 className="mb-4 text-2xl font-semibold tracking-tight">Solutions</h2>
 			{Object.keys(problem.solutuions).map((key) => {
 				return (
 					<div key={key}>
-						<h4 className="text-lg font-semibold tracking-tight">{key}</h4>
-						<pre className="mb-4 mt-6 overflow-x-auto rounded-lg border p-4">
-							<code className="relative rounded border px-[0.3rem] py-[0.2rem] font-mono text-sm">
-								{problem.solutuions[key]}
-							</code>
-						</pre>
+						<h4 className="text-xl font-semibold tracking-tight">
+							{key.toLocaleUpperCase()}
+						</h4>
+						<CodeBlock text={problem.solutuions[key]} language={key} />
 					</div>
 				)
 			})}
