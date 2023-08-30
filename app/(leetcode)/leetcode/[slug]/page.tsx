@@ -119,10 +119,10 @@ export default async function ExperimentPage({
 	params,
 }: {
 	params: {
-		slug: string[]
+		slug: string
 	}
 }) {
-	const slug = params.slug[0]
+	const slug = params.slug
 	const problem = await getProblemDetail(slug)
 	if (!problem) {
 		return <div>Problem not found</div>
