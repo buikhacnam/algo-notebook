@@ -2559,8 +2559,189 @@ export const problemsConfig: ProblemsConfig  = {
       ]
     },
     {
-      "title": "Javascipt",
-      "items": []
+      "title": "Javascript",
+      "items": [
+        {
+          "title": "Create Hello World Function",
+          "href": "/problems/javascript/create-hello-world-function",
+          "mdId": "javascript/create-hello-world-function",
+          "level": "Easy"
+        },
+        {
+          "title": "Counter",
+          "href": "/problems/javascript/counter",
+          "mdId": "javascript/counter",
+          "level": "Easy"
+        },
+        {
+          "title": "Counter II",
+          "href": "/problems/javascript/counter-ii",
+          "mdId": "javascript/counter-ii",
+          "level": "Easy"
+        },
+        {
+          "title": "Apply Transform Over Each Element in Array",
+          "href": "/problems/javascript/apply-transform-over-each-element-in-array",
+          "mdId": "javascript/apply-transform-over-each-element-in-array",
+          "level": "Easy"
+        },
+        {
+          "title": "Filter Elements from Array",
+          "href": "/problems/javascript/filter-elements-from-array",
+          "mdId": "javascript/filter-elements-from-array",
+          "level": "Easy"
+        },
+        {
+          "title": "Array Reduce Transformation",
+          "href": "/problems/javascript/array-reduce-transformation",
+          "mdId": "javascript/array-reduce-transformation",
+          "level": "Easy"
+        },
+        {
+          "title": "Function Composition",
+          "href": "/problems/javascript/function-composition",
+          "mdId": "javascript/function-composition",
+          "level": "Easy"
+        },
+        {
+          "title": "Allow One Function Call",
+          "href": "/problems/javascript/allow-one-function-call",
+          "mdId": "javascript/allow-one-function-call",
+          "level": "Easy"
+        },
+        {
+          "title": "Memoize",
+          "href": "/problems/javascript/memoize",
+          "mdId": "javascript/memoize",
+          "level": "Medium"
+        },
+        {
+          "title": "Curry",
+          "href": "/problems/javascript/curry",
+          "mdId": "javascript/curry",
+          "level": "Medium"
+        },
+        {
+          "title": "Sleep",
+          "href": "/problems/javascript/sleep",
+          "mdId": "javascript/sleep",
+          "level": "Easy"
+        },
+        {
+          "title": "Promise Time Limit",
+          "href": "/problems/javascript/promise-time-limit",
+          "mdId": "javascript/promise-time-limit",
+          "level": "Medium"
+        },
+        {
+          "title": "Promise Pool",
+          "href": "/problems/javascript/promise-pool",
+          "mdId": "javascript/promise-pool",
+          "level": "Medium"
+        },
+        {
+          "title": "Cache With Time Limit",
+          "href": "/problems/javascript/cache-with-time-limit",
+          "mdId": "javascript/cache-with-time-limit",
+          "level": "Medium"
+        },
+        {
+          "title": "Debounce",
+          "href": "/problems/javascript/debounce",
+          "mdId": "javascript/debounce",
+          "level": "Medium"
+        },
+        {
+          "title": "Throttle",
+          "href": "/problems/javascript/throttle",
+          "mdId": "javascript/throttle",
+          "level": "Medium"
+        },
+        {
+          "title": "JSON Deep Equal",
+          "href": "/problems/javascript/json-deep-equal",
+          "mdId": "javascript/json-deep-equal",
+          "level": "Medium"
+        },
+        {
+          "title": "Convert Object to JSON String",
+          "href": "/problems/javascript/convert-object-to-json-string",
+          "mdId": "javascript/convert-object-to-json-string",
+          "level": "Medium"
+        },
+        {
+          "title": "Array of Objects to Matrix",
+          "href": "/problems/javascript/array-of-objects-to-matrix",
+          "mdId": "javascript/array-of-objects-to-matrix",
+          "level": "Medium"
+        },
+        {
+          "title": "Differences Between Two Objects",
+          "href": "/problems/javascript/differences-between-two-objects",
+          "mdId": "javascript/differences-between-two-objects",
+          "level": "Medium"
+        },
+        {
+          "title": "Chunk Array",
+          "href": "/problems/javascript/chunk-array",
+          "mdId": "javascript/chunk-array",
+          "level": "Easy"
+        },
+        {
+          "title": "Flatten Deeply Nested Array",
+          "href": "/problems/javascript/flatten-deeply-nested-array",
+          "mdId": "javascript/flatten-deeply-nested-array",
+          "level": "Medium"
+        },
+        {
+          "title": "Array Prototype Last",
+          "href": "/problems/javascript/array-prototype-last",
+          "mdId": "javascript/array-prototype-last",
+          "level": "Easy"
+        },
+        {
+          "title": "Group By",
+          "href": "/problems/javascript/group-by",
+          "mdId": "javascript/group-by",
+          "level": "Medium"
+        },
+        {
+          "title": "Check if Object Instance of Class",
+          "href": "/problems/javascript/check-if-object-instance-of-class",
+          "mdId": "javascript/check-if-object-instance-of-class",
+          "level": "Medium"
+        },
+        {
+          "title": "Call Function with Custom Context",
+          "href": "/problems/javascript/call-function-with-custom-context",
+          "mdId": "javascript/call-function-with-custom-context",
+          "level": "Medium"
+        },
+        {
+          "title": "Event Emitter",
+          "href": "/problems/javascript/event-emitter",
+          "mdId": "javascript/event-emitter",
+          "level": "Medium"
+        },
+        {
+          "title": "Array Wrapper",
+          "href": "/problems/javascript/array-wrapper",
+          "mdId": "javascript/array-wrapper",
+          "level": "Easy"
+        },
+        {
+          "title": "Generate Fibonacci Sequence",
+          "href": "/problems/javascript/generate-fibonacci-sequence",
+          "mdId": "javascript/generate-fibonacci-sequence",
+          "level": "Easy"
+        },
+        {
+          "title": "Nested Array Generator",
+          "href": "/problems/javascript/nested-array-generator",
+          "mdId": "javascript/nested-array-generator",
+          "level": "Medium"
+        }
+      ]
     }
   ]
 }
