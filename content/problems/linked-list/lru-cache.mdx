@@ -1,0 +1,371 @@
+---
+title: LRU Cache
+category: Linked List
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/lru-cache)
+
+</Callout>
+
+## Description
+Design a data structure that follows the constraints of a <a href="https://en.wikipedia.org/wiki/Cache_replacement_policies#LRU" target="_blank">Least Recently Used (LRU) cache</a>.
+
+Implement the <code>LRUCache</code> class:
+
+
+	- <code>LRUCache(int capacity)</code> Initialize the LRU cache with positive size <code>capacity</code>.
+	- <code>int get(int key)</code> Return the value of the <code>key</code> if the key exists, otherwise return <code>-1</code>.
+	- <code>void put(int key, int value)</code> Update the value of the <code>key</code> if the <code>key</code> exists. Otherwise, add the <code>key-value</code> pair to the cache. If the number of keys exceeds the <code>capacity</code> from this operation, evict the least recently used key.
+
+
+The functions <code>get</code> and <code>put</code> must each run in <code>O(1)</code> average time complexity.
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input
+[&quot;LRUCache&quot;, &quot;put&quot;, &quot;put&quot;, &quot;get&quot;, &quot;put&quot;, &quot;get&quot;, &quot;put&quot;, &quot;get&quot;, &quot;get&quot;, &quot;get&quot;]
+[[2], [1, 1], [2, 2], [1], [3, 3], [2], [4, 4], [1], [3], [4]]
+Output
+[null, null, null, 1, null, -1, null, -1, 3, 4]
+
+Explanation
+LRUCache lRUCache = new LRUCache(2);
+lRUCache.put(1, 1); // cache is {1=1}
+lRUCache.put(2, 2); // cache is {1=1, 2=2}
+lRUCache.get(1);    // return 1
+lRUCache.put(3, 3); // LRU key was 2, evicts key 2, cache is {1=1, 3=3}
+lRUCache.get(2);    // returns -1 (not found)
+lRUCache.put(4, 4); // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
+lRUCache.get(1);    // return -1 (not found)
+lRUCache.get(3);    // return 3
+lRUCache.get(4);    // return 4
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>1 &lt;= capacity &lt;= 3000</code>
+	- <code>0 &lt;= key &lt;= 10<sup>4</sup></code>
+	- <code>0 &lt;= value &lt;= 10<sup>5</sup></code>
+	- At most <code>2 * 10<sup>5</sup></code> calls will be made to <code>get</code> and <code>put</code>.
+
+
+
+## Solution
+
+### Javascript
+```javascript
+/** 
+ * https://leetcode.com/problems/lru-cache/
+ * Time O(1) | Space O(N)
+ * Your LRUCache object will be instantiated and called as such:
+ * var obj = new LRUCache(capacity)
+ * var param_1 = obj.get(key)
+ * obj.put(key,value)
+ */
+ class LRUCache {
+    constructor(capacity) {
+        this.capacity = capacity;
+        this.map = new Map();
+
+        this.head = {};
+        this.tail = {};
+
+        this.head.next = this.tail;
+        this.tail.prev = this.head;
+    }
+
+    removeLastUsed () {
+        const [ key, next, prev ]  = [ this.head.next.key, this.head.next.next, this.head ];
+
+        this.map.delete(key);
+        this.head.next = next;
+        this.head.next.prev = prev;
+    }
+
+    put (key, value) {
+        const hasKey = this.get(key) !== -1;
+        const isAtCapacity = this.map.size === this.capacity;
+        
+        if (hasKey) return (this.tail.prev.value = value);
+        if (isAtCapacity) this.removeLastUsed();
+
+        const node = { key, value };
+        this.map.set(key, node);
+        this.moveToFront(node);
+    }
+
+    moveToFront (node) {
+        const [ prev, next ] = [ this.tail.prev, this.tail ];
+
+        this.tail.prev.next = node;
+        this.connectNode(node, { prev, next });
+        this.tail.prev = node;
+    }
+
+    connectNode (node, top) {
+        node.prev = top.prev;
+        node.next = top.next;
+    }
+
+    get (key) {
+        const hasKey = this.map.has(key);
+        if (!hasKey) return -1;
+
+        const node = this.map.get(key);
+        
+        this.disconnectNode(node);
+        this.moveToFront(node);
+
+        return node.value;
+    }
+
+    disconnectNode (node) {
+        node.next.prev = node.prev;
+        node.prev.next = node.next;
+    }
+}
+
+```
+### Python
+```python
+class Node:
+    def __init__(self, key, val):
+        self.key, self.val = key, val
+        self.prev = self.next = None
+
+
+class LRUCache:
+    def __init__(self, capacity: int):
+        self.cap = capacity
+        self.cache = {}  # map key to node
+
+        self.left, self.right = Node(0, 0), Node(0, 0)
+        self.left.next, self.right.prev = self.right, self.left
+
+    # remove node from list
+    def remove(self, node):
+        prev, nxt = node.prev, node.next
+        prev.next, nxt.prev = nxt, prev
+
+    # insert node at right
+    def insert(self, node):
+        prev, nxt = self.right.prev, self.right
+        prev.next = nxt.prev = node
+        node.next, node.prev = nxt, prev
+
+    def get(self, key: int) -> int:
+        if key in self.cache:
+            self.remove(self.cache[key])
+            self.insert(self.cache[key])
+            return self.cache[key].val
+        return -1
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            self.remove(self.cache[key])
+        self.cache[key] = Node(key, value)
+        self.insert(self.cache[key])
+
+        if len(self.cache) > self.cap:
+            # remove from the list and delete the LRU from hashmap
+            lru = self.left.next
+            self.remove(lru)
+            del self.cache[lru.key]
+
+```
+### C++
+```cpp
+/*
+    Design data structure that follows constraints of an LRU cache
+
+    Hash map + doubly linked list, left = LRU, right = MRU
+    get: update to MRU, put: update to MRU, remove LRU if full
+
+    Time: O(1)
+    Space: O(capacity)
+*/
+
+class Node {
+public:
+    int k;
+    int val;
+    Node* prev;
+    Node* next;
+    
+    Node(int key, int value) {
+        k = key;
+        val = value;
+        prev = NULL;
+        next = NULL;
+    }
+};
+
+class LRUCache {
+public:
+    LRUCache(int capacity) {
+        cap = capacity;
+        
+        left = new Node(0, 0);
+        right = new Node(0, 0);
+        
+        left->next = right;
+        right->prev = left;
+    }
+    
+    int get(int key) {
+        if (cache.find(key) != cache.end()) {
+            remove(cache[key]);
+            insert(cache[key]);
+            return cache[key]->val;
+        }
+        return -1;
+    }
+    
+    void put(int key, int value) {
+        if (cache.find(key) != cache.end()) {
+            remove(cache[key]);
+            
+            // Free allocated memory for the removed node
+            delete cache[key];
+        }
+        cache[key] = new Node(key, value);
+        insert(cache[key]);
+        
+        if (cache.size() > cap) {
+            // remove from list & delete LRU from map
+            Node* lru = left->next;
+            remove(lru);
+            cache.erase(lru->k);
+            
+            // Free allocated memory for the removed node
+            delete lru;
+        }
+    }
+private:
+    int cap;
+    unordered_map<int, Node*> cache; // {key -> node}
+    Node* left;
+    Node* right;
+    
+    // remove node from list
+    void remove(Node* node) {
+        Node* prev = node->prev;
+        Node* next = node->next;
+        
+        prev->next = next;
+        next->prev = prev;
+    }
+    
+    // insert node at right
+    void insert(Node* node) {
+        Node* prev = right->prev;
+        Node* next = right;
+        
+        prev->next = node;
+        next->prev = node;
+        
+        node->prev = prev;
+        node->next = next;
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
+
+```
+### Java
+```java
+class LRUCache {
+
+    private Map<Integer, Node> cache;
+    private int capacity;
+
+    private Node left;
+    private Node right;
+
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        cache = new HashMap<>();
+
+        //left = LRU , right = most recent
+        this.left = new Node(0, 0);
+        this.right = new Node(0, 0);
+        this.left.next = this.right;
+        this.right.prev = this.left;
+    }
+
+    public int get(int key) {
+        if (cache.containsKey(key)) {
+            remove(cache.get(key));
+            insert(cache.get(key));
+            return cache.get(key).val;
+        } else {
+            return -1;
+        }
+    }
+
+    public void put(int key, int value) {
+        if (cache.containsKey(key)) {
+            remove(cache.get(key));
+        }
+        cache.put(key, new Node(key, value));
+        insert(cache.get(key));
+
+        if (cache.size() > capacity) {
+            // remove from the list and delte the LRU from the hashmap
+            Node lru = this.left.next;
+            remove(lru);
+            cache.remove(lru.key);
+        }
+    }
+
+    // remove node from list
+    public void remove(Node node) {
+        Node prev = node.prev;
+        Node next = node.next;
+
+        prev.next = next;
+        next.prev = prev;
+    }
+
+    // insert node at right
+    public void insert(Node node) {
+        Node prev = this.right.prev;
+        Node next = this.right;
+
+        prev.next = node;
+        next.prev = node;
+
+        node.next = next;
+        node.prev = prev;
+    }
+
+    private class Node {
+
+        private int key;
+        private int val;
+
+        Node next;
+        Node prev;
+
+        public Node(int key, int val) {
+            this.key = key;
+            this.val = val;
+        }
+    }
+}
+
+```
+
+

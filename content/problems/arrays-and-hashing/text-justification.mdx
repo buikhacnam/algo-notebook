@@ -1,0 +1,133 @@
+---
+title: Text Justification
+category: Arrays And Hashing
+difficulty: Hard
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/text-justification)
+
+</Callout>
+
+## Description
+Given an array of strings <code>words</code> and a width <code>maxWidth</code>, format the text such that each line has exactly <code>maxWidth</code> characters and is fully (left and right) justified.
+
+You should pack your words in a greedy approach; that is, pack as many words as you can in each line. Pad extra spaces <code>&#39; &#39;</code> when necessary so that each line has exactly <code>maxWidth</code> characters.
+
+Extra spaces between words should be distributed as evenly as possible. If the number of spaces on a line does not divide evenly between words, the empty slots on the left will be assigned more spaces than the slots on the right.
+
+For the last line of text, it should be left-justified, and no extra space is inserted between words.
+
+Note:
+
+
+	- A word is defined as a character sequence consisting of non-space characters only.
+	- Each word&#39;s length is guaranteed to be greater than <code>0</code> and not exceed <code>maxWidth</code>.
+	- The input array <code>words</code> contains at least one word.
+
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input: words = [&quot;This&quot;, &quot;is&quot;, &quot;an&quot;, &quot;example&quot;, &quot;of&quot;, &quot;text&quot;, &quot;justification.&quot;], maxWidth = 16
+Output:
+[
+   &quot;This    is    an&quot;,
+   &quot;example  of text&quot;,
+   &quot;justification.  &quot;
+]</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: words = [&quot;What&quot;,&quot;must&quot;,&quot;be&quot;,&quot;acknowledgment&quot;,&quot;shall&quot;,&quot;be&quot;], maxWidth = 16
+Output:
+[
+  &quot;What   must   be&quot;,
+  &quot;acknowledgment  &quot;,
+  &quot;shall be        &quot;
+]
+Explanation: Note that the last line is &quot;shall be    &quot; instead of &quot;shall     be&quot;, because the last line must be left-justified instead of fully-justified.
+Note that the second line is also left-justified because it contains only one word.</pre>
+
+Example 3:
+
+<br /><pre className="overflow-x-auto">
+Input: words = [&quot;Science&quot;,&quot;is&quot;,&quot;what&quot;,&quot;we&quot;,&quot;understand&quot;,&quot;well&quot;,&quot;enough&quot;,&quot;to&quot;,&quot;explain&quot;,&quot;to&quot;,&quot;a&quot;,&quot;computer.&quot;,&quot;Art&quot;,&quot;is&quot;,&quot;everything&quot;,&quot;else&quot;,&quot;we&quot;,&quot;do&quot;], maxWidth = 20
+Output:
+[
+  &quot;Science  is  what we&quot;,
+  &quot;understand      well&quot;,
+  &quot;enough to explain to&quot;,
+  &quot;a  computer.  Art is&quot;,
+  &quot;everything  else  we&quot;,
+  &quot;do                  &quot;
+]</pre>
+
+ 
+Constraints:
+
+
+	- <code>1 &lt;= words.length &lt;= 300</code>
+	- <code>1 &lt;= words[i].length &lt;= 20</code>
+	- <code>words[i]</code> consists of only English letters and symbols.
+	- <code>1 &lt;= maxWidth &lt;= 100</code>
+	- <code>words[i].length &lt;= maxWidth</code>
+
+
+
+## Solution
+
+### Javascript
+```javascript
+404: Not Found
+```
+### Python
+```python
+class Solution:
+    def fullJustify(self, words: List[str], maxWidth: int) -> List[str]:
+        res = []
+        line = []  # Words in current line
+        length = 0  # Current line length
+        i = 0
+        while i < len(words):
+            if length + len(line) + len(words[i]) > maxWidth:
+                # Line complete
+                extra_space = maxWidth - length
+                word_cnt = len(line) - 1
+                spaces = extra_space // max(1, word_cnt)
+                remainder = extra_space % max(1, word_cnt)
+
+                for j in range(max(1, len(line) - 1)):
+                    line[j] += " " * spaces
+                    if remainder:
+                        line[j] += " "
+                        remainder -= 1
+
+                res.append("".join(line))
+                line, length = [], 0  # Reset line and length
+            
+            line.append(words[i])
+            length += len(words[i])
+            i += 1
+
+        # Handling the last line
+        last_line = " ".join(line)
+        trail_spaces = maxWidth - len(last_line)
+        res.append(last_line + (trail_spaces * " "))
+
+        return res
+
+```
+### C++
+```cpp
+404: Not Found
+```
+### Java
+```java
+404: Not Found
+```
+
+

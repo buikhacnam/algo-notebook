@@ -6,51 +6,85 @@ difficulty: Easy
 
 <Callout>
 
-[Leetcode Link](https://leetcode.com/problems/valid-parentheses/)
+[Leetcode Link](https://leetcode.com/problems/valid-parentheses)
 
 </Callout>
 
 ## Description
-
-Given a string `s` containing just the characters `'('`, `')'`, `'{'`, `'}'`, `'['` and `']'`, determine if the input string is valid.
+Given a string <code>s</code> containing just the characters <code>&#39;(&#39;</code>, <code>&#39;)&#39;</code>, <code>&#39;{&#39;</code>, <code>&#39;}&#39;</code>, <code>&#39;[&#39;</code> and <code>&#39;]&#39;</code>, determine if the input string is valid.
 
 An input string is valid if:
 
-1.  Open brackets must be closed by the same type of brackets.
-2.  Open brackets must be closed in the correct order.
-3.  Every close bracket has a corresponding open bracket of the same type.
+<ol>
+	- Open brackets must be closed by the same type of brackets.
+	- Open brackets must be closed in the correct order.
+	- Every close bracket has a corresponding open bracket of the same type.
+</ol>
 
-- Example 1
+ 
+Example 1:
 
-```mdx
-Input: s = "()"
+<br /><pre className="overflow-x-auto">
+Input: s = &quot;()&quot;
 Output: true
-```
+</pre>
 
-- Example 2
+Example 2:
 
-```mdx
-Input: s = "()[]{}"
+<br /><pre className="overflow-x-auto">
+Input: s = &quot;()[]{}&quot;
 Output: true
-```
+</pre>
 
-- Example 3
+Example 3:
 
-```mdx
-Input: s = "(]"
+<br /><pre className="overflow-x-auto">
+Input: s = &quot;(]&quot;
 Output: false
-```
+</pre>
 
+ 
 Constraints:
 
-- 1 `<=` s.length `<=` <code>10<sup>4</sup></code>
-- s consists of parentheses only `'()[]{}'`.
+
+	- <code>1 &lt;= s.length &lt;= 10<sup>4</sup></code>
+	- <code>s</code> consists of parentheses only <code>&#39;()[]{}&#39;</code>.
+
+
 
 ## Solution
 
 ### Javascript
+```javascript
+/**
+ * Time O(N) | Space O(N)
+ * https://leetcode.com/problems/valid-parentheses/
+ * @param {string} s
+ * @return {boolean}
+ */
+ var isValid = (s, stack = []) => {
+    for (const bracket of s.split('')) {/* Time O(N) */
+        const isParenthesis = bracket === '(';
+        if (isParenthesis) stack.push(')');  /* Space O(N) */
 
-```js
+        const isCurlyBrace = bracket === '{';
+        if (isCurlyBrace) stack.push('}');   /* Space O(N) */
+
+        const isSquareBracket = bracket === '[';
+        if (isSquareBracket) stack.push(']');/* Space O(N) */
+
+        const isOpenPair = isParenthesis || isCurlyBrace || isSquareBracket;
+        if (isOpenPair) continue;
+
+        const isEmpty = !stack.length;
+        const isWrongPair = stack.pop() !== bracket;
+        const isInvalid = isEmpty || isWrongPair;
+        if (isInvalid) return false;
+    }
+
+    return (stack.length === 0);
+};
+
 /**
  * Time O(N) | Space O(N)
  * https://leetcode.com/problems/valid-parentheses/
@@ -58,65 +92,27 @@ Constraints:
  * @return {boolean}
  */
 var isValid = (s, stack = []) => {
-	for (const bracket of s.split('')) {
-		/* Time O(N) */
-		const isParenthesis = bracket === '('
-		if (isParenthesis) stack.push(')') /* Space O(N) */
+    const map = {
+        '}': '{',
+        ']': '[',
+        ')': '(',
+    };
+    
+    for (const char of s) {/* Time O(N) */
+        const isBracket = (char in map)
+        if (!isBracket) { stack.push(char); continue; }/* Space O(N) */
 
-		const isCurlyBrace = bracket === '{'
-		if (isCurlyBrace) stack.push('}') /* Space O(N) */
+        const isEqual = (stack[stack.length - 1] === map[char])
+        if (isEqual) { stack.pop(); continue; }
 
-		const isSquareBracket = bracket === '['
-		if (isSquareBracket) stack.push(']') /* Space O(N) */
+        return false;
+    }
 
-		const isOpenPair = isParenthesis || isCurlyBrace || isSquareBracket
-		if (isOpenPair) continue
+    return (stack.length === 0);
+};
 
-		const isEmpty = !stack.length
-		const isWrongPair = stack.pop() !== bracket
-		const isInvalid = isEmpty || isWrongPair
-		if (isInvalid) return false
-	}
-
-	return stack.length === 0
-}
-
-/**
- * Time O(N) | Space O(N)
- * https://leetcode.com/problems/valid-parentheses/
- * @param {string} s
- * @return {boolean}
- */
-var isValid = (s, stack = []) => {
-	const map = {
-		'}': '{',
-		']': '[',
-		')': '(',
-	}
-
-	for (const char of s) {
-		/* Time O(N) */
-		const isBracket = char in map
-		if (!isBracket) {
-			stack.push(char)
-			continue
-		} /* Space O(N) */
-
-		const isEqual = stack[stack.length - 1] === map[char]
-		if (isEqual) {
-			stack.pop()
-			continue
-		}
-
-		return false
-	}
-
-	return stack.length === 0
-}
 ```
-
 ### Python
-
 ```python
 class Solution:
     def isValid(self, s: str) -> bool:
@@ -134,10 +130,18 @@ class Solution:
         return not stack
 
 ```
-
 ### C++
-
 ```cpp
+/*
+    Given s w/ '(, ), {, }, [, ]', determine if valid
+    Ex. s = "()[]{}" -> true, s = "(]" -> false
+
+    Stack of opens, check for matching closes & validity
+
+    Time: O(n)
+    Space: O(n)
+*/
+
 class Solution {
 public:
     bool isValid(string s) {
@@ -147,7 +151,7 @@ public:
             {']', '['},
             {'}', '{'},
         };
-
+        
         for (const auto& c : s) {
             if (parens.find(c) != parens.end()) {
                 // if input starts with a closing bracket.
@@ -164,15 +168,13 @@ public:
                 open.push(c);
             }
         }
-
+        
         return open.empty();
     }
 };
 
 ```
-
 ### Java
-
 ```java
 class Solution {
 
@@ -228,3 +230,5 @@ class Solution {
 }
 
 ```
+
+

@@ -1,0 +1,187 @@
+---
+title: Populating Next Right Pointers in Each Node
+category: Binary Search
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/populating-next-right-pointers-in-each-node)
+
+</Callout>
+
+## Description
+You are given a perfect binary tree where all leaves are on the same level, and every parent has two children. The binary tree has the following definition:
+
+<br /><pre className="overflow-x-auto">
+struct Node {
+  int val;
+  Node *left;
+  Node *right;
+  Node *next;
+}
+</pre>
+
+Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to <code>NULL</code>.
+
+Initially, all next pointers are set to <code>NULL</code>.
+
+ 
+Example 1:
+<Image alt="" src="https://assets.leetcode.com/uploads/2019/02/14/116_sample.png" width={500} height={171} />
+<br /><pre className="overflow-x-auto">
+Input: root = [1,2,3,4,5,6,7]
+Output: [1,#,2,3,#,4,5,6,7,#]
+Explanation: Given the above perfect binary tree (Figure A), your function should populate each next pointer to point to its next right node, just like in Figure B. The serialized output is in level order as connected by the next pointers, with &#39;#&#39; signifying the end of each level.
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: root = []
+Output: []
+</pre>
+
+ 
+Constraints:
+
+
+	- The number of nodes in the tree is in the range <code>[0, 2<sup>12</sup> - 1]</code>.
+	- <code>-1000 &lt;= Node.val &lt;= 1000</code>
+
+
+ 
+Follow-up:
+
+
+	- You may only use constant extra space.
+	- The recursive approach is fine. You may assume implicit stack space does not count as extra space for this problem.
+
+
+
+## Solution
+
+### Javascript
+```javascript
+/**
+ * BFS
+ * Time O(n) | Space O(1)
+ * 
+ * https://leetcode.com/problems/populating-next-right-pointers-in-each-node/
+ * // Definition for a Node.
+ * function Node(val, left, right, next) {
+ *    this.val = val === undefined ? null : val;
+ *    this.left = left === undefined ? null : left;
+ *    this.right = right === undefined ? null : right;
+ *    this.next = next === undefined ? null : next;
+ * };
+ */
+/**
+ * @param {Node} root
+ * @return {Node}
+ */
+
+var connect = function(root) {
+
+    let currentNode = root;
+    let nextLevelNode = root && root.left;
+
+    while(currentNode && nextLevelNode) {
+        currentNode.left.next = currentNode.right;
+        if(currentNode.next) {
+            currentNode.right.next = currentNode.next.left;
+        }
+        currentNode = currentNode.next;
+        if(!currentNode) {
+            currentNode = nextLevelNode;
+            nextLevelNode = currentNode.left;
+        }
+    }
+
+    return root;
+};
+
+```
+### Python
+```python
+404: Not Found
+```
+### C++
+```cpp
+/*
+  You are given a perfect binary tree where all leaves are on the same level, and every parent has two children. The binary tree has the following definition:
+  
+  struct Node {
+    int val;
+    Node *left;
+    Node *right;
+    Node *next;
+  }
+  
+  Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to NULL.
+  Initially, all next pointers are set to NULL.
+
+  Ex. Input: root = [1,2,3,4,5,6,7]
+      Output: [1,#,2,3,#,4,5,6,7,#]
+      Explanation: Given the above perfect binary tree (Figure A), your function should populate each next pointer to point to its next right node,
+      just like in Figure B. The serialized output is in level order as connected by the next pointers, with '#' signifying the end of each level.
+
+  Time  : O(N)
+  Space : O(N)
+*/
+
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* left;
+    Node* right;
+    Node* next;
+
+    Node() : val(0), left(NULL), right(NULL), next(NULL) {}
+
+    Node(int _val) : val(_val), left(NULL), right(NULL), next(NULL) {}
+
+    Node(int _val, Node* _left, Node* _right, Node* _next)
+        : val(_val), left(_left), right(_right), next(_next) {}
+};
+*/
+
+class Solution {
+public:
+    Node* connect(Node* root) {
+        if(root == NULL || (root -> right == NULL && root -> left == NULL))
+            return root;
+        queue <Node*>q;
+        q.push(root);
+
+        while(!q.empty()) {
+            int size = q.size();
+            Node* temp = NULL;
+
+            for(int i = 0 ; i < size ; i++) {
+                Node* front = q.front();
+
+                if(temp != NULL)
+                    temp -> next = front;
+                temp = front;
+
+                if(front -> left) {
+                    q.push(front -> left);
+                    q.push(front -> right);
+                }
+                q.pop();
+            }
+        }
+        return root;
+    }
+};
+
+```
+### Java
+```java
+404: Not Found
+```
+
+

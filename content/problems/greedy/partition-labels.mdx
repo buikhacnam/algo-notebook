@@ -1,0 +1,218 @@
+---
+title: Partition Labels
+category: Greedy
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/partition-labels)
+
+</Callout>
+
+## Description
+You are given a string <code>s</code>. We want to partition the string into as many parts as possible so that each letter appears in at most one part.
+
+Note that the partition is done so that after concatenating all the parts in order, the resultant string should be <code>s</code>.
+
+Return *a list of integers representing the size of these parts*.
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input: s = &quot;ababcbacadefegdehijhklij&quot;
+Output: [9,7,8]
+Explanation:
+The partition is &quot;ababcbaca&quot;, &quot;defegde&quot;, &quot;hijhklij&quot;.
+This is a partition so that each letter appears in at most one part.
+A partition like &quot;ababcbacadefegde&quot;, &quot;hijhklij&quot; is incorrect, because it splits s into less parts.
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: s = &quot;eccbbbbdec&quot;
+Output: [10]
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>1 &lt;= s.length &lt;= 500</code>
+	- <code>s</code> consists of lowercase English letters.
+
+
+
+## Solution
+
+### Javascript
+```javascript
+/**
+ * @param {string} s
+ * @return {number[]}
+ */
+var partitionLabels = function (s) {
+    var lastIndex = {}, // char -> last index in s
+        res = [],
+        size = 0,
+        end = 0;
+
+    for (var i in s) {
+        lastIndex[s[i]] = i;
+    }
+
+    for (var i in s) {
+        var c = s[i];
+        size++;
+        end = Math.max(end, lastIndex[c]);
+        if (i === String(end)) {
+            res.push(size);
+            size = 0;
+        }
+    }
+
+    return res;
+};
+
+/**
+ * https://leetcode.com/problems/partition-labels/
+ * Time O(N) | Space(1)
+ * @param {string} S
+ * @return {number[]}
+ */
+ var partitionLabels = function(S) {
+    const lastSeen = getLast(S);
+
+    return getAns(S, lastSeen);
+};
+
+const getLast = (S, lastSeen = []) => {
+    for (const index in S) {/* Time O(N) */
+        const code = getCode(S[Number(index)]);
+    
+        lastSeen[code] = Number(index);/* Space O(1) */
+    }
+
+    return lastSeen;
+};
+
+const getCode = (char ) => char.charCodeAt(0) - 'a'.charCodeAt(0);
+
+const getAns = (S, lastSeen, left = 0, right = 0, labels = []) => {
+    for (const index in S) {/* Time O(N) */
+        const code = getCode(S[Number(index)]);
+        const lastSeenAt = lastSeen[code];
+        
+        right = Math.max(right, lastSeenAt);
+        
+        const isEqual = Number(index) === right;
+        if (!isEqual) continue;
+        
+        const placement = (Number(index) - left) + 1;
+        
+        labels.push(placement);
+        left = Number(index) + 1;   
+    };
+    
+    return labels;
+}
+
+```
+### Python
+```python
+class Solution:
+    def partitionLabels(self, S: str) -> List[int]:
+        count = {}
+        res = []
+        i, length = 0, len(S)
+        for j in range(length):
+            c = S[j]
+            count[c] = j
+
+        curLen = 0
+        goal = 0
+        while i < length:
+            c = S[i]
+            goal = max(goal, count[c])
+            curLen += 1
+
+            if goal == i:
+                res.append(curLen)
+                curLen = 0
+            i += 1
+        return res
+
+```
+### C++
+```cpp
+/*
+    Partition string so each letter appears in at most 1 part, return sizes
+    Ex. s = "ababcbacadefegdehijhklij" -> [9,7,8]
+
+    Greedy: determine last occurrence of each char, then loop thru & get sizes
+
+    Time: O(n)
+    Space: O(1)
+*/
+
+class Solution {
+public:
+    vector<int> partitionLabels(string s) {
+        int n = s.size();
+        // {char -> last index in s}
+        vector<int> lastIndex(26);
+        for (int i = 0; i < n; i++) {
+            lastIndex[s[i] - 'a'] = i;
+        }
+        
+        int size = 0;
+        int end = 0;
+        
+        vector<int> result;
+        
+        for (int i = 0; i < n; i++) {
+            size++;
+            // constantly checking for further indices if possible
+            end = max(end, lastIndex[s[i] - 'a']);
+            if (i == end) {
+                result.push_back(size);
+                size = 0;
+            }
+        }
+        
+        return result;
+    }
+};
+
+```
+### Java
+```java
+class Solution {
+
+    public List<Integer> partitionLabels(String s) {
+        List<Integer> list = new ArrayList<>();
+        HashMap<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            map.put(s.charAt(i), i);
+        }
+        int j = 0;
+        int i = 0;
+        while (i < s.length()) {
+            int count = 0;
+            j = Math.max(j, map.get(s.charAt(i)));
+            while (i <= j) {
+                j = Math.max(j, map.get(s.charAt(i)));
+                i++;
+                count++;
+            }
+            list.add(count);
+        }
+        return list;
+    }
+}
+
+```
+
+

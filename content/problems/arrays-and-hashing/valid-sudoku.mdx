@@ -1,0 +1,311 @@
+---
+title: Valid Sudoku
+category: Arrays And Hashing
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/valid-sudoku)
+
+</Callout>
+
+## Description
+Determine if a <code>9 x 9</code> Sudoku board is valid. Only the filled cells need to be validated according to the following rules:
+
+<ol>
+	- Each row must contain the digits <code>1-9</code> without repetition.
+	- Each column must contain the digits <code>1-9</code> without repetition.
+	- Each of the nine <code>3 x 3</code> sub-boxes of the grid must contain the digits <code>1-9</code> without repetition.
+</ol>
+
+Note:
+
+
+	- A Sudoku board (partially filled) could be valid but is not necessarily solvable.
+	- Only the filled cells need to be validated according to the mentioned rules.
+
+
+ 
+Example 1:
+<Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Sudoku-by-L2G-20050714.svg/250px-Sudoku-by-L2G-20050714.svg.png" height:250} width:250px" />
+<br /><pre className="overflow-x-auto">
+Input: board = 
+[[&quot;5&quot;,&quot;3&quot;,&quot;.&quot;,&quot;.&quot;,&quot;7&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;]
+,[&quot;6&quot;,&quot;.&quot;,&quot;.&quot;,&quot;1&quot;,&quot;9&quot;,&quot;5&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;]
+,[&quot;.&quot;,&quot;9&quot;,&quot;8&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;6&quot;,&quot;.&quot;]
+,[&quot;8&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;6&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;3&quot;]
+,[&quot;4&quot;,&quot;.&quot;,&quot;.&quot;,&quot;8&quot;,&quot;.&quot;,&quot;3&quot;,&quot;.&quot;,&quot;.&quot;,&quot;1&quot;]
+,[&quot;7&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;2&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;6&quot;]
+,[&quot;.&quot;,&quot;6&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;2&quot;,&quot;8&quot;,&quot;.&quot;]
+,[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;4&quot;,&quot;1&quot;,&quot;9&quot;,&quot;.&quot;,&quot;.&quot;,&quot;5&quot;]
+,[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;8&quot;,&quot;.&quot;,&quot;.&quot;,&quot;7&quot;,&quot;9&quot;]]
+Output: true
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: board = 
+[[&quot;8&quot;,&quot;3&quot;,&quot;.&quot;,&quot;.&quot;,&quot;7&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;]
+,[&quot;6&quot;,&quot;.&quot;,&quot;.&quot;,&quot;1&quot;,&quot;9&quot;,&quot;5&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;]
+,[&quot;.&quot;,&quot;9&quot;,&quot;8&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;6&quot;,&quot;.&quot;]
+,[&quot;8&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;6&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;3&quot;]
+,[&quot;4&quot;,&quot;.&quot;,&quot;.&quot;,&quot;8&quot;,&quot;.&quot;,&quot;3&quot;,&quot;.&quot;,&quot;.&quot;,&quot;1&quot;]
+,[&quot;7&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;2&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;6&quot;]
+,[&quot;.&quot;,&quot;6&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;2&quot;,&quot;8&quot;,&quot;.&quot;]
+,[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;4&quot;,&quot;1&quot;,&quot;9&quot;,&quot;.&quot;,&quot;.&quot;,&quot;5&quot;]
+,[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;8&quot;,&quot;.&quot;,&quot;.&quot;,&quot;7&quot;,&quot;9&quot;]]
+Output: false
+Explanation: Same as Example 1, except with the 5 in the top left corner being modified to 8. Since there are two 8&#39;s in the top left 3x3 sub-box, it is invalid.
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>board.length == 9</code>
+	- <code>board[i].length == 9</code>
+	- <code>board[i][j]</code> is a digit <code>1-9</code> or <code>&#39;.&#39;</code>.
+
+
+
+## Solution
+
+### Javascript
+```javascript
+/**
+ * Hash Map - Matrix
+ * Time O(ROWS * COLS) | Space O(ROWS * COLS)
+ * https://leetcode.com/problems/valid-sudoku/
+ * @param {character[][]} board
+ * @return {boolean}
+ */
+ var isValidSudoku = (board) => {
+    const boards = 3;
+    const [ boxes, cols, rows ] = getBoards(boards);/* Time O(ROWS * COLS) | Space O(ROWS * COLS) */
+
+    return searchGrid(board, boxes, cols, rows);    /* Time O(ROWS * COLS) | Space O(ROWS * COLS) */
+};
+
+var initBoard = (rows, cols) => new Array(rows).fill()
+    .map(() => new Array(cols).fill(false));
+
+var getBoards = (boards) => {
+    const [ rows, cols ] = [ 9, 9 ];
+
+    return new Array(boards).fill()
+        .map(() => initBoard(rows, cols))
+}
+
+var searchGrid = (board, boxes, cols, rows) => {
+    const [ _rows, _cols ] = [ 9, 9 ];
+
+    for (let row = 0; row < _rows; row++) {/* Time O(ROWS)*/
+        for (let col = 0; col < _cols; col++) {/* Time O(COLS)*/
+            const char = board[row][col];
+            const index = (Math.floor(row / 3) * 3) + Math.floor(col / 3);
+
+            const isEmpty = char === '.';
+            if (isEmpty) continue;
+
+            const hasMoved = boxes[index][(char - 1)] || cols[col][(char - 1)] || rows[row][(char - 1)];
+            if (hasMoved) return false;
+
+            rows[row][(char - 1)] = true;               /* Space O(ROWS * COLS)*/
+            cols[col][(char - 1)] = true;               /* Space O(ROWS * COLS)*/
+            boxes[index][(char - 1)] = true;            /* Space O(ROWS * COLS)*/
+        }
+    }
+
+    return true;
+}
+
+/**
+ * Array - Fixed Size
+ * Time O(ROWS * COLS) | Space O(CELLS)
+ * https://leetcode.com/problems/valid-sudoku/
+ * @param {character[][]} board
+ * @return {boolean}
+ */
+ var isValidSudoku = (board) => {
+    const [ boards, cells ] = [ 3, 9];
+    const [ boxes, rows, cols ] = getBoards(boards, cells);/* Time O(ROWS * COLS) | Space O(CELLS) */
+
+    return searchGrid(board, boxes, rows, cols);           /* Time O(ROWS * COLS) | Space O(CELLS) */
+}
+
+var getBoards = (boards, cells) => new Array(boards).fill()
+    .map(() => new Array(cells).fill(0));
+
+var searchGrid = (board, boxes, rows, cols) => {
+    const [ _rows, _cols ] = [ 9, 9 ];
+
+    for (let row = 0; row < _rows; row++) {/* Time O(ROWS)*/
+        for (let col = 0; col < _cols; col++) {/* Time O(COLS)*/
+            const char = board[row][col];
+            const position = 1 << (char - 1);
+            const index = (Math.floor(row / 3) * 3) + Math.floor(col / 3);
+
+            const isEmpty = char === '.';
+            if (isEmpty) continue;
+
+            const hasMoved = (boxes[index] & position) || (cols[col] & position) || (rows[row] & position);
+            if (hasMoved) return false;
+
+            rows[row] |= position;                 /* Space O(CELLS)*/
+            cols[col] |= position;                 /* Space O(CELLS)*/
+            boxes[index] |= position;              /* Space O(CELLS)*/
+        }
+    }
+
+    return true;
+}
+
+```
+### Python
+```python
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        cols = collections.defaultdict(set)
+        rows = collections.defaultdict(set)
+        squares = collections.defaultdict(set)  # key = (r /3, c /3)
+
+        for r in range(9):
+            for c in range(9):
+                if board[r][c] == ".":
+                    continue
+                if (
+                    board[r][c] in rows[r]
+                    or board[r][c] in cols[c]
+                    or board[r][c] in squares[(r // 3, c // 3)]
+                ):
+                    return False
+                cols[c].add(board[r][c])
+                rows[r].add(board[r][c])
+                squares[(r // 3, c // 3)].add(board[r][c])
+
+        return True
+
+```
+### C++
+```cpp
+/*
+    Determine if a 9x9 Sudoku board is valid (no repeats)
+
+    Boolean matrices to store seen values. Check rows, cols, 3x3 sub-boxes
+
+    Time: O(cnt^2)
+    Space: O(cnt^2)
+*/
+
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        const int cnt = 9;
+        bool row[cnt][cnt] = {false};
+        bool col[cnt][cnt] = {false};
+        bool sub[cnt][cnt] = {false};
+        
+        for(int r = 0; r < cnt; ++r){
+            for(int c = 0; c < cnt; ++c){
+                if(board[r][c] == '.')
+                    continue; // if not number pass
+                
+                int idx = board[r][c] - '0' - 1; //char to num idx
+                int area = (r/3) * 3 + (c/3);
+                
+                //if number already exists
+                if(row[r][idx] || col[c][idx] || sub[area][idx]){
+                    return false;
+                }
+                
+                row[r][idx] = true;
+                col[c][idx] = true;
+                sub[area][idx] = true;
+            }
+        }
+        return true;
+    }
+};
+
+```
+### Java
+```java
+class Solution {
+
+    public boolean isValidSudoku(char[][] board) {
+        //neetcode solution, slightly modified
+
+        //a set of the characters that we have already come across (excluding '.' which denotes an empty space)
+        Set<Character> rowSet = null;
+        Set<Character> colSet = null;
+
+
+        for (int i = 0; i < 9; i++) {
+            //reinitialize the sets so we don't carry over found characters from the previous run
+            rowSet = new HashSet<>();
+            colSet = new HashSet<>();
+            for (int j = 0; j < 9; j++) {
+                char r = board[i][j];
+                char c = board[j][i];
+                if (r != '.'){
+                    if (rowSet.contains(r)){
+                        return false;
+                    } else {
+                        rowSet.add(r);
+                    }
+                }
+                if (c != '.'){
+                    if (colSet.contains(c)){
+                        return false;
+                    } else {
+                        colSet.add(c);
+                    }
+                }
+            }
+        }
+
+        //block
+        //loop controls advance by 3 each time to jump through the boxes
+        for (int i = 0; i < 9; i = i + 3) {
+            for (int j = 0; j < 9; j = j + 3) {
+                //checkBlock will return true if valid
+                if (!checkBlock(i, j, board)) {
+                    return false;
+                }
+            }
+        }
+        //passed all tests, therefore valid board
+        return true;
+    }
+
+    public boolean checkBlock(int idxI, int idxJ, char[][] board) {
+        Set<Character> blockSet = new HashSet<>();
+        //if idxI = 3 and indJ = 0
+        //rows = 6 and cols = 3
+        int rows = idxI + 3;
+        int cols = idxJ + 3;
+        //and because i initializes to idxI but only goes to rows, we loop 3 times (once for each row)
+        for (int i = idxI; i < rows; i++) {
+            //same for columns
+            for (int j = idxJ; j < cols; j++) {
+                if (board[i][j] == '.') {
+                    continue;
+                }
+                
+                if (blockSet.contains(board[i][j])) {
+                    return false;
+                }
+
+                blockSet.add(board[i][j]);
+            }
+        }
+
+        return true;
+    }
+}
+
+```
+
+

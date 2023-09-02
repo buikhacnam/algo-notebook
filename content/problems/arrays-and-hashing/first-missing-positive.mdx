@@ -1,0 +1,145 @@
+---
+title: First Missing Positive
+category: Arrays And Hashing
+difficulty: Hard
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/first-missing-positive)
+
+</Callout>
+
+## Description
+Given an unsorted integer array <code>nums</code>, return the smallest missing positive integer.
+
+You must implement an algorithm that runs in <code>O(n)</code> time and uses <code>O(1)</code> auxiliary space.
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input: nums = [1,2,0]
+Output: 3
+Explanation: The numbers in the range [1,2] are all in the array.
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: nums = [3,4,-1,1]
+Output: 2
+Explanation: 1 is in the array but 2 is missing.
+</pre>
+
+Example 3:
+
+<br /><pre className="overflow-x-auto">
+Input: nums = [7,8,9,11,12]
+Output: 1
+Explanation: The smallest positive integer 1 is missing.
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>1 &lt;= nums.length &lt;= 10<sup>5</sup></code>
+	- <code>-2<sup>31</sup> &lt;= nums[i] &lt;= 2<sup>31</sup> - 1</code>
+
+
+
+## Solution
+
+### Javascript
+```javascript
+404: Not Found
+```
+### Python
+```python
+class Solution:
+    def firstMissingPositive(self, nums: List[int]) -> int:
+        A = nums
+        for i in range(len(A)):
+            if A[i] < 0:
+                A[i] = 0
+            
+        for i in range(len(A)):
+            val = abs(A[i])
+            if 1 <= val <= len(A):
+                if A[val - 1] > 0:
+                    A[val - 1] *= -1
+                elif A[val - 1] == 0:
+                    A[val - 1] = -1 * (len(A) + 1)
+        
+        for i in range( 1, len(A)+ 1):
+            if A[i -1] >= 0:
+                return i
+        
+        return len(A) + 1
+        
+    def firstMissingPositive_2(self, nums: List[int]) -> int:
+        new = set(nums)
+        i = 1
+        while i in new:
+            i += 1
+        return i
+
+```
+### C++
+```cpp
+class Solution {
+public:
+    int firstMissingPositive(vector<int>& nums) {
+        for(int i=0; i<nums.size(); i++){
+            if(i+1==nums[i]) continue;
+            int x = nums[i];
+            while(x>=1 && x<=nums.size() && x!=nums[x-1]){
+                swap(x, nums[x-1]);
+            }
+        }
+        for(int i=0; i<nums.size(); i++){
+            if(i+1!=nums[i])    return i+1;
+        }
+        return nums.size()+1;
+    }
+};
+
+```
+### Java
+```java
+class Solution {
+    public int firstMissingPositive(int[] nums) {
+        int n = nums.length, size = 0;
+
+        while(n > 0){
+            n = n>>1;
+            size++;
+        }
+        n = nums.length;
+        int pivot = 0;
+        
+
+        for(int i = 0; i < n; i++){
+            if(nums[i] <= 0 || nums[i] > n){
+                int temp = nums[i];
+                nums[i] = nums[pivot];
+                nums[pivot] = temp;
+                pivot++;
+            }
+        }
+        for(int i= 0; i < pivot; i++)
+            nums[i] = 0;
+        for(int i= pivot; i < n; i++){
+            nums[(nums[i] - 1)&((1<<size) - 1)] |= (1<<size);
+        }
+        for(int i= 0; i < n; i++)
+            if((nums[i] & (1<<size)) == 0)
+                return i+1;
+        return n+1;
+    }
+}
+
+```
+
+

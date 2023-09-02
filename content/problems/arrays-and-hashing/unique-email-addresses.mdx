@@ -1,0 +1,145 @@
+---
+title: Unique Email Addresses
+category: Arrays And Hashing
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/unique-email-addresses)
+
+</Callout>
+
+## Description
+Every valid email consists of a local name and a domain name, separated by the <code>&#39;@&#39;</code> sign. Besides lowercase letters, the email may contain one or more <code>&#39;.&#39;</code> or <code>&#39;+&#39;</code>.
+
+
+	- For example, in <code>&quot;alice@leetcode.com&quot;</code>, <code>&quot;alice&quot;</code> is the local name, and <code>&quot;leetcode.com&quot;</code> is the domain name.
+
+
+If you add periods <code>&#39;.&#39;</code> between some characters in the local name part of an email address, mail sent there will be forwarded to the same address without dots in the local name. Note that this rule does not apply to domain names.
+
+
+	- For example, <code>&quot;alice.z@leetcode.com&quot;</code> and <code>&quot;alicez@leetcode.com&quot;</code> forward to the same email address.
+
+
+If you add a plus <code>&#39;+&#39;</code> in the local name, everything after the first plus sign will be ignored. This allows certain emails to be filtered. Note that this rule does not apply to domain names.
+
+
+	- For example, <code>&quot;m.y+name@email.com&quot;</code> will be forwarded to <code>&quot;my@email.com&quot;</code>.
+
+
+It is possible to use both of these rules at the same time.
+
+Given an array of strings <code>emails</code> where we send one email to each <code>emails[i]</code>, return *the number of different addresses that actually receive mails*.
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input: emails = [&quot;test.email+alex@leetcode.com&quot;,&quot;test.e.mail+bob.cathy@leetcode.com&quot;,&quot;testemail+david@lee.tcode.com&quot;]
+Output: 2
+Explanation: &quot;testemail@leetcode.com&quot; and &quot;testemail@lee.tcode.com&quot; actually receive mails.
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: emails = [&quot;a@leetcode.com&quot;,&quot;b@leetcode.com&quot;,&quot;c@leetcode.com&quot;]
+Output: 3
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>1 &lt;= emails.length &lt;= 100</code>
+	- <code>1 &lt;= emails[i].length &lt;= 100</code>
+	- <code>emails[i]</code> consist of lowercase English letters, <code>&#39;+&#39;</code>, <code>&#39;.&#39;</code> and <code>&#39;@&#39;</code>.
+	- Each <code>emails[i]</code> contains exactly one <code>&#39;@&#39;</code> character.
+	- All local and domain names are non-empty.
+	- Local names do not start with a <code>&#39;+&#39;</code> character.
+	- Domain names end with the <code>&quot;.com&quot;</code> suffix.
+
+
+
+## Solution
+
+### Javascript
+```javascript
+var numUniqueEmails = function(emails) {
+  const valid=emails.map(email=>{
+       const [local, domain] = email.split('@');
+       return local.split('+').shift().split('.').join('')+'@'+domain;
+   });
+   const set=new Set(valid)
+    
+    return set.size
+      
+    
+};
+
+```
+### Python
+```python
+class Solution:
+    def numUniqueEmails(self, emails: list[str]) -> int:
+        unique_emails: set[str] = set()
+        for email in emails:
+            local_name, domain_name = email.split('@')
+            local_name = local_name.split('+')[0]
+            local_name = local_name.replace('.', '')
+            email = local_name + '@' + domain_name
+            unique_emails.add(email)
+        return len(unique_emails)
+
+```
+### C++
+```cpp
+class Solution {
+public:
+    int numUniqueEmails(vector<string>& emails) {
+        set<string> unique_emails;
+        for(string email: emails) {
+            string local_name = email.substr(0, email.find('@'));
+            local_name = local_name.substr(0, email.find('+'));
+            local_name = regex_replace(local_name, regex("\\."), "");
+            string domain_name = email.substr(email.find('@') + 1, email.length());
+            email = local_name + '@' + domain_name;
+            unique_emails.insert(email);
+        }
+        return unique_emails.size();
+    }
+};
+
+```
+### Java
+```java
+class Solution {
+    private String getFormattedEmail(String email) {
+        String[] arr = email.split("@");
+        String localName = arr[0];
+        String domainName = arr[1];
+
+        // Only keep the first part of "+" sign
+        String[] arrLocalWithPlus = localName.split("\\+");
+        localName = arrLocalWithPlus[0];
+
+        // Replace "."/dots
+        localName = localName.replace(".", "");
+
+        return localName + "@" + domainName;
+    }
+    
+    public int numUniqueEmails(String[] emails) {
+        Set<String> uniqueEmails = new HashSet<>();
+        for(String email: emails) {
+            String formattedEmail = getFormattedEmail(email);
+            uniqueEmails.add(formattedEmail);
+        }
+        return uniqueEmails.size();
+    }
+}
+```
+
+

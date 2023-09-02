@@ -6,43 +6,46 @@ difficulty: Easy
 
 <Callout>
 
-[Leetcode Link](https://leetcode.com/problems/binary-search/)
+[Leetcode Link](https://leetcode.com/problems/binary-search)
 
 </Callout>
 
 ## Description
+Given an array of integers <code>nums</code> which is sorted in ascending order, and an integer <code>target</code>, write a function to search <code>target</code> in <code>nums</code>. If <code>target</code> exists, then return its index. Otherwise, return <code>-1</code>.
 
-Given an array of integers `nums` which is sorted in ascending order, and an integer `target`, write a function to search `target` in `nums`. If `target` exists, then return its index. Otherwise, return `-1`.
+You must write an algorithm with <code>O(log n)</code> runtime complexity.
 
-You must write an algorithm with O(log n) runtime complexity.
+ 
+Example 1:
 
-- Example 1
-
-```mdx
+<br /><pre className="overflow-x-auto">
 Input: nums = [-1,0,3,5,9,12], target = 9
 Output: 4
 Explanation: 9 exists in nums and its index is 4
-```
+</pre>
 
-- Example 2
+Example 2:
 
-```mdx
+<br /><pre className="overflow-x-auto">
 Input: nums = [-1,0,3,5,9,12], target = 2
 Output: -1
 Explanation: 2 does not exist in nums so return -1
-```
+</pre>
 
+ 
 Constraints:
 
-- 1 `<=` nums.length `<=` <code>10<sup>4</sup></code>
-- <code>-10<sup>4</sup></code> `<` nums[i], target `<` <code>10<sup>4</sup></code>
-- All the integers in nums are unique.
-- nums is sorted in ascending order.
+
+	- <code>1 &lt;= nums.length &lt;= 10<sup>4</sup></code>
+	- <code>-10<sup>4</sup> &lt; nums[i], target &lt; 10<sup>4</sup></code>
+	- All the integers in <code>nums</code> are unique.
+	- <code>nums</code> is sorted in ascending order.
+
+
 
 ## Solution
 
 ### Javascript
-
 ```javascript
 /**
  * @param {number[]} nums
@@ -51,28 +54,27 @@ Constraints:
  * @return {number}
  */
 var search = function (nums, target) {
-	let [left, right] = [0, nums.length - 1]
+    let [left, right] = [0, nums.length - 1];
 
-	while (left <= right) {
-		const mid = (left + right) >> 1
-		const guess = nums[mid]
+    while (left <= right) {
+        const mid = (left + right) >> 1;
+        const guess = nums[mid];
 
-		const isTarget = guess === target
-		if (isTarget) return mid
+        const isTarget = guess === target;
+        if (isTarget) return mid;
 
-		const isTargetGreater = guess < target
-		if (isTargetGreater) left = mid + 1
+        const isTargetGreater = guess < target;
+        if (isTargetGreater) left = mid + 1;
 
-		const isTargetLess = target < guess
-		if (isTargetLess) right = mid - 1
-	}
+        const isTargetLess = target < guess;
+        if (isTargetLess) right = mid - 1;
+    }
 
-	return -1
-}
+    return -1;
+};
+
 ```
-
 ### Python
-
 ```python
 class Solution:
     def search(self, nums: List[int], target: int) -> int:
@@ -89,16 +91,24 @@ class Solution:
         return -1
 
 ```
-
 ### C++
-
 ```cpp
+/*
+    Given sorted int array, search for a target value
+    Ex. nums = [-1,0,3,5,9,12], target = 9 -> 4 (index)
+
+    Since array is sorted, perform binary search
+
+    Time: O(log n)
+    Space: O(1)
+*/
+
 class Solution {
 public:
     int search(vector<int>& nums, int target) {
         int low = 0;
         int high = nums.size() - 1;
-
+        
         while (low <= high) {
             int mid = low + (high - low) / 2;
             if (nums[mid] < target) {
@@ -109,15 +119,13 @@ public:
                 return mid;
             }
         }
-
+        
         return -1;
     }
 };
 
 ```
-
 ### Java
-
 ```java
 class Solution {
 
@@ -136,4 +144,7 @@ class Solution {
         return -1;
     }
 }
+
 ```
+
+

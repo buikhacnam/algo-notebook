@@ -1,0 +1,75 @@
+---
+title: Unique Binary Search Trees
+category: Trees
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/unique-binary-search-trees)
+
+</Callout>
+
+## Description
+Given an integer <code>n</code>, return *the number of structurally unique BST&#39;s (binary search trees) which has exactly *<code>n</code>* nodes of unique values from* <code>1</code> *to* <code>n</code>.
+
+ 
+Example 1:
+<Image alt="" src="https://assets.leetcode.com/uploads/2021/01/18/uniquebstn3.jpg" width={600} height={148} />
+<br /><pre className="overflow-x-auto">
+Input: n = 3
+Output: 5
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: n = 1
+Output: 1
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>1 &lt;= n &lt;= 19</code>
+
+
+
+## Solution
+
+### Javascript
+```javascript
+404: Not Found
+```
+### Python
+```python
+404: Not Found
+```
+### C++
+```cpp
+404: Not Found
+```
+### Java
+```java
+class Solution {
+    public int numTrees(int n) {
+        int[] numTree = new int[n+1];
+        numTree[0] = numTree[1] = 1;
+
+        for(int nodes = 2; nodes < n+1; nodes++){
+            int total = 0;
+            for(int root = 1; root < nodes+1; root++){
+                int left = root - 1;
+                int right = nodes - root;
+                total += numTree[left] * numTree[right];
+            }
+            numTree[nodes] = total;
+        }
+        return numTree[n];
+    }
+}
+
+```
+
+

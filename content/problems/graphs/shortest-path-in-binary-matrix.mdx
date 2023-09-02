@@ -1,0 +1,131 @@
+---
+title: Shortest Path in Binary Matrix
+category: Graphs
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/shortest-path-in-binary-matrix)
+
+</Callout>
+
+## Description
+Given an <code>n x n</code> binary matrix <code>grid</code>, return *the length of the shortest clear path in the matrix*. If there is no clear path, return <code>-1</code>.
+
+A clear path in a binary matrix is a path from the top-left cell (i.e., <code>(0, 0)</code>) to the bottom-right cell (i.e., <code>(n - 1, n - 1)</code>) such that:
+
+
+	- All the visited cells of the path are <code>0</code>.
+	- All the adjacent cells of the path are 8-directionally connected (i.e., they are different and they share an edge or a corner).
+
+
+The length of a clear path is the number of visited cells of this path.
+
+ 
+Example 1:
+<Image alt="" src="https://assets.leetcode.com/uploads/2021/02/18/example1_1.png" width={500} height={234} />
+<br /><pre className="overflow-x-auto">
+Input: grid = [[0,1],[1,0]]
+Output: 2
+</pre>
+
+Example 2:
+<Image alt="" src="https://assets.leetcode.com/uploads/2021/02/18/example2_1.png" height={216} width={500} />
+<br /><pre className="overflow-x-auto">
+Input: grid = [[0,0,0],[1,1,0],[1,1,0]]
+Output: 4
+</pre>
+
+Example 3:
+
+<br /><pre className="overflow-x-auto">
+Input: grid = [[1,0,0],[1,1,0],[1,1,0]]
+Output: -1
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>n == grid.length</code>
+	- <code>n == grid[i].length</code>
+	- <code>1 &lt;= n &lt;= 100</code>
+	- <code>grid[i][j] is 0 or 1</code>
+
+
+
+## Solution
+
+### Javascript
+```javascript
+404: Not Found
+```
+### Python
+```python
+class Solution:
+    def shortestPathBinaryMatrix(self, grid: List[List[int]]) -> int:
+        N = len(grid)
+        q = deque([(0, 0, 1)]) # r, c, length
+        visit = set((0, 0))
+        direct = [[0, 1], [1, 0], [0, -1], [-1, 0],
+                  [1, 1], [-1, -1], [1, -1], [-1, 1]]
+        while q:
+            r, c, length = q.popleft()
+            if (min(r, c) < 0 or max(r, c) >= N or
+                grid[r][c]):
+                continue
+            if r == N - 1 and c == N - 1:
+                return length
+            for dr, dc in direct:
+                if (r + dr, c + dc) not in visit:
+                    q.append((r + dr, c + dc, length + 1))
+                    visit.add((r + dr, c + dc))
+        return -1
+
+```
+### C++
+```cpp
+404: Not Found
+```
+### Java
+```java
+class Solution {
+  public int shortestPathBinaryMatrix(int[][] grid) {
+    int n = grid.length;
+    Queue<Integer[]> q = new LinkedList<>();
+    q.add(new Integer[]{0, 0, 1}); // row, col, length
+    
+    boolean[][] visited = new boolean[n][n];
+    visited[0][0] = true;
+    
+    int[][] direct = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}, {1, 1}, {-1, -1}, {1, -1}, {-1, 1}};
+
+    while (!q.isEmpty()) {
+      Integer[] curr = q.poll();
+      int r = curr[0];
+      int c = curr[1];
+      int length = curr[2];
+      
+      // out of bounds or no way further
+      if (Math.min(r, c) < 0 || Math.max(r, c) == n || grid[r][c] == 1) continue;
+      
+      if (r == n - 1 && c == n - 1) return length;
+      
+      for (int[] d : direct) {
+        int newRow = r + d[0];
+        int newCol = c + d[1];
+        if (Math.min(newRow, newCol) >= 0 && Math.max(newRow, newCol) < n && !visited[newRow][newCol]) {
+          q.add(new Integer[]{newRow, newCol, 1 + length});
+          visited[newRow][newCol] = true;
+        }
+      }
+    }
+    return -1;
+  }
+  
+}
+
+```
+
+

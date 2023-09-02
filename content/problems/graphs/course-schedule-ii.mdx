@@ -1,0 +1,352 @@
+---
+title: Course Schedule II
+category: Graphs
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/course-schedule-ii)
+
+</Callout>
+
+## Description
+There are a total of <code>numCourses</code> courses you have to take, labeled from <code>0</code> to <code>numCourses - 1</code>. You are given an array <code>prerequisites</code> where <code>prerequisites[i] = [a<sub>i</sub>, b<sub>i</sub>]</code> indicates that you must take course <code>b<sub>i</sub></code> first if you want to take course <code>a<sub>i</sub></code>.
+
+
+	- For example, the pair <code>[0, 1]</code>, indicates that to take course <code>0</code> you have to first take course <code>1</code>.
+
+
+Return *the ordering of courses you should take to finish all courses*. If there are many valid answers, return any of them. If it is impossible to finish all courses, return an empty array.
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input: numCourses = 2, prerequisites = [[1,0]]
+Output: [0,1]
+Explanation: There are a total of 2 courses to take. To take course 1 you should have finished course 0. So the correct course order is [0,1].
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]
+Output: [0,2,1,3]
+Explanation: There are a total of 4 courses to take. To take course 3 you should have finished both courses 1 and 2. Both courses 1 and 2 should be taken after you finished course 0.
+So one correct course order is [0,1,2,3]. Another correct ordering is [0,2,1,3].
+</pre>
+
+Example 3:
+
+<br /><pre className="overflow-x-auto">
+Input: numCourses = 1, prerequisites = []
+Output: [0]
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>1 &lt;= numCourses &lt;= 2000</code>
+	- <code>0 &lt;= prerequisites.length &lt;= numCourses * (numCourses - 1)</code>
+	- <code>prerequisites[i].length == 2</code>
+	- <code>0 &lt;= a<sub>i</sub>, b<sub>i</sub> &lt; numCourses</code>
+	- <code>a<sub>i</sub> != b<sub>i</sub></code>
+	- All the pairs <code>[a<sub>i</sub>, b<sub>i</sub>]</code> are distinct.
+
+
+
+## Solution
+
+### Javascript
+```javascript
+/**
+ * https://leetcode.com/problems/course-schedule-ii/
+ * Time O(V + E) | Space O(V + E)
+ * @param {number} numCourses
+ * @param {number[][]} prerequisites
+ * @return {number[]}
+ */
+var findOrder = function(numCourses, prerequisites) {
+    const { graph, color, isDirectedAcyclicGraph, topologicalOrder } = buildGraph(numCourses, prerequisites);
+
+    search(numCourses, graph, color, topologicalOrder, isDirectedAcyclicGraph)
+
+    return isDirectedAcyclicGraph[0]
+        ? topologicalOrder.reverse()
+        : []
+}
+
+var initGraph = (numCourses) => ({
+    graph: new Array(numCourses).fill().map(() => []),
+    color: new Array(numCourses).fill(1), // White
+    isDirectedAcyclicGraph: [ true ], 
+    topologicalOrder: []
+})
+
+var buildGraph = (numCourses, prerequisites) => {
+    const { graph, color, isDirectedAcyclicGraph, topologicalOrder } = initGraph(numCourses);
+
+    for (const [ src, dst ] of prerequisites) {
+        const neighbors = (graph[dst] || []);
+
+        neighbors.push(src);
+        graph[dst] = neighbors;
+    }
+
+    return { graph, color, isDirectedAcyclicGraph, topologicalOrder }
+}
+
+var search = (numCourses, graph, color, topologicalOrder, isDirectedAcyclicGraph) => {
+    for (let i = 0; i < numCourses; i++) {
+        const isNew = color[i] === 1 // White
+        if (isNew) dfs(i, graph, color, topologicalOrder, isDirectedAcyclicGraph);
+    }
+}
+
+var dfs = (node, graph, color, topologicalOrder, isDirectedAcyclicGraph) => {
+    const hasCycle = !isDirectedAcyclicGraph[0]
+    if (hasCycle) return;
+
+    colorBackTrack(node, graph, color, topologicalOrder, isDirectedAcyclicGraph)
+
+    topologicalOrder.push(node);
+}
+
+const colorBackTrack = (node, graph, color, topologicalOrder, isDirectedAcyclicGraph) => {
+    color[node] = 2; // Grey
+        checkNeighbors(node, graph, color, topologicalOrder, isDirectedAcyclicGraph)
+    color[node] = 3; // Black
+}
+
+var checkNeighbors = (node, graph, color, topologicalOrder, isDirectedAcyclicGraph) => {
+    for (const neighbor of graph[node]) {
+        const isNew = color[neighbor] === 1 // White
+        if (isNew) dfs(neighbor, graph, color, topologicalOrder, isDirectedAcyclicGraph);
+
+        const isCycle = color[neighbor] === 2 // Grey
+        if (isCycle) isDirectedAcyclicGraph[0] = false;
+    }
+}
+
+/**
+ * https://leetcode.com/problems/course-schedule-ii/
+ * Time O(V + E) | Space O(V + E)
+ * @param {number} numCourses
+ * @param {number[][]} prerequisites
+ * @return {number[]}
+ */
+var findOrder = function(numCourses, prerequisites) {
+    const { graph, indegree } = buildGraph(numCourses, prerequisites);
+    const reversedTopologicalOrder = topologicalSort(graph, indegree);
+    const isDirectedAcyclicGraph = reversedTopologicalOrder.length === numCourses;
+
+    return isDirectedAcyclicGraph
+        ? reversedTopologicalOrder
+        : [];
+};
+
+var initGraph = (numCourses) => ({
+    graph: new Array(numCourses).fill().map(() => []),
+    indegree: new Array(numCourses).fill(0)
+})
+
+var buildGraph = (numCourses, prerequisites) => {
+    const { graph, indegree } = initGraph(numCourses);
+
+    for (const [ src, dst ] of prerequisites){
+        graph[src].push(dst);
+        indegree[dst]++;
+    }
+
+    return { graph, indegree };
+}
+
+var topologicalSort = (graph, indegree) => {
+    const queue = searchGraph(graph, indegree);
+
+    return bfs(graph, indegree, queue);
+}
+
+var isSource = (count) => count === 0;
+
+var searchGraph = (graph, indegree, queue = new Queue([])) => {
+    for (const node in graph) {
+        if (isSource(indegree[node])) queue.enqueue(node);
+    }
+
+    return queue;
+}
+
+var bfs = (graph, indegree, queue, reversedOrder = []) => {
+    while (!queue.isEmpty()) {
+        for (let i = (queue.size() - 1); 0 <= i; i--) {
+            checkNeighbors(graph, indegree, queue, reversedOrder);
+        }
+    }
+
+    return reversedOrder.reverse();
+}
+
+var checkNeighbors = (graph, indegree, queue, reversedOrder) => {
+    const node = queue.dequeue();
+
+    reversedOrder.push(node);
+
+    for (const neighbor of graph[node]) {
+        indegree[neighbor]--;
+
+        if (isSource(indegree[neighbor])) queue.enqueue(neighbor);
+    }
+}
+```
+### Python
+```python
+class Solution:
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        prereq = {c: [] for c in range(numCourses)}
+        for crs, pre in prerequisites:
+            prereq[crs].append(pre)
+
+        output = []
+        visit, cycle = set(), set()
+
+        def dfs(crs):
+            if crs in cycle:
+                return False
+            if crs in visit:
+                return True
+
+            cycle.add(crs)
+            for pre in prereq[crs]:
+                if dfs(pre) == False:
+                    return False
+            cycle.remove(crs)
+            visit.add(crs)
+            output.append(crs)
+            return True
+
+        for c in range(numCourses):
+            if dfs(c) == False:
+                return []
+        return output
+
+```
+### C++
+```cpp
+/*
+    Courses & prerequisites, return ordering of courses to take to finish all courses
+    Ex. numCourses = 2, prerequisites = [[1,0]] -> [0,1], take course 0 then 1
+
+    All courses can be completed if there's no cycle, check for cycles
+
+    Time: O(V + E)
+    Space: O(V + E)
+*/
+
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        unordered_map<int, vector<int>> m;
+        // build adjacency list of prereqs
+        for (int i = 0; i < prerequisites.size(); i++) {
+            m[prerequisites[i][0]].push_back(prerequisites[i][1]);
+        }
+        unordered_set<int> visit;
+        unordered_set<int> cycle;
+        
+        vector<int> result;
+        for (int course = 0; course < numCourses; course++) {
+            if (!dfs(course, m, visit, cycle, result)) {
+                return {};
+            }
+        }
+        return result;
+    }
+private:
+    // a course has 3 possible states:
+    // visited -> course added to result
+    // visiting -> course not added to result, but added to cycle
+    // unvisited -> course not added to result or cycle
+    bool dfs(int course, unordered_map<int, vector<int>>& m, unordered_set<int>& visit,
+        unordered_set<int>& cycle, vector<int>& result) {
+        
+        if (cycle.find(course) != cycle.end()) {
+            return false;
+        }
+        if (visit.find(course) != visit.end()) {
+            return true;
+        }
+        cycle.insert(course);
+        for (int i = 0; i < m[course].size(); i++) {
+            int nextCourse = m[course][i];
+            if (!dfs(nextCourse, m, visit, cycle, result)) {
+                return false;
+            }
+        }
+        cycle.erase(course);
+        visit.insert(course);
+        result.push_back(course);
+        return true;
+    }
+};
+
+```
+### Java
+```java
+class Solution {
+
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        Map<Integer, List<Integer>> adjList = new HashMap<Integer, List<Integer>>();
+        int[] indegree = new int[numCourses];
+        int[] topologicalOrder = new int[numCourses];
+
+        //creating the adjlist
+        for (int i = 0; i < prerequisites.length; i++) {
+            int post = prerequisites[i][0];
+            int pre = prerequisites[i][1];
+            List<Integer> lst = adjList.getOrDefault(
+                pre,
+                new ArrayList<Integer>()
+            );
+            lst.add(post);
+            adjList.put(pre, lst);
+
+            indegree[post] += 1;
+        }
+
+        Queue<Integer> q = new LinkedList<Integer>();
+        for (int i = 0; i < numCourses; i++) {
+            if (indegree[i] == 0) {
+                q.add(i);
+            }
+        }
+
+        int i = 0;
+        while (!q.isEmpty()) {
+            int node = q.remove();
+            topologicalOrder[i++] = node;
+
+            if (adjList.containsKey(node)) {
+                for (Integer neighbor : adjList.get(node)) {
+                    indegree[neighbor]--;
+
+                    if (indegree[neighbor] == 0) {
+                        q.add(neighbor);
+                    }
+                }
+            }
+        }
+
+        if (i == numCourses) {
+            return topologicalOrder;
+        }
+
+        return new int[0];
+    }
+}
+
+```
+
+

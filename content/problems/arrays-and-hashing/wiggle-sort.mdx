@@ -1,0 +1,54 @@
+---
+title: Wiggle Sort
+category: Arrays And Hashing
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/wiggle-sort)
+
+</Callout>
+
+## Description
+This problem is on Premium plan or is not available
+
+## Solution
+
+### Javascript
+```javascript
+404: Not Found
+```
+### Python
+```python
+class Solution:
+    def wiggleSort(self, nums: List[int]) -> None:
+        for i in range(1, len(nums)):
+            if (i % 2 == 1 and nums[i] < nums[i - 1]) or (i % 2 == 0 and nums[i] > nums[i - 1]):
+                nums[i], nums[i - 1] = nums[i - 1], nums[i]
+
+```
+### C++
+```cpp
+/*
+    Time: O(n)
+    Space: O(1)
+*/
+
+class Solution {
+public:
+    void wiggleSort(vector<int> &nums) {
+        for(int i=1; i<nums.size(); i++) {
+            if((i%2==1 && (nums[i] < nums[i-1])) || (i%2==0 && (nums[i] > nums[i-1])))
+                swap(nums[i], nums[i-1]);
+        }
+    }
+};
+
+```
+### Java
+```java
+404: Not Found
+```
+
+

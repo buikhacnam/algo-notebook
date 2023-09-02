@@ -1,0 +1,235 @@
+---
+title: Design Circular Queue
+category: Linked List
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/design-circular-queue)
+
+</Callout>
+
+## Description
+Design your implementation of the circular queue. The circular queue is a linear data structure in which the operations are performed based on FIFO (First In First Out) principle, and the last position is connected back to the first position to make a circle. It is also called &quot;Ring Buffer&quot;.
+
+One of the benefits of the circular queue is that we can make use of the spaces in front of the queue. In a normal queue, once the queue becomes full, we cannot insert the next element even if there is a space in front of the queue. But using the circular queue, we can use the space to store new values.
+
+Implement the <code>MyCircularQueue</code> class:
+
+
+	- <code>MyCircularQueue(k)</code> Initializes the object with the size of the queue to be <code>k</code>.
+	- <code>int Front()</code> Gets the front item from the queue. If the queue is empty, return <code>-1</code>.
+	- <code>int Rear()</code> Gets the last item from the queue. If the queue is empty, return <code>-1</code>.
+	- <code>boolean enQueue(int value)</code> Inserts an element into the circular queue. Return <code>true</code> if the operation is successful.
+	- <code>boolean deQueue()</code> Deletes an element from the circular queue. Return <code>true</code> if the operation is successful.
+	- <code>boolean isEmpty()</code> Checks whether the circular queue is empty or not.
+	- <code>boolean isFull()</code> Checks whether the circular queue is full or not.
+
+
+You must solve the problem without using the built-in queue data structure in your programming language. 
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input
+[&quot;MyCircularQueue&quot;, &quot;enQueue&quot;, &quot;enQueue&quot;, &quot;enQueue&quot;, &quot;enQueue&quot;, &quot;Rear&quot;, &quot;isFull&quot;, &quot;deQueue&quot;, &quot;enQueue&quot;, &quot;Rear&quot;]
+[[3], [1], [2], [3], [4], [], [], [], [4], []]
+Output
+[null, true, true, true, false, 3, true, true, true, 4]
+
+Explanation
+MyCircularQueue myCircularQueue = new MyCircularQueue(3);
+myCircularQueue.enQueue(1); // return True
+myCircularQueue.enQueue(2); // return True
+myCircularQueue.enQueue(3); // return True
+myCircularQueue.enQueue(4); // return False
+myCircularQueue.Rear();     // return 3
+myCircularQueue.isFull();   // return True
+myCircularQueue.deQueue();  // return True
+myCircularQueue.enQueue(4); // return True
+myCircularQueue.Rear();     // return 4
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>1 &lt;= k &lt;= 1000</code>
+	- <code>0 &lt;= value &lt;= 1000</code>
+	- At most <code>3000</code> calls will be made to <code>enQueue</code>, <code>deQueue</code>, <code>Front</code>, <code>Rear</code>, <code>isEmpty</code>, and <code>isFull</code>.
+
+
+
+## Solution
+
+### Javascript
+```javascript
+404: Not Found
+```
+### Python
+```python
+class Node:
+    def __init__(self, val: int):
+        self.val = val
+        self.next = None
+
+
+class MyCircularQueue:
+
+    def __init__(self, k: int):
+        self.head = self.tail = None
+        self.capacity = k
+        self.size = 0
+
+
+    def enQueue(self, value: int) -> bool:
+        if self.isFull():
+            return False
+
+        node = Node(value)
+        if self.size == 0:
+            self.head = self.tail = node
+        else:
+            self.tail.next = self.tail = node
+
+        self.size += 1
+
+        return True
+
+
+    def deQueue(self) -> bool:
+        if self.isEmpty():
+            return False
+
+        self.head = self.head.next
+        self.size -= 1
+
+        return True
+
+
+    def Front(self) -> int:
+        return -1 if self.isEmpty() else self.head.val
+
+
+    def Rear(self) -> int:
+        return -1 if self.isEmpty() else self.tail.val
+
+
+    def isEmpty(self) -> bool:
+        return self.size == 0
+
+
+    def isFull(self) -> bool:
+        return self.capacity == self.size
+
+
+```
+### C++
+```cpp
+404: Not Found
+```
+### Java
+```java
+class MyCircularQueue {
+    Node head=null;
+    Node tail=null;
+
+    int currentLength=0;
+    int totalLength=0;
+    public MyCircularQueue(int k) {
+        head=new Node(-1);
+        tail=new Node(-1);
+
+        head.next=tail;
+        head.prev=tail;
+
+        tail.next=head;
+        tail.prev =head;
+
+        totalLength=k;
+    }
+    
+    public boolean enQueue(int value) {
+        if(isFull()){
+            return false;
+        }
+
+        Node left = head.prev;
+        Node right= head;
+
+        Node temp = new Node(value);
+
+        temp.next= right;
+
+        right.prev = temp;
+
+        left.next=temp;
+
+        temp.prev=left;
+
+        currentLength++;
+
+        
+
+        return true;
+    }
+    
+    public boolean deQueue() {
+        if(isEmpty()){
+            return false;
+        }
+
+        Node left = tail;
+        Node right= tail.next.next;
+ 
+       left.next = right;
+
+       right.prev = left;
+
+
+        currentLength--;
+
+        return true;
+    }
+    
+    public int Front() {
+        if(currentLength<=0){
+            return -1;
+        }
+
+        return tail.next.val;
+    }
+    
+    public int Rear() {
+        if(currentLength<=0){
+            return -1;
+        }
+
+        return head.prev.val;
+    }
+    
+    public boolean isEmpty() {
+        return currentLength==0 ? true : false;
+    }
+    
+    public boolean isFull() {
+        return currentLength==totalLength ? true : false;
+    }
+
+}
+
+class Node{
+    int val;
+    Node next=null;
+    Node prev=null;
+
+    Node(int val){
+        this.val=val;
+    }
+}
+
+```
+
+

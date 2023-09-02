@@ -1,0 +1,329 @@
+---
+title: Coin Change II
+category: 2d Dynamic Programming
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/coin-change-ii)
+
+</Callout>
+
+## Description
+You are given an integer array <code>coins</code> representing coins of different denominations and an integer <code>amount</code> representing a total amount of money.
+
+Return *the number of combinations that make up that amount*. If that amount of money cannot be made up by any combination of the coins, return <code>0</code>.
+
+You may assume that you have an infinite number of each kind of coin.
+
+The answer is guaranteed to fit into a signed 32-bit integer.
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input: amount = 5, coins = [1,2,5]
+Output: 4
+Explanation: there are four ways to make up the amount:
+5=5
+5=2+2+1
+5=2+1+1+1
+5=1+1+1+1+1
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: amount = 3, coins = [2]
+Output: 0
+Explanation: the amount of 3 cannot be made up just with coins of 2.
+</pre>
+
+Example 3:
+
+<br /><pre className="overflow-x-auto">
+Input: amount = 10, coins = [10]
+Output: 1
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>1 &lt;= coins.length &lt;= 300</code>
+	- <code>1 &lt;= coins[i] &lt;= 5000</code>
+	- All the values of <code>coins</code> are unique.
+	- <code>0 &lt;= amount &lt;= 5000</code>
+
+
+
+## Solution
+
+### Javascript
+```javascript
+/**
+ * Brute Force - DFS
+ * Time O(2^N) | Space O(N)
+ * @param {number} amount
+ * @param {number[]} coins
+ * @return {number}
+ */
+ var change = (amount, coins, n = (coins.length)) => {
+    const isBaseCase1 = (amount === 0);
+    if (isBaseCase1) return 1;
+
+    const isBaseCase2 = (n === 0);
+    if (isBaseCase2) return 0;
+
+    return dfs(amount, coins, n);/* Time O(2^N) | Space O(N) */
+}
+
+var dfs = (amount, coins, n) => {
+    const isLess = (amount < coins[(n - 1)]);
+    if (isLess) return change(amount, coins, (n - 1));       /* Time O(2^N) | Space O(N) */
+
+    const left = change((amount - coins[(n - 1)]), coins, n);/* Time O(2^N) | Space O(N) */
+    const right = change(amount, coins, (n - 1));            /* Time O(2^N) | Space O(N) */
+
+    return (left + right);
+}
+
+/**
+ * DP - Top Down
+ * Matrix - Memoization
+ * Time O(N * AMOUNT) | Space O(N * AMOUNT)
+ * https://leetcode.com/problems/coin-change-ii/
+ * @param {number} amount
+ * @param {number[]} coins
+ * @return {number}
+ */
+var change = (amount, coins, n = (coins.length), memo = initMemo(coins, amount)) => {
+    const isBaseCase1 = (n === 0);
+    if (isBaseCase1) return 0;
+
+    const isBaseCase2 = (amount === 0);
+    if (isBaseCase2) return 1;
+
+    const hasSeen = (memo[n][amount] !== null);
+    if (hasSeen) return memo[n][amount];
+
+    return dfs(amount, coins, n, memo);/* Time O(N * AMOUNT) | Space O((N * AMOUNT) + HEIGHT) */
+}
+
+var initMemo = (coins, amount) => new Array(coins.length + 2).fill()
+    .map(() => new Array(amount + 2).fill(null));
+
+var dfs = (amount, coins, n, memo) => {
+    const isLess = (amount < coins[(n - 1)]);
+    if (isLess) {
+        memo[n][amount] = change(amount, coins, (n - 1), memo);     /* Time O(N * AMOUNT) | Space O(HEIGHT) */
+        return memo[n][amount];
+    }
+
+    const left = change((amount - coins[(n - 1)]), coins, n, memo);/* Time O(N * AMOUNT) | Space O(HEIGHT) */
+    const right = change(amount, coins, (n - 1), memo);            /* Time O(N * AMOUNT) | Space O(HEIGHT) */
+
+    memo[n][amount] = (left + right);                              /*                    | Space O(N * AMOUNT) */
+    return memo[n][amount];
+}
+
+/**
+ * DP - Bottom Up
+ * Array - Tabulation
+ * Time O(N * AMOUNT) | Space O(N * AMOUNT)
+ * https://leetcode.com/problems/coin-change-ii/
+ */
+ var change = (amount, coins) => {
+    const tabu = initTabu(amount, coins);/* Time O(N * AMOUNT) | Space O(N * AMOUNT) */
+
+    search(amount, coins, tabu);         /* Time O(N * AMOUNT) | Space O(N * AMOUNT) */
+
+    return tabu[coins.length][amount];
+}
+
+var initTabu = (amount, coins) => {
+    const tabu = new Array((coins.length + 1)).fill()/* Time O(N) | Space O(N) */
+        .map(() => new Array((amount + 1)).fill(0));     /* Time O(AMOUNT) | Space O(AMOUNT) */
+
+    tabu[0][0] = 1;                                   /*          | Space O(N * AMOUNT) */
+
+    return tabu;
+}
+
+var search = (amount, coins, tabu) => {
+    for (let coin = 1; coin <= coins.length; coin++) {   /* Time O(N)*/
+        tabu[coin][0] = 1;                                       /* Space O(N * AMOUNT) */
+
+        for (let _amount = 1; _amount <= amount; _amount++) {/* Time O(AMOUNT) */
+            tabu[coin][_amount] = tabu[coin - 1][_amount];
+
+            const canUpdate = (0 <= (_amount - coins[(coin - 1)]));
+            if (!canUpdate) continue;
+
+            const val = tabu[coin][(_amount - coins[(coin - 1)])];
+            tabu[coin][_amount] += val                           /* Space O(N * AMOUNT) */
+        }
+    }
+}
+
+/**
+ * DP - Bottom Up
+ * Array - Tabulation
+ * Time O(N * AMOUNT) | Space O(AMOUNT)
+ * https://leetcode.com/problems/coin-change-ii/
+ * @param {number} amount
+ * @param {number[]} coins
+ * @return {number}
+ */
+var change = (amount, coins) => {
+    const tabu = initTabu(amount);
+
+    search(amount, coins, tabu);
+
+    return tabu[amount];
+};
+
+var initTabu = (amount) => {
+    var tabu = new Array((amount + 1)).fill(0);
+
+    tabu[0] = 1;
+
+    return tabu;
+}
+
+var search = (amount, coins, tabu) => {
+    for (const coin of coins) {
+        for (let _amount = 0; (_amount < (amount + 1)); _amount++) {
+            const canUpdate = (coin <= _amount);
+            if (!canUpdate) continue;
+
+            tabu[_amount] += tabu[(_amount - coin)];
+        }
+    }
+}
+
+```
+### Python
+```python
+class Solution:
+    def change(self, amount: int, coins: List[int]) -> int:
+        # MEMOIZATION
+        # Time: O(n*m)
+        # Memory: O(n*m)
+        cache = {}
+
+        def dfs(i, a):
+            if a == amount:
+                return 1
+            if a > amount:
+                return 0
+            if i == len(coins):
+                return 0
+            if (i, a) in cache:
+                return cache[(i, a)]
+
+            cache[(i, a)] = dfs(i, a + coins[i]) + dfs(i + 1, a)
+            return cache[(i, a)]
+
+        return dfs(0, 0)
+
+        # DYNAMIC PROGRAMMING
+        # Time: O(n*m)
+        # Memory: O(n*m)
+        dp = [[0] * (len(coins) + 1) for i in range(amount + 1)]
+        dp[0] = [1] * (len(coins) + 1)
+        for a in range(1, amount + 1):
+            for i in range(len(coins) - 1, -1, -1):
+                dp[a][i] = dp[a][i + 1]
+                if a - coins[i] >= 0:
+                    dp[a][i] += dp[a - coins[i]][i]
+        return dp[amount][0]
+
+        # DYNAMIC PROGRAMMING
+        # Time: O(n*m)
+        # Memory: O(n) where n = amount
+        dp = [0] * (amount + 1)
+        dp[0] = 1
+        for i in range(len(coins) - 1, -1, -1):
+            nextDP = [0] * (amount + 1)
+            nextDP[0] = 1
+
+            for a in range(1, amount + 1):
+                nextDP[a] = dp[a]
+                if a - coins[i] >= 0:
+                    nextDP[a] += nextDP[a - coins[i]]
+            dp = nextDP
+        return dp[amount]
+
+```
+### C++
+```cpp
+/*
+    Given array of coins & an amount, return # of combos that make up this amount
+    Ex. amount = 5, coins = [1,2,5] -> 4 (5, 2+2+1, 2+1+1+1, 1+1+1+1+1)
+
+    DFS + memo, 2 choices: either try coin & stay at idx, or don't try & proceed
+
+    Time: O(m x n)
+    Space: O(m x n)
+*/
+
+class Solution {
+public:
+    int change(int amount, vector<int>& coins) {
+        return dfs(amount, coins, 0, 0);
+    }
+private:
+    // {(index, sum) -> # of combos that make up this amount}
+    map<pair<int, int>, int> dp;
+    
+    int dfs(int amount, vector<int>& coins, int i, int sum) {
+        if (sum == amount) {
+            return 1;
+        }
+        if (sum > amount) {
+            return 0;
+        }
+        if (i == coins.size()) {
+            return 0;
+        }
+        if (dp.find({i, sum}) != dp.end()) {
+            return dp[{i, sum}];
+        }
+        
+        dp[{i, sum}] = dfs(amount, coins, i, sum + coins[i])
+                     + dfs(amount, coins, i + 1, sum);
+        
+        return dp[{i, sum}];
+    }
+};
+
+```
+### Java
+```java
+// Dynammic Programming - Tabulation
+// Time Complexity (n * amount) | Space Complexity (amount) where n is the length of coins
+class Solution {
+
+    public int change(int amount, int[] coins) {
+        int[] dp = new int[amount + 1];
+
+        // if amount is 0, there is only 1 way of making change (no money)
+        dp[0] = 1;
+
+        for (int coin : coins) {
+            for (int i = 1; i <= amount; i++) {
+                if (coin <= i) {
+                    dp[i] += dp[i - coin];
+                }
+            }
+        }
+
+        return dp[amount];
+    }
+}
+
+```
+
+

@@ -1,0 +1,235 @@
+---
+title: Time Based Key-Value Store
+category: Binary Search
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/time-based-key-value-store)
+
+</Callout>
+
+## Description
+Design a time-based key-value data structure that can store multiple values for the same key at different time stamps and retrieve the key&#39;s value at a certain timestamp.
+
+Implement the <code>TimeMap</code> class:
+
+
+	- <code>TimeMap()</code> Initializes the object of the data structure.
+	- <code>void set(String key, String value, int timestamp)</code> Stores the key <code>key</code> with the value <code>value </code>at the given time <code>timestamp</code>.
+	- <code>String get(String key, int timestamp)</code> Returns a value such that <code>set</code> was called previously, with <code>timestamp_prev &lt;= timestamp</code>. If there are multiple such values, it returns the value associated with the largest <code>timestamp_prev</code>. If there are no values, it returns <code>&quot;&quot;</code>.
+
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input
+[&quot;TimeMap&quot;, &quot;set&quot;, &quot;get&quot;, &quot;get&quot;, &quot;set&quot;, &quot;get&quot;, &quot;get&quot;]
+[[], [&quot;foo&quot;, &quot;bar&quot;, 1], [&quot;foo&quot;, 1], [&quot;foo&quot;, 3], [&quot;foo&quot;, &quot;bar2&quot;, 4], [&quot;foo&quot;, 4], [&quot;foo&quot;, 5]]
+Output
+[null, null, &quot;bar&quot;, &quot;bar&quot;, null, &quot;bar2&quot;, &quot;bar2&quot;]
+
+Explanation
+TimeMap timeMap = new TimeMap();
+timeMap.set(&quot;foo&quot;, &quot;bar&quot;, 1);  // store the key &quot;foo&quot; and value &quot;bar&quot; along with timestamp = 1.
+timeMap.get(&quot;foo&quot;, 1);         // return &quot;bar&quot;
+timeMap.get(&quot;foo&quot;, 3);         // return &quot;bar&quot;, since there is no value corresponding to foo at timestamp 3 and timestamp 2, then the only value is at timestamp 1 is &quot;bar&quot;.
+timeMap.set(&quot;foo&quot;, &quot;bar2&quot;, 4); // store the key &quot;foo&quot; and value &quot;bar2&quot; along with timestamp = 4.
+timeMap.get(&quot;foo&quot;, 4);         // return &quot;bar2&quot;
+timeMap.get(&quot;foo&quot;, 5);         // return &quot;bar2&quot;
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>1 &lt;= key.length, value.length &lt;= 100</code>
+	- <code>key</code> and <code>value</code> consist of lowercase English letters and digits.
+	- <code>1 &lt;= timestamp &lt;= 10<sup>7</sup></code>
+	- All the timestamps <code>timestamp</code> of <code>set</code> are strictly increasing.
+	- At most <code>2 * 10<sup>5</sup></code> calls will be made to <code>set</code> and <code>get</code>.
+
+
+
+## Solution
+
+### Javascript
+```javascript
+/**
+ * Your TimeMap object will be instantiated and called as such:
+ * var obj = new TimeMap()
+ * obj.set(key,value,timestamp)
+ * var param_2 = obj.get(key,timestamp)
+ */
+class TimeMap {
+    constructor() {
+        this.map = {};
+    }
+
+    /**
+     * @param {string} key
+     * @param {string} value
+     * @param {number} timestamp
+     * Time O(1) | Space O(1)
+     * @return {void}
+     */
+    set(key, value, timestamp) {
+        const bucket = this.map[key] || [];
+
+        this.map[key] = bucket;
+
+        bucket.push([value, timestamp]);
+    }
+
+    /**
+     * @param {string} key
+     * @param {number} timestamp
+     * Time O(log(N)) | Space O(1)
+     * @return {string}
+     */
+    get(key, timestamp, value = '', bucket = this.map[key] || []) {
+        let [left, right] = [0, bucket.length - 1];
+
+        while (left <= right) {
+            const mid = (left + right) >> 1;
+            const [guessValue, guessTimestamp] = bucket[mid];
+
+            const isTargetGreater = guessTimestamp <= timestamp;
+            if (isTargetGreater) {
+                value = guessValue;
+                left = mid + 1;
+            }
+
+            const isTargetLess = timestamp < guessTimestamp;
+            if (isTargetLess) right = mid - 1;
+        }
+
+        return value;
+    }
+}
+
+```
+### Python
+```python
+class TimeMap:
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.keyStore = {}  # key : list of [val, timestamp]
+
+    def set(self, key: str, value: str, timestamp: int) -> None:
+        if key not in self.keyStore:
+            self.keyStore[key] = []
+        self.keyStore[key].append([value, timestamp])
+
+    def get(self, key: str, timestamp: int) -> str:
+        res, values = "", self.keyStore.get(key, [])
+        l, r = 0, len(values) - 1
+        while l <= r:
+            m = (l + r) // 2
+            if values[m][1] <= timestamp:
+                res = values[m][0]
+                l = m + 1
+            else:
+                r = m - 1
+        return res
+
+```
+### C++
+```cpp
+/*
+    Design time-based key-value structure, multiple vals at diff times
+
+    Hash map, since timestamps are naturally in order, binary search
+
+    Time: O(log n)
+    Space: O(n)
+*/
+
+class TimeMap {
+public:
+    TimeMap() {
+        
+    }
+    
+    void set(string key, string value, int timestamp) {
+        m[key].push_back({timestamp, value});
+    }
+    
+    string get(string key, int timestamp) {
+        if (m.find(key) == m.end()) {
+            return "";
+        }
+        
+        int low = 0;
+        int high = m[key].size() - 1;
+        
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            if (m[key][mid].first < timestamp) {
+                low = mid + 1;
+            } else if (m[key][mid].first > timestamp) {
+                high = mid - 1;
+            } else {
+                return m[key][mid].second;
+            }
+        }
+        
+        if (high >= 0) {
+            return m[key][high].second;
+        }
+        return "";
+    }
+private:
+    unordered_map<string, vector<pair<int, string>>> m;
+};
+
+/**
+ * Your TimeMap object will be instantiated and called as such:
+ * TimeMap* obj = new TimeMap();
+ * obj->set(key,value,timestamp);
+ * string param_2 = obj->get(key,timestamp);
+ */
+
+```
+### Java
+```java
+class TimeMap {
+
+    HashMap<String, List<Pair<String, Integer>>> map;
+
+    public TimeMap() {
+        map = new HashMap<>();
+    }
+
+    public void set(String key, String value, int timestamp) {
+        if (!map.containsKey(key)) map.put(key, new ArrayList<>());
+        map.get(key).add(new Pair(value, timestamp));
+    }
+
+    public String get(String key, int timestamp) {
+        if (!map.containsKey(key)) return "";
+        List<Pair<String, Integer>> list = map.get(key);
+        return search(list, timestamp);
+    }
+
+    public String search(List<Pair<String, Integer>> list, int timestamp) {
+        int start = 0;
+        int end = list.size() - 1;
+        while (start < end) {
+            int mid = start + (end - start + 1) / 2;
+            if (list.get(mid).getValue() <= timestamp) start = mid; else end =
+                mid - 1;
+        }
+        return list.get(start).getValue() <= timestamp
+            ? list.get(start).getKey()
+            : "";
+    }
+}
+
+```
+
+

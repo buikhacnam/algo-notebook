@@ -1,0 +1,179 @@
+---
+title: Check if Move is Legal
+category: Graphs
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/check-if-move-is-legal)
+
+</Callout>
+
+## Description
+You are given a 0-indexed <code>8 x 8</code> grid <code>board</code>, where <code>board[r][c]</code> represents the cell <code>(r, c)</code> on a game board. On the board, free cells are represented by <code>&#39;.&#39;</code>, white cells are represented by <code>&#39;W&#39;</code>, and black cells are represented by <code>&#39;B&#39;</code>.
+
+Each move in this game consists of choosing a free cell and changing it to the color you are playing as (either white or black). However, a move is only legal if, after changing it, the cell becomes the endpoint of a good line (horizontal, vertical, or diagonal).
+
+A good line is a line of three or more cells (including the endpoints) where the endpoints of the line are one color, and the remaining cells in the middle are the opposite color (no cells in the line are free). You can find examples for good lines in the figure below:
+<Image alt="" src="https://assets.leetcode.com/uploads/2021/07/22/goodlines5.png" width={500} height={312} />
+Given two integers <code>rMove</code> and <code>cMove</code> and a character <code>color</code> representing the color you are playing as (white or black), return <code>true</code> *if changing cell *<code>(rMove, cMove)</code> *to color* <code>color</code> *is a legal move, or *<code>false</code>* if it is not legal*.
+
+ 
+Example 1:
+<Image alt="" src="https://assets.leetcode.com/uploads/2021/07/10/grid11.png" width={350} height={350} />
+<br /><pre className="overflow-x-auto">
+Input: board = [[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;B&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;],[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;W&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;],[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;W&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;],[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;W&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;],[&quot;W&quot;,&quot;B&quot;,&quot;B&quot;,&quot;.&quot;,&quot;W&quot;,&quot;W&quot;,&quot;W&quot;,&quot;B&quot;],[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;B&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;],[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;B&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;],[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;W&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;]], rMove = 4, cMove = 3, color = &quot;B&quot;
+Output: true
+Explanation: &#39;.&#39;, &#39;W&#39;, and &#39;B&#39; are represented by the colors blue, white, and black respectively, and cell (rMove, cMove) is marked with an &#39;X&#39;.
+The two good lines with the chosen cell as an endpoint are annotated above with the red rectangles.
+</pre>
+
+Example 2:
+<Image alt="" src="https://assets.leetcode.com/uploads/2021/07/10/grid2.png" width={350} height={351} />
+<br /><pre className="overflow-x-auto">
+Input: board = [[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;],[&quot;.&quot;,&quot;B&quot;,&quot;.&quot;,&quot;.&quot;,&quot;W&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;],[&quot;.&quot;,&quot;.&quot;,&quot;W&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;],[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;W&quot;,&quot;B&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;],[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;],[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;B&quot;,&quot;W&quot;,&quot;.&quot;,&quot;.&quot;],[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;W&quot;,&quot;.&quot;],[&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;.&quot;,&quot;B&quot;]], rMove = 4, cMove = 4, color = &quot;W&quot;
+Output: false
+Explanation: While there are good lines with the chosen cell as a middle cell, there are no good lines with the chosen cell as an endpoint.
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>board.length == board[r].length == 8</code>
+	- <code>0 &lt;= rMove, cMove &lt; 8</code>
+	- <code>board[rMove][cMove] == &#39;.&#39;</code>
+	- <code>color</code> is either <code>&#39;B&#39;</code> or <code>&#39;W&#39;</code>.
+
+
+
+## Solution
+
+### Javascript
+```javascript
+var checkMove = function(board, rMove, cMove, color) {
+    const ROWS = board.length, COLS = board[0].length;
+    let direction = [[1, 0], [-1, 0], [0, 1], [0, -1],
+                     [1, 1], [-1, -1], [1, -1], [-1, 1]];
+    board[rMove][cMove] = color;
+    
+    let legal = function(row, col, color, direc) {
+        let dr = direc[0], dc = direc[1];
+        row = row + dr;
+        col = col + dc;
+        let length = 1;
+        
+        while(0 <= row && row < ROWS && 0 <= col && col < COLS) {
+            length += 1;
+            if(board[row][col] == '.') return false;
+            if(board[row][col] == color)
+                return length >= 3;
+            row = row + dr;
+            col = col + dc;
+        }
+        return false;
+    }
+    
+    for(const d of direction)
+        if(legal(rMove, cMove, color, d)) return true;
+    return false;
+};
+
+```
+### Python
+```python
+class Solution:
+    def checkMove(self, board: List[List[str]], rMove: int, cMove: int, color: str) -> bool:
+        ROWS, COLS = len(board), len(board[0])
+        direction = [[1, 0], [-1, 0], [0, 1], [0, -1],
+                     [1, 1], [-1, -1], [1, -1], [-1, 1]]
+        board[rMove][cMove] = color
+        
+        def legal(row, col, color, direc):
+            dr, dc = direc
+            row, col = row + dr, col + dc
+            length = 1
+            
+            while(0 <= row < ROWS and 0 <= col < COLS):
+                length += 1
+                if board[row][col] == '.': return False
+                if board[row][col] == color:
+                    return length >= 3
+                row, col = row + dr, col + dc
+            return False
+        
+        for d in direction:
+            if legal(rMove, cMove, color, d): return True
+        return False
+
+```
+### C++
+```cpp
+class Solution {
+public:
+    bool checkMove(vector<vector<char>>& board, int rMove, int cMove, char color) {
+        const int ROWS = board.size(), COLS = board[0].size();
+        int direction[8][4] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1},
+                               {1, 1}, {-1, -1}, {1, -1}, {-1, 1}};
+        board[rMove][cMove] = color;
+        
+        function<bool(int, int, char, int[])> legal = [&] (int row, int col, char color, int direc[]) -> bool {
+            int dr = direc[0], dc = direc[1];
+            row = row + dr;
+            col = col + dc;
+            int length = 1;
+            
+            while(0 <= row && row < ROWS && 0 <= col && col < COLS) {
+                length += 1;
+                if(board[row][col] == '.') return false;
+                if(board[row][col] == color)
+                    return length >= 3;
+                row = row + dr;
+                col = col + dc;
+            }
+            return false;
+        };
+        
+        for(auto& d: direction)
+            if(legal(rMove, cMove, color, d)) return true;
+        return false;
+    }
+};
+
+```
+### Java
+```java
+class Solution {
+    public boolean checkMove(char[][] board, int rMove, int cMove, char color) {
+        int[][] direction = {{1, 0}, {-1, 0}, {0, 1}, {0, -1},
+                             {1, 1}, {-1, -1}, {1, -1}, {-1, 1}};
+        board[rMove][cMove] = color;
+        
+        for(int[] d: direction)
+            if(legal(board, rMove, cMove, color, d)) return true;
+        return false;
+    }
+    
+    boolean legal(char[][] board, int row, int col, char color, int[] direc) {
+        int ROWS = board.length, COLS = board[0].length;
+        int dr = direc[0], dc = direc[1];
+        row = row + dr;
+        col = col + dc;
+        int length = 1;
+        
+        while(0 <= row && row < ROWS && 0 <= col && col < COLS) {
+            length += 1;
+            if(board[row][col] == '.') return false;
+            if(board[row][col] == color)
+                return length >= 3;
+            row = row + dr;
+            col = col + dc;
+        }
+        return false;
+    }
+}
+
+```
+
+

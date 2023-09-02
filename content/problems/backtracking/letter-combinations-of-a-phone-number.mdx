@@ -1,0 +1,234 @@
+---
+title: Letter Combinations of a Phone Number
+category: Backtracking
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/letter-combinations-of-a-phone-number)
+
+</Callout>
+
+## Description
+Given a string containing digits from <code>2-9</code> inclusive, return all possible letter combinations that the number could represent. Return the answer in any order.
+
+A mapping of digits to letters (just like on the telephone buttons) is given below. Note that 1 does not map to any letters.
+<Image alt="" src="https://assets.leetcode.com/uploads/2022/03/15/1200px-telephone-keypad2svg.png" width={300} height={243} />
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input: digits = &quot;23&quot;
+Output: [&quot;ad&quot;,&quot;ae&quot;,&quot;af&quot;,&quot;bd&quot;,&quot;be&quot;,&quot;bf&quot;,&quot;cd&quot;,&quot;ce&quot;,&quot;cf&quot;]
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: digits = &quot;&quot;
+Output: []
+</pre>
+
+Example 3:
+
+<br /><pre className="overflow-x-auto">
+Input: digits = &quot;2&quot;
+Output: [&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>0 &lt;= digits.length &lt;= 4</code>
+	- <code>digits[i]</code> is a digit in the range <code>[&#39;2&#39;, &#39;9&#39;]</code>.
+
+
+
+## Solution
+
+### Javascript
+```javascript
+/**
+ * https://leetcode.com/problems/letter-combinations-of-a-phone-number/
+ * Time O(N * 4^N) | Space O(N)
+ * @param {string} digits
+ * @return {string[]}
+ */
+ var letterCombinations = function(digits, combination = [], combinations = []) {
+    const isBaseCase = !digits
+    if (isBaseCase) {
+        if (combination.length) combinations.push(combination.join(''))
+
+        return combinations;
+    }
+
+    const letters = phoneButtons[ digits[0] ];
+
+    for (const char of letters) {
+        backTrack(digits, char, combination, combinations);
+    }
+
+    return combinations;
+};
+
+const backTrack = (digits, char, combination, combinations) => {
+    combination.push(char)
+        letterCombinations(digits.slice(1), combination, combinations)
+    combination.pop()
+}
+
+const phoneButtons = ({
+    2: ['a', 'b', 'c'],
+    3: ['d', 'e', 'f'],
+    4: ['g', 'h', 'i'],
+    5: ['j', 'k', 'l'],
+    6: ['m', 'n', 'o'],
+    7: ['p', 'q', 'r', 's'],
+    8: ['t', 'u', 'v'],
+    9: ['w', 'x', 'y', 'z'],
+})
+
+```
+### Python
+```python
+class Solution:
+    def letterCombinations(self, digits: str) -> List[str]:
+        res = []
+        digitToChar = {
+            "2": "abc",
+            "3": "def",
+            "4": "ghi",
+            "5": "jkl",
+            "6": "mno",
+            "7": "qprs",
+            "8": "tuv",
+            "9": "wxyz",
+        }
+
+        def backtrack(i, curStr):
+            if len(curStr) == len(digits):
+                res.append(curStr)
+                return
+            for c in digitToChar[digits[i]]:
+                backtrack(i + 1, curStr + c)
+
+        if digits:
+            backtrack(0, "")
+
+        return res
+
+```
+### C++
+```cpp
+/*
+    Given cell phone pad, return all possible letter combos that the number could represent
+    Ex. digits = "23" -> ["ad","ae","af","bd","be","bf","cd","ce","cf"]
+
+    Hash map all digits to letters, add 1 letter at a time for each digit, then backtrack undo
+
+    Time: O(n x 4^n)
+    Space: O(n x 4^n)
+*/
+
+class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+        if (digits.empty()) {
+            return {};
+        }
+        
+        unordered_map<char, string> m = {
+            {'2', "abc"},
+            {'3', "def"},
+            {'4', "ghi"},
+            {'5', "jkl"},
+            {'6', "mno"},
+            {'7', "pqrs"},
+            {'8', "tuv"},
+            {'9', "wxyz"}
+        };
+        string curr = "";
+        vector<string> result;
+        
+        dfs(digits, 0, m, curr, result);
+        return result;
+    }
+private:
+    void dfs(string digits, int index, unordered_map<char, string>& m, string& curr, vector<string>& result) {
+        if (index == digits.size()) {
+            result.push_back(curr);
+            return;
+        }
+        string str = m[digits[index]];
+        for (int i = 0; i < str.size(); i++) {
+            curr.push_back(str[i]);
+            dfs(digits, index + 1, m, curr, result);
+            curr.pop_back();
+        }
+    }
+};
+
+```
+### Java
+```java
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+class Solution {
+
+    private Map<Character, String> digitToChar = Map.of(
+        '2',
+        "abc",
+        '3',
+        "def",
+        '4',
+        "ghi",
+        '5',
+        "jkl",
+        '6',
+        "mno",
+        '7',
+        "pqrs",
+        '8',
+        "tuv",
+        '9',
+        "wxyz"
+    );
+
+    public List<String> letterCombinations(String digits) {
+        if (digits.length() == 0) {
+            return new ArrayList();
+        }
+
+        List<String> ans = new ArrayList();
+        String cur = "";
+        backtrack(digits, ans, cur, 0);
+        return ans;
+    }
+
+    public void backtrack(
+        String digits,
+        List<String> ans,
+        String cur,
+        int index
+    ) {
+        if (cur.length() == digits.length()) {
+            ans.add(cur);
+            return;
+        } else if (index >= digits.length()) {
+            return;
+        } else {
+            String digit = digitToChar.get(digits.charAt(index));
+            for (char c : digit.toCharArray()) {
+                backtrack(digits, ans, cur + c, index + 1);
+            }
+        }
+    }
+}
+
+```
+
+

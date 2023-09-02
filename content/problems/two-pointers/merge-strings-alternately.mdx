@@ -1,0 +1,145 @@
+---
+title: Merge Strings Alternately
+category: Two Pointers
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/merge-strings-alternately)
+
+</Callout>
+
+## Description
+You are given two strings <code>word1</code> and <code>word2</code>. Merge the strings by adding letters in alternating order, starting with <code>word1</code>. If a string is longer than the other, append the additional letters onto the end of the merged string.
+
+Return *the merged string.*
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input: word1 = &quot;abc&quot;, word2 = &quot;pqr&quot;
+Output: &quot;apbqcr&quot;
+Explanation: The merged string will be merged as so:
+word1:  a   b   c
+word2:    p   q   r
+merged: a p b q c r
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: word1 = &quot;ab&quot;, word2 = &quot;pqrs&quot;
+Output: &quot;apbqrs&quot;
+Explanation: Notice that as word2 is longer, &quot;rs&quot; is appended to the end.
+word1:  a   b 
+word2:    p   q   r   s
+merged: a p b q   r   s
+</pre>
+
+Example 3:
+
+<br /><pre className="overflow-x-auto">
+Input: word1 = &quot;abcd&quot;, word2 = &quot;pq&quot;
+Output: &quot;apbqcd&quot;
+Explanation: Notice that as word1 is longer, &quot;cd&quot; is appended to the end.
+word1:  a   b   c   d
+word2:    p   q 
+merged: a p b q c   d
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>1 &lt;= word1.length, word2.length &lt;= 100</code>
+	- <code>word1</code> and <code>word2</code> consist of lowercase English letters.
+
+
+## Solution
+
+### Javascript
+```javascript
+// Time complexity: O(n)
+// Space complexity: O(n)
+
+var mergeAlternately = function (word1, word2) {
+    const buffer = [];
+
+    for (let i = 0; i < word1.length || i < word2.length; i++) {
+        if (i < word1.length) buffer.push(word1[i]);
+        if (i < word2.length) buffer.push(word2[i]);
+    }
+
+    return buffer.join('');
+};
+
+```
+### Python
+```python
+class Solution:
+    def mergeAlternately(self, word1: str, word2: str) -> str:
+        i = j = 0
+        res = []
+
+        while i < len(word1) and j < len(word2):
+            res.append(word1[i])
+            res.append(word2[j])
+            i += 1
+            j += 1
+        res.append(word1[i:])
+        res.append(word2[j:])
+        return ''.join(res)
+
+
+```
+### C++
+```cpp
+class Solution {
+public:
+    string mergeAlternately(string word1, string word2)
+    {
+        int i=0;
+        string final="";
+
+        while(i < word1.size() && i < word2.size())
+            final = final + word1[i] + word2[i++];
+
+        while(i < word1.size())
+            final += word1[i++];
+        while(i < word2.size())
+            final += word2[i++];
+
+        return final;
+    }
+};
+```
+### Java
+```java
+class Solution {
+    public String mergeAlternately(String word1, String word2) {
+        int i = 0;
+        StringBuilder res = new StringBuilder();
+
+        while (i < word1.length() || i < word2.length()) {
+            if (i < word1.length()) {
+                res.append(word1.charAt(i));
+            }
+            if (i < word2.length()) {
+                res.append(word2.charAt(i));
+            }
+            i++;
+        }
+
+        return res.toString();
+    }
+}
+
+/**
+ * Time Complexity : O(n+m)
+ * Space Complexity : O(n+m)
+ */
+```
+
+

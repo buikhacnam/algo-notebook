@@ -1,0 +1,184 @@
+---
+title: Number of Pairs of Interchangeable Rectangles
+category: Arrays And Hashing
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/number-of-pairs-of-interchangeable-rectangles)
+
+</Callout>
+
+## Description
+You are given <code>n</code> rectangles represented by a 0-indexed 2D integer array <code>rectangles</code>, where <code>rectangles[i] = [width<sub>i</sub>, height<sub>i</sub>]</code> denotes the width and height of the <code>i<sup>th</sup></code> rectangle.
+
+Two rectangles <code>i</code> and <code>j</code> (<code>i &lt; j</code>) are considered interchangeable if they have the same width-to-height ratio. More formally, two rectangles are interchangeable if <code>width<sub>i</sub>/height<sub>i</sub> == width<sub>j</sub>/height<sub>j</sub></code> (using decimal division, not integer division).
+
+Return *the number of pairs of interchangeable rectangles in *<code>rectangles</code>.
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input: rectangles = [[4,8],[3,6],[10,20],[15,30]]
+Output: 6
+Explanation: The following are the interchangeable pairs of rectangles by index (0-indexed):
+- Rectangle 0 with rectangle 1: 4/8 == 3/6.
+- Rectangle 0 with rectangle 2: 4/8 == 10/20.
+- Rectangle 0 with rectangle 3: 4/8 == 15/30.
+- Rectangle 1 with rectangle 2: 3/6 == 10/20.
+- Rectangle 1 with rectangle 3: 3/6 == 15/30.
+- Rectangle 2 with rectangle 3: 10/20 == 15/30.
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: rectangles = [[4,5],[7,8]]
+Output: 0
+Explanation: There are no interchangeable pairs of rectangles.
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>n == rectangles.length</code>
+	- <code>1 &lt;= n &lt;= 10<sup>5</sup></code>
+	- <code>rectangles[i].length == 2</code>
+	- <code>1 &lt;= width<sub>i</sub>, height<sub>i</sub> &lt;= 10<sup>5</sup></code>
+
+
+
+## Solution
+
+### Javascript
+```javascript
+/**
+ * Brute Force
+ * Time O(N^2) | Space O(1)
+ * https://leetcode.com/problems/number-of-pairs-of-interchangeable-rectangles
+ * @param {number[][]} rectangles
+ * @return {number}
+ */
+var interchangeableRectangles = (rectangles) => {
+
+    let totalPair = 0;
+    for (let i = 0; i < rectangles.length; i++) {
+        for (let j = i + 1; j < rectangles.length; j++) {
+            if (rectangles[i][1] / rectangles[i][0] === rectangles[j][1] / rectangles[j][0]) {
+                totalPair++;
+            }
+        }
+    }
+    return totalPair;
+};
+/**
+ * Linear 
+ * Time O(N) | Space O(n)
+ * @param {number[][]} rectangles
+ * @return {number}
+ */
+var interchangeableRectangles = (rectangles) => {
+
+    const ratioFrequency = {};
+
+    for (let i = 0; i < rectangles.length; i++) {
+        const ratio = rectangles[i][1] / rectangles[i][0];
+        if (ratioFrequency[ratio.toString()]) {
+            ratioFrequency[ratio.toString()] += 1;
+        } else {
+            ratioFrequency[ratio.toString()] = 1;
+        }
+    }
+
+    let totalPair = 0;
+    for (const key in ratioFrequency) {
+        if (ratioFrequency[key] !== 1) {
+            totalPair += (ratioFrequency[key] * (ratioFrequency[key] - 1)) / 2;
+        }
+    }
+
+    return totalPair;
+};
+
+```
+### Python
+```python
+class Solution:
+    def interchangeableRectangles(self, rectangles: List[List[int]]) -> int:
+        count = {}  # { W / H : Count }
+        res = 0
+
+        for w, h in rectangles:
+            # Increment the count for the ratio
+            count[w / h] = 1 + count.get(w / h, 0)
+
+        for c in count.values():
+            res += (c * (c - 1)) // 2
+
+        return res
+
+```
+### C++
+```cpp
+/*
+    Approach: 
+    Keep the track of the ratios in a hash map
+    
+    Time complexity : O(n)
+    Space complexity: O(n)
+
+    n is number of rectangles
+*/
+
+class Solution {
+public:
+    long long interchangeableRectangles(vector<vector<int>>& rectangles) {
+        
+        map<long double,int> hash;
+        long double ratio;
+
+        long long answer=0;
+
+        for(int i=0;i<rectangles.size();i++){
+            ratio = (long double)(rectangles[i][0])/
+                    (long double)(rectangles[i][1]);
+            
+            if(hash.find(ratio)!=hash.end()){
+                hash[ratio]++;
+            }
+            else{
+                hash[ratio] = 1;
+            }
+        }
+
+        for(auto it:hash){
+            answer+= (long long)(it.second)*(long long)(it.second-1)/2;
+        }
+
+        return answer;
+    }
+};
+```
+### Java
+```java
+class Solution {
+    public long interchangeableRectangles(int[][] rectangles) {
+        Map<Double, Long> count = new HashMap<>();
+        for (int[] rec : rectangles) {
+            double key = (double) rec[0] / rec[1];
+            count.put(key, count.getOrDefault(key, (long) 0) + 1);
+        }
+
+        long res = 0;
+        for (long c : count.values()) {
+            res += c * (c - 1) / 2;
+        }
+        return res;
+    }
+}
+```
+
+

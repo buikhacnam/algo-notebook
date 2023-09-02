@@ -1,0 +1,108 @@
+---
+title: Maximum Length of a Concatenated String with Unique Characters
+category: Backtracking
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/maximum-length-of-a-concatenated-string-with-unique-characters)
+
+</Callout>
+
+## Description
+You are given an array of strings <code>arr</code>. A string <code>s</code> is formed by the concatenation of a subsequence of <code>arr</code> that has unique characters.
+
+Return *the maximum possible length* of <code>s</code>.
+
+A subsequence is an array that can be derived from another array by deleting some or no elements without changing the order of the remaining elements.
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input: arr = [&quot;un&quot;,&quot;iq&quot;,&quot;ue&quot;]
+Output: 4
+Explanation: All the valid concatenations are:
+- &quot;&quot;
+- &quot;un&quot;
+- &quot;iq&quot;
+- &quot;ue&quot;
+- &quot;uniq&quot; (&quot;un&quot; + &quot;iq&quot;)
+- &quot;ique&quot; (&quot;iq&quot; + &quot;ue&quot;)
+Maximum length is 4.
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: arr = [&quot;cha&quot;,&quot;r&quot;,&quot;act&quot;,&quot;ers&quot;]
+Output: 6
+Explanation: Possible longest valid concatenations are &quot;chaers&quot; (&quot;cha&quot; + &quot;ers&quot;) and &quot;acters&quot; (&quot;act&quot; + &quot;ers&quot;).
+</pre>
+
+Example 3:
+
+<br /><pre className="overflow-x-auto">
+Input: arr = [&quot;abcdefghijklmnopqrstuvwxyz&quot;]
+Output: 26
+Explanation: The only string in arr has all 26 characters.
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>1 &lt;= arr.length &lt;= 16</code>
+	- <code>1 &lt;= arr[i].length &lt;= 26</code>
+	- <code>arr[i]</code> contains only lowercase English letters.
+
+
+
+## Solution
+
+### Javascript
+```javascript
+404: Not Found
+```
+### Python
+```python
+class Solution:
+    def maxLength(self, arr: List[str]) -> int:
+        charSet = set()
+
+        def overlap(charSet, s):
+            c = Counter(charSet) + Counter(s)
+            return max(c.values()) > 1
+            # prev = set()
+            # for c in s:
+            #     if c in charSet or c in prev:
+            #         return True
+            #     prev.add(c)
+            # return False
+
+        def backtrack(i):
+            if i == len(arr):
+                return len(charSet)
+            res = 0
+            if not overlap(charSet, arr[i]):
+                for c in arr[i]:
+                    charSet.add(c)
+                res = backtrack(i + 1)
+                for c in arr[i]:
+                    charSet.remove(c)
+            return max(res, backtrack(i + 1))  # dont concatenate arr[i]
+
+        return backtrack(0)
+
+```
+### C++
+```cpp
+404: Not Found
+```
+### Java
+```java
+404: Not Found
+```
+
+

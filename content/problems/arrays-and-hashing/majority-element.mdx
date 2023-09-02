@@ -1,0 +1,117 @@
+---
+title: Majority Element
+category: Arrays And Hashing
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/majority-element)
+
+</Callout>
+
+## Description
+Given an array <code>nums</code> of size <code>n</code>, return *the majority element*.
+
+The majority element is the element that appears more than <code>&lfloor;n / 2&rfloor;</code> times. You may assume that the majority element always exists in the array.
+
+ 
+Example 1:
+<br /><pre className="overflow-x-auto">Input: nums = [3,2,3]
+Output: 3
+</pre>Example 2:
+<br /><pre className="overflow-x-auto">Input: nums = [2,2,1,1,1,2,2]
+Output: 2
+</pre>
+ 
+Constraints:
+
+
+	- <code>n == nums.length</code>
+	- <code>1 &lt;= n &lt;= 5 * 10<sup>4</sup></code>
+	- <code>-10<sup>9</sup> &lt;= nums[i] &lt;= 10<sup>9</sup></code>
+
+
+ 
+Follow-up: Could you solve the problem in linear time and in <code>O(1)</code> space?
+
+## Solution
+
+### Javascript
+```javascript
+//  problem link https://leetcode.com/problems/majority-element
+// time complexity O(n)
+
+var majorityElement = function(nums) {
+    
+    const occuranceOfElement = new Map();
+    for(let i = 0; i < nums.length; i++) {
+        if(occuranceOfElement.has(nums[i])) {
+            let occurance = occuranceOfElement.get(nums[i]);
+            occuranceOfElement.set(nums[i], occurance+1);
+        } else {
+            occuranceOfElement.set(nums[i], 1);
+        }
+    }
+
+    for(let [key,value] of occuranceOfElement) {
+        if(value > nums.length / 2) return key;
+    }
+
+};
+
+```
+### Python
+```python
+class Solution:
+    def majorityElement(self, nums: List[int]) -> int:
+        res, count = 0, 0
+
+        for n in nums:
+            if count == 0:
+                res = n
+            count += (1 if n == res else -1)
+            
+        return res
+```
+### C++
+```cpp
+/*
+Given an array nums of size n, return the majority element.
+
+The majority element is the element that appears more than ⌊n / 2⌋ times. You may assume that the majority element always exists in the array.
+*/
+
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        unordered_map<int, int> mp;
+        int n = nums.size();
+        for (int& i : nums){
+           if(++mp[i] > n/2)
+               return i;
+       }
+        return -1;
+    }
+};
+
+```
+### Java
+```java
+class Solution {
+    public int majorityElement(int[] nums) {
+        int res = 0, count = 0;
+        
+        for(int n: nums) {
+            if(count == 0)
+                res = n;
+            count += (n == res? 1: -1);
+        }
+        
+        return res;
+    }
+}
+
+```
+
+

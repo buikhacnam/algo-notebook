@@ -1,0 +1,195 @@
+---
+title: Remove Element
+category: Arrays And Hashing
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/remove-element)
+
+</Callout>
+
+## Description
+Given an integer array <code>nums</code> and an integer <code>val</code>, remove all occurrences of <code>val</code> in <code>nums</code> <a href="https://en.wikipedia.org/wiki/In-place_algorithm" target="_blank">in-place</a>. The order of the elements may be changed. Then return *the number of elements in *<code>nums</code>* which are not equal to *<code>val</code>.
+
+Consider the number of elements in <code>nums</code> which are not equal to <code>val</code> be <code>k</code>, to get accepted, you need to do the following things:
+
+
+	- Change the array <code>nums</code> such that the first <code>k</code> elements of <code>nums</code> contain the elements which are not equal to <code>val</code>. The remaining elements of <code>nums</code> are not important as well as the size of <code>nums</code>.
+	- Return <code>k</code>.
+
+
+Custom Judge:
+
+The judge will test your solution with the following code:
+
+<br /><pre className="overflow-x-auto">
+int[] nums = [...]; // Input array
+int val = ...; // Value to remove
+int[] expectedNums = [...]; // The expected answer with correct length.
+                            // It is sorted with no values equaling val.
+
+int k = removeElement(nums, val); // Calls your implementation
+
+assert k == expectedNums.length;
+sort(nums, 0, k); // Sort the first k elements of nums
+for (int i = 0; i &lt; actualLength; i++) {
+    assert nums[i] == expectedNums[i];
+}
+</pre>
+
+If all assertions pass, then your solution will be accepted.
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input: nums = [3,2,2,3], val = 3
+Output: 2, nums = [2,2,_,_]
+Explanation: Your function should return k = 2, with the first two elements of nums being 2.
+It does not matter what you leave beyond the returned k (hence they are underscores).
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: nums = [0,1,2,2,3,0,4,2], val = 2
+Output: 5, nums = [0,1,4,0,3,_,_,_]
+Explanation: Your function should return k = 5, with the first five elements of nums containing 0, 0, 1, 3, and 4.
+Note that the five elements can be returned in any order.
+It does not matter what you leave beyond the returned k (hence they are underscores).
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>0 &lt;= nums.length &lt;= 100</code>
+	- <code>0 &lt;= nums[i] &lt;= 50</code>
+	- <code>0 &lt;= val &lt;= 100</code>
+
+
+
+## Solution
+
+### Javascript
+```javascript
+/**
+ * Time O(N) | Space O(1)
+ * @param {number[]} nums
+ * @param {number} val
+ * @return {number}
+ */
+var removeElement = function(nums, val) {
+    let ptr1 = nums.length - 2;
+    let ptr2 = nums.length - 1;
+    
+    if(!nums) return 0;
+    if(nums.length === 1) {
+        if(nums[0] === val) return 0;
+        return 1;
+    }
+    
+    while(ptr1 > -1) {
+        if(nums[ptr2] === val) {
+            ptr2--;
+            
+            while(nums[ptr1] === val) {
+                ptr2--;
+                ptr1--;
+            }  
+        }
+        else if(nums[ptr1] === val) {
+            let temp = nums[ptr1];
+            nums[ptr1] = nums[ptr2];
+            nums[ptr2] = temp;
+            ptr2--;
+            
+        }
+
+        ptr1--;
+    }
+    
+    return ptr2 + 1;
+};
+
+
+/**
+ * @param {number[]} nums
+ * @param {number} val
+ * @return {number}
+ */
+var removeElement = function(nums, val) {
+    for(let i = 0; i < nums.length; i++) {
+        if(nums[i] === val) {
+            nums.splice(i, 1);
+            i--;            
+        }
+    }
+    
+    return nums.length;
+};
+
+```
+### Python
+```python
+class Solution:
+    def removeElement(self, nums: List[int], val: int) -> int:
+        k = 0
+        for i in range(len(nums)):
+            if nums[i] != val:
+                nums[k] = nums[i]
+                k += 1
+        return k
+
+```
+### C++
+```cpp
+class Solution {
+public:
+    int removeElement(vector<int>& nums, int val) {
+        int n=nums.size();
+        int count=0;
+        for(int i=0;i<n;i++)
+        {
+            if(nums[i]!=val)
+            {
+                swap(nums[i],nums[count]);
+                count++;
+            }
+        }
+        
+        return count;
+    }
+};
+
+```
+### Java
+```java
+class Solution {
+
+    public void swap(int[] a, int i, int j) {
+        int temp = a[i];
+        a[i] = a[j];
+        a[j] = temp;
+    }
+
+    public int removeElement(int[] nums, int val) {
+        int boundary = nums.length - 1;
+        int i = 0;
+        while (i <= boundary) {
+            if (nums[i] == val) {
+                swap(nums, i, boundary);
+                boundary -= 1;
+            } else {
+                i += 1;
+            }
+        }
+        return i;
+    }
+}
+
+```
+
+

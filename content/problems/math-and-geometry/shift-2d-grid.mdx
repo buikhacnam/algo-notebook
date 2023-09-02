@@ -1,0 +1,167 @@
+---
+title: Shift 2D Grid
+category: Math And Geometry
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/shift-2d-grid)
+
+</Callout>
+
+## Description
+Given a 2D <code>grid</code> of size <code>m x n</code> and an integer <code>k</code>. You need to shift the <code>grid</code> <code>k</code> times.
+
+In one shift operation:
+
+
+	- Element at <code>grid[i][j]</code> moves to <code>grid[i][j + 1]</code>.
+	- Element at <code>grid[i][n - 1]</code> moves to <code>grid[i + 1][0]</code>.
+	- Element at <code>grid[m - 1][n - 1]</code> moves to <code>grid[0][0]</code>.
+
+
+Return the *2D grid* after applying shift operation <code>k</code> times.
+
+ 
+Example 1:
+<Image alt="" src="https://assets.leetcode.com/uploads/2019/11/05/e1.png" width={400} height={178} />
+<br /><pre className="overflow-x-auto">
+Input: <code>grid</code> = [[1,2,3],[4,5,6],[7,8,9]], k = 1
+Output: [[9,1,2],[3,4,5],[6,7,8]]
+</pre>
+
+Example 2:
+<Image alt="" src="https://assets.leetcode.com/uploads/2019/11/05/e2.png" width={400} height={166} />
+<br /><pre className="overflow-x-auto">
+Input: <code>grid</code> = [[3,8,1,9],[19,7,2,5],[4,6,11,10],[12,0,21,13]], k = 4
+Output: [[12,0,21,13],[3,8,1,9],[19,7,2,5],[4,6,11,10]]
+</pre>
+
+Example 3:
+
+<br /><pre className="overflow-x-auto">
+Input: <code>grid</code> = [[1,2,3],[4,5,6],[7,8,9]], k = 9
+Output: [[1,2,3],[4,5,6],[7,8,9]]
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>m == grid.length</code>
+	- <code>n == grid[i].length</code>
+	- <code>1 &lt;= m &lt;= 50</code>
+	- <code>1 &lt;= n &lt;= 50</code>
+	- <code>-1000 &lt;= grid[i][j] &lt;= 1000</code>
+	- <code>0 &lt;= k &lt;= 100</code>
+
+
+
+## Solution
+
+### Javascript
+```javascript
+var shiftGrid = function(grid, k) {
+    const M = grid.length, N = grid[0].length;
+    
+    let posToVal = (r, c) =>
+        r * N + c;
+    let valToPos = (v) =>
+        [Math.floor(v / N), v % N];
+    
+    res = [];
+    for(let i = 0; i < M; i++)
+        res.push([]);
+    for(let r = 0; r < M; r++)
+        for(let c = 0; c < N; c++) {
+            let newVal = (posToVal(r, c) + k) % (M * N);
+            let newRC = valToPos(newVal);
+            res[newRC[0]][newRC[1]] = grid[r][c];
+        }
+    return res;
+};
+
+```
+### Python
+```python
+class Solution:
+    def shiftGrid(self, grid: List[List[int]], k: int) -> List[List[int]]:
+        M, N = len(grid), len(grid[0])
+        
+        def posToVal(r, c):
+            return r * N + c
+        def valToPos(v):
+            return [v // N, v % N] # r, c
+        
+        res = [[0] * N for i in range(M)]
+        for r in range(M):
+            for c in range(N):
+                newVal = (posToVal(r, c) + k) % (M * N)
+                newR, newC = valToPos(newVal)
+                res[newR][newC] = grid[r][c]
+        return res
+
+```
+### C++
+```cpp
+class Solution {
+public:
+    vector<vector<int>> shiftGrid(vector<vector<int>>& grid, int k) {
+        const int M = grid.size(), N = grid[0].size();
+        
+        auto posToVal = [&] (int r, int c) -> int {
+            return r * N + c;};
+        auto valToPos = [&] (int v) -> int* {
+            return new int[] {v / N, v % N};};
+        
+        vector<vector<int>> res;
+        for(int r = 0; r < M; r++) {
+            vector<int> row;
+            for(int c = 0; c < N; c++)
+                row.push_back(0);
+            res.push_back(row);
+        }
+        for(int r = 0; r < M; r++)
+            for(int c = 0; c < N; c++) {
+                int newVal = (posToVal(r, c) + k) % (M * N);
+                int *newRC = valToPos(newVal);
+                res[newRC[0]][newRC[1]] = grid[r][c];
+            }
+        return res;
+    }
+};
+
+```
+### Java
+```java
+class Solution {
+    static final int ROW = 0, COL = 1;
+    public List<List<Integer>> shiftGrid(int[][] grid, int k) {
+        final int M = grid.length, N = grid[0].length;
+        
+        BiFunction<Integer, Integer, Integer> posToVal = (r, c) ->
+            r * N + c;
+        Function<Integer, int[]> valToPos = (v) ->
+            new int[] {v / N, v % N};
+        
+        List<List<Integer>> res = new ArrayList<>();
+        for(int i = 0; i < M; i++) {
+            Integer[] tmp = new Integer[N];
+            for(int j = 0; j < N; j++)
+                tmp[j] = 0;
+            res.add(Arrays.asList(tmp));
+        }
+        for(int r = 0; r < M; r++)
+            for(int c = 0; c < N; c++) {
+                int newVal = (posToVal.apply(r, c) + k) % (M * N);
+                int[] newRC = valToPos.apply(newVal);
+                res.get(newRC[ROW]).set(newRC[COL], grid[r][c]);
+            }
+        return res;
+    }
+}
+
+```
+
+

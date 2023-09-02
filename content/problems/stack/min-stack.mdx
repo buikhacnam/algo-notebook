@@ -1,0 +1,294 @@
+---
+title: Min Stack
+category: Stack
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/min-stack)
+
+</Callout>
+
+## Description
+Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+
+Implement the <code>MinStack</code> class:
+
+
+	- <code>MinStack()</code> initializes the stack object.
+	- <code>void push(int val)</code> pushes the element <code>val</code> onto the stack.
+	- <code>void pop()</code> removes the element on the top of the stack.
+	- <code>int top()</code> gets the top element of the stack.
+	- <code>int getMin()</code> retrieves the minimum element in the stack.
+
+
+You must implement a solution with <code>O(1)</code> time complexity for each function.
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input
+[&quot;MinStack&quot;,&quot;push&quot;,&quot;push&quot;,&quot;push&quot;,&quot;getMin&quot;,&quot;pop&quot;,&quot;top&quot;,&quot;getMin&quot;]
+[[],[-2],[0],[-3],[],[],[],[]]
+
+Output
+[null,null,null,null,-3,null,0,-2]
+
+Explanation
+MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.getMin(); // return -3
+minStack.pop();
+minStack.top();    // return 0
+minStack.getMin(); // return -2
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>-2<sup>31</sup> &lt;= val &lt;= 2<sup>31</sup> - 1</code>
+	- Methods <code>pop</code>, <code>top</code> and <code>getMin</code> operations will always be called on non-empty stacks.
+	- At most <code>3 * 10<sup>4</sup></code> calls will be made to <code>push</code>, <code>pop</code>, <code>top</code>, and <code>getMin</code>.
+
+
+
+## Solution
+
+### Javascript
+```javascript
+/** 
+ * https://leetcode.com/problems/min-stack
+ * Time O(1) | Space O(N)
+ * Your MinStack object will be instantiated and called as such:
+ * var obj = new MinStack()
+ * obj.push(x)
+ * obj.pop()
+ * var param_3 = obj.top()
+ * var param_4 = obj.getMin()
+ */
+class MinStack {
+    /**
+     * @constructor
+     */
+    constructor () {
+        this.stack = [];
+        this.minStack = [];
+    }
+
+    /**
+     * @param {number} val
+     * @return {void}
+     */
+    push (val, { minStack } = this) {
+        this.stack.push(val);             /* Space O(N) */
+
+        const isMinEmpty = !minStack.length;
+        const hasNewMin = val <= this.top(minStack);
+        const canAddMin = isMinEmpty || hasNewMin;
+        if (canAddMin) minStack.push(val);/* Space O(N) */
+    }
+
+    /**
+     * @return {void}
+     */
+    pop ({ stack, minStack } = this) {
+        const top = stack.pop();          /* Time O(1) */
+
+        const canPopMin = top === this.getMin();
+        if (canPopMin) minStack.pop();    /* Time O(1) */
+    }
+
+    /**
+     * @param {Array}
+     * @return {number}
+     */
+    top (stack = this.stack) {
+        return stack.length
+            ? stack[stack.length - 1]     /* Time O(1) */
+            : null;
+    }
+
+    /**
+     * @return {number}
+     */
+    getMin (minStack = this.minStack) {
+        return this.top(minStack);       /* Time O(1) */
+    }
+}
+
+
+/** 
+ * https://leetcode.com/problems/min-stack
+ * Time O(1) | Space O(1)
+ * Your MinStack object will be instantiated and called as such:
+ * var obj = new MinStack()
+ * obj.push(x)
+ * obj.pop()
+ * var param_3 = obj.top()
+ * var param_4 = obj.getMin()
+ */
+class MinStack {
+    constructor () {
+        this.head = null
+    }
+
+    push (val) {
+        this.head = (!this.head)   /* Space O(1) */
+            ? new Node(val, val, null)
+            : new Node(val, Math.min(val, this.head.min), this.head);
+    }
+
+    pop () {
+        this.head = this.head.next;/* Time O(1) */
+    }
+
+    top () {
+        return this.head.val;      /* Time O(1) */
+    }
+
+    getMin () {
+        return this.head.min;      /* Time O(1) */
+    }
+}
+
+class Node {
+    constructor (val, min, next) {
+        this.val = val;
+        this.min = min;
+        this.next = next;
+    }
+}
+
+```
+### Python
+```python
+class MinStack:
+    def __init__(self):
+        self.stack = []
+        self.minStack = []
+
+    def push(self, val: int) -> None:
+        self.stack.append(val)
+        val = min(val, self.minStack[-1] if self.minStack else val)
+        self.minStack.append(val)
+
+    def pop(self) -> None:
+        self.stack.pop()
+        self.minStack.pop()
+
+    def top(self) -> int:
+        return self.stack[-1]
+
+    def getMin(self) -> int:
+        return self.minStack[-1]
+
+```
+### C++
+```cpp
+/*
+    Design stack that supports push, pop, top, & retriving min element
+    
+    2 stacks, 1 normal & 1 monotonic decr, only push if lower than top
+    
+    Time: O(1)
+    Space: O(n)
+*/
+
+class MinStack {
+public:
+    MinStack() {
+        
+    }
+    
+    void push(int val) {
+        stk.push(val);
+        
+        if (minStk.empty() || val < minStk.top().first) {
+            minStk.push({val, 1});
+        } else if (val == minStk.top().first) {
+            minStk.top().second++;
+        }
+    }
+    
+    void pop() {
+        if (stk.top() == minStk.top().first) {
+            minStk.top().second--;
+            if (minStk.top().second == 0) {
+                minStk.pop();
+            }
+        }
+        stk.pop();
+    }
+    
+    int top() {
+        return stk.top();
+    }
+    
+    int getMin() {
+        return minStk.top().first;
+    }
+private:
+    stack<int> stk;
+    stack<pair<int, int>> minStk;
+};
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack* obj = new MinStack();
+ * obj->push(val);
+ * obj->pop();
+ * int param_3 = obj->top();
+ * int param_4 = obj->getMin();
+ */
+
+```
+### Java
+```java
+class MinStack {
+
+    private Stack<Integer> stack;
+    private Stack<Integer> minStack;
+
+    public MinStack() {
+        stack = new Stack<>();
+        minStack = new Stack<>();
+    }
+
+    public void push(int val) {
+        stack.push(val);
+
+        // The min stack may be empty, so we need to check it
+        val = Math.min(val, minStack.isEmpty() ? val : minStack.peek());
+        minStack.push(val);
+    }
+
+    public void pop() {
+        stack.pop();
+        minStack.pop();
+    }
+
+    public int top() {
+        return stack.peek();
+    }
+
+    public int getMin() {
+        return minStack.peek();
+    }
+}
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack obj = new MinStack();
+ * obj.push(val);
+ * obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.getMin();
+ */
+
+```
+
+

@@ -1,0 +1,431 @@
+---
+title: K Closest Points to Origin
+category: Heap And Priority Queue
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/k-closest-points-to-origin)
+
+</Callout>
+
+## Description
+Given an array of <code>points</code> where <code>points[i] = [x<sub>i</sub>, y<sub>i</sub>]</code> represents a point on the X-Y plane and an integer <code>k</code>, return the <code>k</code> closest points to the origin <code>(0, 0)</code>.
+
+The distance between two points on the X-Y plane is the Euclidean distance (i.e., <code>&radic;(x<sub>1</sub> - x<sub>2</sub>)<sup>2</sup> + (y<sub>1</sub> - y<sub>2</sub>)<sup>2</sup></code>).
+
+You may return the answer in any order. The answer is guaranteed to be unique (except for the order that it is in).
+
+ 
+Example 1:
+<Image alt="" src="https://assets.leetcode.com/uploads/2021/03/03/closestplane1.jpg" width={400} height={400} />
+<br /><pre className="overflow-x-auto">
+Input: points = [[1,3],[-2,2]], k = 1
+Output: [[-2,2]]
+Explanation:
+The distance between (1, 3) and the origin is sqrt(10).
+The distance between (-2, 2) and the origin is sqrt(8).
+Since sqrt(8) &lt; sqrt(10), (-2, 2) is closer to the origin.
+We only want the closest k = 1 points from the origin, so the answer is just [[-2,2]].
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: points = [[3,3],[5,-1],[-2,4]], k = 2
+Output: [[3,3],[-2,4]]
+Explanation: The answer [[-2,4],[3,3]] would also be accepted.
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>1 &lt;= k &lt;= points.length &lt;= 10<sup>4</sup></code>
+	- <code>-10<sup>4</sup> &lt;= x<sub>i</sub>, y<sub>i</sub> &lt;= 10<sup>4</sup></code>
+
+
+
+## Solution
+
+### Javascript
+```javascript
+//////////////////////////////////////////////////////////////////////////////
+// Sort with Custom Comparator
+// Time: O(nlogn)
+// Space: O(n)
+//////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @param {number[][]} points
+ * @param {number} k
+ * @return {number[][]}
+ */
+var kClosest = function (points, k) {
+    // Sort the array with a custom lambda comparator function
+    points.sort((a, b) => squaredDistance(a) - squaredDistance(b));
+
+    // Return the first k elements of the sorted array
+    return points.slice(0, k);
+};
+
+// Calculate and return the squared Euclidean distance
+const squaredDistance = ([x, y]) => x ** 2 + y ** 2;
+
+//////////////////////////////////////////////////////////////////////////////
+// Max Heap or Max Priority Queue
+// Time: O(nlogk)
+// Space: O(k)
+//////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @param {number[][]} points
+ * @param {number} k
+ * @return {number[][]}
+ */
+var kClosest = function (points, k) {
+    let maxPQ = new MaxPriorityQueue();
+    for (let point of points) {
+        let dist = squaredDistance(point);
+        if (maxPQ.size() < k) {
+            // Fill the max PQ up to k points
+            maxPQ.enqueue(point, dist);
+        } else if (dist < maxPQ.front().priority) {
+            // If the max PQ is full and a closer point is found,
+            // discard the farthest point and add this one
+            maxPQ.dequeue();
+            maxPQ.enqueue(point, dist);
+        }
+    }
+
+    // Return all points stored in the max PQ
+    return maxPQ.toArray().map((el) => el.element);
+};
+
+// Calculate and return the squared Euclidean distance
+const squaredDistance = ([x, y]) => x ** 2 + y ** 2;
+
+//////////////////////////////////////////////////////////////////////////////
+// Binary Search
+// Time: O(n)
+// Space: O(n)
+//////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @param {number[][]} points
+ * @param {number} k
+ * @return {number[][]}
+ */
+var kClosest = function (points, k) {
+    // Precompute the Euclidean distance for each point
+    let distances = points.map(euclideanDistance);
+    // Create a reference array of point indices
+    let remaining = points.map((_, i) => i);
+    // Define the initial binary search range
+    let low = 0,
+        high = Math.max(...distances);
+
+    // Perform a binary search of the distances
+    // to find the k closest points
+    let closest = [];
+    while (k) {
+        let mid = low + (high - low) / 2;
+        let [closer, farther] = splitDistances(remaining, distances, mid);
+        if (closer.length > k) {
+            // If more than k points are in the closer distances
+            // then discard the farther points and continue
+            remaining = closer;
+            high = mid;
+        } else {
+            // Add the closer points to the answer array and keep
+            // searching the farther distances for the remaining points
+            k -= closer.length;
+            closest.push(...closer);
+            remaining = farther;
+            low = mid;
+        }
+    }
+
+    // Return the k closest points using the reference indices
+    return closest.map((i) => points[i]);
+};
+
+var splitDistances = function (remaining, distances, mid) {
+    // Split the distances around the midpoint
+    // and return them in separate arrays
+    let closer = [],
+        farther = [];
+    for (let index of remaining) {
+        if (distances[index] <= mid) {
+            closer.push(index);
+        } else {
+            farther.push(index);
+        }
+    }
+    return [closer, farther];
+};
+
+// Calculate and return the squared Euclidean distance
+const euclideanDistance = ([x, y]) => x ** 2 + y ** 2;
+
+//////////////////////////////////////////////////////////////////////////////
+// QuickSelect
+// Time: O(n)
+// Space: O(1)
+//////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @param {number[][]} points
+ * @param {number} k
+ * @return {number[][]}
+ */
+var kClosest = function (points, k) {
+    return quickSelect(points, k);
+};
+
+var quickSelect = function (points, k) {
+    let left = 0,
+        right = points.length - 1;
+    let pivotIndex = points.length;
+    while (pivotIndex !== k) {
+        // Repeatedly partition the array
+        // while narrowing in on the kth element
+        pivotIndex = partition(points, left, right);
+        if (pivotIndex < k) {
+            left = pivotIndex;
+        } else {
+            right = pivotIndex - 1;
+        }
+    }
+
+    // Return the first k elements of the partially sorted array
+    return points.slice(0, k);
+};
+
+var partition = function (points, left, right) {
+    let pivot = choosePivot(points, left, right);
+    let pivotDist = squaredDistance(pivot);
+    while (left < right) {
+        // Iterate through the range and swap elements to make sure
+        // that all points closer than the pivot are to the left
+        if (squaredDistance(points[left]) >= pivotDist) {
+            [points[left], points[right]] = [points[right], points[left]];
+            right--;
+        } else {
+            left++;
+        }
+    }
+
+    // Ensure the left pointer is just past the end of
+    // the left range then return it as the new pivotIndex
+    if (squaredDistance(points[left]) < pivotDist) {
+        left++;
+    }
+
+    return left;
+};
+
+// Choose a pivot element of the array
+const choosePivot = (points, left, right) =>
+    points[left + ((right - left) >> 1)];
+
+// Calculate and return the squared Euclidean distance
+const squaredDistance = ([x, y]) => x ** 2 + y ** 2;
+
+```
+### Python
+```python
+class Solution:
+    def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
+        pts = []
+        for x, y in points:
+            dist = (abs(x - 0) ** 2) + (abs(y - 0) ** 2)
+            pts.append([dist, x, y])
+
+        res = []
+        heapq.heapify(pts)
+        for i in range(k):
+            dist, x, y = heapq.heappop(pts)
+            res.append([x, y])
+        return res
+
+```
+### C++
+```cpp
+/*
+    Given array of points & an int k, return k closest points to (0, 0)
+    Ex. points = [[1,3],[-2,2]], k = 1 -> [[-2,2]]
+
+    Quickselect, partition until pivot = k, left side all < k
+
+    Time: O(k log n)
+    Space: O(n)
+*/
+
+// class Solution {
+// public:
+//     vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
+//         priority_queue<pair<double, vector<int>>> pq;
+//         for (int i = 0; i < points.size(); i++) {
+//             double distance = sqrt(pow(points[i][0], 2) + pow(points[i][1], 2));
+//             pq.push({distance, points[i]});
+//             if (pq.size() > k) {
+//                 pq.pop();
+//             }
+//         }
+        
+//         vector<vector<int>> result;
+//         while(!pq.empty()) {
+//             result.push_back(pq.top().second);
+//             pq.pop();
+//         }
+        
+//         return result;
+//     }
+// };
+/*
+class Solution {
+public:
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
+        int low = 0;
+        int high = points.size() - 1;
+        int pivotIndex = points.size();
+        
+        while (pivotIndex != k) {
+            pivotIndex = partition(points, low, high);
+            if (pivotIndex < k) {
+                low = pivotIndex;
+            } else {
+                high = pivotIndex - 1;
+            }
+        }
+        
+        return vector<vector<int>>(points.begin(), points.begin() + k);
+    }
+private:
+    int partition(vector<vector<int>>& points, int low, int high) {
+        vector<int> pivot = points[low + (high - low) / 2];
+        int pivotDistance = getDistance(pivot);
+        
+        while (low < high) {
+            if (getDistance(points[low]) >= pivotDistance) {
+                swap(points[low], points[high]);
+                high--;
+            } else {
+                low++;
+            }
+        }
+        
+        if (getDistance(points[low]) < pivotDistance) {
+            low++;
+        }
+        return low;
+    }
+    
+    int getDistance(vector<int>& point) {
+        return pow(point[0], 2) + pow(point[1], 2);
+    }
+};
+*/
+
+/*
+// O(n logn) solution using sorting
+class Solution {
+public:
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
+        vector<vector<int>> res(k);
+        sort(points.begin(), points.end(), [](vector<int>& p1, vector<int>& p2){
+            int dist_p1 = pow(p1[0],2) + pow(p1[1],2);
+            int dist_p2 = pow(p2[0],2) + pow(p2[1],2);
+            return dist_p1 < dist_p2;
+        });
+        copy(points.begin(), points.begin() + k, res.begin());
+        return res;
+    }
+};
+*/
+
+// O(k logn) solution
+class Solution {
+public:
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
+        vector<vector<int>> triples;
+        for (auto& p : points)
+            triples.push_back({p[0] * p[0] + p[1] * p[1], p[0], p[1]});
+        // Min heap of vectors (triples). This constructor takes O(n) time (n = len(v))
+        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> pq(triples.begin(), triples.end());
+        vector<vector<int>> res;
+        while (k--){
+            vector<int> el = pq.top();
+            pq.pop();
+            res.push_back({el[1], el[2]});
+        }
+        return res;
+    }
+};
+
+```
+### Java
+```java
+//First solution Time Complexity is O(NlogN)
+//Just take a min heap and add the values using the formula and return the top k values
+//We can completely ignore the square root as we are just comparing the values (if a*a>b*b => a>b)
+
+class Solution {
+
+    public int[][] kClosest(int[][] points, int k) {
+        PriorityQueue<int[]> q = new PriorityQueue<>((a, b) ->
+            Integer.compare(
+                (a[0] * a[0] + a[1] * a[1]),
+                (b[0] * b[0] + b[1] * b[1])
+            )
+        );
+        for (int[] point : points) {
+            q.add(point);
+        }
+        int[][] ans = new int[k][2];
+        for (int i = 0; i < k; i++) {
+            int[] cur = q.poll();
+            ans[i][0] = cur[0];
+            ans[i][1] = cur[1];
+        }
+        return ans;
+    }
+}
+
+//This approach is a sightly optimized approach here we can use a max heap and maintain its size as k.
+//So when we do the removal the time complexity will reduce from logn to logk
+//Max heap because we will remove the top elements (the one which are greater)
+//Overall Time complexity O(NlogK)
+
+class Solution {
+
+    public int[][] kClosest(int[][] points, int k) {
+        PriorityQueue<int[]> q = new PriorityQueue<>((a, b) ->
+            Integer.compare(
+                (b[0] * b[0] + b[1] * b[1]),
+                (a[0] * a[0] + a[1] * a[1])
+            )
+        ); //only this is changed (swapped)
+        for (int[] point : points) {
+            q.add(point);
+            //remove when size increase k
+            if (q.size() > k) {
+                q.remove();
+            }
+        }
+        int[][] ans = new int[k][2];
+        for (int i = 0; i < k; i++) {
+            int[] cur = q.poll();
+            ans[i][0] = cur[0];
+            ans[i][1] = cur[1];
+        }
+        return ans;
+    }
+}
+//There are also some O(N) solutions using quick select and binary search https://leetcode.com/problems/k-closest-points-to-origin/solution/
+
+```
+
+

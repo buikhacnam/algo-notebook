@@ -1,0 +1,134 @@
+---
+title: Remove Duplicates from Sorted List
+category: Linked List
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/remove-duplicates-from-sorted-list)
+
+</Callout>
+
+## Description
+Given the <code>head</code> of a sorted linked list, *delete all duplicates such that each element appears only once*. Return *the linked list sorted as well*.
+
+ 
+Example 1:
+<Image alt="" src="https://assets.leetcode.com/uploads/2021/01/04/list1.jpg" width={302} height={242} />
+<br /><pre className="overflow-x-auto">
+Input: head = [1,1,2]
+Output: [1,2]
+</pre>
+
+Example 2:
+<Image alt="" src="https://assets.leetcode.com/uploads/2021/01/04/list2.jpg" width={542} height={222} />
+<br /><pre className="overflow-x-auto">
+Input: head = [1,1,2,3,3]
+Output: [1,2,3]
+</pre>
+
+ 
+Constraints:
+
+
+	- The number of nodes in the list is in the range <code>[0, 300]</code>.
+	- <code>-100 &lt;= Node.val &lt;= 100</code>
+	- The list is guaranteed to be sorted in ascending order.
+
+
+
+## Solution
+
+### Javascript
+```javascript
+/**
+ * https://leetcode.com/problems/remove-duplicates-from-sorted-list/
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var deleteDuplicates = function (head) {
+    let cur = head;
+    while (cur != null && cur.next != null) {
+        if (cur.next.val === cur.val) {
+            cur.next = cur.next.next;
+        } else {
+            cur = cur.next;
+        }
+    }
+    return head;
+};
+
+```
+### Python
+```python
+class Solution:
+    def deleteDuplicates(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        cur = head
+        while cur:
+            while cur.next and cur.next.val == cur.val:
+                cur.next = cur.next.next
+            cur = cur.next
+        return head
+
+```
+### C++
+```cpp
+// Time Complexity is O(N).
+// Space Complexity is O(1).
+
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+      ListNode * fast = head;
+      ListNode * slow = head;
+      
+      while(slow != NULL)
+      {
+        while(fast != NULL && slow->val == fast->val)
+          fast = fast -> next;
+        
+        slow->next = fast;
+        slow = slow -> next;
+      }
+      
+      return head;
+        
+    }
+};
+
+```
+### Java
+```java
+//Three pointer approach that we use in in-place reversal of linked list.
+
+class Solution {
+
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode p = null;
+        ListNode q = null;
+        ListNode r = head;
+        while (r != null) {
+            if (q != null && q.val == r.val) {
+                r = r.next;
+                q.next = r;
+            } else {
+                p = q;
+                q = r;
+                r = r.next;
+            }
+        }
+        return head;
+    }
+}
+
+```
+
+

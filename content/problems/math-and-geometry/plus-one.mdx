@@ -1,0 +1,205 @@
+---
+title: Plus One
+category: Math And Geometry
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/plus-one)
+
+</Callout>
+
+## Description
+You are given a large integer represented as an integer array <code>digits</code>, where each <code>digits[i]</code> is the <code>i<sup>th</sup></code> digit of the integer. The digits are ordered from most significant to least significant in left-to-right order. The large integer does not contain any leading <code>0</code>&#39;s.
+
+Increment the large integer by one and return *the resulting array of digits*.
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input: digits = [1,2,3]
+Output: [1,2,4]
+Explanation: The array represents the integer 123.
+Incrementing by one gives 123 + 1 = 124.
+Thus, the result should be [1,2,4].
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: digits = [4,3,2,1]
+Output: [4,3,2,2]
+Explanation: The array represents the integer 4321.
+Incrementing by one gives 4321 + 1 = 4322.
+Thus, the result should be [4,3,2,2].
+</pre>
+
+Example 3:
+
+<br /><pre className="overflow-x-auto">
+Input: digits = [9]
+Output: [1,0]
+Explanation: The array represents the integer 9.
+Incrementing by one gives 9 + 1 = 10.
+Thus, the result should be [1,0].
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>1 &lt;= digits.length &lt;= 100</code>
+	- <code>0 &lt;= digits[i] &lt;= 9</code>
+	- <code>digits</code> does not contain any leading <code>0</code>&#39;s.
+
+
+
+## Solution
+
+### Javascript
+```javascript
+/**
+ * Time O(N) | Space O(N)
+ * https://leetcode.com/problems/plus-one/
+ * @param {number[]} digits
+ * @return {number[]}
+ */
+ var plusOne = (digits) => {
+    add(digits);
+    carry(digits);     /* Time O(N) */
+    addLeading(digits);/*           | Space O(N) */
+
+    return digits;
+};
+
+var add = (digits) => digits[digits.length - 1] += 1;
+
+var carry = (digits) => {
+    for (let digit = (digits.length - 1); (0 < digit); digit--) {/* Time O(N) */
+        const canCarry = (digits[digit] === 10);
+        if (!canCarry) break;
+        
+        digits[digit] = 0;
+        digits[(digit - 1)] += 1;
+    }
+}
+
+const addLeading = (digits) => {
+    const canCarry = (digits[0] === 10);
+    if (!canCarry) return;
+
+    digits[0] = 1;
+    digits.push(0);/* Space O(N) */
+}
+
+/**
+ * Time O(N) | Space O(N)
+ * https://leetcode.com/problems/plus-one/
+ * @param {number[]} digits
+ * @return {number[]}
+ */
+var plusOne = (digits) => {
+    for (let digit = (digits.length - 1); (0 <= digit); digit--) {/* Time O(N) */
+        const canCarry = digits[digit] === 9;
+        if (canCarry) { digits[digit] = 0; continue; }
+
+        digits[digit]++;
+
+        return digits;
+    }
+
+    digits.unshift(1);                                            /* Time O(N) | Space O(N) */
+
+    return digits;
+};
+
+```
+### Python
+```python
+class Solution:
+    def plusOne(self, digits: List[int]) -> List[int]:
+        one = 1
+        i = 0
+        digits = digits[::-1]
+
+        while one:
+            if i < len(digits):
+                if digits[i] == 9:
+                    digits[i] = 0
+                else:
+                    digits[i] += 1
+                    one = 0
+            else:
+                digits.append(one)
+                one = 0
+            i += 1
+        return digits[::-1]
+
+```
+### C++
+```cpp
+/*
+    Given large int as an array, add 1 (consider carry)
+    Ex. digits = [1,2,3] -> [1,2,4]
+
+    From right to left, keep carrying until digit < 9, add 1
+
+    Time: O(n)
+    Space: O(1)
+*/
+
+class Solution {
+public:
+    vector<int> plusOne(vector<int>& digits) {
+        for (int i = digits.size() - 1; i >= 0; i--) {
+            if (digits[i] < 9) {
+                digits[i]++;
+                return digits;
+            }
+            digits[i] = 0;
+        }
+        
+        digits[0] = 1;
+        digits.push_back(0);
+        return digits;
+    }
+};
+
+```
+### Java
+```java
+class Solution {
+
+    public int[] plusOne(int[] digits) {
+        final int len = digits.length;
+        int[] newDigits = new int[len + 1];
+        int carry = 1;
+        int currSum = 0;
+        for (int i = len - 1; i >= 0; i--) {
+            currSum = digits[i] + carry;
+            if (currSum > 9) {
+                digits[i] = currSum % 10;
+                newDigits[i + 1] = digits[i];
+                carry = 1;
+            } else {
+                digits[i] = currSum;
+                newDigits[i + 1] = digits[i];
+                carry = 0;
+                break;
+            }
+        }
+
+        if (carry == 1) {
+            newDigits[0] = 1;
+            return newDigits;
+        }
+
+        return digits;
+    }
+}
+
+```
+
+

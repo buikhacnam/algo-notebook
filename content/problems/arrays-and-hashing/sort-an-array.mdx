@@ -1,0 +1,241 @@
+---
+title: Sort an Array
+category: Arrays And Hashing
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/sort-an-array)
+
+</Callout>
+
+## Description
+Given an array of integers <code>nums</code>, sort the array in ascending order and return it.
+
+You must solve the problem without using any built-in functions in <code>O(nlog(n))</code> time complexity and with the smallest space complexity possible.
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input: nums = [5,2,3,1]
+Output: [1,2,3,5]
+Explanation: After sorting the array, the positions of some numbers are not changed (for example, 2 and 3), while the positions of other numbers are changed (for example, 1 and 5).
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: nums = [5,1,1,2,0,0]
+Output: [0,0,1,1,2,5]
+Explanation: Note that the values of nums are not necessairly unique.
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>1 &lt;= nums.length &lt;= 5 * 10<sup>4</sup></code>
+	- <code>-5 * 10<sup>4</sup> &lt;= nums[i] &lt;= 5 * 10<sup>4</sup></code>
+
+
+
+## Solution
+
+### Javascript
+```javascript
+/**
+ * https://leetcode.com/problems/sort-an-array/
+ * Merge Sort
+ * Time O(n*log(n)) | Space O(n)
+ * @param {number[]} nums
+ * @return {number[]}
+ */
+const sortArray = function(nums) {
+    return mergeSort(0, nums.length  - 1, nums);
+};  
+
+const mergeSort = (left, right, nums) => {
+
+    if(left === right) return nums;
+    
+    const mid = Math.floor((left+right)/2);
+    mergeSort(left, mid, nums);
+    mergeSort(mid+1, right, nums);
+    return merge(left, right, mid, nums);
+}
+
+const merge = (left, right, mid, nums) => {
+    const arr1 = nums.slice(left, mid+1);
+    const arr2 = nums.slice(mid+1, right + 1);
+    
+    let p1 = 0; 
+    let p2 = 0;
+    let gp = left;
+
+    while(p1 < arr1.length && p2 < arr2.length) {
+        if(arr1[p1] < arr2[p2]) {
+            nums[gp] = arr1[p1];
+            p1++;
+        } else {
+            nums[gp] = arr2[p2];
+            p2++;
+        }
+        gp++;
+    }
+
+    while(p1 < arr1.length) {
+        nums[gp] = arr1[p1];
+        p1++;
+        gp++;
+    }
+
+    while(p2 < arr2.length) {
+        nums[gp] = arr2[p2];
+        p2++;
+        gp++;
+    }
+    return nums;
+}  
+
+```
+### Python
+```python
+class Solution:
+    def sortArray(self, nums: List[int]) -> List[int]:
+        def merge(arr, L, M, R):
+            left, right = arr[L:M+1], arr[M+1:R+1]
+            i, j, k = L, 0, 0
+            while j < len(left) and k < len(right):
+                if left[j] <= right[k]:
+                    arr[i] = left[j]
+                    j += 1
+                else:
+                    arr[i] = right[k]
+                    k += 1
+                i += 1
+            while j < len(left):
+                nums[i] = left[j]
+                j += 1
+                i += 1
+            while k < len(right):
+                nums[i] = right[k]
+                k += 1
+                i += 1
+
+        def mergeSort(arr, l, r):
+            if l == r:
+                return arr
+            m = (l + r) // 2
+            mergeSort(arr, l, m)
+            mergeSort(arr, m + 1, r)
+            merge(arr, l, m, r)
+            return arr
+        
+        return mergeSort(nums, 0, len(nums) - 1)
+
+```
+### C++
+```cpp
+/*
+    Given an array of integers nums, sort the array in ascending order and return it.
+    Ex. nums = [5,2,3,1] -> [1,2,3,5]
+
+    Use Merge sort to sort the array.
+
+    Time - O(nlogn)
+    Space - O(n)
+*/
+
+class Solution {
+  private:
+    void merge(vector<int> &nums, int low, int mid, int high) {
+        if(low >= high) 
+            return;
+        
+        int l = low, r = mid + 1, k = 0, size = high - low + 1;
+        vector<int> sorted(size, 0);
+        
+        while (l <= mid and r <= high){
+            if(nums[l] < nums[r])
+                sorted[k++] = nums[l++];
+            else
+                sorted[k++] = nums[r++];
+        }
+
+        while(l <= mid) 
+            sorted[k++] = nums[l++];
+        while(r <= high) 
+            sorted[k++] = nums[r++];
+        
+        for(k = 0; k < size; k++)
+            nums[k + low] = sorted[k];
+    }
+
+    void mergeSort(vector<int>& nums, int low, int high){
+        if(low >= high) 
+            return;
+	    
+        int mid = low + (high - low) / 2;
+	    
+        mergeSort(nums, low, mid);
+	    mergeSort(nums, mid + 1, high);
+	    merge(nums, low, mid, high);
+    }
+
+public:
+    vector<int> sortArray(vector<int>& nums) {
+        mergeSort(nums, 0, nums.size()-1);
+        return nums;
+    }
+};
+
+```
+### Java
+```java
+class Solution {
+    //Using Merge Sort
+    public int[] sortArray(int[] nums) {
+        mergeSort(nums, 0, nums.length-1);
+        return nums;
+    }
+    public void mergeSort(int []arr, int low, int high){
+        if(low >= high) return;
+
+        int mid = (low+high)/2;
+        mergeSort(arr, low, mid);
+        mergeSort(arr, mid+1, high);
+        merge(arr, low, high, mid);
+    }
+    public void merge(int []arr, int low, int high, int mid){
+        ArrayList<Integer> temp = new ArrayList<>();
+        int left = low;
+        int right = mid+1;
+
+        while(left <= mid && right <= high){
+            if(arr[left] <= arr[right]){
+                temp.add(arr[left]);
+                left++;
+            }else{
+                temp.add(arr[right]);
+                right++;
+            }
+        }
+        while(left <= mid){
+            temp.add(arr[left]);
+            left++;
+        }
+        while(right <= high){
+            temp.add(arr[right]);
+            right++;
+        }
+        for(int i=low; i<= high; i++){
+            arr[i] = temp.get(i-low);
+        }
+    }
+}
+
+```
+
+

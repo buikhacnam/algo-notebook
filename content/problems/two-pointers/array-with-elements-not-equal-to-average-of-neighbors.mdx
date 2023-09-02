@@ -1,0 +1,116 @@
+---
+title: Array With Elements Not Equal to Average of Neighbors
+category: Two Pointers
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/array-with-elements-not-equal-to-average-of-neighbors)
+
+</Callout>
+
+## Description
+You are given a 0-indexed array <code>nums</code> of distinct integers. You want to rearrange the elements in the array such that every element in the rearranged array is not equal to the average of its neighbors.
+
+More formally, the rearranged array should have the property such that for every <code>i</code> in the range <code>1 &lt;= i &lt; nums.length - 1</code>, <code>(nums[i-1] + nums[i+1]) / 2</code> is not equal to <code>nums[i]</code>.
+
+Return *any rearrangement of *<code>nums</code>* that meets the requirements*.
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input: nums = [1,2,3,4,5]
+Output: [1,2,4,5,3]
+Explanation:
+When i=1, nums[i] = 2, and the average of its neighbors is (1+4) / 2 = 2.5.
+When i=2, nums[i] = 4, and the average of its neighbors is (2+5) / 2 = 3.5.
+When i=3, nums[i] = 5, and the average of its neighbors is (4+3) / 2 = 3.5.
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: nums = [6,2,0,9,7]
+Output: [9,7,6,2,0]
+Explanation:
+When i=1, nums[i] = 7, and the average of its neighbors is (9+6) / 2 = 7.5.
+When i=2, nums[i] = 6, and the average of its neighbors is (7+2) / 2 = 4.5.
+When i=3, nums[i] = 2, and the average of its neighbors is (6+0) / 2 = 3.
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>3 &lt;= nums.length &lt;= 10<sup>5</sup></code>
+	- <code>0 &lt;= nums[i] &lt;= 10<sup>5</sup></code>
+
+
+
+## Solution
+
+### Javascript
+```javascript
+404: Not Found
+```
+### Python
+```python
+class Solution:
+    # Solution 1: Sort and fill
+    # Intuition:
+    # Ensure the below pattern (no Avg number can form at nums[i]:
+    # nums[i-1] < nums[i] > nums[i+1]
+
+    # Input: nums = [6,2,0,9,7]
+    # Sorted nums = [0,2,6,7,9]
+    # 1st Filled arr = [0,_,2,_,6]
+    # 2nd Filled arr = [0,7,2,9,6]
+
+    def rearrangeArray(self, nums: List[int]) -> List[int]:
+        nums.sort()
+
+        i, j, n = 0, 0, len(nums)
+        ans = [0]*n
+
+        while i < n and j < n:
+            ans[i] = nums[j]
+            i = i + 2
+            j = j + 1
+
+        i = 1
+        while i < n and j < n:
+            ans[i] = nums[j]
+            i = i + 2
+            j = j + 1
+
+        return ans
+    
+```
+### C++
+```cpp
+class Solution {
+public:
+    vector<int> rearrangeArray(vector<int>& nums) {
+         vector<int> ans;
+        for(int i=1;i<nums.size()-1;i++){
+            int a=nums[i-1];
+            int b=nums[i];
+            int c=nums[i+1];
+            if(a>b && b>c || a<b && b<c)
+            {
+                swap(nums[i],nums[i+1]);
+            }
+        }
+        return nums;
+    }
+};
+
+```
+### Java
+```java
+404: Not Found
+```
+
+

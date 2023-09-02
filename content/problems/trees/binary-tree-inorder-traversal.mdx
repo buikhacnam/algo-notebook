@@ -1,0 +1,199 @@
+---
+title: Binary Tree Inorder Traversal
+category: Trees
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/binary-tree-inorder-traversal)
+
+</Callout>
+
+## Description
+Given the <code>root</code> of a binary tree, return *the inorder traversal of its nodes&#39; values*.
+
+ 
+Example 1:
+<Image alt="" src="https://assets.leetcode.com/uploads/2020/09/15/inorder_1.jpg" width={125} height={200} />
+<br /><pre className="overflow-x-auto">
+Input: root = [1,null,2,3]
+Output: [1,3,2]
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: root = []
+Output: []
+</pre>
+
+Example 3:
+
+<br /><pre className="overflow-x-auto">
+Input: root = [1]
+Output: [1]
+</pre>
+
+ 
+Constraints:
+
+
+	- The number of nodes in the tree is in the range <code>[0, 100]</code>.
+	- <code>-100 &lt;= Node.val &lt;= 100</code>
+
+
+ 
+Follow up: Recursive solution is trivial, could you do it iteratively?
+
+## Solution
+
+### Javascript
+```javascript
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ * this.val   = (val===undefined ? 0 : val)
+ * this.left  = (left===undefined ? null : left)
+ * this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number[]}
+ */
+ var inorderTraversal = function (root, list = []) {
+
+    if (!root) return [];
+    
+    inorderTraversal(root.left, list);
+    list.push(root.val)
+    inorderTraversal(root.right, list);
+    
+    return list
+};
+
+```
+### Python
+```python
+class Solution:
+    def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        # Iterative
+        res, stack = [], []
+        cur = root
+
+        while cur or stack:
+            while cur:
+                stack.append(cur)
+                cur = cur.left
+            cur = stack.pop()
+            res.append(cur.val)
+            cur = cur.right
+        return res
+
+        # Recursive
+        res = []
+
+        def helper(root):
+            if not root:
+                return
+            helper(root.left)
+            res.append(root.val)
+            helper(root.right)
+
+        helper(root)
+        return res
+
+```
+### C++
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+#include <stack>
+
+class Solution {
+public:
+    /* Recursive
+    vector<int> helper(TreeNode* node, vector<int>& path) {
+        if (node == NULL)
+            return path;
+
+        path = helper(node->left, path);
+        path.push_back(node->val);
+        path = helper(node->right, path);
+        return path;
+    }
+    */
+
+    // Iterative
+    vector<int> inorderTraversal(TreeNode* root) {
+        stack<TreeNode*> stk;
+        vector<int> path;
+        TreeNode* current = root;
+
+        while (!stk.empty() || current != NULL) {
+            while (current != NULL) {
+                stk.push(current);
+                current = current->left;
+            }
+            TreeNode* node = stk.top();
+            path.push_back(node->val);
+            stk.pop();
+            current = node->right;
+        }
+        return path;
+    }
+};
+
+```
+### Java
+```java
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        //iterative
+        List<Integer> res = new ArrayList<>();
+        if(root == null) return res;
+
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode node = root;
+        while(!stack.isEmpty() || node != null) {
+            if(node != null) {
+                stack.push(node);
+                node = node.left;
+            } else {
+                node = stack.pop();
+                res.add(node.val);
+                node = node.right;
+            }
+        }
+
+        return res;
+
+        //recursive
+        // List<Integer> res = new ArrayList<>();
+        // dfs(root, res);
+        // return res;
+    }
+
+    // public void dfs(TreeNode n, List<Integer> res) {
+    //     if(n == null) {
+    //         return;
+    //     }
+        
+    //     dfs(n.left, res);
+    //     res.add(n.val);
+    //     dfs(n.right, res);
+    // }
+}
+```
+
+

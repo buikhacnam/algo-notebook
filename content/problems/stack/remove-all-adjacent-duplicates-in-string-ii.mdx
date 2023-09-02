@@ -1,0 +1,153 @@
+---
+title: Remove All Adjacent Duplicates in String II
+category: Stack
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string-ii)
+
+</Callout>
+
+## Description
+You are given a string <code>s</code> and an integer <code>k</code>, a <code>k</code> duplicate removal consists of choosing <code>k</code> adjacent and equal letters from <code>s</code> and removing them, causing the left and the right side of the deleted substring to concatenate together.
+
+We repeatedly make <code>k</code> duplicate removals on <code>s</code> until we no longer can.
+
+Return *the final string after all such duplicate removals have been made*. It is guaranteed that the answer is unique.
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input: s = &quot;abcd&quot;, k = 2
+Output: &quot;abcd&quot;
+Explanation: There&#39;s nothing to delete.</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: s = &quot;deeedbbcccbdaa&quot;, k = 3
+Output: &quot;aa&quot;
+Explanation: 
+First delete &quot;eee&quot; and &quot;ccc&quot;, get &quot;ddbbbdaa&quot;
+Then delete &quot;bbb&quot;, get &quot;dddaa&quot;
+Finally delete &quot;ddd&quot;, get &quot;aa&quot;</pre>
+
+Example 3:
+
+<br /><pre className="overflow-x-auto">
+Input: s = &quot;pbbcggttciiippooaais&quot;, k = 2
+Output: &quot;ps&quot;
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>1 &lt;= s.length &lt;= 10<sup>5</sup></code>
+	- <code>2 &lt;= k &lt;= 10<sup>4</sup></code>
+	- <code>s</code> only contains lowercase English letters.
+
+
+
+## Solution
+
+### Javascript
+```javascript
+/**
+ * @param {string} s
+ * @param {number} k
+ * @return {string}
+ */
+var removeDuplicates = function (s, k) {
+    const stack = []; // [char, count];
+
+    for (const c of s) {
+        if (stack.length !== 0 && stack[stack.length - 1][0] === c) {
+            stack[stack.length - 1][1]++;
+        } else {
+            stack.push([c, 1]);
+        }
+
+        if (stack[stack.length - 1][1] === k) {
+            stack.pop();
+        }
+    }
+
+    return stack.reduce((res, el) => (res += el[0].repeat(el[1])), '');
+};
+
+```
+### Python
+```python
+class Solution:
+    def removeDuplicates(self, s: str, k: int) -> str:
+        stack = []  # [char, count]
+
+        for c in s:
+            if stack and stack[-1][0] == c:
+                stack[-1][1] += 1
+            else:
+                stack.append([c, 1])
+
+            if stack[-1][1] == k:
+                stack.pop()
+
+        res = ""
+        for char, count in stack:
+            res += char * count
+
+        return res
+
+```
+### C++
+```cpp
+// Time and space complexity is O(n) where n is the size of the input string.
+class Solution {
+public:
+    string removeDuplicates(string s, int k) {
+      stack<pair<char , int>> st;
+      
+      for(int i = 0 ; i < s.size(); i++)
+      {
+        int count = 1;
+        if(!st.empty() && st.top().first == s[i])
+        {
+          count += st.top().second;
+          st.pop();
+        }
+        
+        st.push({s[i] , count});
+        
+        if(count == k) st.pop();
+        
+      }
+      
+      string ans = "";
+      while(!st.empty())
+      {
+        int freq = st.top().second;
+        int c = st.top().first;
+        while(freq > 0)
+        {
+           ans += c;
+           freq--;
+        }
+        
+        st.pop();
+      }
+      
+      reverse(ans.begin() , ans.end());
+      return ans;
+    }
+};
+
+```
+### Java
+```java
+404: Not Found
+```
+
+

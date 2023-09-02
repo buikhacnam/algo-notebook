@@ -1,0 +1,106 @@
+---
+title: Longest Turbulent Subarray
+category: Greedy
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/longest-turbulent-subarray)
+
+</Callout>
+
+## Description
+Given an integer array <code>arr</code>, return *the length of a maximum size turbulent subarray of* <code>arr</code>.
+
+A subarray is turbulent if the comparison sign flips between each adjacent pair of elements in the subarray.
+
+More formally, a subarray <code>[arr[i], arr[i + 1], ..., arr[j]]</code> of <code>arr</code> is said to be turbulent if and only if:
+
+
+	- For <code>i &lt;= k &lt; j</code>:
+
+	
+		- <code>arr[k] &gt; arr[k + 1]</code> when <code>k</code> is odd, and
+		- <code>arr[k] &lt; arr[k + 1]</code> when <code>k</code> is even.
+	
+	
+	- Or, for <code>i &lt;= k &lt; j</code>:
+	
+		- <code>arr[k] &gt; arr[k + 1]</code> when <code>k</code> is even, and
+		- <code>arr[k] &lt; arr[k + 1]</code> when <code>k</code> is odd.
+	
+	
+
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input: arr = [9,4,2,10,7,8,8,1,9]
+Output: 5
+Explanation: arr[1] &gt; arr[2] &lt; arr[3] &gt; arr[4] &lt; arr[5]
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: arr = [4,8,12,16]
+Output: 2
+</pre>
+
+Example 3:
+
+<br /><pre className="overflow-x-auto">
+Input: arr = [100]
+Output: 1
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>1 &lt;= arr.length &lt;= 4 * 10<sup>4</sup></code>
+	- <code>0 &lt;= arr[i] &lt;= 10<sup>9</sup></code>
+
+
+
+## Solution
+
+### Javascript
+```javascript
+404: Not Found
+```
+### Python
+```python
+class Solution:
+    def maxTurbulenceSize(self, arr: List[int]) -> int:
+        l, r = 0, 1
+        res, prev = 1, ""
+
+        while r < len(arr):
+            if arr[r - 1] > arr[r] and prev != ">":
+                res = max(res, r - l + 1)
+                r += 1
+                prev = ">"
+            elif arr[r - 1] < arr[r] and prev != "<":
+                res = max(res, r - l + 1)
+                r += 1
+                prev = "<"
+            else:
+                r = r + 1 if arr[r] == arr[r - 1] else r
+                l = r - 1
+                prev = ""
+        return res
+
+```
+### C++
+```cpp
+404: Not Found
+```
+### Java
+```java
+404: Not Found
+```
+
+

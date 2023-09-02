@@ -1,0 +1,179 @@
+---
+title: Island Perimeter
+category: Graphs
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/island-perimeter)
+
+</Callout>
+
+## Description
+You are given <code>row x col</code> <code>grid</code> representing a map where <code>grid[i][j] = 1</code> represents land and <code>grid[i][j] = 0</code> represents water.
+
+Grid cells are connected horizontally/vertically (not diagonally). The <code>grid</code> is completely surrounded by water, and there is exactly one island (i.e., one or more connected land cells).
+
+The island doesn&#39;t have &quot;lakes&quot;, meaning the water inside isn&#39;t connected to the water around the island. One cell is a square with side length 1. The grid is rectangular, width and height don&#39;t exceed 100. Determine the perimeter of the island.
+
+ 
+Example 1:
+<Image src="https://assets.leetcode.com/uploads/2018/10/12/island.png" width={221} height={213} />
+<br /><pre className="overflow-x-auto">
+Input: grid = [[0,1,0,0],[1,1,1,0],[0,1,0,0],[1,1,0,0]]
+Output: 16
+Explanation: The perimeter is the 16 yellow stripes in the image above.
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: grid = [[1]]
+Output: 4
+</pre>
+
+Example 3:
+
+<br /><pre className="overflow-x-auto">
+Input: grid = [[1,0]]
+Output: 4
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>row == grid.length</code>
+	- <code>col == grid[i].length</code>
+	- <code>1 &lt;= row, col &lt;= 100</code>
+	- <code>grid[i][j]</code> is <code>0</code> or <code>1</code>.
+	- There is exactly one island in <code>grid</code>.
+
+
+
+## Solution
+
+### Javascript
+```javascript
+var islandPerimeter = function(grid) {
+    const visit = new Set();
+    
+    const dfs = function(i, j) {
+        if(i >= grid.length || j >= grid[0].length || i < 0 || j < 0 || grid[i][j] == 0)
+            return 1;
+        let flatCoord = i*grid[0].length + j;
+        if(visit.has(flatCoord))
+            return 0;
+        
+        visit.add(flatCoord);
+        let perim = dfs(i, j + 1);
+        perim += dfs(i + 1, j);
+        perim += dfs(i, j - 1);
+        perim += dfs(i - 1, j);
+        return perim;
+    };
+    
+    for(let i = 0; i < grid.length; i++)
+        for(let j = 0; j < grid[0].length; j++)
+            if(grid[i][j])
+                return dfs(i, j);
+};
+
+```
+### Python
+```python
+class Solution:
+    def islandPerimeter(self, grid: List[List[int]]) -> int:
+        visit = set()
+
+        def dfs(i, j):
+            if i >= len(grid) or j >= len(grid[0]) or i < 0 or j < 0 or grid[i][j] == 0:
+                return 1
+            if (i, j) in visit:
+                return 0
+
+            visit.add((i, j))
+            perim = dfs(i, j + 1)
+            perim += dfs(i + 1, j)
+            perim += dfs(i, j - 1)
+            perim += dfs(i - 1, j)
+            return perim
+
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j]:
+                    return dfs(i, j)
+
+```
+### C++
+```cpp
+// Time complexity is O(M*N)
+// Space complexity is O(1)
+
+class Solution {
+public:
+    int islandPerimeter(vector<vector<int>>& grid) {
+      int m = grid.size();
+      int n = grid[0].size();
+      
+      int prem = 0;
+      
+      for(int i = 0 ; i < m ; i++)
+      {
+        for(int j = 0 ; j < n ; j++)
+        {
+          if(grid[i][j] == 1) {
+            prem += 4;
+          
+            if(j > 0 && grid[i][j-1] == 1) prem -=2;
+            if(i >0 && grid[i-1][j] == 1) prem -=2;
+
+          }
+        }
+      }
+      
+      return prem;
+    }
+};
+
+```
+### Java
+```java
+class Solution {
+    class RecursiveBiFunction<A, B, C> {
+        BiFunction<A, B, C> func;
+    }
+    
+    public int islandPerimeter(int[][] _grid) {
+        final int[][] grid = _grid;
+        final Set<Integer> visit = new HashSet<>();
+        
+        final RecursiveBiFunction<Integer, Integer, Integer> dfs = new RecursiveBiFunction();
+        dfs.func = (i, j) -> {
+            if(i >= grid.length || j >= grid[0].length || i < 0 || j < 0 || grid[i][j] == 0)
+                return 1;
+            //convert 2D-Coordinate to 1D-Coordinate
+            int flatCoord = i*grid[0].length + j;
+            if(visit.contains(flatCoord))
+                return 0;
+            
+            visit.add(flatCoord);
+            int perim = dfs.func.apply(i, j + 1);
+            perim += dfs.func.apply(i + 1, j);
+            perim += dfs.func.apply(i, j - 1);
+            perim += dfs.func.apply(i - 1, j);
+            return perim;
+        };
+        
+        for(int i = 0; i < grid.length; i++)
+            for(int j = 0; j < grid[0].length; j++)
+                if(grid[i][j] != 0)
+                    return dfs.func.apply(i, j);
+        return -1;
+    }
+}
+
+```
+
+

@@ -1,0 +1,174 @@
+---
+title: Two Sum II - Input Array Is Sorted
+category: Two Pointers
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted)
+
+</Callout>
+
+## Description
+Given a 1-indexed array of integers <code>numbers</code> that is already *sorted in non-decreasing order*, find two numbers such that they add up to a specific <code>target</code> number. Let these two numbers be <code>numbers[index<sub>1</sub>]</code> and <code>numbers[index<sub>2</sub>]</code> where <code>1 &lt;= index<sub>1</sub> &lt; index<sub>2</sub> &lt; numbers.length</code>.
+
+Return* the indices of the two numbers, *<code>index<sub>1</sub></code>* and *<code>index<sub>2</sub></code>*, added by one as an integer array *<code>[index<sub>1</sub>, index<sub>2</sub>]</code>* of length 2.*
+
+The tests are generated such that there is exactly one solution. You may not use the same element twice.
+
+Your solution must use only constant extra space.
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input: numbers = [<u>2</u>,<u>7</u>,11,15], target = 9
+Output: [1,2]
+Explanation: The sum of 2 and 7 is 9. Therefore, index<sub>1</sub> = 1, index<sub>2</sub> = 2. We return [1, 2].
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: numbers = [<u>2</u>,3,<u>4</u>], target = 6
+Output: [1,3]
+Explanation: The sum of 2 and 4 is 6. Therefore index<sub>1</sub> = 1, index<sub>2</sub> = 3. We return [1, 3].
+</pre>
+
+Example 3:
+
+<br /><pre className="overflow-x-auto">
+Input: numbers = [<u>-1</u>,<u>0</u>], target = -1
+Output: [1,2]
+Explanation: The sum of -1 and 0 is -1. Therefore index<sub>1</sub> = 1, index<sub>2</sub> = 2. We return [1, 2].
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>2 &lt;= numbers.length &lt;= 3 * 10<sup>4</sup></code>
+	- <code>-1000 &lt;= numbers[i] &lt;= 1000</code>
+	- <code>numbers</code> is sorted in non-decreasing order.
+	- <code>-1000 &lt;= target &lt;= 1000</code>
+	- The tests are generated such that there is exactly one solution.
+
+
+
+## Solution
+
+### Javascript
+```javascript
+/**
+ * https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/
+ * Time O(N) | Space O(1)
+ * @param {number[]} numbers
+ * @param {number} target
+ * @return {number[]}
+ */
+var twoSum = function (numbers, target) {
+    let [left, right] = [0, numbers.length - 1];
+
+    while (left < right) {
+        const sum = numbers[left] + numbers[right];
+
+        const isTarget = sum === target;
+        if (isTarget) return [left + 1, right + 1];
+
+        const isTargetGreater = sum < target;
+        if (isTargetGreater) left++;
+
+        const isTargetLess = target < sum;
+        if (isTargetLess) right--;
+    }
+
+    return [-1, -1];
+};
+
+```
+### Python
+```python
+class Solution:
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        l, r = 0, len(numbers) - 1
+
+        while l < r:
+            curSum = numbers[l] + numbers[r]
+
+            if curSum > target:
+                r -= 1
+            elif curSum < target:
+                l += 1
+            else:
+                return [l + 1, r + 1]
+
+```
+### C++
+```cpp
+/*
+    Given a 1-indexed sorted int array & target:
+    Return indices (added by 1) of 2 nums that add to target
+
+    2 pointers, outside in, iterate i/j if sum is too low/high
+
+    Time: O(n)
+    Space: O(1)
+*/
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& numbers, int target) {
+        int i = 0;
+        int j = numbers.size() - 1;
+        
+        vector<int> result;
+        
+        while (i < j) {
+            int sum = numbers[i] + numbers[j];
+            if (sum < target) {
+                i++;
+            } else if (sum > target) {
+                j--;
+            } else {
+                result.push_back(i + 1);
+                result.push_back(j + 1);
+                break;
+            }
+        }
+        
+        return result;
+    }
+};
+
+```
+### Java
+```java
+class Solution {
+
+    public int[] twoSum(int[] numbers, int target) {
+        int a_pointer = 0;
+        int b_pointer = numbers.length - 1;
+        int num_a, num_b;
+
+        while (a_pointer < b_pointer) {
+            num_a = numbers[a_pointer];
+            num_b = numbers[b_pointer];
+
+            if (num_a + num_b == target) break;
+
+            if (num_a + num_b < target) {
+                a_pointer++;
+                continue;
+            }
+
+            b_pointer--;
+        }
+
+        return new int[] { a_pointer + 1, b_pointer + 1 };
+    }
+}
+
+```
+
+

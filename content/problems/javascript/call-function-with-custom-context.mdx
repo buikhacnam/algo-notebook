@@ -1,0 +1,87 @@
+---
+title: Call Function with Custom Context
+category: Javascript
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/call-function-with-custom-context)
+
+</Callout>
+
+## Description
+Enhance all functions to have the <code>callPolyfill</code> method. The method accepts an object <code>obj</code> as it&#39;s first parameter and any number of additional arguments. The <code>obj</code> becomes the <code>this</code> context for the function. The additional arguments are passed to the function (that the <code>callPolyfill</code> method belongs on).
+
+For example if you had the function:
+
+<br /><pre className="overflow-x-auto">
+function tax(price, taxRate) {
+  const totalCost = price * (1 + taxRate);
+  console.log(`The cost of ${this.item} is ${totalCost}`);
+}
+</pre>
+
+Calling this function like <code>tax(10, 0.1)</code> will log <code>&quot;The cost of undefined is 11&quot;</code>. This is because the <code>this</code> context was not defined.
+
+However, calling the function like <code>tax.callPolyfill({item: &quot;salad&quot;}, 10, 0.1)</code> will log <code>&quot;The cost of salad is 11&quot;</code>. The <code>this</code> context was appropriately set, and the function logged an appropriate output.
+
+Please solve this without using the built-in <code>Function.call</code> method.
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input:
+fn = function add(b) {
+  return this.a + b;
+}
+args = [{&quot;a&quot;: 5}, 7]
+Output: 12
+Explanation:
+fn.callPolyfill({&quot;a&quot;: 5}, 7); // 12
+callPolyfill sets the &quot;this&quot; context to {&quot;a&quot;: 5}. 7 is passed as an argument.
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: 
+fn = function tax(price, taxRate) { 
+ return `The cost of the ${this.item} is ${price * taxRate}`; 
+}
+args = [{&quot;item&quot;: &quot;burger&quot;}, 10, 1.1]
+Output: &quot;The cost of the burger is 11&quot;
+Explanation: callPolyfill sets the &quot;this&quot; context to {&quot;item&quot;: &quot;burger&quot;}. 10 and 1.1 are passed as additional arguments.
+</pre>
+
+ 
+Constraints:
+
+<ul list-style-type:square;">
+	- <code><font face="monospace">typeof args[0] == &#39;object&#39; and args[0] != null</font></code>
+	- <code>1 &lt;= args.length &lt;= 100</code>
+	- <code>2 &lt;= JSON.stringify(args[0]).length &lt;= 10<sup>5</sup></code>
+
+
+
+## Solution
+
+### Javascript
+```javascript
+404: Not Found
+```
+### Python
+```python
+404: Not Found
+```
+### C++
+```cpp
+404: Not Found
+```
+### Java
+```java
+404: Not Found
+```
+
+

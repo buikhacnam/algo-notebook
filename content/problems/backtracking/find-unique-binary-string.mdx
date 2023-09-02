@@ -1,0 +1,91 @@
+---
+title: Find Unique Binary String
+category: Backtracking
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/find-unique-binary-string)
+
+</Callout>
+
+## Description
+Given an array of strings <code>nums</code> containing <code>n</code> unique binary strings each of length <code>n</code>, return *a binary string of length *<code>n</code>* that does not appear in *<code>nums</code>*. If there are multiple answers, you may return any of them*.
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input: nums = [&quot;01&quot;,&quot;10&quot;]
+Output: &quot;11&quot;
+Explanation: &quot;11&quot; does not appear in nums. &quot;00&quot; would also be correct.
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: nums = [&quot;00&quot;,&quot;01&quot;]
+Output: &quot;11&quot;
+Explanation: &quot;11&quot; does not appear in nums. &quot;10&quot; would also be correct.
+</pre>
+
+Example 3:
+
+<br /><pre className="overflow-x-auto">
+Input: nums = [&quot;111&quot;,&quot;011&quot;,&quot;001&quot;]
+Output: &quot;101&quot;
+Explanation: &quot;101&quot; does not appear in nums. &quot;000&quot;, &quot;010&quot;, &quot;100&quot;, and &quot;110&quot; would also be correct.
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>n == nums.length</code>
+	- <code>1 &lt;= n &lt;= 16</code>
+	- <code>nums[i].length == n</code>
+	- <code>nums[i] </code>is either <code>&#39;0&#39;</code> or <code>&#39;1&#39;</code>.
+	- All the strings of <code>nums</code> are unique.
+
+
+
+## Solution
+
+### Javascript
+```javascript
+404: Not Found
+```
+### Python
+```python
+class Solution:
+    def findDifferentBinaryString(self, nums: List[str]) -> str:
+        
+        strSet = { s for s in nums }
+        
+        def backtrack(i, cur):
+            if i == len(nums):
+                res = "".join(cur)
+                return None if res in strSet else res
+            
+            res = backtrack(i+1, cur)
+            if res: return res
+            
+            cur[i] = "1"
+            res = backtrack(i+1, cur)
+            if res: return res
+            
+        return backtrack(0, ["0" for s in nums])
+        
+
+```
+### C++
+```cpp
+404: Not Found
+```
+### Java
+```java
+404: Not Found
+```
+
+

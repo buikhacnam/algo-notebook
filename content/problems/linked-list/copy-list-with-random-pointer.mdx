@@ -1,0 +1,315 @@
+---
+title: Copy List with Random Pointer
+category: Linked List
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/copy-list-with-random-pointer)
+
+</Callout>
+
+## Description
+A linked list of length <code>n</code> is given such that each node contains an additional random pointer, which could point to any node in the list, or <code>null</code>.
+
+Construct a <a href="https://en.wikipedia.org/wiki/Object_copying#Deep_copy" target="_blank">deep copy</a> of the list. The deep copy should consist of exactly <code>n</code> brand new nodes, where each new node has its value set to the value of its corresponding original node. Both the <code>next</code> and <code>random</code> pointer of the new nodes should point to new nodes in the copied list such that the pointers in the original list and copied list represent the same list state. None of the pointers in the new list should point to nodes in the original list.
+
+For example, if there are two nodes <code>X</code> and <code>Y</code> in the original list, where <code>X.random --&gt; Y</code>, then for the corresponding two nodes <code>x</code> and <code>y</code> in the copied list, <code>x.random --&gt; y</code>.
+
+Return *the head of the copied linked list*.
+
+The linked list is represented in the input/output as a list of <code>n</code> nodes. Each node is represented as a pair of <code>[val, random_index]</code> where:
+
+
+	- <code>val</code>: an integer representing <code>Node.val</code>
+	- <code>random_index</code>: the index of the node (range from <code>0</code> to <code>n-1</code>) that the <code>random</code> pointer points to, or <code>null</code> if it does not point to any node.
+
+
+Your code will only be given the <code>head</code> of the original linked list.
+
+ 
+Example 1:
+<Image alt="" src="https://assets.leetcode.com/uploads/2019/12/18/e1.png" width={700} height={142} />
+<br /><pre className="overflow-x-auto">
+Input: head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
+Output: [[7,null],[13,0],[11,4],[10,2],[1,0]]
+</pre>
+
+Example 2:
+<Image alt="" src="https://assets.leetcode.com/uploads/2019/12/18/e2.png" width={700} height={114} />
+<br /><pre className="overflow-x-auto">
+Input: head = [[1,1],[2,1]]
+Output: [[1,1],[2,1]]
+</pre>
+
+Example 3:
+
+<Image alt="" src="https://assets.leetcode.com/uploads/2019/12/18/e3.png" width={700} height={122} />
+
+<br /><pre className="overflow-x-auto">
+Input: head = [[3,null],[3,0],[3,null]]
+Output: [[3,null],[3,0],[3,null]]
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>0 &lt;= n &lt;= 1000</code>
+	- <code>-10<sup>4</sup> &lt;= Node.val &lt;= 10<sup>4</sup></code>
+	- <code>Node.random</code> is <code>null</code> or is pointing to some node in the linked list.
+
+
+
+## Solution
+
+### Javascript
+```javascript
+/**
+ * https://leetcode.com/problems/copy-list-with-random-pointer/
+ * Time O(N) | Space O(N)
+ * @param {Node} head
+ * @return {Node}
+ */
+var copyRandomList = function(head, map = new Map()) {
+    if (!head) return null;
+    if (map.has(head)) return map.get(head);
+
+    const clone = new Node(head.val);
+
+    map.set(head, clone);                           /*           | Space O(N) */
+    clone.next = copyRandomList(head.next, map);    /* Time O(N) | Space O(N) */
+    clone.random = copyRandomList(head.random, map);/* Time O(N) | Space O(N) */
+
+    return clone;
+}
+
+/**
+ * https://leetcode.com/problems/copy-list-with-random-pointer/
+ * Time O(N) | Space O(1)
+ * @param {Node} head
+ * @return {Node}
+ */
+var copyRandomList = function(head) {
+    if (!head) return null;
+
+    cloneNode(head);         /* Time O(N) */
+    connectRandomNode(head); /* Time O(N) */
+
+    return connectNode(head);/* Time O(N) */
+};
+
+const cloneNode = (curr) => {
+    while (curr) {          /* Time O(N) */
+        const node = new Node(curr.val);
+
+        node.next = curr.next;
+        curr.next = node;
+        curr = node.next;
+    }
+
+    return curr;
+}
+
+const connectRandomNode = (curr) => {
+    while (curr) {         /* Time O(N) */
+        curr.next.random = curr.random?.next || null;
+        curr = curr.next.next;
+    }
+}
+
+const connectNode = (head) => {
+    let [ prev, curr, next ] = [ head, head.next, head.next ];
+
+    while (prev) {        /* Time O(N) */
+        prev.next = prev.next.next;
+        curr.next = curr?.next?.next || null;
+        prev = prev.next;
+        curr = curr.next;
+    }
+
+    return next
+}
+```
+### Python
+```python
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
+"""
+
+
+class Solution:
+    def copyRandomList(self, head: "Node") -> "Node":
+        oldToCopy = {None: None}
+
+        cur = head
+        while cur:
+            copy = Node(cur.val)
+            oldToCopy[cur] = copy
+            cur = cur.next
+        cur = head
+        while cur:
+            copy = oldToCopy[cur]
+            copy.next = oldToCopy[cur.next]
+            copy.random = oldToCopy[cur.random]
+            cur = cur.next
+        return oldToCopy[head]
+
+```
+### C++
+```cpp
+/*
+    Given linked list w/ also a random pointer, construct deep copy
+
+    Hash map {old -> new}, O(n) space
+    Optimize interweave old and new nodes, O(1) space
+    A -> A' -> B -> B' -> C -> C', A'.random = A.random.next
+
+    Time: O(n)
+    Space: O(n) -> can optimize to O(1)
+*/
+
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* next;
+    Node* random;
+    
+    Node(int _val) {
+        val = _val;
+        next = NULL;
+        random = NULL;
+    }
+};
+*/
+
+// class Solution {
+// public:
+//     Node* copyRandomList(Node* head) {
+//         if (head == NULL) {
+//             return NULL;
+//         }
+//         Node* oldNode = head;
+//         Node* newNode = new Node(oldNode->val);
+//         visited[oldNode] = newNode;
+//         while (oldNode != NULL) {
+//             newNode->next = getClonedNode(oldNode->next);
+//             newNode->random = getClonedNode(oldNode->random);
+//             oldNode = oldNode->next;
+//             newNode = newNode->next;
+//         }
+//         return visited[head];
+//     }
+// private:
+//     unordered_map<Node*, Node*> visited;
+//     Node* getClonedNode(Node* node) {
+//         if (node == NULL) {
+//             return NULL;
+//         }
+//         if (visited.find(node) != visited.end()) {
+//             return visited[node];
+//         }
+//         visited[node] = new Node(node->val);
+//         return visited[node];
+//     }
+// };
+/*
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        if (head == NULL) {
+            return NULL;
+        }
+        
+        Node* ptr = head;
+        while (ptr != NULL) {
+            Node* newNode = new Node(ptr->val);
+            newNode->next = ptr->next;
+            ptr->next = newNode;
+            ptr = newNode->next;
+        }
+        ptr = head;
+        
+        while (ptr != NULL) {
+            if (ptr->random == NULL) {
+                ptr->next->random == NULL;
+            } else {
+                ptr->next->random = ptr->random->next;
+            }
+            ptr = ptr->next->next;
+        }
+        
+        Node* oldPtr = head;
+        Node* newPtr = head->next;
+        Node* oldHead = head->next;
+        
+        while (oldPtr != NULL) {
+            oldPtr->next = oldPtr->next->next;
+            if (newPtr->next == NULL) {
+                newPtr->next = NULL;
+            } else {
+                newPtr->next = newPtr->next->next;
+            }
+            oldPtr = oldPtr->next;
+            newPtr = newPtr->next;
+        }
+        
+        return oldHead;
+    }
+};
+*/
+
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        unordered_map<Node*, Node*> nodes;
+        Node* h = head;
+        
+        while (h){
+            nodes[h] = new Node(h->val);
+            h = h->next;
+        }
+        h = head;
+        while (h){
+            Node* newNode = nodes[h];
+            newNode->next = nodes[h->next];
+            newNode->random = nodes[h->random];
+            h = h->next;
+        }
+        return nodes[head];
+    }
+};
+
+```
+### Java
+```java
+class Solution {
+
+    public Node copyRandomList(Node head) {
+        Node cur = head;
+        HashMap<Node, Node> map = new HashMap<>();
+        while (cur != null) {
+            map.put(cur, new Node(cur.val));
+            cur = cur.next;
+        }
+        cur = head;
+        while (cur != null) {
+            map.get(cur).next = map.get(cur.next);
+            map.get(cur).random = map.get(cur.random);
+            cur = cur.next;
+        }
+        return map.get(head);
+    }
+}
+
+```
+
+

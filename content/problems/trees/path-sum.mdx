@@ -1,0 +1,142 @@
+---
+title: Path Sum
+category: Trees
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/path-sum)
+
+</Callout>
+
+## Description
+Given the <code>root</code> of a binary tree and an integer <code>targetSum</code>, return <code>true</code> if the tree has a root-to-leaf path such that adding up all the values along the path equals <code>targetSum</code>.
+
+A leaf is a node with no children.
+
+ 
+Example 1:
+<Image alt="" src="https://assets.leetcode.com/uploads/2021/01/18/pathsum1.jpg" width={500} height={356} />
+<br /><pre className="overflow-x-auto">
+Input: root = [5,4,8,11,null,13,4,7,2,null,null,null,1], targetSum = 22
+Output: true
+Explanation: The root-to-leaf path with the target sum is shown.
+</pre>
+
+Example 2:
+<Image alt="" src="https://assets.leetcode.com/uploads/2021/01/18/pathsum2.jpg" />
+<br /><pre className="overflow-x-auto">
+Input: root = [1,2,3], targetSum = 5
+Output: false
+Explanation: There two root-to-leaf paths in the tree:
+(1 --&gt; 2): The sum is 3.
+(1 --&gt; 3): The sum is 4.
+There is no root-to-leaf path with sum = 5.
+</pre>
+
+Example 3:
+
+<br /><pre className="overflow-x-auto">
+Input: root = [], targetSum = 0
+Output: false
+Explanation: Since the tree is empty, there are no root-to-leaf paths.
+</pre>
+
+ 
+Constraints:
+
+
+	- The number of nodes in the tree is in the range <code>[0, 5000]</code>.
+	- <code>-1000 &lt;= Node.val &lt;= 1000</code>
+	- <code>-1000 &lt;= targetSum &lt;= 1000</code>
+
+
+
+## Solution
+
+### Javascript
+```javascript
+// problem link https://leetcode.com/problems/path-sum/
+// time complexity O(n) // whatever the number of nodes are.
+
+var hasPathSum = function(root, targetSum) {
+
+    const ans = [];
+    function goDFS(node, curruntSum) {
+        
+    if(!node) return;
+    
+        if(!node.left && !node.right) {
+            ans.push(node.val + curruntSum);
+        }
+        
+        goDFS(node.left, curruntSum + node.val);
+        goDFS(node.right, curruntSum + node.val);
+    }
+    goDFS(root, 0);
+    
+    return ans.includes(targetSum);
+};
+
+```
+### Python
+```python
+class Solution:
+    def hasPathSum(self, root, sum):
+        if not root:
+            return False
+        de = [
+            (root, sum - root.val),
+        ]
+        while de:
+            node, curr_sum = de.pop()
+            if not node.left and not node.right and curr_sum == 0:
+                return True
+            if node.right:
+                de.append((node.right, curr_sum - node.right.val))
+            if node.left:
+                de.append((node.left, curr_sum - node.left.val))
+        return False
+
+```
+### C++
+```cpp
+404: Not Found
+```
+### Java
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    //This would be easily solved by DFS and then comparing the values
+    public boolean dfs(TreeNode root, int targetSum, int currSum){
+        if(root == null) return false;
+
+        currSum += root.val;
+        if(root.left == null && root.right == null){
+            return (currSum == targetSum);
+        }
+        return dfs(root.left, targetSum, currSum) || dfs(root.right, targetSum, currSum);
+    }
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        return dfs(root, targetSum, 0);
+    }
+}
+
+```
+
+

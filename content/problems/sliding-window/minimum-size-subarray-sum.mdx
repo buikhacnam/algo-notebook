@@ -1,0 +1,161 @@
+---
+title: Minimum Size Subarray Sum
+category: Sliding Window
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/minimum-size-subarray-sum)
+
+</Callout>
+
+## Description
+Given an array of positive integers <code>nums</code> and a positive integer <code>target</code>, return *the minimal length of a *<span data-keyword="subarray-nonempty">*subarray*</span>* whose sum is greater than or equal to* <code>target</code>. If there is no such subarray, return <code>0</code> instead.
+
+ 
+Example 1:
+
+<br /><pre className="overflow-x-auto">
+Input: target = 7, nums = [2,3,1,2,4,3]
+Output: 2
+Explanation: The subarray [4,3] has the minimal length under the problem constraint.
+</pre>
+
+Example 2:
+
+<br /><pre className="overflow-x-auto">
+Input: target = 4, nums = [1,4,4]
+Output: 1
+</pre>
+
+Example 3:
+
+<br /><pre className="overflow-x-auto">
+Input: target = 11, nums = [1,1,1,1,1,1,1,1]
+Output: 0
+</pre>
+
+ 
+Constraints:
+
+
+	- <code>1 &lt;= target &lt;= 10<sup>9</sup></code>
+	- <code>1 &lt;= nums.length &lt;= 10<sup>5</sup></code>
+	- <code>1 &lt;= nums[i] &lt;= 10<sup>4</sup></code>
+
+
+ 
+Follow up: If you have figured out the <code>O(n)</code> solution, try coding another solution of which the time complexity is <code>O(n log(n))</code>.
+
+## Solution
+
+### Javascript
+```javascript
+/**
+ * @param {number} target
+ * @param {number[]} nums
+ * @return {number}
+ */
+var minSubArrayLen = function (target, nums) {
+    let minLength = Infinity;
+    let leftWindow = 0;
+    let currentSum = 0;
+
+    for (let rightWindow = 0; rightWindow < nums.length; rightWindow++) {
+        currentSum += nums[rightWindow];
+        while (currentSum >= target) {
+            minLength = Math.min(minLength, rightWindow - leftWindow + 1);
+            currentSum -= nums[leftWindow];
+            leftWindow++;
+        }
+    }
+    return minLength === Infinity ? 0 : minLength;
+};
+
+```
+### Python
+```python
+class Solution:
+    def minSubArrayLen(self, target: int, nums: List[int]) -> int:
+        res = float('inf')
+        l, total = 0, 0
+
+        for r in range(len(nums)):
+            total += nums[r]
+            while total >= target:
+                res = min(res, r - l + 1)
+                total -= nums[l]
+                l += 1
+        return res if res != float('inf') else 0
+
+        
+
+
+            
+
+```
+### C++
+```cpp
+/* Given an array of positive integers nums and a positive integer target, 
+return the minimal length of a contiguous subarray [numsl, numsl+1, ..., numsr-1, numsr] 
+of which the sum is greater than or equal to target. 
+If there is no such subarray, return 0 instead.
+Ex.: target = 7, nums = [2,3,1,2,4,3] -> 2 
+     target = 4, nums = [1,4,4] -> 1     
+Sliding window (with two pointer). Keep adding elements to the SL. When Sum => target or SP points to end of the vector resize the SW. */
+
+class Solution{    
+    public:    
+        int minSubArrayLen(int target, vector<int>& nums){            
+            int min;            
+            int fp, sp;            
+            int sum;            
+            fp = 0;            
+            sp = 1;            
+            sum = nums[0];            
+            min = nums.size() + 1;            
+            while(fp != sp){                
+                if(Sum >= target){                    
+                    min = min(sp - fp, min);                    
+                    sum = Sìsum - nums[fp];                    
+                    fp++;                    
+                }
+                else{                        
+                    if(sp < nums.size()){                         
+                        sum = sum + nums[sp];
+                        sp++;                            
+                    }
+                    else{                            
+                        fp++;                            
+                    }                    
+                }                  
+            }            
+            return min;
+        }    
+};
+
+```
+### Java
+```java
+class Solution {
+
+    public int minSubArrayLen(int target, int[] nums) {
+        int l = 0, total = 0;
+        int res = Integer.MAX_VALUE;
+
+        for (int r = 0; r < nums.length; r++) {
+            total += nums[r];
+            while (total >= target) {
+                res = Math.min(r - l + 1, res);
+                total -= nums[l++];
+            }
+        }
+
+        return res == Integer.MAX_VALUE ? 0 : res;
+    }
+}
+
+```
+
+
