@@ -4,6 +4,8 @@ A notebook for quick algorithms and data structures revision.
 
 Visit: https://algonotebook.vercel.app/dashboard
 
+The project also powers the [Leetcode Assistant Chrome Extension](https://chrome.google.com/webstore/detail/leetcode-assistant/nbeehcepchjjlajedbfbjcfdmgcoioja).
+
 ## Features
 
 - Quickly browse algorithms and data structures by category.
@@ -109,24 +111,24 @@ To generate a new problem markdown template, you can use our snippet by followin
 
 ### Categories (problems count)
 
-- Arrays and Hashing `(1)`
-- Two Pointers `(1)`
-- Sliding Window `(1)`
+- Arrays and Hashing `(8)`
+- Two Pointers `(3)`
+- Sliding Window `(4)`
 - Stack `(1)`
-- Binary Search `(1)`
-- Linked List `(1)`
-- Trees `(1)`
-- Tries (0)
-- Heap and Priority Queue (0)
-- Backtracking (0)
-- Graphs (0)
-- Advanced Graphs (0)
-- 1-D Dynamic Programming (0)
-- 2-D Dynamic Programming (0)
-- Greedy (0)
-- Intervals (0)
-- Math and Geometry (0)
-- Bit Manipulation (0)
+- Binary Search `(2)`
+- Linked List `(6)`
+- Trees `(11)`
+- Tries `(3)`
+- Heap and Priority Queue `(1)`
+- Backtracking `(2)`
+- Graphs `(6)`
+- Advanced Graphs `(1)`
+- 1-D Dynamic Programming `(10)`
+- 2-D Dynamic Programming `(2)`
+- Greedy `(2)`
+- Intervals `(5)`
+- Math and Geometry `(3)`
+- Bit Manipulation `(5)`
 
 ## References
 
