@@ -11,42 +11,44 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given the <code>root</code> of a binary tree, imagine yourself standing on the right side of it, return *the values of the nodes you can see ordered from top to bottom*.
 
- 
+Given the <code>root</code> of a binary tree, imagine yourself standing on the right side of it, return _the values of the nodes you can see ordered from top to bottom_.
+
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/02/14/tree.jpg" width={401} height={301} />
-<br /><pre className="overflow-x-auto">
-Input: root = [1,2,3,null,5,null,4]
-Output: [1,3,4]
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/02/14/tree.jpg"
+	width={401}
+	height={301}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: root = [1,2,3,null,5,null,4] Output: [1,3,4]
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: root = [1,null,3]
-Output: [1,3]
-</pre>
+<br />
+
+<pre className="overflow-x-auto">Input: root = [1,null,3] Output: [1,3]</pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: root = []
-Output: []
-</pre>
+<br />
 
- 
+<pre className="overflow-x-auto">Input: root = [] Output: []</pre>
+
 Constraints:
 
-
-	- The number of nodes in the tree is in the range <code>[0, 100]</code>.
-	- <code>-100 &lt;= Node.val &lt;= 100</code>
-
-
+    - The number of nodes in the tree is in the range <code>[0, 100]</code>.
+    - <code>-100 &lt;= Node.val &lt;= 100</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/binary-tree-right-side-view/
@@ -54,30 +56,30 @@ Constraints:
  * @param {TreeNode} root
  * @return {number[]}
  */
- var rightSideView = function(root) {
-    const isBaseCase = root === null;
-    if (isBaseCase) return [];
+var rightSideView = function (root) {
+	const isBaseCase = root === null
+	if (isBaseCase) return []
 
-    return bfs([ root ]);
-};
+	return bfs([root])
+}
 
 const bfs = (queue, rightSide = []) => {
-    while (queue.length) {
-        let prev = null;
+	while (queue.length) {
+		let prev = null
 
-        for (let i = (queue.length - 1); 0 <= i; i--) {
-            const node = queue.shift();
+		for (let i = queue.length - 1; 0 <= i; i--) {
+			const node = queue.shift()
 
-            prev = node;
+			prev = node
 
-            if (node.left) queue.push(node.left);
-            if (node.right) queue.push(node.right);
-        }
+			if (node.left) queue.push(node.left)
+			if (node.right) queue.push(node.right)
+		}
 
-        rightSide.push(prev.val);
-    }
+		rightSide.push(prev.val)
+	}
 
-    return rightSide;
+	return rightSide
 }
 
 /**
@@ -86,26 +88,26 @@ const bfs = (queue, rightSide = []) => {
  * @param {TreeNode} root
  * @return {number[]}
  */
- var rightSideView = function(root, level = 0, rightSide = []) {
-    const isBaseCase = root === null;
-    if (isBaseCase) return rightSide;
+var rightSideView = function (root, level = 0, rightSide = []) {
+	const isBaseCase = root === null
+	if (isBaseCase) return rightSide
 
-    const isLastNode = level === rightSide.length
-    if (isLastNode) rightSide.push(root.val);
+	const isLastNode = level === rightSide.length
+	if (isLastNode) rightSide.push(root.val)
 
-    return dfs(root, level, rightSide)
+	return dfs(root, level, rightSide)
 }
 
 const dfs = (root, level, rightSide) => {
-    if (root.right) rightSideView(root.right, (level + 1), rightSide);
-    if (root.left) rightSideView(root.left, (level + 1), rightSide);
+	if (root.right) rightSideView(root.right, level + 1, rightSide)
+	if (root.left) rightSideView(root.left, level + 1, rightSide)
 
-    return rightSide
+	return rightSide
 }
-
-
 ```
+
 ### Python
+
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -133,7 +135,9 @@ class Solution:
         return res
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given root of binary tree, return values that can only be seen from the right side
@@ -161,23 +165,23 @@ public:
         if (root == NULL) {
             return {};
         }
-        
+
         queue<TreeNode*> q;
         q.push(root);
-        
+
         vector<int> result;
-        
+
         while (!q.empty()) {
             int count = q.size();
-            
+
             for (int i = count; i > 0; i--) {
                 TreeNode* node = q.front();
                 q.pop();
-                
+
                 if (i == count) {
                     result.push_back(node->val);
                 }
-                
+
                 if (node->right != NULL) {
                     q.push(node->right);
                 }
@@ -186,13 +190,15 @@ public:
                 }
             }
         }
-        
+
         return result;
     }
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -219,5 +225,3 @@ class Solution {
 }
 
 ```
-
-

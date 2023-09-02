@@ -11,37 +11,46 @@ difficulty: Hard
 </Callout>
 
 ## Description
-Given an array of integers <code>heights</code> representing the histogram&#39;s bar height where the width of each bar is <code>1</code>, return *the area of the largest rectangle in the histogram*.
 
- 
+Given an array of integers <code>heights</code> representing the histogram&#39;s bar height where the width of each bar is <code>1</code>, return _the area of the largest rectangle in the histogram_.
+
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/01/04/histogram.jpg" width={522} height={242} />
-<br /><pre className="overflow-x-auto">
-Input: heights = [2,1,5,6,2,3]
-Output: 10
-Explanation: The above is a histogram where width of each bar is 1.
-The largest rectangle is shown in the red area, which has an area = 10 units.
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/01/04/histogram.jpg"
+	width={522}
+	height={242}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: heights = [2,1,5,6,2,3] Output: 10 Explanation: The above is a
+	histogram where width of each bar is 1. The largest rectangle is shown in the
+	red area, which has an area = 10 units.
 </pre>
 
 Example 2:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/01/04/histogram-1.jpg" width={202} height={362} />
-<br /><pre className="overflow-x-auto">
-Input: heights = [2,4]
-Output: 4
-</pre>
 
- 
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/01/04/histogram-1.jpg"
+	width={202}
+	height={362}
+/>
+<br />
+
+<pre className="overflow-x-auto">Input: heights = [2,4] Output: 4</pre>
+
 Constraints:
 
-
-	- <code>1 &lt;= heights.length &lt;= 10<sup>5</sup></code>
-	- <code>0 &lt;= heights[i] &lt;= 10<sup>4</sup></code>
-
-
+    - <code>1 &lt;= heights.length &lt;= 10<sup>5</sup></code>
+    - <code>0 &lt;= heights[i] &lt;= 10<sup>4</sup></code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/largest-rectangle-in-histogram/solution/
@@ -49,22 +58,25 @@ Constraints:
  * @param {number[]} heights
  * @return {number}
  */
-var largestRectangleArea = function(heights, maxArea = 0) {
-    for (let i = 0; i < heights.length; i++) {/* Time O(N) */
-        for (let j = i; j < heights.length; j++) {/* Time O(N) */
-            let min = Infinity;
+var largestRectangleArea = function (heights, maxArea = 0) {
+	for (let i = 0; i < heights.length; i++) {
+		/* Time O(N) */
+		for (let j = i; j < heights.length; j++) {
+			/* Time O(N) */
+			let min = Infinity
 
-            for (let k = i; k <= j; k++) {            /* Time O(N) */
-                min = Math.min(min, heights[k]);
-            }
+			for (let k = i; k <= j; k++) {
+				/* Time O(N) */
+				min = Math.min(min, heights[k])
+			}
 
-            const area = min * ((j - i) + 1);
+			const area = min * (j - i + 1)
 
-            maxArea = Math.max(maxArea, area);
-        }
-    }
+			maxArea = Math.max(maxArea, area)
+		}
+	}
 
-    return maxArea;
+	return maxArea
 }
 
 /**
@@ -73,20 +85,22 @@ var largestRectangleArea = function(heights, maxArea = 0) {
  * @param {number[]} heights
  * @return {number}
  */
-var largestRectangleArea = function(heights, maxArea = 0) {
-    for (let i = 0; i < heights.length; i++) {/* Time O(N) */
-        let min = Infinity;
+var largestRectangleArea = function (heights, maxArea = 0) {
+	for (let i = 0; i < heights.length; i++) {
+		/* Time O(N) */
+		let min = Infinity
 
-        for (let j = i; j < heights.length; j++) {/* Time O(N) */
-            min = Math.min(min, heights[j]);
+		for (let j = i; j < heights.length; j++) {
+			/* Time O(N) */
+			min = Math.min(min, heights[j])
 
-            const area = min * ((j - i) + 1);
+			const area = min * (j - i + 1)
 
-            maxArea = Math.max(maxArea, area);
-        }
-    }
+			maxArea = Math.max(maxArea, area)
+		}
+	}
 
-    return maxArea;
+	return maxArea
 }
 
 /**
@@ -95,28 +109,41 @@ var largestRectangleArea = function(heights, maxArea = 0) {
  * @param {number[]} heights
  * @return {number}
  */
-var largestRectangleArea = function(heights, left = 0, right = (heights.length - 1)) {
-    const isBaseCase = right < left;
-    if (isBaseCase) return 0;
+var largestRectangleArea = function (
+	heights,
+	left = 0,
+	right = heights.length - 1,
+) {
+	const isBaseCase = right < left
+	if (isBaseCase) return 0
 
-    return divideAndConquer(heights, left, right);                  /* Time O(N^2) | Space O(N) */
+	return divideAndConquer(heights, left, right) /* Time O(N^2) | Space O(N) */
 }
 
 const divideAndConquer = (heights, left, right, min = left) => {
-    for (let i = left; i <= right; i++) {                           /* Time O(N) */
-        const isMinGreater = heights[i] < heights[min];
-        if (!isMinGreater) continue;
+	for (let i = left; i <= right; i++) {
+		/* Time O(N) */
+		const isMinGreater = heights[i] < heights[min]
+		if (!isMinGreater) continue
 
-        min = i;
-    }
+		min = i
+	}
 
-    const window = (right - left) + 1;
-    const area = heights[min] * window;
+	const window = right - left + 1
+	const area = heights[min] * window
 
-    const leftArea = largestRectangleArea(heights, (min + 1), right)/* Time O(N^2) | Space O(N) */
-    const rightArea = largestRectangleArea(heights, left, (min - 1))/* Time O(N^2) | Space O(N) */
+	const leftArea = largestRectangleArea(
+		heights,
+		min + 1,
+		right,
+	) /* Time O(N^2) | Space O(N) */
+	const rightArea = largestRectangleArea(
+		heights,
+		left,
+		min - 1,
+	) /* Time O(N^2) | Space O(N) */
 
-    return Math.max(area, leftArea, rightArea);
+	return Math.max(area, leftArea, rightArea)
 }
 
 /**
@@ -125,49 +152,52 @@ const divideAndConquer = (heights, left, right, min = left) => {
  * @param {number[]} heights
  * @return {number}
  */
-var largestRectangleArea = function(heights) {
-    const { stack, maxArea } = fillStack(heights);        /* Time O(N) | Space O(N) */
+var largestRectangleArea = function (heights) {
+	const { stack, maxArea } = fillStack(heights) /* Time O(N) | Space O(N) */
 
-    return getMaxArea(heights, stack, maxArea);           /* Time O(N) */
-};
+	return getMaxArea(heights, stack, maxArea) /* Time O(N) */
+}
 
 const fillStack = (heights, stack = [], maxArea = 0) => {
-    for (let index = 0; index < heights.length; index++) {/* Time O(N + N) */
-        let start = index;
+	for (let index = 0; index < heights.length; index++) {
+		/* Time O(N + N) */
+		let start = index
 
-        const isCurrHeightLess = ([ prevIndex, prevHeight ], currHeight) =>  currHeight < prevHeight;
-        const canShrink = () => isCurrHeightLess(stack[stack.length - 1], heights[index]);
-        while (stack.length && canShrink()) {             /* Time O(N + N) */
-            const [ _index, _height ] = stack.pop();
-            const width = index - _index;
-            const area = _height * width;
+		const isCurrHeightLess = ([prevIndex, prevHeight], currHeight) =>
+			currHeight < prevHeight
+		const canShrink = () =>
+			isCurrHeightLess(stack[stack.length - 1], heights[index])
+		while (stack.length && canShrink()) {
+			/* Time O(N + N) */
+			const [_index, _height] = stack.pop()
+			const width = index - _index
+			const area = _height * width
 
-            maxArea = Math.max(maxArea, area);
-            start = _index;
-        }
+			maxArea = Math.max(maxArea, area)
+			start = _index
+		}
 
-        stack.push([ start, heights[index] ]);            /* Space O(N) */
-    }
+		stack.push([start, heights[index]]) /* Space O(N) */
+	}
 
-    return { stack, maxArea }
+	return { stack, maxArea }
 }
 
 const getMaxArea = (heights, stack, maxArea) => {
-    for (const [ index, height ] of stack) {              /* Time O(N) */
-        const width = heights.length - index;
-        const area = height * width;
+	for (const [index, height] of stack) {
+		/* Time O(N) */
+		const width = heights.length - index
+		const area = height * width
 
-        maxArea = Math.max(maxArea, area);
-    }
+		maxArea = Math.max(maxArea, area)
+	}
 
-    return maxArea;
+	return maxArea
 }
-
-
-
-
 ```
+
 ### Python
+
 ```python
 class Solution:
     def largestRectangleArea(self, heights: List[int]) -> int:
@@ -187,7 +217,9 @@ class Solution:
         return maxArea
 
 ```
+
 ### C++
+
 ```cpp
 /*
 Given array of heights, return area of largest rectangle
@@ -205,37 +237,39 @@ public:
         // pair: [index, height]
         stack<pair<int, int>> stk;
         int result = 0;
-        
+
         for (int i = 0; i < heights.size(); i++) {
             int start = i;
-            
+
             while (!stk.empty() && stk.top().second > heights[i]) {
                 int index = stk.top().first;
                 int width = i - index;
                 int height = stk.top().second;
                 stk.pop();
-                
+
                 result = max(result, height * width);
                 start = index;
             }
-            
+
             stk.push({start, heights[i]});
         }
-        
+
         while (!stk.empty()) {
             int width = heights.size() - stk.top().first;
             int height = stk.top().second;
             stk.pop();
-            
+
             result = max(result, height * width);
         }
-                          
+
         return result;
     }
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
     public int largestRectangleArea(int[] heights) {
@@ -254,7 +288,7 @@ class Solution {
         }
         stack.push(new Pair(start,curHt));
       }
-      
+
        while(!stack.isEmpty()){
           Pair<Integer,Integer> pair = stack.pop();
           int index = pair.getKey();
@@ -263,9 +297,7 @@ class Solution {
        }
         return area;
     }
-  
+
 }
 
 ```
-
-

@@ -11,43 +11,58 @@ difficulty: Hard
 </Callout>
 
 ## Description
-Given an <code>m x n</code> <code>board</code> of characters and a list of strings <code>words</code>, return *all words on the board*.
+
+Given an <code>m x n</code> <code>board</code> of characters and a list of strings <code>words</code>, return _all words on the board_.
 
 Each word must be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. The same letter cell may not be used more than once in a word.
 
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2020/11/07/search1.jpg" width={322} height={322} />
-<br /><pre className="overflow-x-auto">
-Input: board = [[&quot;o&quot;,&quot;a&quot;,&quot;a&quot;,&quot;n&quot;],[&quot;e&quot;,&quot;t&quot;,&quot;a&quot;,&quot;e&quot;],[&quot;i&quot;,&quot;h&quot;,&quot;k&quot;,&quot;r&quot;],[&quot;i&quot;,&quot;f&quot;,&quot;l&quot;,&quot;v&quot;]], words = [&quot;oath&quot;,&quot;pea&quot;,&quot;eat&quot;,&quot;rain&quot;]
-Output: [&quot;eat&quot;,&quot;oath&quot;]
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/11/07/search1.jpg"
+	width={322}
+	height={322}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: board =
+	[[&quot;o&quot;,&quot;a&quot;,&quot;a&quot;,&quot;n&quot;],[&quot;e&quot;,&quot;t&quot;,&quot;a&quot;,&quot;e&quot;],[&quot;i&quot;,&quot;h&quot;,&quot;k&quot;,&quot;r&quot;],[&quot;i&quot;,&quot;f&quot;,&quot;l&quot;,&quot;v&quot;]],
+	words = [&quot;oath&quot;,&quot;pea&quot;,&quot;eat&quot;,&quot;rain&quot;]
+	Output: [&quot;eat&quot;,&quot;oath&quot;]
 </pre>
 
 Example 2:
-<Image alt="" src="https://assets.leetcode.com/uploads/2020/11/07/search2.jpg" width={162} height={162} />
-<br /><pre className="overflow-x-auto">
-Input: board = [[&quot;a&quot;,&quot;b&quot;],[&quot;c&quot;,&quot;d&quot;]], words = [&quot;abcb&quot;]
-Output: []
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/11/07/search2.jpg"
+	width={162}
+	height={162}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: board = [[&quot;a&quot;,&quot;b&quot;],[&quot;c&quot;,&quot;d&quot;]],
+	words = [&quot;abcb&quot;] Output: []
 </pre>
 
- 
 Constraints:
 
-
-	- <code>m == board.length</code>
-	- <code>n == board[i].length</code>
-	- <code>1 &lt;= m, n &lt;= 12</code>
-	- <code>board[i][j]</code> is a lowercase English letter.
-	- <code>1 &lt;= words.length &lt;= 3 * 10<sup>4</sup></code>
-	- <code>1 &lt;= words[i].length &lt;= 10</code>
-	- <code>words[i]</code> consists of lowercase English letters.
-	- All the strings of <code>words</code> are unique.
-
-
+    - <code>m == board.length</code>
+    - <code>n == board[i].length</code>
+    - <code>1 &lt;= m, n &lt;= 12</code>
+    - <code>board[i][j]</code> is a lowercase English letter.
+    - <code>1 &lt;= words.length &lt;= 3 * 10<sup>4</sup></code>
+    - <code>1 &lt;= words[i].length &lt;= 10</code>
+    - <code>words[i]</code> consists of lowercase English letters.
+    - All the strings of <code>words</code> are unique.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * @param {character[][]} board
@@ -56,104 +71,105 @@ Constraints:
  * @return {string[]}
  */
 var findWords = function (board, words) {
-    return new Trie(words).searchBoard(board);
-};
+	return new Trie(words).searchBoard(board)
+}
 
 class TrieNode {
-    constructor() {
-        this.children = {};
-        this.word = '';
-    }
+	constructor() {
+		this.children = {}
+		this.word = ''
+	}
 }
 
 class Trie {
-    constructor(words) {
-        this.root = new TrieNode();
-        words.forEach((word) => this.insert(word));
-    }
+	constructor(words) {
+		this.root = new TrieNode()
+		words.forEach((word) => this.insert(word))
+	}
 
-    /* Time O(N) | Space O(N) */
-    insert(word, node = this.root) {
-        for (const char of word) {
-            const child = node.children[char] || new TrieNode();
+	/* Time O(N) | Space O(N) */
+	insert(word, node = this.root) {
+		for (const char of word) {
+			const child = node.children[char] || new TrieNode()
 
-            node.children[char] = child;
+			node.children[char] = child
 
-            node = child;
-        }
+			node = child
+		}
 
-        node.word = word;
-    }
+		node.word = word
+	}
 
-    /* Time O((ROWS * COLS) * (4 * (3 ^ (WORDS - 1)))) | Space O(N) */
-    searchBoard(board, node = this.root, words = []) {
-        const [rows, cols] = [board.length, board[0].length];
+	/* Time O((ROWS * COLS) * (4 * (3 ^ (WORDS - 1)))) | Space O(N) */
+	searchBoard(board, node = this.root, words = []) {
+		const [rows, cols] = [board.length, board[0].length]
 
-        for (let row = 0; row < rows; row++) {
-            for (let col = 0; col < cols; col++) {
-                this.dfs(board, row, rows, col, cols, node, words);
-            }
-        }
+		for (let row = 0; row < rows; row++) {
+			for (let col = 0; col < cols; col++) {
+				this.dfs(board, row, rows, col, cols, node, words)
+			}
+		}
 
-        return words;
-    }
+		return words
+	}
 
-    dfs(board, row, rows, col, cols, node, words) {
-        const char = board[row][col];
-        const child = node.children[char] || null;
+	dfs(board, row, rows, col, cols, node, words) {
+		const char = board[row][col]
+		const child = node.children[char] || null
 
-        if (this.canSkip(char, child)) return;
+		if (this.canSkip(char, child)) return
 
-        node = child;
-        this.checkWord(node, words);
-        this.backTrack(board, row, rows, col, cols, node, words);
-    }
+		node = child
+		this.checkWord(node, words)
+		this.backTrack(board, row, rows, col, cols, node, words)
+	}
 
-    canSkip(char, child) {
-        const hasSeen = char === '#';
-        const isMissingChild = !child;
+	canSkip(char, child) {
+		const hasSeen = char === '#'
+		const isMissingChild = !child
 
-        return hasSeen || isMissingChild;
-    }
+		return hasSeen || isMissingChild
+	}
 
-    checkWord(node, words) {
-        if (!node.word.length) return;
+	checkWord(node, words) {
+		if (!node.word.length) return
 
-        words.push(node.word);
-        node.word = '';
-    }
+		words.push(node.word)
+		node.word = ''
+	}
 
-    backTrack(board, row, rows, col, cols, node, words) {
-        const char = board[row][col];
+	backTrack(board, row, rows, col, cols, node, words) {
+		const char = board[row][col]
 
-        board[row][col] = '#';
+		board[row][col] = '#'
 
-        for (const [_row, _col] of this.getNeighbors(row, rows, col, cols)) {
-            this.dfs(board, _row, rows, _col, cols, node, words);
-        }
+		for (const [_row, _col] of this.getNeighbors(row, rows, col, cols)) {
+			this.dfs(board, _row, rows, _col, cols, node, words)
+		}
 
-        board[row][col] = char;
-    }
+		board[row][col] = char
+	}
 
-    getNeighbors(row, rows, col, cols) {
-        return [
-            [row - 1, col],
-            [row + 1, col],
-            [row, col - 1],
-            [row, col + 1],
-        ].filter(([_row, _col]) => !this.isOutOfBounds(_row, rows, _col, cols));
-    }
+	getNeighbors(row, rows, col, cols) {
+		return [
+			[row - 1, col],
+			[row + 1, col],
+			[row, col - 1],
+			[row, col + 1],
+		].filter(([_row, _col]) => !this.isOutOfBounds(_row, rows, _col, cols))
+	}
 
-    isOutOfBounds(row, rows, col, cols) {
-        const isRowOut = row < 0 || rows <= row;
-        const isColOut = col < 0 || cols <= col;
+	isOutOfBounds(row, rows, col, cols) {
+		const isRowOut = row < 0 || rows <= row
+		const isColOut = col < 0 || cols <= col
 
-        return isRowOut || isColOut;
-    }
+		return isRowOut || isColOut
+	}
 }
-
 ```
+
 ### Python
+
 ```python
 class TrieNode:
     def __init__(self):
@@ -191,7 +207,7 @@ class Solution:
 
         def dfs(r, c, node, word):
             if (
-                r not in range(ROWS) 
+                r not in range(ROWS)
                 or c not in range(COLS)
                 or board[r][c] not in node.children
                 or node.children[board[r][c]].refs < 1
@@ -220,7 +236,9 @@ class Solution:
         return list(res)
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given a board of characters & a list of words, return all words on the board
@@ -235,7 +253,7 @@ class TrieNode {
 public:
     TrieNode* children[26];
     bool isWord;
-    
+
     TrieNode() {
         for (int i = 0; i < 26; i++) {
             children[i] = NULL;
@@ -250,28 +268,28 @@ public:
         for (int i = 0; i < words.size(); i++) {
             insert(words[i]);
         }
-        
+
         int m = board.size();
         int n = board[0].size();
-        
+
         TrieNode* node = root;
         vector<string> result;
-        
+
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 search(board, i, j, m, n, node, "", result);
             }
         }
-        
+
         return result;
     }
 private:
     TrieNode* root = new TrieNode();
-    
+
     void insert(string word) {
         TrieNode* node = root;
         int curr = 0;
-        
+
         for (int i = 0; i < word.size(); i++) {
             curr = word[i] - 'a';
             if (node->children[curr] == NULL) {
@@ -279,41 +297,43 @@ private:
             }
             node = node->children[curr];
         }
-        
+
         node->isWord = true;
     }
-    
+
     void search(vector<vector<char>>& board, int i, int j, int m, int n, TrieNode* node, string word, vector<string>& result) {
         if (i < 0 || i >= m || j < 0 || j >= n || board[i][j] == '#') {
             return;
         }
-        
+
         char c = board[i][j];
-        
+
         node = node->children[c - 'a'];
         if (node == NULL) {
             return;
         }
-        
+
         word += board[i][j];
         if (node->isWord) {
             result.push_back(word);
             node->isWord = false;
         }
-        
+
         board[i][j] = '#';
-        
+
         search(board, i - 1, j, m, n, node, word, result);
         search(board, i + 1, j, m, n, node, word, result);
         search(board, i, j - 1, m, n, node, word, result);
         search(board, i, j + 1, m, n, node, word, result);
-        
+
         board[i][j] = c;
     }
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -417,5 +437,3 @@ class Solution {
 }
 
 ```
-
-

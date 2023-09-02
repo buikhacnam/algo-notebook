@@ -11,39 +11,51 @@ difficulty: Easy
 </Callout>
 
 ## Description
+
 Given the roots of two binary trees <code>root</code> and <code>subRoot</code>, return <code>true</code> if there is a subtree of <code>root</code> with the same structure and node values of<code> subRoot</code> and <code>false</code> otherwise.
 
 A subtree of a binary tree <code>tree</code> is a tree that consists of a node in <code>tree</code> and all of this node&#39;s descendants. The tree <code>tree</code> could also be considered as a subtree of itself.
 
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/04/28/subtree1-tree.jpg" width={532} height={400} />
-<br /><pre className="overflow-x-auto">
-Input: root = [3,4,5,1,2], subRoot = [4,1,2]
-Output: true
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/04/28/subtree1-tree.jpg"
+	width={532}
+	height={400}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: root = [3,4,5,1,2], subRoot = [4,1,2] Output: true
 </pre>
 
 Example 2:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/04/28/subtree2-tree.jpg" width={502} height={458} />
-<br /><pre className="overflow-x-auto">
-Input: root = [3,4,5,1,2,null,null,null,null,0], subRoot = [4,1,2]
-Output: false
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/04/28/subtree2-tree.jpg"
+	width={502}
+	height={458}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: root = [3,4,5,1,2,null,null,null,null,0], subRoot = [4,1,2] Output:
+	false
 </pre>
 
- 
 Constraints:
 
-
-	- The number of nodes in the <code>root</code> tree is in the range <code>[1, 2000]</code>.
-	- The number of nodes in the <code>subRoot</code> tree is in the range <code>[1, 1000]</code>.
-	- <code>-10<sup>4</sup> &lt;= root.val &lt;= 10<sup>4</sup></code>
-	- <code>-10<sup>4</sup> &lt;= subRoot.val &lt;= 10<sup>4</sup></code>
-
-
+    - The number of nodes in the <code>root</code> tree is in the range <code>[1, 2000]</code>.
+    - The number of nodes in the <code>subRoot</code> tree is in the range <code>[1, 1000]</code>.
+    - <code>-10<sup>4</sup> &lt;= root.val &lt;= 10<sup>4</sup></code>
+    - <code>-10<sup>4</sup> &lt;= subRoot.val &lt;= 10<sup>4</sup></code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/subtree-of-another-tree/
@@ -51,98 +63,98 @@ Constraints:
  * @param {TreeNode} subRoot
  * @return {boolean}
  */
-var isSubtree = function(root, subRoot) {
-    if (!root) return false
+var isSubtree = function (root, subRoot) {
+	if (!root) return false
 
-    if (isSame(root, subRoot)) return true
+	if (isSame(root, subRoot)) return true
 
-    const hasLeftTree = isSubtree(root.left, subRoot)
-    const hasRightTree = isSubtree(root.right, subRoot)
+	const hasLeftTree = isSubtree(root.left, subRoot)
+	const hasRightTree = isSubtree(root.right, subRoot)
 
-    return hasLeftTree || hasRightTree
-};
-
-const isSame = (root, subRoot) => {
-    const hasReachedEnd = !(root && subRoot)
-    if (hasReachedEnd) return root === subRoot
-
-    const isMismatch = root.val !== subRoot.val
-    if (isMismatch) return false
-
-    const isLeftSame = isSame(root.left, subRoot.left)
-    const isRightSame = isSame(root.right, subRoot.right)
-
-    return isLeftSame && isRightSame
+	return hasLeftTree || hasRightTree
 }
 
-const hash = (val) => require('crypto')
-    .createHash('md5')
-    .update(val)
-    .digest('hex')
+const isSame = (root, subRoot) => {
+	const hasReachedEnd = !(root && subRoot)
+	if (hasReachedEnd) return root === subRoot
+
+	const isMismatch = root.val !== subRoot.val
+	if (isMismatch) return false
+
+	const isLeftSame = isSame(root.left, subRoot.left)
+	const isRightSame = isSame(root.right, subRoot.right)
+
+	return isLeftSame && isRightSame
+}
+
+const hash = (val) =>
+	require('crypto').createHash('md5').update(val).digest('hex')
 
 const merkle = (root) => {
-    if (!root) return '#'
+	if (!root) return '#'
 
-    const { left, val, right } = root
+	const { left, val, right } = root
 
-    const leftMerkle = merkle(left)
-    const rightMerkle = merkle(right)
+	const leftMerkle = merkle(left)
+	const rightMerkle = merkle(right)
 
-    const merkleVal = [ leftMerkle, val, rightMerkle ].join('')
-    const merkleHash = hash(merkleVal)
+	const merkleVal = [leftMerkle, val, rightMerkle].join('')
+	const merkleHash = hash(merkleVal)
 
-    root.merkle = merkleHash
+	root.merkle = merkleHash
 
-    return root.merkle
+	return root.merkle
 }
 
 const search = (root, subRoot) => {
-    if (!root) return false
+	if (!root) return false
 
-    const hasSamePath = root.merkle === subRoot.merkle
-    if (hasSamePath) return true
+	const hasSamePath = root.merkle === subRoot.merkle
+	if (hasSamePath) return true
 
-    const left = search(root.left, subRoot)
-    const right = search(root.right, subRoot)
+	const left = search(root.left, subRoot)
+	const right = search(root.right, subRoot)
 
-    return left || right
+	return left || right
 }
 
-var isSubtree = function(root, subRoot) {
-    [ root, subRoot ].forEach(merkle)
+var isSubtree = function (root, subRoot) {
+	;[root, subRoot].forEach(merkle)
 
-    return search(root, subRoot)
+	return search(root, subRoot)
 }
 
 const hashify = (root, hash, postOrderKey) => {
-    if (!root) return '#'
+	if (!root) return '#'
 
-    const left = hashify(root.left, hash, postOrderKey)
-    const right = hashify(root.right, hash, postOrderKey)
+	const left = hashify(root.left, hash, postOrderKey)
+	const right = hashify(root.right, hash, postOrderKey)
 
-    const key = [left, root.val, right].join('')
+	const key = [left, root.val, right].join('')
 
-    if (!hash.has(key)) {
-        hash.set(key, postOrderKey[0])
-        postOrderKey[0]++
-    }
+	if (!hash.has(key)) {
+		hash.set(key, postOrderKey[0])
+		postOrderKey[0]++
+	}
 
-    return hash.get(key)
+	return hash.get(key)
 }
 
-var isSubtree = function(root, subRoot, hash = new Map (), postOrderKey = [0]) {
-    hashify(root, hash, postOrderKey)
+var isSubtree = function (root, subRoot, hash = new Map(), postOrderKey = [0]) {
+	hashify(root, hash, postOrderKey)
 
-    const hashKey = [
-        hashify(subRoot.left, hash, postOrderKey),
-        subRoot.val,
-        hashify(subRoot.right, hash, postOrderKey)
-    ].join('')
+	const hashKey = [
+		hashify(subRoot.left, hash, postOrderKey),
+		subRoot.val,
+		hashify(subRoot.right, hash, postOrderKey),
+	].join('')
 
-    return hash.has(hashKey)
+	return hash.has(hashKey)
 }
 ```
+
 ### Python
+
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -169,7 +181,9 @@ class Solution:
         return False
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given the roots of 2 binary trees, return true if a tree has a subtree of the other tree
@@ -218,7 +232,9 @@ private:
 };
 
 ```
+
 ### Java
+
 ```java
 // Solution: Recursive Approach
 
@@ -236,7 +252,7 @@ class Solution {
         if (p == null && q == null) {
             return true;
         }
-    
+
         if (p == null || q == null || p.val != q.val) {
             return false;
         }
@@ -246,5 +262,3 @@ class Solution {
 }
 
 ```
-
-

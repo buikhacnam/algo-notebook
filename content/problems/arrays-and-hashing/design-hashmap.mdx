@@ -11,55 +11,48 @@ difficulty: Easy
 </Callout>
 
 ## Description
+
 Design a HashMap without using any built-in hash table libraries.
 
 Implement the <code>MyHashMap</code> class:
 
+    - <code>MyHashMap()</code> initializes the object with an empty map.
+    - <code>void put(int key, int value)</code> inserts a <code>(key, value)</code> pair into the HashMap. If the <code>key</code> already exists in the map, update the corresponding <code>value</code>.
+    - <code>int get(int key)</code> returns the <code>value</code> to which the specified <code>key</code> is mapped, or <code>-1</code> if this map contains no mapping for the <code>key</code>.
+    - <code>void remove(key)</code> removes the <code>key</code> and its corresponding <code>value</code> if the map contains the mapping for the <code>key</code>.
 
-	- <code>MyHashMap()</code> initializes the object with an empty map.
-	- <code>void put(int key, int value)</code> inserts a <code>(key, value)</code> pair into the HashMap. If the <code>key</code> already exists in the map, update the corresponding <code>value</code>.
-	- <code>int get(int key)</code> returns the <code>value</code> to which the specified <code>key</code> is mapped, or <code>-1</code> if this map contains no mapping for the <code>key</code>.
-	- <code>void remove(key)</code> removes the <code>key</code> and its corresponding <code>value</code> if the map contains the mapping for the <code>key</code>.
-
-
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input
-[&quot;MyHashMap&quot;, &quot;put&quot;, &quot;put&quot;, &quot;get&quot;, &quot;get&quot;, &quot;put&quot;, &quot;get&quot;, &quot;remove&quot;, &quot;get&quot;]
-[[], [1, 1], [2, 2], [1], [3], [2, 1], [2], [2], [2]]
-Output
-[null, null, null, 1, -1, null, 1, null, -1]
+<br />
 
-Explanation
-MyHashMap myHashMap = new MyHashMap();
-myHashMap.put(1, 1); // The map is now [[1,1]]
-myHashMap.put(2, 2); // The map is now [[1,1], [2,2]]
-myHashMap.get(1);    // return 1, The map is now [[1,1], [2,2]]
-myHashMap.get(3);    // return -1 (i.e., not found), The map is now [[1,1], [2,2]]
-myHashMap.put(2, 1); // The map is now [[1,1], [2,1]] (i.e., update the existing value)
-myHashMap.get(2);    // return 1, The map is now [[1,1], [2,1]]
-myHashMap.remove(2); // remove the mapping for 2, The map is now [[1,1]]
-myHashMap.get(2);    // return -1 (i.e., not found), The map is now [[1,1]]
+<pre className="overflow-x-auto">
+	Input [&quot;MyHashMap&quot;, &quot;put&quot;, &quot;put&quot;,
+	&quot;get&quot;, &quot;get&quot;, &quot;put&quot;, &quot;get&quot;,
+	&quot;remove&quot;, &quot;get&quot;] [[], [1, 1], [2, 2], [1], [3], [2, 1],
+	[2], [2], [2]] Output [null, null, null, 1, -1, null, 1, null, -1] Explanation
+	MyHashMap myHashMap = new MyHashMap(); myHashMap.put(1, 1); // The map is now
+	[[1,1]] myHashMap.put(2, 2); // The map is now [[1,1], [2,2]]
+	myHashMap.get(1); // return 1, The map is now [[1,1], [2,2]] myHashMap.get(3);
+	// return -1 (i.e., not found), The map is now [[1,1], [2,2]] myHashMap.put(2,
+	1); // The map is now [[1,1], [2,1]] (i.e., update the existing value)
+	myHashMap.get(2); // return 1, The map is now [[1,1], [2,1]]
+	myHashMap.remove(2); // remove the mapping for 2, The map is now [[1,1]]
+	myHashMap.get(2); // return -1 (i.e., not found), The map is now [[1,1]]
 </pre>
 
- 
 Constraints:
 
-
-	- <code>0 &lt;= key, value &lt;= 10<sup>6</sup></code>
-	- At most <code>10<sup>4</sup></code> calls will be made to <code>put</code>, <code>get</code>, and <code>remove</code>.
-
-
+    - <code>0 &lt;= key, value &lt;= 10<sup>6</sup></code>
+    - At most <code>10<sup>4</sup></code> calls will be made to <code>put</code>, <code>get</code>, and <code>remove</code>.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 var MyHashMap = function () {
-    this.map = new Map();
-};
+	this.map = new Map()
+}
 
 /**
  * @param {number} key
@@ -67,25 +60,25 @@ var MyHashMap = function () {
  * @return {void}
  */
 MyHashMap.prototype.put = function (key, value) {
-    this.map.set(key, value);
-};
+	this.map.set(key, value)
+}
 
 /**
  * @param {number} key
  * @return {number}
  */
 MyHashMap.prototype.get = function (key) {
-    const val = this.map.get(key);
-    return val !== undefined ? val : -1;
-};
+	const val = this.map.get(key)
+	return val !== undefined ? val : -1
+}
 
 /**
  * @param {number} key
  * @return {void}
  */
 MyHashMap.prototype.remove = function (key) {
-    this.map.delete(key);
-};
+	this.map.delete(key)
+}
 
 /**
  * Your MyHashMap object will be instantiated and called as such:
@@ -94,9 +87,10 @@ MyHashMap.prototype.remove = function (key) {
  * var param_2 = obj.get(key)
  * obj.remove(key)
  */
-
 ```
+
 ### Python
+
 ```python
 class ListNode:
     def __init__(self, key=-1, val=-1, next=None):
@@ -107,7 +101,7 @@ class ListNode:
 class MyHashMap:
     def __init__(self):
         self.map = [ListNode() for i in range(1000)]
-        
+
     def hashcode(self, key):
         return key % len(self.map)
 
@@ -119,7 +113,7 @@ class MyHashMap:
                 return
             cur = cur.next
         cur.next = ListNode(key, value)
-         
+
     def get(self, key: int) -> int:
         cur = self.map[self.hashcode(key)].next
         while cur and cur.key != key:
@@ -136,7 +130,9 @@ class MyHashMap:
             cur.next = cur.next.next
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Design a HashMap without using any built-in hash table libraries.
@@ -150,13 +146,13 @@ class MyHashMap:
 class MyHashMap {
 public:
     const int N = 10010;
-    vector<list<pair<int, int>>> h; 
+    vector<list<pair<int, int>>> h;
 
     /** Initialize your data structure here. */
     MyHashMap() {
         h = vector<list<pair<int, int>>>(N);
     }
-    
+
     list<pair<int, int>>::iterator find(int key) {
         int t = key % N;
         for (auto it = h[t].begin(); it != h[t].end(); it ++ ) {
@@ -173,7 +169,7 @@ public:
         if (it == h[t].end()) h[t].push_back({key, value});
         else it->second = value;
     }
-    
+
     /** Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key */
     int get(int key) {
         auto t = key % N;
@@ -181,7 +177,7 @@ public:
         if (it != h[t].end()) return it->second;
         return -1;
     }
-    
+
     /** Removes the mapping of the specified value key if this map contains a mapping for the key */
     void remove(int key) {
         auto t = key % N;
@@ -198,7 +194,9 @@ public:
  * obj->remove(key);
  */
 ```
+
 ### Java
+
 ```java
 class ListNode {
     int key, val;
@@ -245,5 +243,3 @@ class MyHashMap {
     }
 }
 ```
-
-

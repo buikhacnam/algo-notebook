@@ -11,50 +11,52 @@ difficulty: Easy
 </Callout>
 
 ## Description
-Given an array <code>nums</code> containing <code>n</code> distinct numbers in the range <code>[0, n]</code>, return *the only number in the range that is missing from the array.*
 
- 
+Given an array <code>nums</code> containing <code>n</code> distinct numbers in the range <code>[0, n]</code>, return _the only number in the range that is missing from the array._
+
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [3,0,1]
-Output: 2
-Explanation: n = 3 since there are 3 numbers, so all numbers are in the range [0,3]. 2 is the missing number in the range since it does not appear in nums.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [3,0,1] Output: 2 Explanation: n = 3 since there are 3 numbers,
+	so all numbers are in the range [0,3]. 2 is the missing number in the range
+	since it does not appear in nums.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [0,1]
-Output: 2
-Explanation: n = 2 since there are 2 numbers, so all numbers are in the range [0,2]. 2 is the missing number in the range since it does not appear in nums.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [0,1] Output: 2 Explanation: n = 2 since there are 2 numbers, so
+	all numbers are in the range [0,2]. 2 is the missing number in the range since
+	it does not appear in nums.
 </pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [9,6,4,2,3,5,7,0,1]
-Output: 8
-Explanation: n = 9 since there are 9 numbers, so all numbers are in the range [0,9]. 8 is the missing number in the range since it does not appear in nums.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [9,6,4,2,3,5,7,0,1] Output: 8 Explanation: n = 9 since there are
+	9 numbers, so all numbers are in the range [0,9]. 8 is the missing number in
+	the range since it does not appear in nums.
 </pre>
 
- 
 Constraints:
 
+    - <code>n == nums.length</code>
+    - <code>1 &lt;= n &lt;= 10<sup>4</sup></code>
+    - <code>0 &lt;= nums[i] &lt;= n</code>
+    - All the numbers of <code>nums</code> are unique.
 
-	- <code>n == nums.length</code>
-	- <code>1 &lt;= n &lt;= 10<sup>4</sup></code>
-	- <code>0 &lt;= nums[i] &lt;= n</code>
-	- All the numbers of <code>nums</code> are unique.
-
-
- 
 Follow up: Could you implement a solution using only <code>O(1)</code> extra space complexity and <code>O(n)</code> runtime complexity?
-
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/missing-number/
@@ -63,17 +65,18 @@ Follow up: Could you implement a solution using only <code>O(1)</code> extra spa
  * @return {number}
  */
 var missingNumber = function (nums, missingNumber = nums.length) {
-    for (let i = 0; i < nums.length; i++) {
-        const xor = (i ^ nums[i]);
+	for (let i = 0; i < nums.length; i++) {
+		const xor = i ^ nums[i]
 
-        missingNumber ^= xor;
-    }
+		missingNumber ^= xor
+	}
 
-    return missingNumber;
-};
-
+	return missingNumber
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def missingNumber(self, nums: List[int]) -> int:
@@ -84,7 +87,9 @@ class Solution:
         return res
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given array in range [0, n], return missing
@@ -113,7 +118,9 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -128,5 +135,3 @@ class Solution {
 }
 
 ```
-
-

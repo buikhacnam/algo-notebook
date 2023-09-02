@@ -11,79 +11,78 @@ difficulty: Easy
 </Callout>
 
 ## Description
+
 An ugly number is a positive integer whose prime factors are limited to <code>2</code>, <code>3</code>, and <code>5</code>.
 
-Given an integer <code>n</code>, return <code>true</code> *if* <code>n</code> *is an ugly number*.
+Given an integer <code>n</code>, return <code>true</code> _if_ <code>n</code> _is an ugly number_.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: n = 6
-Output: true
-Explanation: 6 = 2 &times; 3
+<br />
+
+<pre className="overflow-x-auto">
+	Input: n = 6 Output: true Explanation: 6 = 2 &times; 3
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: n = 1
-Output: true
-Explanation: 1 has no prime factors, therefore all of its prime factors are limited to 2, 3, and 5.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: n = 1 Output: true Explanation: 1 has no prime factors, therefore all
+	of its prime factors are limited to 2, 3, and 5.
 </pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: n = 14
-Output: false
-Explanation: 14 is not ugly since it includes the prime factor 7.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: n = 14 Output: false Explanation: 14 is not ugly since it includes the
+	prime factor 7.
 </pre>
 
- 
 Constraints:
 
-
-	- <code>-2<sup>31</sup> &lt;= n &lt;= 2<sup>31</sup> - 1</code>
-
-
+    - <code>-2<sup>31</sup> &lt;= n &lt;= 2<sup>31</sup> - 1</code>
 
 ## Solution
 
 ### Javascript
-```javascript
-var isUgly = function(n) {
-    if(n <= 0)
-        return false;
-    
-    for(const p of [2, 3, 5])
-        while(n % p == 0)
-            n = n / p;
-    return n == 1;
-};
 
+```javascript
+var isUgly = function (n) {
+	if (n <= 0) return false
+
+	for (const p of [2, 3, 5]) while (n % p == 0) n = n / p
+	return n == 1
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def isUgly(self, n: int) -> bool:
         if n <= 0:
             return False
-        
+
         for p in [2, 3, 5]:
             while n % p == 0:
                 n = n // p
         return n == 1
 
 ```
+
 ### C++
+
 ```cpp
 class Solution {
 public:
     bool isUgly(int n) {
         if(n <= 0)
             return false;
-        
+
         for(int p: {2, 3, 5})
             while(n % p == 0)
                 n = n / p;
@@ -92,13 +91,15 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
     public boolean isUgly(int n) {
         if(n <= 0)
             return false;
-        
+
         for(int p: new int[] {2, 3, 5})
             while(n % p == 0)
                 n = n / p;
@@ -107,5 +108,3 @@ class Solution {
 }
 
 ```
-
-

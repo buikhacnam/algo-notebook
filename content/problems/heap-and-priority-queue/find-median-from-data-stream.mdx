@@ -11,63 +11,49 @@ difficulty: Hard
 </Callout>
 
 ## Description
+
 The median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value, and the median is the mean of the two middle values.
 
-
-	- For example, for <code>arr = [2,3,4]</code>, the median is <code>3</code>.
-	- For example, for <code>arr = [2,3]</code>, the median is <code>(2 + 3) / 2 = 2.5</code>.
-
+    - For example, for <code>arr = [2,3,4]</code>, the median is <code>3</code>.
+    - For example, for <code>arr = [2,3]</code>, the median is <code>(2 + 3) / 2 = 2.5</code>.
 
 Implement the MedianFinder class:
 
+    - <code>MedianFinder()</code> initializes the <code>MedianFinder</code> object.
+    - <code>void addNum(int num)</code> adds the integer <code>num</code> from the data stream to the data structure.
+    - <code>double findMedian()</code> returns the median of all elements so far. Answers within <code>10<sup>-5</sup></code> of the actual answer will be accepted.
 
-	- <code>MedianFinder()</code> initializes the <code>MedianFinder</code> object.
-	- <code>void addNum(int num)</code> adds the integer <code>num</code> from the data stream to the data structure.
-	- <code>double findMedian()</code> returns the median of all elements so far. Answers within <code>10<sup>-5</sup></code> of the actual answer will be accepted.
-
-
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input
-[&quot;MedianFinder&quot;, &quot;addNum&quot;, &quot;addNum&quot;, &quot;findMedian&quot;, &quot;addNum&quot;, &quot;findMedian&quot;]
-[[], [1], [2], [], [3], []]
-Output
-[null, null, null, 1.5, null, 2.0]
+<br />
 
-Explanation
-MedianFinder medianFinder = new MedianFinder();
-medianFinder.addNum(1);    // arr = [1]
-medianFinder.addNum(2);    // arr = [1, 2]
-medianFinder.findMedian(); // return 1.5 (i.e., (1 + 2) / 2)
-medianFinder.addNum(3);    // arr[1, 2, 3]
-medianFinder.findMedian(); // return 2.0
+<pre className="overflow-x-auto">
+	Input [&quot;MedianFinder&quot;, &quot;addNum&quot;, &quot;addNum&quot;,
+	&quot;findMedian&quot;, &quot;addNum&quot;, &quot;findMedian&quot;] [[], [1],
+	[2], [], [3], []] Output [null, null, null, 1.5, null, 2.0] Explanation
+	MedianFinder medianFinder = new MedianFinder(); medianFinder.addNum(1); // arr
+	= [1] medianFinder.addNum(2); // arr = [1, 2] medianFinder.findMedian(); //
+	return 1.5 (i.e., (1 + 2) / 2) medianFinder.addNum(3); // arr[1, 2, 3]
+	medianFinder.findMedian(); // return 2.0
 </pre>
 
- 
 Constraints:
 
+    - <code>-10<sup>5</sup> &lt;= num &lt;= 10<sup>5</sup></code>
+    - There will be at least one element in the data structure before calling <code>findMedian</code>.
+    - At most <code>5 * 10<sup>4</sup></code> calls will be made to <code>addNum</code> and <code>findMedian</code>.
 
-	- <code>-10<sup>5</sup> &lt;= num &lt;= 10<sup>5</sup></code>
-	- There will be at least one element in the data structure before calling <code>findMedian</code>.
-	- At most <code>5 * 10<sup>4</sup></code> calls will be made to <code>addNum</code> and <code>findMedian</code>.
-
-
- 
 Follow up:
 
-
-	- If all integer numbers from the stream are in the range <code>[0, 100]</code>, how would you optimize your solution?
-	- If <code>99%</code> of all integer numbers from the stream are in the range <code>[0, 100]</code>, how would you optimize your solution?
-
-
+    - If all integer numbers from the stream are in the range <code>[0, 100]</code>, how would you optimize your solution?
+    - If <code>99%</code> of all integer numbers from the stream are in the range <code>[0, 100]</code>, how would you optimize your solution?
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-/** 
+/**
  * https://leetcode.com/problems/find-median-from-data-stream/
  * Your MedianFinder object will be instantiated and called as such:
  * var obj = new MedianFinder()
@@ -75,57 +61,54 @@ Follow up:
  * var param_2 = obj.findMedian()
  */
 class MedianFinder {
-    constructor () {
-        this.maxHeap = new MaxPriorityQueue()
-        this.minHeap = new MinPriorityQueue()
-    }
+	constructor() {
+		this.maxHeap = new MaxPriorityQueue()
+		this.minHeap = new MinPriorityQueue()
+	}
 
-    /* Time O(log(N)) | Space (N) */
-    insertNum (num) {
-        this.addNum(num)
-    }
+	/* Time O(log(N)) | Space (N) */
+	insertNum(num) {
+		this.addNum(num)
+	}
 
-    addNum (num, heap = this.getHeap(num)) {
-        heap.enqueue(num)
-        this.rebalance()
-    }
+	addNum(num, heap = this.getHeap(num)) {
+		heap.enqueue(num)
+		this.rebalance()
+	}
 
-    getHeap (num, { maxHeap, minHeap } = this) {
-        const isFirst = maxHeap.isEmpty()
-        const isGreater = num <= this.top(maxHeap);
-        const isMaxHeap = (isFirst || isGreater);
-        return (isMaxHeap)
-            ? maxHeap
-            : minHeap
-    }
+	getHeap(num, { maxHeap, minHeap } = this) {
+		const isFirst = maxHeap.isEmpty()
+		const isGreater = num <= this.top(maxHeap)
+		const isMaxHeap = isFirst || isGreater
+		return isMaxHeap ? maxHeap : minHeap
+	}
 
-    rebalance ({ maxHeap, minHeap } = this) {
-        const canShiftMax = (minHeap.size() + 1) < maxHeap.size()
-        if (canShiftMax) return minHeap.enqueue(maxHeap.dequeue().element)
+	rebalance({ maxHeap, minHeap } = this) {
+		const canShiftMax = minHeap.size() + 1 < maxHeap.size()
+		if (canShiftMax) return minHeap.enqueue(maxHeap.dequeue().element)
 
-        const canShiftMin = maxHeap.size() < minHeap.size()
-        if (canShiftMin) return maxHeap.enqueue(minHeap.dequeue().element)
-    }
+		const canShiftMin = maxHeap.size() < minHeap.size()
+		if (canShiftMin) return maxHeap.enqueue(minHeap.dequeue().element)
+	}
 
-    /* Time O(1) | Space (1) */
-    findMedian ({ maxHeap, minHeap } = this) {
-        const isEven = maxHeap.size() === minHeap.size()
-        return (isEven)
-            ? this.average(maxHeap, minHeap)
-            : this.top(maxHeap)
-    }
+	/* Time O(1) | Space (1) */
+	findMedian({ maxHeap, minHeap } = this) {
+		const isEven = maxHeap.size() === minHeap.size()
+		return isEven ? this.average(maxHeap, minHeap) : this.top(maxHeap)
+	}
 
-    average (maxHeap, minHeap) {
-        return (this.top(maxHeap) + this.top(minHeap)) / 2
-    }
+	average(maxHeap, minHeap) {
+		return (this.top(maxHeap) + this.top(minHeap)) / 2
+	}
 
-    top (heap) {
-        return heap.front()?.element || 0
-    }
+	top(heap) {
+		return heap.front()?.element || 0
+	}
 }
-
 ```
+
 ### Python
+
 ```python
 class MedianFinder:
     def __init__(self):
@@ -157,7 +140,9 @@ class MedianFinder:
         return (-1 * self.small[0] + self.large[0]) / 2.0
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Implement data structure that gets the median from a data stream
@@ -171,15 +156,15 @@ class MedianFinder:
 class MedianFinder {
 public:
     MedianFinder() {
-        
+
     }
-    
+
     void addNum(int num) {
         if (lower.empty()) {
             lower.push(num);
             return;
         }
-        
+
         if (lower.size() > higher.size()) {
             if (lower.top() > num) {
                 higher.push(lower.top());
@@ -198,10 +183,10 @@ public:
             }
         }
     }
-    
+
     double findMedian() {
         double result = 0.0;
-        
+
         if (lower.size() == higher.size()) {
             result = lower.top() + (higher.top() - lower.top()) / 2.0;
         } else {
@@ -211,7 +196,7 @@ public:
                 result = higher.top();
             }
         }
-        
+
         return result;
     }
 private:
@@ -227,7 +212,9 @@ private:
  */
 
 ```
+
 ### Java
+
 ```java
 class MedianFinder {
 
@@ -271,5 +258,3 @@ class MedianFinder {
  */
 
 ```
-
-

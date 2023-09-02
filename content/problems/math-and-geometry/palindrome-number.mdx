@@ -11,65 +11,65 @@ difficulty: Easy
 </Callout>
 
 ## Description
-Given an integer <code>x</code>, return <code>true</code>* if *<code>x</code>* is a *<span data-keyword="palindrome-integer">*palindrome*</span>*, and *<code>false</code>* otherwise*.
 
- 
+Given an integer <code>x</code>, return <code>true</code>_ if _<code>x</code>_ is a _<span data-keyword="palindrome-integer">_palindrome_</span>_, and _<code>false</code>_ otherwise_.
+
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: x = 121
-Output: true
-Explanation: 121 reads as 121 from left to right and from right to left.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: x = 121 Output: true Explanation: 121 reads as 121 from left to right
+	and from right to left.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: x = -121
-Output: false
-Explanation: From left to right, it reads -121. From right to left, it becomes 121-. Therefore it is not a palindrome.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: x = -121 Output: false Explanation: From left to right, it reads -121.
+	From right to left, it becomes 121-. Therefore it is not a palindrome.
 </pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: x = 10
-Output: false
-Explanation: Reads 01 from right to left. Therefore it is not a palindrome.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: x = 10 Output: false Explanation: Reads 01 from right to left.
+	Therefore it is not a palindrome.
 </pre>
 
- 
 Constraints:
 
+    - <code>-2<sup>31</sup> &lt;= x &lt;= 2<sup>31</sup> - 1</code>
 
-	- <code>-2<sup>31</sup> &lt;= x &lt;= 2<sup>31</sup> - 1</code>
-
-
- 
 Follow up: Could you solve it without converting the integer to a string?
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * @param {number} x
  * @return {boolean}
  */
 var isPalindrome = function (x) {
-    // Creates array from int characters
-    // 121 -> [1,2,1]
-    let arr = Array.from(String(x), Number);
+	// Creates array from int characters
+	// 121 -> [1,2,1]
+	let arr = Array.from(String(x), Number)
 
-    // Uses two pointer
-    for (let i = 0; i < arr.length; i++) {
-        if (arr[i] !== arr[arr.length - 1 - i]) {
-            return false;
-        }
-    }
+	// Uses two pointer
+	for (let i = 0; i < arr.length; i++) {
+		if (arr[i] !== arr[arr.length - 1 - i]) {
+			return false
+		}
+	}
 
-    return true;
-};
+	return true
+}
 
 // Runtime: 302 ms, faster than 40.50% of JavaScript online submissions for Palindrome Number.
 // Memory Usage: 51.8 MB, less than 8.36% of JavaScript online submissions for Palindrome Number.
@@ -81,61 +81,64 @@ var isPalindrome = function (x) {
  * @param {number} x
  * @return {boolean}
  */
- var isPalindrome = function(x) {
-    if (x < 0) return false;
+var isPalindrome = function (x) {
+	if (x < 0) return false
 
-    const inputX = x;
-    let revX = 0;
+	const inputX = x
+	let revX = 0
 
-    while (x > 0) {
-        revX += x % 10;
-        x = Math.floor(x / 10);
+	while (x > 0) {
+		revX += x % 10
+		x = Math.floor(x / 10)
 
-        if (x > 0) revX *= 10
-    }
+		if (x > 0) revX *= 10
+	}
 
-    return revX === inputX;
-};
-
+	return revX === inputX
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def isPalindrome(self, x: int) -> bool:
         if x < 0: return False
-        
+
         div = 1
         while x >= 10 * div:
             div *= 10
-            
+
         while x:
             right = x % 10
             left = x // div
-            
+
             if left != right: return False
-            
+
             x = (x % div) // 10
             div = div / 100
         return True
 
 ```
+
 ### C++
+
 ```cpp
 class Solution {
 public:
     bool isPalindrome(int x) {
         if(x < 0) return false;
-        
+
         long div = 1;
         while(x >= 10 * div)
             div *= 10;
-        
+
         while(x) {
             int right = x % 10;
             int left = x / div;
-            
+
             if(left != right) return false;
-            
+
             x = (x % div) / 10;
             div = div / 100;
         }
@@ -144,16 +147,18 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
     public boolean isPalindrome(int x) {
         if(x < 0) return false;
-        
+
         long div = 1;
         while(x >= 10 * div)
             div *= 10;
-        
+
         while(x > 0) {
             if(x / div != x % 10) return false;
             x = (int)((x % div) / 10);
@@ -164,5 +169,3 @@ class Solution {
 }
 
 ```
-
-

@@ -11,7 +11,8 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given a string <code>s</code>, return *the number of unique palindromes of length three that are a subsequence of *<code>s</code>.
+
+Given a string <code>s</code>, return _the number of unique palindromes of length three that are a subsequence of _<code>s</code>.
 
 Note that even if there are multiple ways to obtain the same subsequence, it is still only counted once.
 
@@ -19,71 +20,70 @@ A palindrome is a string that reads the same forwards and backwards.
 
 A subsequence of a string is a new string generated from the original string with some characters (can be none) deleted without changing the relative order of the remaining characters.
 
+    - For example, <code>&quot;ace&quot;</code> is a subsequence of <code>&quot;<u>a</u>b<u>c</u>d<u>e</u>&quot;</code>.
 
-	- For example, <code>&quot;ace&quot;</code> is a subsequence of <code>&quot;<u>a</u>b<u>c</u>d<u>e</u>&quot;</code>.
-
-
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;aabca&quot;
-Output: 3
-Explanation: The 3 palindromic subsequences of length 3 are:
-- &quot;aba&quot; (subsequence of &quot;<u>a</u>a<u>b</u>c<u>a</u>&quot;)
-- &quot;aaa&quot; (subsequence of &quot;<u>aa</u>bc<u>a</u>&quot;)
-- &quot;aca&quot; (subsequence of &quot;<u>a</u>ab<u>ca</u>&quot;)
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;aabca&quot; Output: 3 Explanation: The 3 palindromic
+	subsequences of length 3 are: - &quot;aba&quot; (subsequence of &quot;<u>a</u>
+	a<u>b</u>c<u>a</u>&quot;) - &quot;aaa&quot; (subsequence of &quot;<u>aa</u>bc
+	<u>a</u>&quot;) - &quot;aca&quot; (subsequence of &quot;<u>a</u>ab<u>ca</u>
+	&quot;)
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;adc&quot;
-Output: 0
-Explanation: There are no palindromic subsequences of length 3 in &quot;adc&quot;.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;adc&quot; Output: 0 Explanation: There are no palindromic
+	subsequences of length 3 in &quot;adc&quot;.
 </pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;bbcbaba&quot;
-Output: 4
-Explanation: The 4 palindromic subsequences of length 3 are:
-- &quot;bbb&quot; (subsequence of &quot;<u>bb</u>c<u>b</u>aba&quot;)
-- &quot;bcb&quot; (subsequence of &quot;<u>b</u>b<u>cb</u>aba&quot;)
-- &quot;bab&quot; (subsequence of &quot;<u>b</u>bcb<u>ab</u>a&quot;)
-- &quot;aba&quot; (subsequence of &quot;bbcb<u>aba</u>&quot;)
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;bbcbaba&quot; Output: 4 Explanation: The 4 palindromic
+	subsequences of length 3 are: - &quot;bbb&quot; (subsequence of &quot;
+	<u>bb</u>c<u>b</u>aba&quot;) - &quot;bcb&quot; (subsequence of &quot;<u>b</u>b
+	<u>cb</u>aba&quot;) - &quot;bab&quot; (subsequence of &quot;<u>b</u>bcb
+	<u>ab</u>a&quot;) - &quot;aba&quot; (subsequence of &quot;bbcb<u>aba</u>
+	&quot;)
 </pre>
 
- 
 Constraints:
 
-
-	- <code>3 &lt;= s.length &lt;= 10<sup>5</sup></code>
-	- <code>s</code> consists of only lowercase English letters.
-
-
+    - <code>3 &lt;= s.length &lt;= 10<sup>5</sup></code>
+    - <code>s</code> consists of only lowercase English letters.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * @param {string} s
  * @return {number}
  */
 var countPalindromicSubsequence = function (s) {
-    let count = 0;
-    let chars = new Set(s);
-    for(const char of chars){
-        let first = s.indexOf(char),last = s.lastIndexOf(char);
-        count += new Set(s.slice(first + 1, last)).size;
-    }
-    return count;
-};
-
+	let count = 0
+	let chars = new Set(s)
+	for (const char of chars) {
+		let first = s.indexOf(char),
+			last = s.lastIndexOf(char)
+		count += new Set(s.slice(first + 1, last)).size
+	}
+	return count
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def countPalindromicSubsequence(self, s: str) -> int:
@@ -94,7 +94,9 @@ class Solution:
             count += len(set(s[first+1:last]))
         return count
 ```
+
 ### C++
+
 ```cpp
 class Solution {
 public:
@@ -104,7 +106,7 @@ public:
             if (v[s[i] - 'a'].first == -1) v[s[i] - 'a'].first = i;
             else v[s[i] - 'a'].second = i;
         }
-        
+
         int res = 0;
         for (int i = 0; i < 26; i++) {
             if (v[i].second != -1) {
@@ -113,18 +115,20 @@ public:
                 res += tmp.size();
             }
         }
-        
+
         return res;
     }
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
     public int countPalindromicSubsequence(String s) {
         char[] letters = new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
-                                    'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 
+                                    'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
                                     'w', 'x', 'y', 'z'};
         Set<Character> left = new HashSet<>();
         Map<Character, Integer> right = new HashMap<>();
@@ -135,7 +139,7 @@ class Solution {
 
         for(int mid = 0; mid < s.length(); mid++) {
             char c = s.charAt(mid);
-            
+
             right.put(c, right.get(c)-1);
             if(right.get(c) == 0) {
                 right.remove(c);
@@ -154,5 +158,3 @@ class Solution {
     }
 }
 ```
-
-

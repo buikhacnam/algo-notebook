@@ -11,40 +11,43 @@ difficulty: Easy
 </Callout>
 
 ## Description
-Given the <code>root</code> of a binary tree, return *the length of the diameter of the tree*.
+
+Given the <code>root</code> of a binary tree, return _the length of the diameter of the tree_.
 
 The diameter of a binary tree is the length of the longest path between any two nodes in a tree. This path may or may not pass through the <code>root</code>.
 
 The length of a path between two nodes is represented by the number of edges between them.
 
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/03/06/diamtree.jpg" width={292} height={302} />
-<br /><pre className="overflow-x-auto">
-Input: root = [1,2,3,4,5]
-Output: 3
-Explanation: 3 is the length of the path [4,2,1,3] or [5,2,1,3].
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/03/06/diamtree.jpg"
+	width={292}
+	height={302}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: root = [1,2,3,4,5] Output: 3 Explanation: 3 is the length of the path
+	[4,2,1,3] or [5,2,1,3].
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: root = [1,2]
-Output: 1
-</pre>
+<br />
 
- 
+<pre className="overflow-x-auto">Input: root = [1,2] Output: 1</pre>
+
 Constraints:
 
-
-	- The number of nodes in the tree is in the range <code>[1, 10<sup>4</sup>]</code>.
-	- <code>-100 &lt;= Node.val &lt;= 100</code>
-
-
+    - The number of nodes in the tree is in the range <code>[1, 10<sup>4</sup>]</code>.
+    - <code>-100 &lt;= Node.val &lt;= 100</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/diameter-of-binary-tree/
@@ -52,32 +55,34 @@ Constraints:
  * @param {TreeNode} root
  * @return {number}
  */
-var diameterOfBinaryTree = function(root, max = [0]) {
-    diameterOfTree(root, max);
+var diameterOfBinaryTree = function (root, max = [0]) {
+	diameterOfTree(root, max)
 
-    return max[0];
-};
+	return max[0]
+}
 
 const diameterOfTree = (root, max) => {
-    const isBaseCase = root === null;
-    if (isBaseCase) return 0;
+	const isBaseCase = root === null
+	if (isBaseCase) return 0
 
-    return dfs(root, max);
+	return dfs(root, max)
 }
 
 const dfs = (root, max) => {
-    const left = diameterOfTree(root.left, max);
-    const right = diameterOfTree(root.right, max);
+	const left = diameterOfTree(root.left, max)
+	const right = diameterOfTree(root.right, max)
 
-    const diameter = left + right;
-    max[0] = Math.max(max[0], diameter);
+	const diameter = left + right
+	max[0] = Math.max(max[0], diameter)
 
-    const height = Math.max(left, right);
+	const height = Math.max(left, right)
 
-    return height + 1;
+	return height + 1
 }
 ```
+
 ### Python
+
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -104,7 +109,9 @@ class Solution:
         return res
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given root of binary tree, return length of diameter of tree (longest path b/w any 2 nodes)
@@ -138,17 +145,19 @@ private:
         if (root == NULL) {
             return 0;
         }
-        
+
         int left = dfs(root->left, result);
         int right = dfs(root->right, result);
-        
+
         result = max(result, left + right);
         return 1 + max(left, right);
     }
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -171,5 +180,3 @@ class Solution {
 }
 
 ```
-
-

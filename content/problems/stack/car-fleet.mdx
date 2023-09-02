@@ -11,6 +11,7 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 There are <code>n</code> cars going to the same destination along a one-lane road. The destination is <code>target</code> miles away.
 
 You are given two integer array <code>position</code> and <code>speed</code>, both of length <code>n</code>, where <code>position[i]</code> is the position of the <code>i<sup>th</sup></code> car and <code>speed[i]</code> is the speed of the <code>i<sup>th</sup></code> car (in miles per hour).
@@ -21,55 +22,56 @@ A car fleet is some non-empty set of cars driving at the same position and same 
 
 If a car catches up to a car fleet right at the destination point, it will still be considered as one car fleet.
 
-Return *the number of car fleets that will arrive at the destination*.
+Return _the number of car fleets that will arrive at the destination_.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: target = 12, position = [10,8,0,5,3], speed = [2,4,1,1,3]
-Output: 3
-Explanation:
-The cars starting at 10 (speed 2) and 8 (speed 4) become a fleet, meeting each other at 12.
-The car starting at 0 does not catch up to any other car, so it is a fleet by itself.
-The cars starting at 5 (speed 1) and 3 (speed 3) become a fleet, meeting each other at 6. The fleet moves at speed 1 until it reaches target.
-Note that no other cars meet these fleets before the destination, so the answer is 3.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: target = 12, position = [10,8,0,5,3], speed = [2,4,1,1,3] Output: 3
+	Explanation: The cars starting at 10 (speed 2) and 8 (speed 4) become a fleet,
+	meeting each other at 12. The car starting at 0 does not catch up to any other
+	car, so it is a fleet by itself. The cars starting at 5 (speed 1) and 3 (speed
+	3) become a fleet, meeting each other at 6. The fleet moves at speed 1 until
+	it reaches target. Note that no other cars meet these fleets before the
+	destination, so the answer is 3.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: target = 10, position = [3], speed = [3]
-Output: 1
-Explanation: There is only one car, hence there is only one fleet.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: target = 10, position = [3], speed = [3] Output: 1 Explanation: There
+	is only one car, hence there is only one fleet.
 </pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: target = 100, position = [0,2,4], speed = [4,2,1]
-Output: 1
-Explanation:
-The cars starting at 0 (speed 4) and 2 (speed 2) become a fleet, meeting each other at 4. The fleet moves at speed 2.
-Then, the fleet (speed 2) and the car starting at 4 (speed 1) become one fleet, meeting each other at 6. The fleet moves at speed 1 until it reaches target.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: target = 100, position = [0,2,4], speed = [4,2,1] Output: 1
+	Explanation: The cars starting at 0 (speed 4) and 2 (speed 2) become a fleet,
+	meeting each other at 4. The fleet moves at speed 2. Then, the fleet (speed 2)
+	and the car starting at 4 (speed 1) become one fleet, meeting each other at 6.
+	The fleet moves at speed 1 until it reaches target.
 </pre>
 
- 
 Constraints:
 
-
-	- <code>n == position.length == speed.length</code>
-	- <code>1 &lt;= n &lt;= 10<sup>5</sup></code>
-	- <code>0 &lt; target &lt;= 10<sup>6</sup></code>
-	- <code>0 &lt;= position[i] &lt; target</code>
-	- All the values of <code>position</code> are unique.
-	- <code>0 &lt; speed[i] &lt;= 10<sup>6</sup></code>
-
-
+    - <code>n == position.length == speed.length</code>
+    - <code>1 &lt;= n &lt;= 10<sup>5</sup></code>
+    - <code>0 &lt; target &lt;= 10<sup>6</sup></code>
+    - <code>0 &lt;= position[i] &lt; target</code>
+    - All the values of <code>position</code> are unique.
+    - <code>0 &lt; speed[i] &lt;= 10<sup>6</sup></code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/car-fleet
@@ -79,29 +81,42 @@ Constraints:
  * @param {number[]} speed
  * @return {number}
  */
-var carFleet = function(target, position, speed) {
-    const coordinates = getCoordinates(target, position, speed);    /* Time O(N * log(N)) | Space O(N) */
+var carFleet = function (target, position, speed) {
+	const coordinates = getCoordinates(
+		target,
+		position,
+		speed,
+	) /* Time O(N * log(N)) | Space O(N) */
 
-    return searchAscending(coordinates);                            /* Time O(N)          | Space O(N) */
-};
+	return searchAscending(coordinates) /* Time O(N)          | Space O(N) */
+}
 
-var getCoordinates = (target, position, speed) => position
-    .map((_position, index) => [ _position, speed[index] ])         /* Time O(N)          | Space O(N) */
-    .sort(([ aPosition ], [ bPosition ]) => aPosition - bPosition)  /* Time O(N * log(N)) | HeapSort Space 0(1) | QuickSort Space O(log(N)) */
-    .map(([ _position, _speed ]) => (target - _position) / _speed); /* Time O(N)          | Space O(N) */
+var getCoordinates = (target, position, speed) =>
+	position
+		.map((_position, index) => [
+			_position,
+			speed[index],
+		]) /* Time O(N)          | Space O(N) */
+		.sort(
+			([aPosition], [bPosition]) => aPosition - bPosition,
+		) /* Time O(N * log(N)) | HeapSort Space 0(1) | QuickSort Space O(log(N)) */
+		.map(
+			([_position, _speed]) => (target - _position) / _speed,
+		) /* Time O(N)          | Space O(N) */
 
 var searchAscending = (coordinates, stack = []) => {
-    for (const coordinate of coordinates) {                         /* Time O(N + N) */
-        shrink(coordinate, stack);                                  /* Time O(N + N) */
-        stack.push(coordinate);                                     /* Space O(N) */
-    }
+	for (const coordinate of coordinates) {
+		/* Time O(N + N) */
+		shrink(coordinate, stack) /* Time O(N + N) */
+		stack.push(coordinate) /* Space O(N) */
+	}
 
-    return stack.length;
+	return stack.length
 }
 
 const shrink = (coordinate, stack) => {
-    const isPreviousLess = () => stack[stack.length - 1] <= coordinate;
-    while (stack.length && isPreviousLess()) stack.pop();                /* Time O(N + N) */
+	const isPreviousLess = () => stack[stack.length - 1] <= coordinate
+	while (stack.length && isPreviousLess()) stack.pop() /* Time O(N + N) */
 }
 
 /**
@@ -112,30 +127,45 @@ const shrink = (coordinate, stack) => {
  * @param {number[]} speed
  * @return {number}
  */
- var carFleet = function(target, position, speed) {
-    const coordinates = getCoordinates(target, position, speed);   /* Time O(N * log(N)) | Space O(N) */
+var carFleet = function (target, position, speed) {
+	const coordinates = getCoordinates(
+		target,
+		position,
+		speed,
+	) /* Time O(N * log(N)) | Space O(N) */
 
-    return searchDescending(coordinates);                          /* Time O(N) */
-};
+	return searchDescending(coordinates) /* Time O(N) */
+}
 
-var getCoordinates = (target, position, speed) => position
-    .map((_position, index) => [ _position, speed[index] ])        /* Time O(N)          | Space O(N) */
-    .sort(([ aPosition ], [ bPosition ]) => bPosition - aPosition) /* Time O(N * log(N)) | HeapSort Space 0(1) | QuickSort Space O(log(N)) */
-    .map(([ _position, _speed ]) => (target - _position) / _speed);/* Time O(N)          | Space O(N) */
+var getCoordinates = (target, position, speed) =>
+	position
+		.map((_position, index) => [
+			_position,
+			speed[index],
+		]) /* Time O(N)          | Space O(N) */
+		.sort(
+			([aPosition], [bPosition]) => bPosition - aPosition,
+		) /* Time O(N * log(N)) | HeapSort Space 0(1) | QuickSort Space O(log(N)) */
+		.map(
+			([_position, _speed]) => (target - _position) / _speed,
+		) /* Time O(N)          | Space O(N) */
 
 var searchDescending = (coordinates, previous = 0, fleets = 0) => {
-    for (const coordinate of coordinates) {                        /* Time O(N) */
-        const isPreviousLess = previous < coordinate
-        if (!isPreviousLess) continue
+	for (const coordinate of coordinates) {
+		/* Time O(N) */
+		const isPreviousLess = previous < coordinate
+		if (!isPreviousLess) continue
 
-        previous = coordinate
-        fleets++
-    }
+		previous = coordinate
+		fleets++
+	}
 
-    return fleets;
+	return fleets
 }
 ```
+
 ### Python
+
 ```python
 class Solution:
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
@@ -149,7 +179,9 @@ class Solution:
         return len(stack)
 
 ```
+
 ### C++
+
 ```cpp
 /*
     n cars 1 road, diff pos/speeds, faster cars slow down -> car fleet, return # fleets
@@ -166,17 +198,17 @@ class Solution {
 public:
     int carFleet(int target, vector<int>& position, vector<int>& speed) {
         int n = position.size();
-        
+
         vector<pair<int, double>> cars;
         for (int i = 0; i < n; i++) {
             double time = (double) (target - position[i]) / speed[i];
             cars.push_back({position[i], time});
         }
         sort(cars.begin(), cars.end());
-        
+
         double maxTime = 0.0;
         int result = 0;
-        
+
         for (int i = n - 1; i >= 0; i--) {
             double time = cars[i].second;
             if (time > maxTime) {
@@ -184,13 +216,15 @@ public:
                 result++;
             }
         }
-        
+
         return result;
     }
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -218,5 +252,3 @@ class Solution {
 }
 
 ```
-
-

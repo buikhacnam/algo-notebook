@@ -11,52 +11,50 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given an array of distinct integers <code>candidates</code> and a target integer <code>target</code>, return *a list of all unique combinations of *<code>candidates</code>* where the chosen numbers sum to *<code>target</code>*.* You may return the combinations in any order.
+
+Given an array of distinct integers <code>candidates</code> and a target integer <code>target</code>, return _a list of all unique combinations of _<code>candidates</code>_ where the chosen numbers sum to _<code>target</code>_._ You may return the combinations in any order.
 
 The same number may be chosen from <code>candidates</code> an unlimited number of times. Two combinations are unique if the <span data-keyword="frequency-array">frequency</span> of at least one of the chosen numbers is different.
 
 The test cases are generated such that the number of unique combinations that sum up to <code>target</code> is less than <code>150</code> combinations for the given input.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: candidates = [2,3,6,7], target = 7
-Output: [[2,2,3],[7]]
-Explanation:
-2 and 3 are candidates, and 2 + 2 + 3 = 7. Note that 2 can be used multiple times.
-7 is a candidate, and 7 = 7.
-These are the only two combinations.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: candidates = [2,3,6,7], target = 7 Output: [[2,2,3],[7]] Explanation: 2
+	and 3 are candidates, and 2 + 2 + 3 = 7. Note that 2 can be used multiple
+	times. 7 is a candidate, and 7 = 7. These are the only two combinations.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: candidates = [2,3,5], target = 8
-Output: [[2,2,2,2],[2,3,3],[3,5]]
+<br />
+
+<pre className="overflow-x-auto">
+	Input: candidates = [2,3,5], target = 8 Output: [[2,2,2,2],[2,3,3],[3,5]]
 </pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: candidates = [2], target = 1
-Output: []
+<br />
+
+<pre className="overflow-x-auto">
+	Input: candidates = [2], target = 1 Output: []
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= candidates.length &lt;= 30</code>
-	- <code>2 &lt;= candidates[i] &lt;= 40</code>
-	- All elements of <code>candidates</code> are distinct.
-	- <code>1 &lt;= target &lt;= 40</code>
-
-
+    - <code>1 &lt;= candidates.length &lt;= 30</code>
+    - <code>2 &lt;= candidates[i] &lt;= 40</code>
+    - All elements of <code>candidates</code> are distinct.
+    - <code>1 &lt;= target &lt;= 40</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/combination-sum/
@@ -65,27 +63,41 @@ Constraints:
  * @param {number} target
  * @return {number[][]}
  */
- var combinationSum = function (candidates, target, index = 0, combination = [], combinations = []) {
-    const isBaseCase = target < 0;
-    if (isBaseCase) return combinations;
+var combinationSum = function (
+	candidates,
+	target,
+	index = 0,
+	combination = [],
+	combinations = [],
+) {
+	const isBaseCase = target < 0
+	if (isBaseCase) return combinations
 
-    const isTarget = target === 0;
-    if (isTarget) return combinations.push(combination.slice());
+	const isTarget = target === 0
+	if (isTarget) return combinations.push(combination.slice())
 
-    for (let i = index; i < candidates.length; i++) {
-        backTrack(candidates, target, i, combination, combinations);
-    }
+	for (let i = index; i < candidates.length; i++) {
+		backTrack(candidates, target, i, combination, combinations)
+	}
 
-    return combinations;
+	return combinations
 }
 
 const backTrack = (candidates, target, i, combination, combinations) => {
-    combination.push(candidates[i]);
-        combinationSum(candidates, (target - candidates[i]), i, combination, combinations);
-    combination.pop();
+	combination.push(candidates[i])
+	combinationSum(
+		candidates,
+		target - candidates[i],
+		i,
+		combination,
+		combinations,
+	)
+	combination.pop()
 }
 ```
+
 ### Python
+
 ```python
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
@@ -107,7 +119,9 @@ class Solution:
         return res
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given distinct int array & a target, return list of all unique combos that sum to target
@@ -123,10 +137,10 @@ class Solution {
 public:
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
         sort(candidates.begin(), candidates.end());
-        
+
         vector<int> curr;
         vector<vector<int>> result;
-        
+
         dfs(candidates, target, 0, 0, curr, result);
         return result;
     }
@@ -148,7 +162,9 @@ private:
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -181,5 +197,3 @@ class Solution {
 }
 
 ```
-
-

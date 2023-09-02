@@ -11,42 +11,44 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given the <code>root</code> of a binary tree, return *the level order traversal of its nodes&#39; values*. (i.e., from left to right, level by level).
 
- 
+Given the <code>root</code> of a binary tree, return _the level order traversal of its nodes&#39; values_. (i.e., from left to right, level by level).
+
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/02/19/tree1.jpg" width={277} height={302} />
-<br /><pre className="overflow-x-auto">
-Input: root = [3,9,20,null,null,15,7]
-Output: [[3],[9,20],[15,7]]
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/02/19/tree1.jpg"
+	width={277}
+	height={302}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: root = [3,9,20,null,null,15,7] Output: [[3],[9,20],[15,7]]
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: root = [1]
-Output: [[1]]
-</pre>
+<br />
+
+<pre className="overflow-x-auto">Input: root = [1] Output: [[1]]</pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: root = []
-Output: []
-</pre>
+<br />
 
- 
+<pre className="overflow-x-auto">Input: root = [] Output: []</pre>
+
 Constraints:
 
-
-	- The number of nodes in the tree is in the range <code>[0, 2000]</code>.
-	- <code>-1000 &lt;= Node.val &lt;= 1000</code>
-
-
+    - The number of nodes in the tree is in the range <code>[0, 2000]</code>.
+    - <code>-1000 &lt;= Node.val &lt;= 1000</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/binary-tree-level-order-traversal/
@@ -55,30 +57,31 @@ Constraints:
  * @param {TreeNode} root
  * @return {number[][]}
  */
-var levelOrder = function(root) {
-    const isBaseCase = root === null;
-    if (isBaseCase) return [];
+var levelOrder = function (root) {
+	const isBaseCase = root === null
+	if (isBaseCase) return []
 
-    return bfs([ root ]);
-};
+	return bfs([root])
+}
 
 const bfs = (queue /* Space O(W) */, levels = []) => {
-    while (queue.length) { // Time O(N)
-        const level = [];
+	while (queue.length) {
+		// Time O(N)
+		const level = []
 
-        for (let i = (queue.length - 1); 0 <= i; i--) {
-            const node = queue.shift(); // Time O(N) ... This can be O(1) if we use an actual queue data structure
+		for (let i = queue.length - 1; 0 <= i; i--) {
+			const node = queue.shift() // Time O(N) ... This can be O(1) if we use an actual queue data structure
 
-            if (node.left) queue.push(node.left);
-            if (node.right) queue.push(node.right);
+			if (node.left) queue.push(node.left)
+			if (node.right) queue.push(node.right)
 
-            level.push(node.val);
-        }
+			level.push(node.val)
+		}
 
-        levels.push(level.slice());
-    }
+		levels.push(level.slice())
+	}
 
-    return levels;
+	return levels
 }
 
 /**
@@ -87,27 +90,28 @@ const bfs = (queue /* Space O(W) */, levels = []) => {
  * @param {TreeNode} root
  * @return {number[]}
  */
- var levelOrder = function(root, level = 0, levels = []) {
-    const isBaseCase = root === null;
-    if (isBaseCase) return levels;
+var levelOrder = function (root, level = 0, levels = []) {
+	const isBaseCase = root === null
+	if (isBaseCase) return levels
 
-    const isLastNode = level === levels.length;
-    if (isLastNode) levels.push([]);
+	const isLastNode = level === levels.length
+	if (isLastNode) levels.push([])
 
-    levels[level].push(root.val);
+	levels[level].push(root.val)
 
-    return dfs(root, level, levels); // Time O(N) | Space O(H)
+	return dfs(root, level, levels) // Time O(N) | Space O(H)
 }
 
 const dfs = (root, level, levels) => {
-    if (root.left) levelOrder(root.left, (level + 1), levels);
-    if (root.right) levelOrder(root.right, (level + 1), levels);
+	if (root.left) levelOrder(root.left, level + 1, levels)
+	if (root.right) levelOrder(root.right, level + 1, levels)
 
-    return levels;
+	return levels
 }
-
 ```
+
 ### Python
+
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -138,7 +142,9 @@ class Solution:
         return res
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given root of binary tree, return level order traversal of its nodes (left to right)
@@ -165,24 +171,24 @@ class Solution {
 public:
     vector<vector<int>> levelOrder(TreeNode* root) {
         vector<vector<int>> result;
-        
+
         if (root == NULL) {
             return result;
         }
-        
+
         queue<TreeNode*> q;
         q.push(root);
-        
+
         while (!q.empty()) {
             int count = q.size();
             vector<int> curr;
-            
+
             for (int i = 0; i < count; i++) {
                 TreeNode* node = q.front();
                 q.pop();
-                
+
                 curr.push_back(node->val);
-                
+
                 if (node->left != NULL) {
                     q.push(node->left);
                 }
@@ -190,16 +196,18 @@ public:
                     q.push(node->right);
                 }
             }
-            
+
             result.push_back(curr);
         }
-        
+
         return result;
     }
 };
 
 ```
+
 ### Java
+
 ```java
 /**
  * Definition for a binary tree node.
@@ -245,5 +253,3 @@ class Solution {
 }
 
 ```
-
-

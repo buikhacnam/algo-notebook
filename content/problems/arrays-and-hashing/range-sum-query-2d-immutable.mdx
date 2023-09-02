@@ -25,20 +25,24 @@ You must design an algorithm where <code>sumRegion</code> works on <code>O(1)</c
 
 Example 1:
 
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/03/14/sum-grid.jpg" width={415} height={415} />
-<br /><pre className="overflow-x-auto">
-Input
-[&quot;NumMatrix&quot;, &quot;sumRegion&quot;, &quot;sumRegion&quot;, &quot;sumRegion&quot;]
-[[[[3, 0, 1, 4, 2], [5, 6, 3, 2, 1], [1, 2, 0, 1, 5], [4, 1, 0, 1, 7], [1, 0, 3, 0, 5]]], [2, 1, 4, 3], [1, 1, 2, 2], [1, 2, 2, 4]]
-Output
-[null, 8, 11, 12]
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/03/14/sum-grid.jpg"
+	width={415}
+	height={415}
+/>
+<br />
 
-Explanation
-NumMatrix numMatrix = new NumMatrix([[3, 0, 1, 4, 2], [5, 6, 3, 2, 1], [1, 2, 0, 1, 5], [4, 1, 0, 1, 7], [1, 0, 3, 0, 5]]);
-numMatrix.sumRegion(2, 1, 4, 3); // return 8 (i.e sum of the red rectangle)
-numMatrix.sumRegion(1, 1, 2, 2); // return 11 (i.e sum of the green rectangle)
-numMatrix.sumRegion(1, 2, 2, 4); // return 12 (i.e sum of the blue rectangle)
-
+<pre className="overflow-x-auto">
+	Input [&quot;NumMatrix&quot;, &quot;sumRegion&quot;, &quot;sumRegion&quot;,
+	&quot;sumRegion&quot;] [[[[3, 0, 1, 4, 2], [5, 6, 3, 2, 1], [1, 2, 0, 1, 5],
+	[4, 1, 0, 1, 7], [1, 0, 3, 0, 5]]], [2, 1, 4, 3], [1, 1, 2, 2], [1, 2, 2, 4]]
+	Output [null, 8, 11, 12] Explanation NumMatrix numMatrix = new NumMatrix([[3,
+	0, 1, 4, 2], [5, 6, 3, 2, 1], [1, 2, 0, 1, 5], [4, 1, 0, 1, 7], [1, 0, 3, 0,
+	5]]); numMatrix.sumRegion(2, 1, 4, 3); // return 8 (i.e sum of the red
+	rectangle) numMatrix.sumRegion(1, 1, 2, 2); // return 11 (i.e sum of the green
+	rectangle) numMatrix.sumRegion(1, 2, 2, 4); // return 12 (i.e sum of the blue
+	rectangle)
 </pre>
 
 Constraints:

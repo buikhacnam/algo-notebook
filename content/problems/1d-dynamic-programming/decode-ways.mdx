@@ -11,65 +11,65 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 A message containing letters from <code>A-Z</code> can be encoded into numbers using the following mapping:
 
-<br /><pre className="overflow-x-auto">
-&#39;A&#39; -&gt; &quot;1&quot;
-&#39;B&#39; -&gt; &quot;2&quot;
-...
-&#39;Z&#39; -&gt; &quot;26&quot;
+<br />
+
+<pre className="overflow-x-auto">
+	&#39;A&#39; -&gt; &quot;1&quot; &#39;B&#39; -&gt; &quot;2&quot; ...
+	&#39;Z&#39; -&gt; &quot;26&quot;
 </pre>
 
 To decode an encoded message, all the digits must be grouped then mapped back into letters using the reverse of the mapping above (there may be multiple ways). For example, <code>&quot;11106&quot;</code> can be mapped into:
 
-
-	- <code>&quot;AAJF&quot;</code> with the grouping <code>(1 1 10 6)</code>
-	- <code>&quot;KJF&quot;</code> with the grouping <code>(11 10 6)</code>
-
+    - <code>&quot;AAJF&quot;</code> with the grouping <code>(1 1 10 6)</code>
+    - <code>&quot;KJF&quot;</code> with the grouping <code>(11 10 6)</code>
 
 Note that the grouping <code>(1 11 06)</code> is invalid because <code>&quot;06&quot;</code> cannot be mapped into <code>&#39;F&#39;</code> since <code>&quot;6&quot;</code> is different from <code>&quot;06&quot;</code>.
 
-Given a string <code>s</code> containing only digits, return *the number of ways to decode it*.
+Given a string <code>s</code> containing only digits, return _the number of ways to decode it_.
 
 The test cases are generated so that the answer fits in a 32-bit integer.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;12&quot;
-Output: 2
-Explanation: &quot;12&quot; could be decoded as &quot;AB&quot; (1 2) or &quot;L&quot; (12).
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;12&quot; Output: 2 Explanation: &quot;12&quot; could be
+	decoded as &quot;AB&quot; (1 2) or &quot;L&quot; (12).
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;226&quot;
-Output: 3
-Explanation: &quot;226&quot; could be decoded as &quot;BZ&quot; (2 26), &quot;VF&quot; (22 6), or &quot;BBF&quot; (2 2 6).
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;226&quot; Output: 3 Explanation: &quot;226&quot; could be
+	decoded as &quot;BZ&quot; (2 26), &quot;VF&quot; (22 6), or &quot;BBF&quot; (2
+	2 6).
 </pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;06&quot;
-Output: 0
-Explanation: &quot;06&quot; cannot be mapped to &quot;F&quot; because of the leading zero (&quot;6&quot; is different from &quot;06&quot;).
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;06&quot; Output: 0 Explanation: &quot;06&quot; cannot be
+	mapped to &quot;F&quot; because of the leading zero (&quot;6&quot; is
+	different from &quot;06&quot;).
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= s.length &lt;= 100</code>
-	- <code>s</code> contains only digits and may contain leading zero(s).
-
-
+    - <code>1 &lt;= s.length &lt;= 100</code>
+    - <code>s</code> contains only digits and may contain leading zero(s).
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * DP - Top Down
@@ -80,33 +80,33 @@ Constraints:
  * @return {number}
  */
 var numDecodings = (str, index = 0, memo = new Map()) => {
-    const isBaseCase1 = !str.length || (str[index] === '0');
-    if (isBaseCase1) return 0;
+	const isBaseCase1 = !str.length || str[index] === '0'
+	if (isBaseCase1) return 0
 
-    const isisBaseCase2 = index === str.length;
-    if (isisBaseCase2) return 1;
+	const isisBaseCase2 = index === str.length
+	if (isisBaseCase2) return 1
 
-    if (memo.has(index)) return memo.get(index);
+	if (memo.has(index)) return memo.get(index)
 
-    return dfs(str, index, memo);
-};
+	return dfs(str, index, memo)
+}
 
 const dfs = (str, index, memo) => {
-    let count = numDecodings(str, (index + 1), memo);
+	let count = numDecodings(str, index + 1, memo)
 
-    if (isTwoDigit(str, index)) {
-        count += numDecodings(str, (index + 2), memo);
-    }
+	if (isTwoDigit(str, index)) {
+		count += numDecodings(str, index + 2, memo)
+	}
 
-    memo.set(index, count);
+	memo.set(index, count)
 
-    return count;
+	return count
 }
 
 var isTwoDigit = (str, index) => {
-    const twoDigit = Number(str.slice(index, (index + 2)));
+	const twoDigit = Number(str.slice(index, index + 2))
 
-    return (10 <= twoDigit) && (twoDigit <= 26);
+	return 10 <= twoDigit && twoDigit <= 26
 }
 
 /**
@@ -118,41 +118,39 @@ var isTwoDigit = (str, index) => {
  * @return {number}
  */
 var numDecodings = (s) => {
-    const isBaseCase = !s.length || s[0] === '0'
-    if (isBaseCase) return 0;
+	const isBaseCase = !s.length || s[0] === '0'
+	if (isBaseCase) return 0
 
-    const tabu = getTabu(s);
+	const tabu = getTabu(s)
 
-    decode(s, tabu);
+	decode(s, tabu)
 
-    return tabu[s.length];
+	return tabu[s.length]
 }
 
 const getTabu = (s) => {
-    const tabu = new Array(s.length + 1).fill(0);
+	const tabu = new Array(s.length + 1).fill(0)
 
-    tabu[0] = 1;
-    tabu[1] = (s[1] === '0')
-        ? 0
-        : 1;
+	tabu[0] = 1
+	tabu[1] = s[1] === '0' ? 0 : 1
 
-    return tabu;
+	return tabu
 }
 
 var decode = (s, tabu) => {
-    for (let curr = 2; curr < tabu.length; curr++) {
-        const [ prev, prevPrev ] = [ (curr - 1), (curr - 2) ];
-        const isEqual = s[prev] === '0';
-        if (!isEqual) tabu[curr] += tabu[prev];
+	for (let curr = 2; curr < tabu.length; curr++) {
+		const [prev, prevPrev] = [curr - 1, curr - 2]
+		const isEqual = s[prev] === '0'
+		if (!isEqual) tabu[curr] += tabu[prev]
 
-        if (isTwoDigit(s, curr)) tabu[curr] += tabu[prevPrev];
-    }
+		if (isTwoDigit(s, curr)) tabu[curr] += tabu[prevPrev]
+	}
 }
 
 var isTwoDigit = (s, index) => {
-    const twoDigit = Number(s.slice((index - 2), index));
+	const twoDigit = Number(s.slice(index - 2, index))
 
-    return 10 <= twoDigit && twoDigit <= 26;
+	return 10 <= twoDigit && twoDigit <= 26
 }
 
 /**
@@ -163,38 +161,40 @@ var isTwoDigit = (s, index) => {
  * @return {number}
  */
 var numDecodings = (s) => {
-    const isBaseCase = !s.length || s[0] === '0';
-    if (isBaseCase) return 0;
+	const isBaseCase = !s.length || s[0] === '0'
+	if (isBaseCase) return 0
 
-    return decode(s);
+	return decode(s)
 }
 
 var decode = (s) => {
-    let [ prev, prevPrev ] = [ 1, 1 ];
+	let [prev, prevPrev] = [1, 1]
 
-    for (let curr = 1; curr < s.length; curr++) {
-        const temp = prev;
+	for (let curr = 1; curr < s.length; curr++) {
+		const temp = prev
 
-        const isEqual = s[curr] === '0';
-        if (isEqual) prev = 0;
+		const isEqual = s[curr] === '0'
+		if (isEqual) prev = 0
 
-        if (isTwoDigit(s, curr)) prev += prevPrev;
+		if (isTwoDigit(s, curr)) prev += prevPrev
 
-        prevPrev = temp;
-    }
+		prevPrev = temp
+	}
 
-    return prev;
+	return prev
 }
 
 var isTwoDigit = (s, i) => {
-    const [ prevChar, curChar ] = [ (s[i - 1]), s[i] ];
-    const is10 = prevChar === '1';
-    const is20 = (prevChar === '2' && curChar <= '6');
+	const [prevChar, curChar] = [s[i - 1], s[i]]
+	const is10 = prevChar === '1'
+	const is20 = prevChar === '2' && curChar <= '6'
 
-    return is10 || is20;
+	return is10 || is20
 }
 ```
+
 ### Python
+
 ```python
 class Solution:
     def numDecodings(self, s: str) -> int:
@@ -232,7 +232,9 @@ class Solution:
         return dp[0]
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given a string w/ only digits, return # ways to decode it (letter -> digit)
@@ -251,13 +253,13 @@ public:
         if (s[0] == '0') {
             return 0;
         }
-        
+
         int n = s.size();
-        
+
         vector<int> dp(n + 1);
         dp[0] = 1;
         dp[1] = 1;
-        
+
         for (int i = 2; i <= n; i++) {
             int ones = stoi(s.substr(i - 1, 1));
             if (ones >= 1 && ones <= 9) {
@@ -268,13 +270,15 @@ public:
                 dp[i] += dp[i - 2];
             }
         }
-        
+
         return dp[n];
     }
 };
 
 ```
+
 ### Java
+
 ```java
 // Optimal
 class Solution {
@@ -348,5 +352,3 @@ class Solution {
 }
 
 ```
-
-

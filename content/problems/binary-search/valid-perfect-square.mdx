@@ -11,61 +11,62 @@ difficulty: Easy
 </Callout>
 
 ## Description
-Given a positive integer num, return <code>true</code> *if* <code>num</code> *is a perfect square or* <code>false</code> *otherwise*.
+
+Given a positive integer num, return <code>true</code> _if_ <code>num</code> _is a perfect square or_ <code>false</code> _otherwise_.
 
 A perfect square is an integer that is the square of an integer. In other words, it is the product of some integer with itself.
 
 You must not use any built-in library function, such as <code>sqrt</code>.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: num = 16
-Output: true
-Explanation: We return true because 4 * 4 = 16 and 4 is an integer.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: num = 16 Output: true Explanation: We return true because 4 * 4 = 16
+	and 4 is an integer.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: num = 14
-Output: false
-Explanation: We return false because 3.742 * 3.742 = 14 and 3.742 is not an integer.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: num = 14 Output: false Explanation: We return false because 3.742 *
+	3.742 = 14 and 3.742 is not an integer.
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= num &lt;= 2<sup>31</sup> - 1</code>
-
-
+    - <code>1 &lt;= num &lt;= 2<sup>31</sup> - 1</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * @param {number} num
  * @return {boolean}
  */
- var isPerfectSquare = function(num) {
-    let left = 1, right = num;
-    
-    while(left <= right) {
-        let mid = Math.floor((left + right) / 2);
-        
-        if(mid*mid === num) return true;
-        else if(mid*mid > num) right = mid -1;
-        else left = mid + 1;
-    }
-    
-    return false;
-};
+var isPerfectSquare = function (num) {
+	let left = 1,
+		right = num
 
+	while (left <= right) {
+		let mid = Math.floor((left + right) / 2)
+
+		if (mid * mid === num) return true
+		else if (mid * mid > num) right = mid - 1
+		else left = mid + 1
+	}
+
+	return false
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def isPerfectSquare(self, num: int) -> bool:
@@ -74,9 +75,9 @@ class Solution:
                 return True
             if i* i > num:
                 return False
-    
-    
-    
+
+
+
     def isPerfectSquare_2(self, num: int) -> bool:
         l ,r = 1, num
         while l <= r:
@@ -90,7 +91,9 @@ class Solution:
         return False
 
 ```
+
 ### C++
+
 ```cpp
 /*
 Approach: Binary search the number such that divind num by that number gives the number itself
@@ -121,7 +124,9 @@ public:
     }
 };
 ```
+
 ### Java
+
 ```java
 class Solution {
     public boolean isPerfectSquare(int num) {
@@ -139,11 +144,9 @@ class Solution {
                 left = mid + 1;
             }
 
-        }        
+        }
 
         return false;
     }
 }
 ```
-
-

@@ -11,81 +11,74 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 Given an integer array <code>nums</code>, rotate the array to the right by <code>k</code> steps, where <code>k</code> is non-negative.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [1,2,3,4,5,6,7], k = 3
-Output: [5,6,7,1,2,3,4]
-Explanation:
-rotate 1 steps to the right: [7,1,2,3,4,5,6]
-rotate 2 steps to the right: [6,7,1,2,3,4,5]
-rotate 3 steps to the right: [5,6,7,1,2,3,4]
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [1,2,3,4,5,6,7], k = 3 Output: [5,6,7,1,2,3,4] Explanation:
+	rotate 1 steps to the right: [7,1,2,3,4,5,6] rotate 2 steps to the right:
+	[6,7,1,2,3,4,5] rotate 3 steps to the right: [5,6,7,1,2,3,4]
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [-1,-100,3,99], k = 2
-Output: [3,99,-1,-100]
-Explanation: 
-rotate 1 steps to the right: [99,-1,-100,3]
-rotate 2 steps to the right: [3,99,-1,-100]
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [-1,-100,3,99], k = 2 Output: [3,99,-1,-100] Explanation: rotate
+	1 steps to the right: [99,-1,-100,3] rotate 2 steps to the right:
+	[3,99,-1,-100]
 </pre>
 
- 
 Constraints:
 
+    - <code>1 &lt;= nums.length &lt;= 10<sup>5</sup></code>
+    - <code>-2<sup>31</sup> &lt;= nums[i] &lt;= 2<sup>31</sup> - 1</code>
+    - <code>0 &lt;= k &lt;= 10<sup>5</sup></code>
 
-	- <code>1 &lt;= nums.length &lt;= 10<sup>5</sup></code>
-	- <code>-2<sup>31</sup> &lt;= nums[i] &lt;= 2<sup>31</sup> - 1</code>
-	- <code>0 &lt;= k &lt;= 10<sup>5</sup></code>
-
-
- 
 Follow up:
 
-
-	- Try to come up with as many solutions as you can. There are at least three different ways to solve this problem.
-	- Could you do it in-place with <code>O(1)</code> extra space?
-
-
+    - Try to come up with as many solutions as you can. There are at least three different ways to solve this problem.
+    - Could you do it in-place with <code>O(1)</code> extra space?
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * Two Pointers
  * https://leetcode.com/problems/rotate-array/
- * 
+ *
  * Time O(n) | Space O(1)
  * @param {number[]} nums
  * @param {number} k
  * @return {void} Do not return anything, modify nums in-place instead.
  */
- var rotate = function(nums, k) {
-    
-    // if the k exceeds the length of nums.
-    k = k % nums.length;
+var rotate = function (nums, k) {
+	// if the k exceeds the length of nums.
+	k = k % nums.length
 
-    nums.reverse();
-    reversePortionOfArray(nums, 0, k - 1);
-    reversePortionOfArray(nums,k, nums.length - 1);
-};
-
-var reversePortionOfArray = function(nums,start,end) {
-    while(start < end) {
-        [nums[start],nums[end]] = [nums[end],nums[start]];
-        start++;
-        end--;
-    }    
+	nums.reverse()
+	reversePortionOfArray(nums, 0, k - 1)
+	reversePortionOfArray(nums, k, nums.length - 1)
 }
 
+var reversePortionOfArray = function (nums, start, end) {
+	while (start < end) {
+		;[nums[start], nums[end]] = [nums[end], nums[start]]
+		start++
+		end--
+	}
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def rotate(self, nums: List[int], k: int) -> None:
@@ -97,24 +90,26 @@ class Solution:
         while l < r:
             nums[l], nums[r] = nums[r], nums[l]
             l, r = l + 1, r - 1
-            
+
         l, r = 0, k - 1
         while l < r:
             nums[l], nums[r] = nums[r], nums[l]
             l, r = l + 1, r - 1
-            
+
         l, r = k, len(nums) - 1
         while l < r:
             nums[l], nums[r] = nums[r], nums[l]
             l, r = l + 1, r - 1
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given an array, rotate the array to the right by k steps, where k is non-negative.
-    Ex. 
-    Input: nums = [1,2,3,4,5,6,7], k = 3 
+    Ex.
+    Input: nums = [1,2,3,4,5,6,7], k = 3
     Output: [5,6,7,1,2,3,4]
 
     1.- To avoid problems with the size of the vector we use the remainder of a division.
@@ -136,7 +131,9 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
     public void rotate(int[] nums, int k) {
@@ -172,5 +169,3 @@ class Solution {
 }
 
 ```
-
-

@@ -11,59 +11,57 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 Suppose an array of length <code>n</code> sorted in ascending order is rotated between <code>1</code> and <code>n</code> times. For example, the array <code>nums = [0,1,2,4,5,6,7]</code> might become:
 
-
-	- <code>[4,5,6,7,0,1,2]</code> if it was rotated <code>4</code> times.
-	- <code>[0,1,2,4,5,6,7]</code> if it was rotated <code>7</code> times.
-
+    - <code>[4,5,6,7,0,1,2]</code> if it was rotated <code>4</code> times.
+    - <code>[0,1,2,4,5,6,7]</code> if it was rotated <code>7</code> times.
 
 Notice that rotating an array <code>[a[0], a[1], a[2], ..., a[n-1]]</code> 1 time results in the array <code>[a[n-1], a[0], a[1], a[2], ..., a[n-2]]</code>.
 
-Given the sorted rotated array <code>nums</code> of unique elements, return *the minimum element of this array*.
+Given the sorted rotated array <code>nums</code> of unique elements, return _the minimum element of this array_.
 
 You must write an algorithm that runs in <code>O(log n) time.</code>
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [3,4,5,1,2]
-Output: 1
-Explanation: The original array was [1,2,3,4,5] rotated 3 times.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [3,4,5,1,2] Output: 1 Explanation: The original array was
+	[1,2,3,4,5] rotated 3 times.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [4,5,6,7,0,1,2]
-Output: 0
-Explanation: The original array was [0,1,2,4,5,6,7] and it was rotated 4 times.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [4,5,6,7,0,1,2] Output: 0 Explanation: The original array was
+	[0,1,2,4,5,6,7] and it was rotated 4 times.
 </pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [11,13,15,17]
-Output: 11
-Explanation: The original array was [11,13,15,17] and it was rotated 4 times. 
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [11,13,15,17] Output: 11 Explanation: The original array was
+	[11,13,15,17] and it was rotated 4 times.
 </pre>
 
- 
 Constraints:
 
-
-	- <code>n == nums.length</code>
-	- <code>1 &lt;= n &lt;= 5000</code>
-	- <code>-5000 &lt;= nums[i] &lt;= 5000</code>
-	- All the integers of <code>nums</code> are unique.
-	- <code>nums</code> is sorted and rotated between <code>1</code> and <code>n</code> times.
-
-
+    - <code>n == nums.length</code>
+    - <code>1 &lt;= n &lt;= 5000</code>
+    - <code>-5000 &lt;= nums[i] &lt;= 5000</code>
+    - All the integers of <code>nums</code> are unique.
+    - <code>nums</code> is sorted and rotated between <code>1</code> and <code>n</code> times.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * @param {number[]} nums
@@ -71,28 +69,29 @@ Constraints:
  * @return {number}
  */
 var findMin = function (nums) {
-    let [left, right] = [0, nums.length - 1];
+	let [left, right] = [0, nums.length - 1]
 
-    while (left < right) {
-        const mid = (left + right) >> 1;
-        const guess = nums[mid];
-        const [leftNum, rightNum] = [nums[left], nums[right]];
+	while (left < right) {
+		const mid = (left + right) >> 1
+		const guess = nums[mid]
+		const [leftNum, rightNum] = [nums[left], nums[right]]
 
-        const isTarget = leftNum < rightNum;
-        if (isTarget) return leftNum;
+		const isTarget = leftNum < rightNum
+		if (isTarget) return leftNum
 
-        const isTargetGreater = leftNum <= guess;
-        if (isTargetGreater) left = mid + 1;
+		const isTargetGreater = leftNum <= guess
+		if (isTargetGreater) left = mid + 1
 
-        const isTargetLess = guess < leftNum;
-        if (isTargetLess) right = mid;
-    }
+		const isTargetLess = guess < leftNum
+		if (isTargetLess) right = mid
+	}
 
-    return nums[left];
-};
-
+	return nums[left]
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def findMin(self, nums: List[int]) -> int:
@@ -106,7 +105,9 @@ class Solution:
         return nums[l]
 
 ```
+
 ### C++
+
 ```cpp
 /*
  * @lc app=leetcode id=153 lang=cpp
@@ -151,7 +152,9 @@ public:
 // @lc code=end
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -176,5 +179,3 @@ class Solution {
 }
 
 ```
-
-

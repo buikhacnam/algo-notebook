@@ -11,39 +11,42 @@ difficulty: Hard
 </Callout>
 
 ## Description
+
 Serialization is the process of converting a data structure or object into a sequence of bits so that it can be stored in a file or memory buffer, or transmitted across a network connection link to be reconstructed later in the same or another computer environment.
 
 Design an algorithm to serialize and deserialize a binary tree. There is no restriction on how your serialization/deserialization algorithm should work. You just need to ensure that a binary tree can be serialized to a string and this string can be deserialized to the original tree structure.
 
 Clarification: The input/output format is the same as <a href="https://support.leetcode.com/hc/en-us/articles/360011883654-What-does-1-null-2-3-mean-in-binary-tree-representation-" target="_blank">how LeetCode serializes a binary tree</a>. You do not necessarily need to follow this format, so please be creative and come up with different approaches yourself.
 
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2020/09/15/serdeser.jpg" width={442} height={324} />
-<br /><pre className="overflow-x-auto">
-Input: root = [1,2,3,null,null,4,5]
-Output: [1,2,3,null,null,4,5]
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/09/15/serdeser.jpg"
+	width={442}
+	height={324}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: root = [1,2,3,null,null,4,5] Output: [1,2,3,null,null,4,5]
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: root = []
-Output: []
-</pre>
+<br />
 
- 
+<pre className="overflow-x-auto">Input: root = [] Output: []</pre>
+
 Constraints:
 
-
-	- The number of nodes in the tree is in the range <code>[0, 10<sup>4</sup>]</code>.
-	- <code>-1000 &lt;= Node.val &lt;= 1000</code>
-
-
+    - The number of nodes in the tree is in the range <code>[0, 10<sup>4</sup>]</code>.
+    - <code>-1000 &lt;= Node.val &lt;= 1000</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * Encodes a tree to a single string.
@@ -52,24 +55,24 @@ Constraints:
  * @param {TreeNode} root
  * @return {string}
  */
- var serialize = function(root, result = []) {
-    serial(root, result);
+var serialize = function (root, result = []) {
+	serial(root, result)
 
-    return result;
-};
+	return result
+}
 
 const serial = (root, result) => {
-    const isBase = root === null;
-    if (isBase) return result.push(null);
+	const isBase = root === null
+	if (isBase) return result.push(null)
 
-    dfsSerialize(root, result);
+	dfsSerialize(root, result)
 }
 
 const dfsSerialize = (node, result) => {
-    result.push(node.val);
-    serial(node.left, result);
-    serial(node.right, result);
-};
+	result.push(node.val)
+	serial(node.left, result)
+	serial(node.right, result)
+}
 
 /**
  * Encodes a tree to a single string.
@@ -78,61 +81,62 @@ const dfsSerialize = (node, result) => {
  * @param {TreeNode} root
  * @return {string}
  */
-var serialize = function(root) {
-    const isBaseCase = root === null;
-    if (isBaseCase) return [ null ];
+var serialize = function (root) {
+	const isBaseCase = root === null
+	if (isBaseCase) return [null]
 
-    return dfsSerializeIterative([ root ]);
-};
+	return dfsSerializeIterative([root])
+}
 
 const dfsSerializeIterative = (stack, result = []) => {
-    while (stack.length) {
-        const curr = stack.pop();
+	while (stack.length) {
+		const curr = stack.pop()
 
-        const isNull = curr === null;
-        if (isNull) {
-            result.push(null);
-            continue;
-        }
+		const isNull = curr === null
+		if (isNull) {
+			result.push(null)
+			continue
+		}
 
-        result.push(curr.val);
-        stack.push(curr.right);
-        stack.push(curr.left);
-    }
+		result.push(curr.val)
+		stack.push(curr.right)
+		stack.push(curr.left)
+	}
 
-    return result;
+	return result
 }
 
 /**
-* Decodes your encoded data to tree.
-* https://leetcode.com/problems/serialize-and-deserialize-binary-tree/solution/
-* Time O(N) | Space O(H)
-* @param {string} data
-* @return {TreeNode}
-*/
-var deserialize = function(data) {
-    const isBaseCase = !data.length;
-    if (isBaseCase) return null;
+ * Decodes your encoded data to tree.
+ * https://leetcode.com/problems/serialize-and-deserialize-binary-tree/solution/
+ * Time O(N) | Space O(H)
+ * @param {string} data
+ * @return {TreeNode}
+ */
+var deserialize = function (data) {
+	const isBaseCase = !data.length
+	if (isBaseCase) return null
 
-    const val = data.shift();
+	const val = data.shift()
 
-    const isNull = val === null;
-    if (isNull) return null;
+	const isNull = val === null
+	if (isNull) return null
 
-    return dfsDeserialize(val, data)
-};
-
-const dfsDeserialize = (val, data) => {
-    const node = new TreeNode(val);
-
-    node.left = deserialize(data);
-    node.right = deserialize(data);
-
-    return node;
+	return dfsDeserialize(val, data)
 }
 
+const dfsDeserialize = (val, data) => {
+	const node = new TreeNode(val)
+
+	node.left = deserialize(data)
+	node.right = deserialize(data)
+
+	return node
+}
 ```
+
 ### Python
+
 ```python
 # Definition for a binary tree node.
 # class TreeNode(object):
@@ -174,7 +178,9 @@ class Codec:
         return dfs()
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Design an algorithm to serialize & deserialize a binary tree
@@ -209,37 +215,37 @@ public:
         istringstream in(data);
         return decode(in);
     }
-    
+
 private:
-    
+
     void encode(TreeNode* root, ostringstream& out) {
         if (root == NULL) {
             out << "N ";
             return;
         }
-        
+
         out << root->val << " ";
-        
+
         encode(root->left, out);
         encode(root->right, out);
     }
-    
+
     TreeNode* decode(istringstream& in) {
         string value = "";
         in >> value;
-        
+
         if (value == "N") {
             return NULL;
         }
-        
+
         TreeNode* root = new TreeNode(stoi(value));
-        
+
         root->left = decode(in);
         root->right = decode(in);
-        
+
         return root;
     }
-    
+
 };
 
 // Your Codec object will be instantiated and called as such:
@@ -247,7 +253,9 @@ private:
 // TreeNode* ans = deser.deserialize(ser.serialize(root));
 
 ```
+
 ### Java
+
 ```java
 /**
  * Definition for a binary tree node.
@@ -305,5 +313,3 @@ public class Codec {
 // TreeNode ans = deser.deserialize(ser.serialize(root));
 
 ```
-
-

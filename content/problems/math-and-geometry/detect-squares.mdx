@@ -11,115 +11,113 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 You are given a stream of points on the X-Y plane. Design an algorithm that:
 
-
-	- Adds new points from the stream into a data structure. Duplicate points are allowed and should be treated as different points.
-	- Given a query point, counts the number of ways to choose three points from the data structure such that the three points and the query point form an axis-aligned square with positive area.
-
+    - Adds new points from the stream into a data structure. Duplicate points are allowed and should be treated as different points.
+    - Given a query point, counts the number of ways to choose three points from the data structure such that the three points and the query point form an axis-aligned square with positive area.
 
 An axis-aligned square is a square whose edges are all the same length and are either parallel or perpendicular to the x-axis and y-axis.
 
 Implement the <code>DetectSquares</code> class:
 
+    - <code>DetectSquares()</code> Initializes the object with an empty data structure.
+    - <code>void add(int[] point)</code> Adds a new point <code>point = [x, y]</code> to the data structure.
+    - <code>int count(int[] point)</code> Counts the number of ways to form axis-aligned squares with point <code>point = [x, y]</code> as described above.
 
-	- <code>DetectSquares()</code> Initializes the object with an empty data structure.
-	- <code>void add(int[] point)</code> Adds a new point <code>point = [x, y]</code> to the data structure.
-	- <code>int count(int[] point)</code> Counts the number of ways to form axis-aligned squares with point <code>point = [x, y]</code> as described above.
-
-
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/09/01/image.png" width={869} height={504} />
-<br /><pre className="overflow-x-auto">
-Input
-[&quot;DetectSquares&quot;, &quot;add&quot;, &quot;add&quot;, &quot;add&quot;, &quot;count&quot;, &quot;count&quot;, &quot;add&quot;, &quot;count&quot;]
-[[], [[3, 10]], [[11, 2]], [[3, 2]], [[11, 10]], [[14, 8]], [[11, 2]], [[11, 10]]]
-Output
-[null, null, null, null, 1, 0, null, 2]
 
-Explanation
-DetectSquares detectSquares = new DetectSquares();
-detectSquares.add([3, 10]);
-detectSquares.add([11, 2]);
-detectSquares.add([3, 2]);
-detectSquares.count([11, 10]); // return 1. You can choose:
-                               //   - The first, second, and third points
-detectSquares.count([14, 8]);  // return 0. The query point cannot form a square with any points in the data structure.
-detectSquares.add([11, 2]);    // Adding duplicate points is allowed.
-detectSquares.count([11, 10]); // return 2. You can choose:
-                               //   - The first, second, and third points
-                               //   - The first, third, and fourth points
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/09/01/image.png"
+	width={869}
+	height={504}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input [&quot;DetectSquares&quot;, &quot;add&quot;, &quot;add&quot;,
+	&quot;add&quot;, &quot;count&quot;, &quot;count&quot;, &quot;add&quot;,
+	&quot;count&quot;] [[], [[3, 10]], [[11, 2]], [[3, 2]], [[11, 10]], [[14, 8]],
+	[[11, 2]], [[11, 10]]] Output [null, null, null, null, 1, 0, null, 2]
+	Explanation DetectSquares detectSquares = new DetectSquares();
+	detectSquares.add([3, 10]); detectSquares.add([11, 2]); detectSquares.add([3,
+	2]); detectSquares.count([11, 10]); // return 1. You can choose: // - The
+	first, second, and third points detectSquares.count([14, 8]); // return 0. The
+	query point cannot form a square with any points in the data structure.
+	detectSquares.add([11, 2]); // Adding duplicate points is allowed.
+	detectSquares.count([11, 10]); // return 2. You can choose: // - The first,
+	second, and third points // - The first, third, and fourth points
 </pre>
 
- 
 Constraints:
 
-
-	- <code>point.length == 2</code>
-	- <code>0 &lt;= x, y &lt;= 1000</code>
-	- At most <code>3000</code> calls in total will be made to <code>add</code> and <code>count</code>.
-
-
+    - <code>point.length == 2</code>
+    - <code>0 &lt;= x, y &lt;= 1000</code>
+    - At most <code>3000</code> calls in total will be made to <code>add</code> and <code>count</code>.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /*
  * Time O(N) | Space O(N)
  * https://leetcode.com/problems/detect-squares
  */
 class DetectSquares {
-    constructor () {
-        this.map = {};   /* Space O(N) */
-        this.points = [];/* Space O(N) */
-    }
-    
-    add (point, { map, points } = this) {
-        const [ x, y ] = point;
-        const key = this.getKey(x, y);
-        const value = ((map[key] || 0) + 1);
+	constructor() {
+		this.map = {} /* Space O(N) */
+		this.points = [] /* Space O(N) */
+	}
 
-        map[key] = value;  /* Space O(N) */
-        points.push(point);/* Space O(N) */
-    }
+	add(point, { map, points } = this) {
+		const [x, y] = point
+		const key = this.getKey(x, y)
+		const value = (map[key] || 0) + 1
 
-    count (point, { points } = this, score = 0) {
-        const [ x1, y1 ] = point;
+		map[key] = value /* Space O(N) */
+		points.push(point) /* Space O(N) */
+	}
 
-        for (const [ x2, y2 ] of points) {/* Time O(N) */
-            const isSame = (Math.abs(x2 - x1) === Math.abs(y2 - y1));
-            const isEqual = ((x1 === x2) || (y1 === y2));
-            const canSkip = (!isSame || isEqual);
-            if (canSkip) continue;
+	count(point, { points } = this, score = 0) {
+		const [x1, y1] = point
 
-            score += this.getScore(x1, y1, x2, y2);
-        }
+		for (const [x2, y2] of points) {
+			/* Time O(N) */
+			const isSame = Math.abs(x2 - x1) === Math.abs(y2 - y1)
+			const isEqual = x1 === x2 || y1 === y2
+			const canSkip = !isSame || isEqual
+			if (canSkip) continue
 
-        return score;
-    };
+			score += this.getScore(x1, y1, x2, y2)
+		}
 
-    getKey (x, y) {
-        return `${x},${y}`;
-    }
+		return score
+	}
 
-    getScore (x1, y1, x2, y2, { map } = this) {
-        const [ aKey, bKey ] = [ this.getKey(x1, y2), this.getKey(x2, y1) ];
-        const [ aScore, bScore ] = [ (map[aKey] || 0), (map[bKey] || 0) ];
-    
-        return (aScore * bScore);
-    }
-};
+	getKey(x, y) {
+		return `${x},${y}`
+	}
 
-/** 
+	getScore(x1, y1, x2, y2, { map } = this) {
+		const [aKey, bKey] = [this.getKey(x1, y2), this.getKey(x2, y1)]
+		const [aScore, bScore] = [map[aKey] || 0, map[bKey] || 0]
+
+		return aScore * bScore
+	}
+}
+
+/**
  * Your DetectSquares object will be instantiated and called as such:
  * var obj = new DetectSquares()
  * obj.add(point)
  * var param_2 = obj.count(point)
  */
 ```
+
 ### Python
+
 ```python
 class DetectSquares:
     def __init__(self):
@@ -140,7 +138,9 @@ class DetectSquares:
         return res
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given stream of points, add new points, return count of squares
@@ -154,34 +154,34 @@ class DetectSquares:
 class DetectSquares {
 public:
     DetectSquares() {
-        
+
     }
-    
+
     void add(vector<int> point) {
         points[point[0]][point[1]]++;
     }
-    
+
     int count(vector<int> point) {
         int x1 = point[0];
         int y1 = point[1];
-        
+
         int result = 0;
-        
+
         for (auto x = points.begin(); x != points.end(); x++) {
             unordered_map<int, int> yPoints = x->second;
             for (auto y = yPoints.begin(); y != yPoints.end(); y++) {
                 int x3 = x->first;
                 int y3 = y->first;
-                
+
                 // skip points on same x-axis or y-axis
                 if (abs(x3 - x1) == 0 || abs(x3 - x1) != abs(y3 - y1)) {
                     continue;
                 }
-                
+
                 result += points[x3][y3] * points[x1][y3] * points[x3][y1];
             }
         }
-        
+
         return result;
     }
 private:
@@ -197,7 +197,9 @@ private:
  */
 
 ```
+
 ### Java
+
 ```java
 // https://leetcode.com/submissions/detail/761120641/
 class DetectSquares {
@@ -311,5 +313,3 @@ class DetectSquares {
 }
 
 ```
-
-

@@ -11,37 +11,44 @@ difficulty: Easy
 </Callout>
 
 ## Description
-Given the <code>head</code> of a singly linked list, return <code>true</code>* if it is a *<span data-keyword="palindrome-sequence">*palindrome*</span>* or *<code>false</code>* otherwise*.
 
- 
+Given the <code>head</code> of a singly linked list, return <code>true</code>_ if it is a _<span data-keyword="palindrome-sequence">_palindrome_</span>_ or _<code>false</code>_ otherwise_.
+
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/03/03/pal1linked-list.jpg" width={422} height={62} />
-<br /><pre className="overflow-x-auto">
-Input: head = [1,2,2,1]
-Output: true
-</pre>
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/03/03/pal1linked-list.jpg"
+	width={422}
+	height={62}
+/>
+<br />
+
+<pre className="overflow-x-auto">Input: head = [1,2,2,1] Output: true</pre>
 
 Example 2:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/03/03/pal2linked-list.jpg" width={182} height={62} />
-<br /><pre className="overflow-x-auto">
-Input: head = [1,2]
-Output: false
-</pre>
 
- 
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/03/03/pal2linked-list.jpg"
+	width={182}
+	height={62}
+/>
+<br />
+
+<pre className="overflow-x-auto">Input: head = [1,2] Output: false</pre>
+
 Constraints:
 
+    - The number of nodes in the list is in the range <code>[1, 10<sup>5</sup>]</code>.
+    - <code>0 &lt;= Node.val &lt;= 9</code>
 
-	- The number of nodes in the list is in the range <code>[1, 10<sup>5</sup>]</code>.
-	- <code>0 &lt;= Node.val &lt;= 9</code>
-
-
- 
 Follow up: Could you do it in <code>O(n)</code> time and <code>O(1)</code> space?
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * Definition for singly-linked list.
@@ -55,51 +62,52 @@ Follow up: Could you do it in <code>O(n)</code> time and <code>O(1)</code> space
  * @return {boolean}
  */
 var isPalindrome = function (head) {
-    // find mid point
-    let slow = head;
-    let fast = head;
-    while (fast && fast.next) {
-        slow = slow.next;
-        fast = fast.next.next;
-    }
+	// find mid point
+	let slow = head
+	let fast = head
+	while (fast && fast.next) {
+		slow = slow.next
+		fast = fast.next.next
+	}
 
-    // reverse 2nd half
-    let curr = slow;
-    let prev = null;
-    while (curr) {
-        let next = curr.next;
-        curr.next = prev;
-        prev = curr;
-        curr = next;
-    }
-    let head2 = prev;
+	// reverse 2nd half
+	let curr = slow
+	let prev = null
+	while (curr) {
+		let next = curr.next
+		curr.next = prev
+		prev = curr
+		curr = next
+	}
+	let head2 = prev
 
-    // compare both halfs
-    while (head && head2) {
-        if (head.val !== head2.val) {
-            return false;
-        }
+	// compare both halfs
+	while (head && head2) {
+		if (head.val !== head2.val) {
+			return false
+		}
 
-        head = head.next;
-        head2 = head2.next;
-    }
+		head = head.next
+		head2 = head2.next
+	}
 
-    return true;
-};
-
+	return true
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def isPalindrome(self, head: ListNode) -> bool:
         fast = head
         slow = head
-        
+
         # find the middle (slow)
         while fast and fast.next:
             fast = fast.next.next
             slow = slow.next
-            
+
         # reverse second half
         prev = None
         while slow:
@@ -107,7 +115,7 @@ class Solution:
             slow.next = prev
             prev = slow
             slow = tmp
-        
+
         # check palindrome
         left, right = head, prev
         while right:
@@ -118,27 +126,31 @@ class Solution:
         return True
 
 ```
+
 ### C++
+
 ```cpp
-class Solution{    
-    public:    
-        bool isPalindrome(ListNode* head){            
-            vector<int> v;            
-            while(head != nullptr){                
-                v.push_back(head -> val);                
-                head = head -> next;              
-            }         
-            for(int i = 0; i < v.size() / 2; i++){                
-                if(v[i] != v[v.size() - i - 1]){                    
-                    return false;                    
-                }                
-            }            
+class Solution{
+    public:
+        bool isPalindrome(ListNode* head){
+            vector<int> v;
+            while(head != nullptr){
+                v.push_back(head -> val);
+                head = head -> next;
+            }
+            for(int i = 0; i < v.size() / 2; i++){
+                if(v[i] != v[v.size() - i - 1]){
+                    return false;
+                }
+            }
             return true;
-        }    
+        }
 };
 
 ```
+
 ### Java
+
 ```java
 //reverse the later half
 //after reversing just start comparing if at any time the value doesn't match it's not a palindrome, i.e. return false, else it's a palindrome and return true.
@@ -177,5 +189,3 @@ class Solution {
 }
 
 ```
-
-

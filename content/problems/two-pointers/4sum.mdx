@@ -11,44 +11,42 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given an array <code>nums</code> of <code>n</code> integers, return *an array of all the unique quadruplets* <code>[nums[a], nums[b], nums[c], nums[d]]</code> such that:
 
+Given an array <code>nums</code> of <code>n</code> integers, return _an array of all the unique quadruplets_ <code>[nums[a], nums[b], nums[c], nums[d]]</code> such that:
 
-	- <code>0 &lt;= a, b, c, d &lt; n</code>
-	- <code>a</code>, <code>b</code>, <code>c</code>, and <code>d</code> are distinct.
-	- <code>nums[a] + nums[b] + nums[c] + nums[d] == target</code>
-
+    - <code>0 &lt;= a, b, c, d &lt; n</code>
+    - <code>a</code>, <code>b</code>, <code>c</code>, and <code>d</code> are distinct.
+    - <code>nums[a] + nums[b] + nums[c] + nums[d] == target</code>
 
 You may return the answer in any order.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [1,0,-1,0,-2,2], target = 0
-Output: [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [1,0,-1,0,-2,2], target = 0 Output:
+	[[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [2,2,2,2,2], target = 8
-Output: [[2,2,2,2]]
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [2,2,2,2,2], target = 8 Output: [[2,2,2,2]]
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= nums.length &lt;= 200</code>
-	- <code>-10<sup>9</sup> &lt;= nums[i] &lt;= 10<sup>9</sup></code>
-	- <code>-10<sup>9</sup> &lt;= target &lt;= 10<sup>9</sup></code>
-
-
+    - <code>1 &lt;= nums.length &lt;= 200</code>
+    - <code>-10<sup>9</sup> &lt;= nums[i] &lt;= 10<sup>9</sup></code>
+    - <code>-10<sup>9</sup> &lt;= target &lt;= 10<sup>9</sup></code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * @param {number[]} nums
@@ -56,58 +54,54 @@ Constraints:
  * @return {number[][]}
  */
 var fourSum = function (nums, target) {
-    const sortedNums = nums.sort((a, b) => a - b);
-    const res = [];
-    const quad = [];
+	const sortedNums = nums.sort((a, b) => a - b)
+	const res = []
+	const quad = []
 
-    const kSum = (k, start, target) => {
-        if (k > 2) {
-            for (let i = start; i < sortedNums.length; i++) {
-                if (i !== start && sortedNums[i] === sortedNums[i - 1]) {
-                    continue;
-                }
-                quad.push(sortedNums[i]);
-                kSum(k - 1, i + 1, target - sortedNums[i]);
-                quad.pop();
-            }
-        } else {
-            let left = start;
-            let right = sortedNums.length - 1;
+	const kSum = (k, start, target) => {
+		if (k > 2) {
+			for (let i = start; i < sortedNums.length; i++) {
+				if (i !== start && sortedNums[i] === sortedNums[i - 1]) {
+					continue
+				}
+				quad.push(sortedNums[i])
+				kSum(k - 1, i + 1, target - sortedNums[i])
+				quad.pop()
+			}
+		} else {
+			let left = start
+			let right = sortedNums.length - 1
 
-            while (left < right) {
-                const sum = sortedNums[left] + sortedNums[right];
-                if (sum < target) {
-                    left++;
-                } else if (sum > target) {
-                    right--;
-                } else {
-                    res.push(
-                        quad.concat([sortedNums[left], sortedNums[right]])
-                    );
-                    left++;
-                    while (
-                        left < right &&
-                        sortedNums[left] === sortedNums[left - 1]
-                    ) {
-                        left++;
-                    }
-                }
-            }
-        }
-    };
-    kSum(4, 0, target);
-    return res;
-};
-
+			while (left < right) {
+				const sum = sortedNums[left] + sortedNums[right]
+				if (sum < target) {
+					left++
+				} else if (sum > target) {
+					right--
+				} else {
+					res.push(quad.concat([sortedNums[left], sortedNums[right]]))
+					left++
+					while (left < right && sortedNums[left] === sortedNums[left - 1]) {
+						left++
+					}
+				}
+			}
+		}
+	}
+	kSum(4, 0, target)
+	return res
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def fourSum(self, nums, target):
         def findNsum(l, r, target, N, result, results):
-            if r-l+1 < N or N < 2 or target < nums[l]*N or target > nums[r]*N:  
+            if r-l+1 < N or N < 2 or target < nums[l]*N or target > nums[r]*N:
                 return
-            if N == 2: 
+            if N == 2:
                 while l < r:
                     s = nums[l] + nums[r]
                     if s == target:
@@ -129,7 +123,9 @@ class Solution:
         findNsum(0, len(nums)-1, target, 4, [], results)
         return results
 ```
+
 ### C++
+
 ```cpp
 // Time Complexity = O(n^3)
 // Space Complexity = O(n)
@@ -169,7 +165,9 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
     public static List<List<Integer>> fourSum(int[] nums, int target) {
@@ -206,5 +204,3 @@ class Solution {
 }
 
 ```
-
-

@@ -11,44 +11,62 @@ difficulty: Easy
 </Callout>
 
 ## Description
+
 Given the roots of two binary trees <code>p</code> and <code>q</code>, write a function to check if they are the same or not.
 
 Two binary trees are considered the same if they are structurally identical, and the nodes have the same value.
 
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2020/12/20/ex1.jpg" width={622} height={182} />
-<br /><pre className="overflow-x-auto">
-Input: p = [1,2,3], q = [1,2,3]
-Output: true
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/12/20/ex1.jpg"
+	width={622}
+	height={182}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: p = [1,2,3], q = [1,2,3] Output: true
 </pre>
 
 Example 2:
-<Image alt="" src="https://assets.leetcode.com/uploads/2020/12/20/ex2.jpg" width={382} height={182} />
-<br /><pre className="overflow-x-auto">
-Input: p = [1,2], q = [1,null,2]
-Output: false
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/12/20/ex2.jpg"
+	width={382}
+	height={182}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: p = [1,2], q = [1,null,2] Output: false
 </pre>
 
 Example 3:
-<Image alt="" src="https://assets.leetcode.com/uploads/2020/12/20/ex3.jpg" width={622} height={182} />
-<br /><pre className="overflow-x-auto">
-Input: p = [1,2,1], q = [1,1,2]
-Output: false
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/12/20/ex3.jpg"
+	width={622}
+	height={182}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: p = [1,2,1], q = [1,1,2] Output: false
 </pre>
 
- 
 Constraints:
 
-
-	- The number of nodes in both trees is in the range <code>[0, 100]</code>.
-	- <code>-10<sup>4</sup> &lt;= Node.val &lt;= 10<sup>4</sup></code>
-
-
+    - The number of nodes in both trees is in the range <code>[0, 100]</code>.
+    - <code>-10<sup>4</sup> &lt;= Node.val &lt;= 10<sup>4</sup></code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/same-tree/
@@ -57,24 +75,24 @@ Constraints:
  * @param {TreeNode} q
  * @return {boolean}
  */
-var isSameTree = function(p, q) {
-    const isBaseCase = !(p || q);
-    if (isBaseCase) return true;
+var isSameTree = function (p, q) {
+	const isBaseCase = !(p || q)
+	if (isBaseCase) return true
 
-    const isBalanced = (p && q);
-    if (!isBalanced) return false;
+	const isBalanced = p && q
+	if (!isBalanced) return false
 
-    const isSame = p.val === q.val;
-    if (!isSame) return false;
+	const isSame = p.val === q.val
+	if (!isSame) return false
 
-    return dfs(p, q);
-};
+	return dfs(p, q)
+}
 
 const dfs = (p, q) => {
-    const left = isSameTree(p.left, q.left);
-    const right = isSameTree(p.right, q.right);
+	const left = isSameTree(p.left, q.left)
+	const right = isSameTree(p.right, q.right)
 
-    return left && right;
+	return left && right
 }
 
 /**
@@ -84,46 +102,46 @@ const dfs = (p, q) => {
  * @param {TreeNode} q
  * @return {boolean}
  */
-var isSameTree = function(p, q) {
-    if (isSameNode(p, q)) return true;
+var isSameTree = function (p, q) {
+	if (isSameNode(p, q)) return true
 
-    return bfs([[ p, q ]]);
+	return bfs([[p, q]])
 }
 
 const bfs = (queue) => {
-    while (queue.length) {
-        for (let i = (queue.length - 1); 0 <= i; i--) {
-            const [ p, q ] = queue.shift();
+	while (queue.length) {
+		for (let i = queue.length - 1; 0 <= i; i--) {
+			const [p, q] = queue.shift()
 
-            if (!isSame(p, q)) return false;
+			if (!isSame(p, q)) return false
 
-            if (p.left) queue.push([ p.left, q.left ]);
-            if (p.right) queue.push([ p.right, q.right ]);
-        }
-    }
+			if (p.left) queue.push([p.left, q.left])
+			if (p.right) queue.push([p.right, q.right])
+		}
+	}
 
-    return true;
+	return true
 }
 
 const isSameNode = (p, q) => {
-    const isBaseCase = !(p || q);
-    if (isBaseCase) return true;
+	const isBaseCase = !(p || q)
+	if (isBaseCase) return true
 
-    const isBalanced = (p && q);
-    if (!isBalanced) return false;
+	const isBalanced = p && q
+	if (!isBalanced) return false
 
-    const isSame = p.val === q.val;
-    if (!isSame) return false;
+	const isSame = p.val === q.val
+	if (!isSame) return false
 
-    return true;
+	return true
 }
 
-const isSame = (p, q) => isSameNode(p, q)
-    && isSameNode(p.left, q.left)
-    && isSameNode(p.right, q.right);
-
+const isSame = (p, q) =>
+	isSameNode(p, q) && isSameNode(p.left, q.left) && isSameNode(p.right, q.right)
 ```
+
 ### Python
+
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -143,7 +161,9 @@ class Solution:
             return False
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given roots of 2 binary trees, check if they're the same or not (same structure & values)
@@ -183,7 +203,9 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
 package java;
 
@@ -227,5 +249,3 @@ class Solution {
 }
 
 ```
-
-

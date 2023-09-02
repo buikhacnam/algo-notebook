@@ -11,50 +11,40 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 Given a collection of candidate numbers (<code>candidates</code>) and a target number (<code>target</code>), find all unique combinations in <code>candidates</code> where the candidate numbers sum to <code>target</code>.
 
 Each number in <code>candidates</code> may only be used once in the combination.
 
 Note: The solution set must not contain duplicate combinations.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: candidates = [10,1,2,7,6,1,5], target = 8
-Output: 
-[
-[1,1,6],
-[1,2,5],
-[1,7],
-[2,6]
-]
+<br />
+
+<pre className="overflow-x-auto">
+	Input: candidates = [10,1,2,7,6,1,5], target = 8 Output: [ [1,1,6], [1,2,5],
+	[1,7], [2,6] ]
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: candidates = [2,5,2,1,2], target = 5
-Output: 
-[
-[1,2,2],
-[5]
-]
+<br />
+
+<pre className="overflow-x-auto">
+	Input: candidates = [2,5,2,1,2], target = 5 Output: [ [1,2,2], [5] ]
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= candidates.length &lt;= 100</code>
-	- <code>1 &lt;= candidates[i] &lt;= 50</code>
-	- <code>1 &lt;= target &lt;= 30</code>
-
-
+    - <code>1 &lt;= candidates.length &lt;= 100</code>
+    - <code>1 &lt;= candidates[i] &lt;= 50</code>
+    - <code>1 &lt;= target &lt;= 30</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/combination-sum-ii/
@@ -63,41 +53,48 @@ Constraints:
  * @param {number} target
  * @return {number[][]}
  */
- var combinationSum2 = function(candidates, target) {
-    candidates.sort((a, b) => a - b)
+var combinationSum2 = function (candidates, target) {
+	candidates.sort((a, b) => a - b)
 
-    return dfs(candidates, target)
-};
+	return dfs(candidates, target)
+}
 
-const dfs = (candidates, target, index = 0, combination = [], combinations = []) => {
-    const isBaseCase = target < 0;
-    if (isBaseCase) return combinations;
+const dfs = (
+	candidates,
+	target,
+	index = 0,
+	combination = [],
+	combinations = [],
+) => {
+	const isBaseCase = target < 0
+	if (isBaseCase) return combinations
 
-    const isTarget = target === 0;
-    if (isTarget) {
-        if (combination.length) combinations.push(combination.slice());
+	const isTarget = target === 0
+	if (isTarget) {
+		if (combination.length) combinations.push(combination.slice())
 
-        return combinations
-    }
+		return combinations
+	}
 
-    for (let i = index; i < candidates.length; i++) {
-        const isDuplicate = (index < i) && (candidates[i - 1] === candidates[i]);
-        if (isDuplicate) continue;
+	for (let i = index; i < candidates.length; i++) {
+		const isDuplicate = index < i && candidates[i - 1] === candidates[i]
+		if (isDuplicate) continue
 
-        backTrack(candidates, target, i, combination, combinations);
-    }
+		backTrack(candidates, target, i, combination, combinations)
+	}
 
-    return combinations;
+	return combinations
 }
 
 const backTrack = (candidates, target, i, combination, combinations) => {
-    combination.push(candidates[i])
-        dfs(candidates, (target - candidates[i]), (i + 1), combination, combinations)
-    combination.pop()
+	combination.push(candidates[i])
+	dfs(candidates, target - candidates[i], i + 1, combination, combinations)
+	combination.pop()
 }
-
 ```
+
 ### Python
+
 ```python
 class Solution:
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
@@ -125,7 +122,9 @@ class Solution:
         return res
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given array & a target, find all unique combos that sum to target, nums can only be used once
@@ -141,10 +140,10 @@ class Solution {
 public:
     vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
         sort(candidates.begin(), candidates.end());
-        
+
         vector<int> curr;
         vector<vector<int>> result;
-        
+
         dfs(candidates, target, 0, 0, curr, result);
         return result;
     }
@@ -169,7 +168,9 @@ private:
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -202,5 +203,3 @@ class Solution {
 }
 
 ```
-
-

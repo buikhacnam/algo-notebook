@@ -11,39 +11,44 @@ difficulty: Hard
 </Callout>
 
 ## Description
+
 The n-queens puzzle is the problem of placing <code>n</code> queens on an <code>n x n</code> chessboard such that no two queens attack each other.
 
-Given an integer <code>n</code>, return *all distinct solutions to the n-queens puzzle*. You may return the answer in any order.
+Given an integer <code>n</code>, return _all distinct solutions to the n-queens puzzle_. You may return the answer in any order.
 
 Each solution contains a distinct board configuration of the n-queens&#39; placement, where <code>&#39;Q&#39;</code> and <code>&#39;.&#39;</code> both indicate a queen and an empty space, respectively.
 
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2020/11/13/queens.jpg" width={600} height={268} />
-<br /><pre className="overflow-x-auto">
-Input: n = 4
-Output: [[&quot;.Q..&quot;,&quot;...Q&quot;,&quot;Q...&quot;,&quot;..Q.&quot;],[&quot;..Q.&quot;,&quot;Q...&quot;,&quot;...Q&quot;,&quot;.Q..&quot;]]
-Explanation: There exist two distinct solutions to the 4-queens puzzle as shown above
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/11/13/queens.jpg"
+	width={600}
+	height={268}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: n = 4 Output:
+	[[&quot;.Q..&quot;,&quot;...Q&quot;,&quot;Q...&quot;,&quot;..Q.&quot;],[&quot;..Q.&quot;,&quot;Q...&quot;,&quot;...Q&quot;,&quot;.Q..&quot;]]
+	Explanation: There exist two distinct solutions to the 4-queens puzzle as
+	shown above
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: n = 1
-Output: [[&quot;Q&quot;]]
-</pre>
+<br />
 
- 
+<pre className="overflow-x-auto">Input: n = 1 Output: [[&quot;Q&quot;]]</pre>
+
 Constraints:
 
-
-	- <code>1 &lt;= n &lt;= 9</code>
-
-
+    - <code>1 &lt;= n &lt;= 9</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/n-queens/
@@ -51,48 +56,64 @@ Constraints:
  * @param {number} n
  * @return {string[][]}
  */
-function solveNQueens(n, colSet = new Set(), posDiagSet = new Set(), negDiagSet = new Set()) {
-    const board = new Array(n).fill().map(() => new Array(n).fill('.'));
+function solveNQueens(
+	n,
+	colSet = new Set(),
+	posDiagSet = new Set(),
+	negDiagSet = new Set(),
+) {
+	const board = new Array(n).fill().map(() => new Array(n).fill('.'))
 
-    return dfs(board, n, colSet, posDiagSet, negDiagSet);
+	return dfs(board, n, colSet, posDiagSet, negDiagSet)
 }
 
 const dfs = (board, n, colSet, posDiagSet, negDiagSet, row = 0, moves = []) => {
-    const isBaseCase = row === n;
-    if (isBaseCase) {
-        const rows = board.map((_row) => _row.join(''))
+	const isBaseCase = row === n
+	if (isBaseCase) {
+		const rows = board.map((_row) => _row.join(''))
 
-        moves.push(rows);
+		moves.push(rows)
 
-        return moves;
-    }
+		return moves
+	}
 
-    for (let col = 0; col < n; col++) {
-        const hasQueen = colSet.has(col) || posDiagSet.has(row + col) || negDiagSet.has(row - col)
-        if (hasQueen) continue;
+	for (let col = 0; col < n; col++) {
+		const hasQueen =
+			colSet.has(col) || posDiagSet.has(row + col) || negDiagSet.has(row - col)
+		if (hasQueen) continue
 
-        backTrack(board, n, row, col, colSet, posDiagSet, negDiagSet, moves);
-    }
+		backTrack(board, n, row, col, colSet, posDiagSet, negDiagSet, moves)
+	}
 
-    return moves
+	return moves
 }
 
-const backTrack = (board, n, row, col, colSet, posDiagSet, negDiagSet, moves) => {
-    colSet.add(col);
-    posDiagSet.add(row + col);
-    negDiagSet.add(row - col);
-    board[row][col] = "Q";
+const backTrack = (
+	board,
+	n,
+	row,
+	col,
+	colSet,
+	posDiagSet,
+	negDiagSet,
+	moves,
+) => {
+	colSet.add(col)
+	posDiagSet.add(row + col)
+	negDiagSet.add(row - col)
+	board[row][col] = 'Q'
 
-        dfs(board, n, colSet, posDiagSet, negDiagSet, (row + 1), moves);
+	dfs(board, n, colSet, posDiagSet, negDiagSet, row + 1, moves)
 
-    colSet.delete(col);
-    posDiagSet.delete(row + col);
-    negDiagSet.delete(row - col);
-    board[row][col] = ".";
+	colSet.delete(col)
+	posDiagSet.delete(row + col)
+	negDiagSet.delete(row - col)
+	board[row][col] = '.'
 }
-
 ```
+
 ### Python
+
 ```python
 class Solution:
     def solveNQueens(self, n: int) -> List[List[str]]:
@@ -129,7 +150,9 @@ class Solution:
         return res
 
 ```
+
 ### C++
+
 ```cpp
 /*
     N-Queens: place n queens such that no 2 queens atk each other, return all soln's
@@ -145,34 +168,34 @@ private:
     unordered_set<int> cols;     //for Columns
     unordered_set<int> negDiag;  //for negative diagnals R-C
     unordered_set<int> posDiag;  //for positive diagnals R+C
-    
+
     void backtrack(int n, int row, vector<vector<string>>& res, vector<string>& board){
         if(row==n){
             res.push_back(board);
-            return ; 
+            return ;
         }
-        
+
         for(int col = 0; col < n; col++){   //Shifting through each col
             if( cols.find(col) != cols.end() or //if queen alread placed in this col
                 negDiag.find(row - col) != negDiag.end() or //if queen in negDiag
                 posDiag.find(row + col) != posDiag.end()    //if queen in posDiag
               )
                 continue;
-            
+
             cols.insert(col);
             negDiag.insert(row - col);
             posDiag.insert(row + col);
             board[row][col] = 'Q';
-            
+
             backtrack(n, row +1, res, board);
-            
+
             cols.erase(col);
             negDiag.erase(row - col);
             posDiag.erase(row + col);
             board[row][col] = '.';
         }
     }
-   
+
 public:
     vector<vector<string>> solveNQueens(int n) {
         vector<vector<string>> res;
@@ -183,7 +206,9 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -244,5 +269,3 @@ class Solution {
 }
 
 ```
-
-

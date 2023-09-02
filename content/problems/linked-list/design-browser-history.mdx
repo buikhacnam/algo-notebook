@@ -23,25 +23,30 @@ Implement the <code>BrowserHistory</code> class:
 
 Example:
 
-<br /><pre className="overflow-x-auto">
-<b>Input:</b>
-[&quot;BrowserHistory&quot;,&quot;visit&quot;,&quot;visit&quot;,&quot;visit&quot;,&quot;back&quot;,&quot;back&quot;,&quot;forward&quot;,&quot;visit&quot;,&quot;forward&quot;,&quot;back&quot;,&quot;back&quot;]
-[[&quot;leetcode.com&quot;],[&quot;google.com&quot;],[&quot;facebook.com&quot;],[&quot;youtube.com&quot;],[1],[1],[1],[&quot;linkedin.com&quot;],[2],[2],[7]]
-<b>Output:</b>
-[null,null,null,null,&quot;facebook.com&quot;,&quot;google.com&quot;,&quot;facebook.com&quot;,null,&quot;linkedin.com&quot;,&quot;google.com&quot;,&quot;leetcode.com&quot;]
+<br />
 
-<b>Explanation:</b>
-BrowserHistory browserHistory = new BrowserHistory(&quot;leetcode.com&quot;);
-browserHistory.visit(&quot;google.com&quot;);       // You are in &quot;leetcode.com&quot;. Visit &quot;google.com&quot;
-browserHistory.visit(&quot;facebook.com&quot;);     // You are in &quot;google.com&quot;. Visit &quot;facebook.com&quot;
-browserHistory.visit(&quot;youtube.com&quot;);      // You are in &quot;facebook.com&quot;. Visit &quot;youtube.com&quot;
-browserHistory.back(1);                   // You are in &quot;youtube.com&quot;, move back to &quot;facebook.com&quot; return &quot;facebook.com&quot;
-browserHistory.back(1);                   // You are in &quot;facebook.com&quot;, move back to &quot;google.com&quot; return &quot;google.com&quot;
-browserHistory.forward(1);                // You are in &quot;google.com&quot;, move forward to &quot;facebook.com&quot; return &quot;facebook.com&quot;
-browserHistory.visit(&quot;linkedin.com&quot;);     // You are in &quot;facebook.com&quot;. Visit &quot;linkedin.com&quot;
-browserHistory.forward(2);                // You are in &quot;linkedin.com&quot;, you cannot move forward any steps.
-browserHistory.back(2);                   // You are in &quot;linkedin.com&quot;, move back two steps to &quot;facebook.com&quot; then to &quot;google.com&quot;. return &quot;google.com&quot;
-browserHistory.back(7);                   // You are in &quot;google.com&quot;, you can move back only one step to &quot;leetcode.com&quot;. return &quot;leetcode.com&quot;
+<pre className="overflow-x-auto">
+	<b>Input:</b>
+	[&quot;BrowserHistory&quot;,&quot;visit&quot;,&quot;visit&quot;,&quot;visit&quot;,&quot;back&quot;,&quot;back&quot;,&quot;forward&quot;,&quot;visit&quot;,&quot;forward&quot;,&quot;back&quot;,&quot;back&quot;]
+	[[&quot;leetcode.com&quot;],[&quot;google.com&quot;],[&quot;facebook.com&quot;],[&quot;youtube.com&quot;],[1],[1],[1],[&quot;linkedin.com&quot;],[2],[2],[7]]
+	<b>Output:</b>
+	[null,null,null,null,&quot;facebook.com&quot;,&quot;google.com&quot;,&quot;facebook.com&quot;,null,&quot;linkedin.com&quot;,&quot;google.com&quot;,&quot;leetcode.com&quot;]
+	<b>Explanation:</b>
+	BrowserHistory browserHistory = new BrowserHistory(&quot;leetcode.com&quot;); browserHistory.visit(&quot;google.com&quot;);
+	// You are in &quot;leetcode.com&quot;. Visit &quot;google.com&quot; browserHistory.visit(&quot;facebook.com&quot;);
+	// You are in &quot;google.com&quot;. Visit &quot;facebook.com&quot; browserHistory.visit(&quot;youtube.com&quot;);
+	// You are in &quot;facebook.com&quot;. Visit &quot;youtube.com&quot; browserHistory.back(1);
+	// You are in &quot;youtube.com&quot;, move back to &quot;facebook.com&quot; return
+	&quot;facebook.com&quot; browserHistory.back(1); // You are in &quot;facebook.com&quot;,
+	move back to &quot;google.com&quot; return &quot;google.com&quot; browserHistory.forward(1);
+	// You are in &quot;google.com&quot;, move forward to &quot;facebook.com&quot;
+	return &quot;facebook.com&quot; browserHistory.visit(&quot;linkedin.com&quot;);
+	// You are in &quot;facebook.com&quot;. Visit &quot;linkedin.com&quot; browserHistory.forward(2);
+	// You are in &quot;linkedin.com&quot;, you cannot move forward any steps. browserHistory.back(2);
+	// You are in &quot;linkedin.com&quot;, move back two steps to &quot;facebook.com&quot;
+	then to &quot;google.com&quot;. return &quot;google.com&quot; browserHistory.back(7);
+	// You are in &quot;google.com&quot;, you can move back only one step to &quot;leetcode.com&quot;.
+	return &quot;leetcode.com&quot;
 </pre>
 
 Constraints:

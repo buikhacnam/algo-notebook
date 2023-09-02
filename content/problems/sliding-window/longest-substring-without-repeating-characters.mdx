@@ -11,46 +11,46 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 Given a string <code>s</code>, find the length of the longest <span data-keyword="substring-nonempty">substring</span> without repeating characters.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;abcabcbb&quot;
-Output: 3
-Explanation: The answer is &quot;abc&quot;, with the length of 3.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;abcabcbb&quot; Output: 3 Explanation: The answer is
+	&quot;abc&quot;, with the length of 3.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;bbbbb&quot;
-Output: 1
-Explanation: The answer is &quot;b&quot;, with the length of 1.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;bbbbb&quot; Output: 1 Explanation: The answer is
+	&quot;b&quot;, with the length of 1.
 </pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;pwwkew&quot;
-Output: 3
-Explanation: The answer is &quot;wke&quot;, with the length of 3.
-Notice that the answer must be a substring, &quot;pwke&quot; is a subsequence and not a substring.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;pwwkew&quot; Output: 3 Explanation: The answer is
+	&quot;wke&quot;, with the length of 3. Notice that the answer must be a
+	substring, &quot;pwke&quot; is a subsequence and not a substring.
 </pre>
 
- 
 Constraints:
 
-
-	- <code>0 &lt;= s.length &lt;= 5 * 10<sup>4</sup></code>
-	- <code>s</code> consists of English letters, digits, symbols and spaces.
-
-
+    - <code>0 &lt;= s.length &lt;= 5 * 10<sup>4</sup></code>
+    - <code>s</code> consists of English letters, digits, symbols and spaces.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/longest-substring-without-repeating-characters/
@@ -60,23 +60,24 @@ Constraints:
  */
 
 var lengthOfLongestSubstring = function (s) {
-    const set = new Set();
-    let l = 0;
-    let max = 0;
+	const set = new Set()
+	let l = 0
+	let max = 0
 
-    for (let r = 0; r < s.length; r++) {
-        while (set.has(s[r])) {
-            set.delete(s[l]);
-            l++;
-        }
-        set.add(s[r]);
-        max = Math.max(max, set.size);
-    }
-    return max;
-};
-
+	for (let r = 0; r < s.length; r++) {
+		while (set.has(s[r])) {
+			set.delete(s[l])
+			l++
+		}
+		set.add(s[r])
+		max = Math.max(max, set.size)
+	}
+	return max
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
@@ -93,7 +94,9 @@ class Solution:
         return res
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given string, find longest substring w/o repeating chars
@@ -109,12 +112,12 @@ class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
         unordered_set<char> letters;
-        
+
         int i = 0;
         int j = 0;
-        
+
         int result = 0;
-        
+
         while (j < s.size()) {
             if (letters.find(s[j]) == letters.end()) {
                 letters.insert(s[j]);
@@ -125,7 +128,7 @@ public:
                 i++;
             }
         }
-        
+
         return result;
     }
 };
@@ -153,7 +156,9 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -161,7 +166,7 @@ class Solution {
             List<Character> substringL = new ArrayList<>();
             int largestlength = 0;
             for(int right = 0; right < s.length(); right++) {
-                if(substringL.contains(s.charAt(right))) { 
+                if(substringL.contains(s.charAt(right))) {
                     // get the index of the char
                     int index = substringL.indexOf(s.charAt(right));
                     substringL.remove(index);
@@ -176,5 +181,3 @@ class Solution {
 }
 
 ```
-
-

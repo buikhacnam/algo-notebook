@@ -11,44 +11,43 @@ difficulty: Easy
 </Callout>
 
 ## Description
-Given the <code>root</code> of a binary tree, return *the inorder traversal of its nodes&#39; values*.
 
- 
+Given the <code>root</code> of a binary tree, return _the inorder traversal of its nodes&#39; values_.
+
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2020/09/15/inorder_1.jpg" width={125} height={200} />
-<br /><pre className="overflow-x-auto">
-Input: root = [1,null,2,3]
-Output: [1,3,2]
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/09/15/inorder_1.jpg"
+	width={125}
+	height={200}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: root = [1,null,2,3] Output: [1,3,2]
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: root = []
-Output: []
-</pre>
+<br />
+<pre className="overflow-x-auto">Input: root = [] Output: []</pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: root = [1]
-Output: [1]
-</pre>
+<br />
+<pre className="overflow-x-auto">Input: root = [1] Output: [1]</pre>
 
- 
 Constraints:
 
+    - The number of nodes in the tree is in the range <code>[0, 100]</code>.
+    - <code>-100 &lt;= Node.val &lt;= 100</code>
 
-	- The number of nodes in the tree is in the range <code>[0, 100]</code>.
-	- <code>-100 &lt;= Node.val &lt;= 100</code>
-
-
- 
 Follow up: Recursive solution is trivial, could you do it iteratively?
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * Definition for a binary tree node.
@@ -62,19 +61,19 @@ Follow up: Recursive solution is trivial, could you do it iteratively?
  * @param {TreeNode} root
  * @return {number[]}
  */
- var inorderTraversal = function (root, list = []) {
+var inorderTraversal = function (root, list = []) {
+	if (!root) return []
 
-    if (!root) return [];
-    
-    inorderTraversal(root.left, list);
-    list.push(root.val)
-    inorderTraversal(root.right, list);
-    
-    return list
-};
+	inorderTraversal(root.left, list)
+	list.push(root.val)
+	inorderTraversal(root.right, list)
 
+	return list
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
@@ -105,7 +104,9 @@ class Solution:
         return res
 
 ```
+
 ### C++
+
 ```cpp
 /**
  * Definition for a binary tree node.
@@ -155,7 +156,9 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
     public List<Integer> inorderTraversal(TreeNode root) {
@@ -188,12 +191,10 @@ class Solution {
     //     if(n == null) {
     //         return;
     //     }
-        
+
     //     dfs(n.left, res);
     //     res.add(n.val);
     //     dfs(n.right, res);
     // }
 }
 ```
-
-

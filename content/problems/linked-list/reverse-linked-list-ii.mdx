@@ -11,39 +11,44 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given the <code>head</code> of a singly linked list and two integers <code>left</code> and <code>right</code> where <code>left &lt;= right</code>, reverse the nodes of the list from position <code>left</code> to position <code>right</code>, and return *the reversed list*.
 
- 
+Given the <code>head</code> of a singly linked list and two integers <code>left</code> and <code>right</code> where <code>left &lt;= right</code>, reverse the nodes of the list from position <code>left</code> to position <code>right</code>, and return _the reversed list_.
+
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/02/19/rev2ex2.jpg" width={542} height={222} />
-<br /><pre className="overflow-x-auto">
-Input: head = [1,2,3,4,5], left = 2, right = 4
-Output: [1,4,3,2,5]
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/02/19/rev2ex2.jpg"
+	width={542}
+	height={222}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: head = [1,2,3,4,5], left = 2, right = 4 Output: [1,4,3,2,5]
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: head = [5], left = 1, right = 1
-Output: [5]
+<br />
+
+<pre className="overflow-x-auto">
+	Input: head = [5], left = 1, right = 1 Output: [5]
 </pre>
 
- 
 Constraints:
 
+    - The number of nodes in the list is <code>n</code>.
+    - <code>1 &lt;= n &lt;= 500</code>
+    - <code>-500 &lt;= Node.val &lt;= 500</code>
+    - <code>1 &lt;= left &lt;= right &lt;= n</code>
 
-	- The number of nodes in the list is <code>n</code>.
-	- <code>1 &lt;= n &lt;= 500</code>
-	- <code>-500 &lt;= Node.val &lt;= 500</code>
-	- <code>1 &lt;= left &lt;= right &lt;= n</code>
-
-
- 
 Follow up: Could you do it in one pass?
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * Definition for singly-linked list.
@@ -59,37 +64,38 @@ Follow up: Could you do it in one pass?
  * @return {ListNode}
  */
 var reverseBetween = function (head, left, right) {
-    if (!head || !head.next || left === right) {
-        return head;
-    }
-    let idx = 1;
-    let prevLower = null;
-    let curLower = head;
-    while (curLower && idx < left) {
-        prevLower = curLower;
-        curLower = curLower.next;
-        idx++;
-    }
-    let storedPrevLower = prevLower;
-    let storedCurLower = curLower;
-    let prevPtr = null;
-    let tmpPtr = null;
-    while (curLower && idx <= right) {
-        tmpPtr = curLower.next;
-        curLower.next = prevPtr;
-        prevPtr = curLower;
-        curLower = tmpPtr;
-        idx++;
-    }
-    if (storedPrevLower) {
-        storedPrevLower.next = prevPtr;
-    }
-    storedCurLower.next = curLower;
-    return storedPrevLower ? head : prevPtr;
-};
-
+	if (!head || !head.next || left === right) {
+		return head
+	}
+	let idx = 1
+	let prevLower = null
+	let curLower = head
+	while (curLower && idx < left) {
+		prevLower = curLower
+		curLower = curLower.next
+		idx++
+	}
+	let storedPrevLower = prevLower
+	let storedCurLower = curLower
+	let prevPtr = null
+	let tmpPtr = null
+	while (curLower && idx <= right) {
+		tmpPtr = curLower.next
+		curLower.next = prevPtr
+		prevPtr = curLower
+		curLower = tmpPtr
+		idx++
+	}
+	if (storedPrevLower) {
+		storedPrevLower.next = prevPtr
+	}
+	storedCurLower.next = curLower
+	return storedPrevLower ? head : prevPtr
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def reverseBetween(
@@ -116,11 +122,13 @@ class Solution:
         return dummy.next
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given the head of a singly linked list and two integers left and right where left <= right, reverse the nodes of the list from position left to position right, and return the reversed list.
-    
+
     Time complexity: O(n)
     Space complexity: O(1)
 */
@@ -153,7 +161,9 @@ public:
     }
 };
 ```
+
 ### Java
+
 ```java
 /**
  * Definition for singly-linked list.
@@ -218,5 +228,3 @@ class Solution {
 }
 
 ```
-
-

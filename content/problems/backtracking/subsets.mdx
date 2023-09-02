@@ -11,38 +11,35 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given an integer array <code>nums</code> of unique elements, return *all possible* <span data-keyword="subset">*subsets*</span> *(the power set)*.
+
+Given an integer array <code>nums</code> of unique elements, return _all possible_ <span data-keyword="subset">_subsets_</span> _(the power set)_.
 
 The solution set must not contain duplicate subsets. Return the solution in any order.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [1,2,3]
-Output: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [1,2,3] Output: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [0]
-Output: [[],[0]]
-</pre>
+<br />
 
- 
+<pre className="overflow-x-auto">Input: nums = [0] Output: [[],[0]]</pre>
+
 Constraints:
 
-
-	- <code>1 &lt;= nums.length &lt;= 10</code>
-	- <code>-10 &lt;= nums[i] &lt;= 10</code>
-	- All the numbers of <code>nums</code> are unique.
-
-
+    - <code>1 &lt;= nums.length &lt;= 10</code>
+    - <code>-10 &lt;= nums[i] &lt;= 10</code>
+    - All the numbers of <code>nums</code> are unique.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/subsets/
@@ -50,26 +47,26 @@ Constraints:
  * @param {number[]} nums
  * @return {number[][]}
  */
- var subsets = (nums) => {
-    nums.sort((a, b) => a -b);
+var subsets = (nums) => {
+	nums.sort((a, b) => a - b)
 
-    return dfs(nums)
+	return dfs(nums)
 }
 
 var dfs = (nums, level = 0, set = [], subset = []) => {
-    subset.push(set.slice());
+	subset.push(set.slice())
 
-    for (let i = level; i < nums.length; i++){
-        backTrack(nums, i, set, subset);
-    }
+	for (let i = level; i < nums.length; i++) {
+		backTrack(nums, i, set, subset)
+	}
 
-    return subset
+	return subset
 }
 
 const backTrack = (nums, i, set, subset) => {
-    set.push(nums[i]);
-        dfs(nums, (i + 1), set, subset);
-    set.pop();
+	set.push(nums[i])
+	dfs(nums, i + 1, set, subset)
+	set.pop()
 }
 
 /**
@@ -78,28 +75,29 @@ const backTrack = (nums, i, set, subset) => {
  * @param {number[]} nums
  * @return {number[][]}
  */
- var subsets = (nums) => {
-    nums.sort((a, b) => a -b);
+var subsets = (nums) => {
+	nums.sort((a, b) => a - b)
 
-    return bfs(nums)
+	return bfs(nums)
 }
 
 const bfs = (nums, subsets = [[]]) => {
-    for (const num of nums) {
-        const levels = subsets.length
+	for (const num of nums) {
+		const levels = subsets.length
 
-        for (let level = 0; level < levels; level++) {
-            const nextLevel = [ ...subsets[level], num ]
+		for (let level = 0; level < levels; level++) {
+			const nextLevel = [...subsets[level], num]
 
-            subsets.push(nextLevel)
-        }
-    }
+			subsets.push(nextLevel)
+		}
+	}
 
-    return subsets
+	return subsets
 }
-
 ```
+
 ### Python
+
 ```python
 class Solution:
     def subsets(self, nums: List[int]) -> List[List[int]]:
@@ -122,7 +120,9 @@ class Solution:
         return res
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given an integer array of unique elements, return all possible subsets (the power set)
@@ -154,10 +154,12 @@ private:
 };
 
 ```
+
 ### Java
+
 ```java
-// The idea is to have two conditions: 
-// One in which we will take the element into consideration, 
+// The idea is to have two conditions:
+// One in which we will take the element into consideration,
 // Second in which we won't take the element into consideration.
 class Solution {
 
@@ -188,5 +190,3 @@ class Solution {
 }
 
 ```
-
-

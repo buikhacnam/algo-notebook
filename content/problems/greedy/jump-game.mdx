@@ -11,55 +11,55 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 You are given an integer array <code>nums</code>. You are initially positioned at the array&#39;s first index, and each element in the array represents your maximum jump length at that position.
 
-Return <code>true</code>* if you can reach the last index, or *<code>false</code>* otherwise*.
+Return <code>true</code>_ if you can reach the last index, or _<code>false</code>_ otherwise_.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [2,3,1,1,4]
-Output: true
-Explanation: Jump 1 step from index 0 to 1, then 3 steps to the last index.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [2,3,1,1,4] Output: true Explanation: Jump 1 step from index 0
+	to 1, then 3 steps to the last index.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [3,2,1,0,4]
-Output: false
-Explanation: You will always arrive at index 3 no matter what. Its maximum jump length is 0, which makes it impossible to reach the last index.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [3,2,1,0,4] Output: false Explanation: You will always arrive at
+	index 3 no matter what. Its maximum jump length is 0, which makes it
+	impossible to reach the last index.
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= nums.length &lt;= 10<sup>4</sup></code>
-	- <code>0 &lt;= nums[i] &lt;= 10<sup>5</sup></code>
-
-
+    - <code>1 &lt;= nums.length &lt;= 10<sup>4</sup></code>
+    - <code>0 &lt;= nums[i] &lt;= 10<sup>5</sup></code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * Time O(2^N) | Space O(N)
  * @param {number[]} nums
  * @return {boolean}
  */
- var canJump = (nums, index = 0) => {
-    const isBaseCase = index === nums.length - 1;
-    if (isBaseCase) return true;
+var canJump = (nums, index = 0) => {
+	const isBaseCase = index === nums.length - 1
+	if (isBaseCase) return true
 
-    const furthestJump = Math.min(index + nums[index], (nums.length - 1));
-    for (let nextIndex = (index + 1); nextIndex <= furthestJump; nextIndex++) {
-        if (canJump(nums, nextIndex)) return true;
-    }
+	const furthestJump = Math.min(index + nums[index], nums.length - 1)
+	for (let nextIndex = index + 1; nextIndex <= furthestJump; nextIndex++) {
+		if (canJump(nums, nextIndex)) return true
+	}
 
-    return false;
+	return false
 }
 
 /**
@@ -68,25 +68,25 @@ Constraints:
  * @return {boolean}
  */
 var canJump = (nums) => {
-    const memo = new Array(nums.length).fill(0);
-    memo[memo.length - 1] = 1;
-    
-    return canJumpFromIndex(nums, memo);
+	const memo = new Array(nums.length).fill(0)
+	memo[memo.length - 1] = 1
+
+	return canJumpFromIndex(nums, memo)
 }
 
 const canJumpFromIndex = (nums, memo, index = 0) => {
-    if (memo[index] !== 0) return memo[index] === 1;
+	if (memo[index] !== 0) return memo[index] === 1
 
-    const furthestJump = Math.min(index + nums[index], nums.length - 1);
-    for (let nextIndex = (index + 1); nextIndex <= furthestJump; nextIndex++) {
-        if (!canJumpFromIndex(nums, memo, nextIndex)) continue
+	const furthestJump = Math.min(index + nums[index], nums.length - 1)
+	for (let nextIndex = index + 1; nextIndex <= furthestJump; nextIndex++) {
+		if (!canJumpFromIndex(nums, memo, nextIndex)) continue
 
-        memo[index] = 1;
-        return true;
-    }
+		memo[index] = 1
+		return true
+	}
 
-    memo[index] = -1;
-    return false;
+	memo[index] = -1
+	return false
 }
 
 /**
@@ -95,18 +95,21 @@ const canJumpFromIndex = (nums, memo, index = 0) => {
  * @return {boolean}
  */
 var canJump = (nums) => {
-    const memo = new Array(nums.length).fill(0)
-    memo[memo.length - 1] = 1;
+	const memo = new Array(nums.length).fill(0)
+	memo[memo.length - 1] = 1
 
-    for (let i = (nums.length - 2); 0 <= i; i--) {
-        const furthestJump = Math.min(i + nums[i], nums.length - 1);
-        for (let j = (i + 1); j <= furthestJump; j++) {
-            const isGood = memo[j] === 1
-            if (isGood) { memo[i] = 1; break; }
-        }
-    }
+	for (let i = nums.length - 2; 0 <= i; i--) {
+		const furthestJump = Math.min(i + nums[i], nums.length - 1)
+		for (let j = i + 1; j <= furthestJump; j++) {
+			const isGood = memo[j] === 1
+			if (isGood) {
+				memo[i] = 1
+				break
+			}
+		}
+	}
 
-    return memo[0] === 1;
+	return memo[0] === 1
 }
 
 /**
@@ -115,18 +118,18 @@ var canJump = (nums) => {
  * @return {boolean}
  */
 var canJump = (nums, max = 0, index = 0) => {
-    while (index < nums.length) {
-        const num = nums[index]
-        const jumps = num + index
-        
-        const canNotReachEnd = max < index
-        if (canNotReachEnd) return false
-        
-        max = Math.max(max, jumps)
-        index++
-    }
+	while (index < nums.length) {
+		const num = nums[index]
+		const jumps = num + index
 
-    return true
+		const canNotReachEnd = max < index
+		if (canNotReachEnd) return false
+
+		max = Math.max(max, jumps)
+		index++
+	}
+
+	return true
 }
 
 /**
@@ -135,17 +138,17 @@ var canJump = (nums, max = 0, index = 0) => {
  * @return {boolean}
  */
 var canJump = (nums, right = nums.length - 1) => {
-    for (let i = right; 0 <= i; i--) {
-        const isJumpable = right <= (i + nums[i])
-        if (isJumpable) right = i;
-    }
+	for (let i = right; 0 <= i; i--) {
+		const isJumpable = right <= i + nums[i]
+		if (isJumpable) right = i
+	}
 
-    return right === 0;
+	return right === 0
 }
-
-
 ```
+
 ### Python
+
 ```python
 class Solution:
     def canJump(self, nums: List[int]) -> bool:
@@ -157,7 +160,9 @@ class Solution:
         return goal == 0
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given int array, return true if can reach last index
@@ -174,7 +179,7 @@ public:
     bool canJump(vector<int>& nums) {
         int n = nums.size();
         int reachable = 0;
-        
+
         for (int i = 0; i < n; i++) {
             if (i > reachable) {
                 return false;
@@ -184,13 +189,15 @@ public:
                 break;
             }
         }
-        
+
         return true;
     }
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -206,5 +213,3 @@ class Solution {
 }
 
 ```
-
-

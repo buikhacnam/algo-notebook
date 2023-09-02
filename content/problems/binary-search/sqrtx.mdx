@@ -11,70 +11,67 @@ difficulty: Easy
 </Callout>
 
 ## Description
-Given a non-negative integer <code>x</code>, return *the square root of *<code>x</code>* rounded down to the nearest integer*. The returned integer should be non-negative as well.
+
+Given a non-negative integer <code>x</code>, return _the square root of _<code>x</code>_ rounded down to the nearest integer_. The returned integer should be non-negative as well.
 
 You must not use any built-in exponent function or operator.
 
+    - For example, do not use <code>pow(x, 0.5)</code> in c++ or <code>x ** 0.5</code> in python.
 
-	- For example, do not use <code>pow(x, 0.5)</code> in c++ or <code>x ** 0.5</code> in python.
-
-
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: x = 4
-Output: 2
-Explanation: The square root of 4 is 2, so we return 2.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: x = 4 Output: 2 Explanation: The square root of 4 is 2, so we return 2.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: x = 8
-Output: 2
-Explanation: The square root of 8 is 2.82842..., and since we round it down to the nearest integer, 2 is returned.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: x = 8 Output: 2 Explanation: The square root of 8 is 2.82842..., and
+	since we round it down to the nearest integer, 2 is returned.
 </pre>
 
- 
 Constraints:
 
-
-	- <code>0 &lt;= x &lt;= 2<sup>31</sup> - 1</code>
-
-
+    - <code>0 &lt;= x &lt;= 2<sup>31</sup> - 1</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
- * Binary Search 
+ * Binary Search
  * https://leetcode.com/problems/sqrtx/
- * 
+ *
  * Time O(log(n)) | Space O(1)
  * @param {number} x
  * @return {number}
  */
-var mySqrt = function(x) {
-    let left = 1;
-    let right = x;
- 
-    while(left <= right) {
-        const mid = (left + right) >> 1;
-        if(mid * mid <= x && (mid+1) * (mid+1) > x) return mid;
-        if(mid * mid < x) {
-            left = mid + 1;
-        } else {
-            right = mid -1;
-        }
-    } 
- 
-    return 0;
- };
+var mySqrt = function (x) {
+	let left = 1
+	let right = x
 
+	while (left <= right) {
+		const mid = (left + right) >> 1
+		if (mid * mid <= x && (mid + 1) * (mid + 1) > x) return mid
+		if (mid * mid < x) {
+			left = mid + 1
+		} else {
+			right = mid - 1
+		}
+	}
+
+	return 0
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def mySqrt(self, x: int) -> int:
@@ -90,7 +87,9 @@ class Solution:
         return r
 
 ```
+
 ### C++
+
 ```cpp
 class Solution {
 public:
@@ -115,11 +114,13 @@ public:
     }
 };
 ```
+
 ### Java
+
 ```java
 class Solution {
     public int mySqrt(int x) {
-        
+
         // Linear search way -> loop through for all nums till x
         // then see if their square <= x
 
@@ -148,5 +149,3 @@ class Solution {
 }
 
 ```
-
-

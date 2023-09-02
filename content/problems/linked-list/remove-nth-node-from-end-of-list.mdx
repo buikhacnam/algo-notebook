@@ -11,47 +11,48 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 Given the <code>head</code> of a linked list, remove the <code>n<sup>th</sup></code> node from the end of the list and return its head.
 
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2020/10/03/remove_ex1.jpg" width={542} height={222} />
-<br /><pre className="overflow-x-auto">
-Input: head = [1,2,3,4,5], n = 2
-Output: [1,2,3,5]
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/10/03/remove_ex1.jpg"
+	width={542}
+	height={222}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: head = [1,2,3,4,5], n = 2 Output: [1,2,3,5]
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: head = [1], n = 1
-Output: []
-</pre>
+<br />
+
+<pre className="overflow-x-auto">Input: head = [1], n = 1 Output: []</pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: head = [1,2], n = 1
-Output: [1]
-</pre>
+<br />
 
- 
+<pre className="overflow-x-auto">Input: head = [1,2], n = 1 Output: [1]</pre>
+
 Constraints:
 
+    - The number of nodes in the list is <code>sz</code>.
+    - <code>1 &lt;= sz &lt;= 30</code>
+    - <code>0 &lt;= Node.val &lt;= 100</code>
+    - <code>1 &lt;= n &lt;= sz</code>
 
-	- The number of nodes in the list is <code>sz</code>.
-	- <code>1 &lt;= sz &lt;= 30</code>
-	- <code>0 &lt;= Node.val &lt;= 100</code>
-	- <code>1 &lt;= n &lt;= sz</code>
-
-
- 
 Follow up: Could you do this in one pass?
-
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/remove-nth-node-from-end-of-list/
@@ -60,34 +61,36 @@ Follow up: Could you do this in one pass?
  * @param {number} n
  * @return {ListNode}
  */
- var removeNthFromEnd = function(head, n) {
-    const sentinel = new ListNode();
+var removeNthFromEnd = function (head, n) {
+	const sentinel = new ListNode()
 
-    sentinel.next = head;
+	sentinel.next = head
 
-    const fast = moveFast(sentinel, n);   /* Time O(N) */
-    const slow = moveSlow(sentinel, fast);/* Time O(N) */
+	const fast = moveFast(sentinel, n) /* Time O(N) */
+	const slow = moveSlow(sentinel, fast) /* Time O(N) */
 
-    slow.next = slow.next.next || null;
+	slow.next = slow.next.next || null
 
-    return sentinel.next;
-};
+	return sentinel.next
+}
 
 const moveFast = (fast, n) => {
-    for (let i = 1; i <= (n + 1); i++) {/* Time O(N) */
-        fast = fast.next;
-    }
+	for (let i = 1; i <= n + 1; i++) {
+		/* Time O(N) */
+		fast = fast.next
+	}
 
-    return fast;
+	return fast
 }
 
 const moveSlow = (slow, fast) => {
-    while (fast) {                     /* Time O(N) */
-        slow = slow.next;
-        fast = fast.next;
-    }
+	while (fast) {
+		/* Time O(N) */
+		slow = slow.next
+		fast = fast.next
+	}
 
-    return slow;
+	return slow
 }
 
 /**
@@ -97,39 +100,42 @@ const moveSlow = (slow, fast) => {
  * @param {number} n
  * @return {ListNode}
  */
- var removeNthFromEnd = function(head, n) {
-    const length = getNthFromEnd(head, n);/* Time O(N) */
+var removeNthFromEnd = function (head, n) {
+	const length = getNthFromEnd(head, n) /* Time O(N) */
 
-    const isHead = length < 0;
-    if (isHead) return head.next;
+	const isHead = length < 0
+	if (isHead) return head.next
 
-    const curr = moveNode(head, length);  /* Time O(N) */
+	const curr = moveNode(head, length) /* Time O(N) */
 
-    curr.next = curr.next.next;
+	curr.next = curr.next.next
 
-    return head
-};
+	return head
+}
 
 const getNthFromEnd = (curr, n, length = 0) => {
-    while (curr) {                       /* Time O(N) */
-        curr = curr.next;
-        length++;
-    }
+	while (curr) {
+		/* Time O(N) */
+		curr = curr.next
+		length++
+	}
 
-    return (length - n) - 1;
+	return length - n - 1
 }
 
 const moveNode = (curr, length) => {
-    while (length) {                    /* Time O(N) */
-        curr = curr.next;
-        length--;
-    }
+	while (length) {
+		/* Time O(N) */
+		curr = curr.next
+		length--
+	}
 
-    return curr;
+	return curr
 }
-
 ```
+
 ### Python
+
 ```python
 class Solution:
     def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
@@ -150,7 +156,9 @@ class Solution:
         return dummy.next
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given head of a linked list, remove nth node from end of list
@@ -178,31 +186,33 @@ public:
         if (head->next == NULL) {
             return NULL;
         }
-        
+
         ListNode* slow = head;
         ListNode* fast = head;
-        
+
         while (n > 0) {
             fast = fast->next;
             n--;
         }
-        
+
         if (fast == NULL) {
             return head->next;
         }
-        
+
         while (fast->next != NULL) {
             slow = slow->next;
             fast = fast->next;
         }
-        
+
         slow->next = slow->next->next;
         return head;
     }
 };
 
 ```
+
 ### Java
+
 ```java
 /**
  * Definition for singly-linked list.
@@ -246,5 +256,3 @@ class Solution {
 }
 
 ```
-
-

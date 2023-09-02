@@ -11,38 +11,37 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given an unsorted array of integers <code>nums</code>, return *the length of the longest consecutive elements sequence.*
+
+Given an unsorted array of integers <code>nums</code>, return _the length of the longest consecutive elements sequence._
 
 You must write an algorithm that runs in <code>O(n)</code> time.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [100,4,200,1,3,2]
-Output: 4
-Explanation: The longest consecutive elements sequence is <code>[1, 2, 3, 4]</code>. Therefore its length is 4.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [100,4,200,1,3,2] Output: 4 Explanation: The longest consecutive
+	elements sequence is <code>[1, 2, 3, 4]</code>. Therefore its length is 4.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [0,3,7,2,5,8,4,6,0,1]
-Output: 9
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [0,3,7,2,5,8,4,6,0,1] Output: 9
 </pre>
 
- 
 Constraints:
 
-
-	- <code>0 &lt;= nums.length &lt;= 10<sup>5</sup></code>
-	- <code>-10<sup>9</sup> &lt;= nums[i] &lt;= 10<sup>9</sup></code>
-
-
+    - <code>0 &lt;= nums.length &lt;= 10<sup>5</sup></code>
+    - <code>-10<sup>9</sup> &lt;= nums[i] &lt;= 10<sup>9</sup></code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * Brute Force
@@ -52,28 +51,31 @@ Constraints:
  * @param {number[]} nums
  * @return {number}
  */
- var longestConsecutive = (nums, maxScore = 0) => {
-    for (const num of nums) {/* Time O(N) */
-        let [ currNum, score ] = [ num, 1 ];
+var longestConsecutive = (nums, maxScore = 0) => {
+	for (const num of nums) {
+		/* Time O(N) */
+		let [currNum, score] = [num, 1]
 
-        while (isStreak(nums, (currNum + 1))) {/* Time O(N * N) */
-            currNum++;
-            score++;
-        }
+		while (isStreak(nums, currNum + 1)) {
+			/* Time O(N * N) */
+			currNum++
+			score++
+		}
 
-        maxScore = Math.max(maxScore, score);
-    }
+		maxScore = Math.max(maxScore, score)
+	}
 
-    return maxScore;
+	return maxScore
 }
 
 const isStreak = (nums, num) => {
-    for (let i = 0; i < nums.length; i++) {/* Time O(N) */
-        const isEqual = nums[i] === num
-        if (isEqual) return true;
-    }
+	for (let i = 0; i < nums.length; i++) {
+		/* Time O(N) */
+		const isEqual = nums[i] === num
+		if (isEqual) return true
+	}
 
-    return false;
+	return false
 }
 
 /**
@@ -84,29 +86,33 @@ const isStreak = (nums, num) => {
  * @param {number[]} nums
  * @return {number}
  */
- var longestConsecutive = (nums) => {
-    if (!nums.length) return 0;
+var longestConsecutive = (nums) => {
+	if (!nums.length) return 0
 
-    nums.sort((a, b) => a - b);/* Time O(N * log(N)) | Space O(1 || log(N)) */
+	nums.sort((a, b) => a - b) /* Time O(N * log(N)) | Space O(1 || log(N)) */
 
-    return search(nums);       /* Time O(N) */
+	return search(nums) /* Time O(N) */
 }
 
 const search = (nums) => {
-    let [ maxScore, score ] = [ 1, 1 ];
+	let [maxScore, score] = [1, 1]
 
-    for (let i = 1; i < nums.length; i++) {/* Time O(N) */
-        const isPrevDuplicate = nums[i - 1] === nums[i]
-        if (isPrevDuplicate) continue
+	for (let i = 1; i < nums.length; i++) {
+		/* Time O(N) */
+		const isPrevDuplicate = nums[i - 1] === nums[i]
+		if (isPrevDuplicate) continue
 
-        const isStreak = nums[i] === ((nums[i - 1]) + 1)
-        if (isStreak) { score++; continue; }
+		const isStreak = nums[i] === nums[i - 1] + 1
+		if (isStreak) {
+			score++
+			continue
+		}
 
-        maxScore = Math.max(maxScore, score);
-        score = 1;
-    }
+		maxScore = Math.max(maxScore, score)
+		score = 1
+	}
 
-    return Math.max(maxScore, score);
+	return Math.max(maxScore, score)
 }
 
 /**
@@ -117,29 +123,33 @@ const search = (nums) => {
  * @param {number[]} nums
  * @return {number}
  */
- var longestConsecutive = (nums, maxScore = 0) => {
-    const numSet = new Set(nums);         /* Time O(N) | Space O(N) */
+var longestConsecutive = (nums, maxScore = 0) => {
+	const numSet = new Set(nums) /* Time O(N) | Space O(N) */
 
-    for (const num of [ ...numSet ]) {    /* Time O(N) */
-        const prevNum = num - 1;
+	for (const num of [...numSet]) {
+		/* Time O(N) */
+		const prevNum = num - 1
 
-        if (numSet.has(prevNum)) continue;/* Time O(N) */
+		if (numSet.has(prevNum)) continue /* Time O(N) */
 
-        let [ currNum, score ] = [ num, 1 ];
+		let [currNum, score] = [num, 1]
 
-        const isStreak = () => numSet.has(currNum + 1)
-        while (isStreak()) {              /* Time O(N) */
-            currNum++;
-            score++;
-        }
+		const isStreak = () => numSet.has(currNum + 1)
+		while (isStreak()) {
+			/* Time O(N) */
+			currNum++
+			score++
+		}
 
-        maxScore = Math.max(maxScore, score);
-    }
+		maxScore = Math.max(maxScore, score)
+	}
 
-    return maxScore;
+	return maxScore
 }
 ```
+
 ### Python
+
 ```python
 class Solution:
     def longestConsecutive(self, nums: List[int]) -> int:
@@ -156,7 +166,9 @@ class Solution:
         return longest
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given unsorted array, return length of longest consecutive sequence
@@ -177,11 +189,11 @@ public:
         for(auto &n: s){
             //if this is the start of the sequence
             if(!s.count(n - 1)){
-                int length = 1; 
+                int length = 1;
                 while(s.count(n + length))
                     ++length;
                 longest = max(longest, length);
-            } 
+            }
 
         }
         return longest;
@@ -189,7 +201,9 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
     public int longestConsecutive(int[] nums) {
@@ -206,7 +220,7 @@ class Solution {
                     count++;
                 }
                 longest = Math.max(longest, count);
-                
+
            }
            if(longest > nums.length/2) break;
 
@@ -216,5 +230,3 @@ class Solution {
 }
 
 ```
-
-

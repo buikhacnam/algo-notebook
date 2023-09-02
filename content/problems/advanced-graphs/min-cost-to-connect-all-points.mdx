@@ -11,44 +11,53 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 You are given an array <code>points</code> representing integer coordinates of some points on a 2D-plane, where <code>points[i] = [x<sub>i</sub>, y<sub>i</sub>]</code>.
 
 The cost of connecting two points <code>[x<sub>i</sub>, y<sub>i</sub>]</code> and <code>[x<sub>j</sub>, y<sub>j</sub>]</code> is the manhattan distance between them: <code>|x<sub>i</sub> - x<sub>j</sub>| + |y<sub>i</sub> - y<sub>j</sub>|</code>, where <code>|val|</code> denotes the absolute value of <code>val</code>.
 
-Return *the minimum cost to make all points connected.* All points are connected if there is exactly one simple path between any two points.
+Return _the minimum cost to make all points connected._ All points are connected if there is exactly one simple path between any two points.
 
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2020/08/26/d.png" width={214} height={268} />
-<br /><pre className="overflow-x-auto">
-Input: points = [[0,0],[2,2],[3,10],[5,2],[7,0]]
-Output: 20
-Explanation: 
-<Image alt="" src="https://assets.leetcode.com/uploads/2020/08/26/c.png" width={214} height={268} />
-We can connect the points as shown above to get the minimum cost of 20.
-Notice that there is a unique path between every pair of points.
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/08/26/d.png"
+	width={214}
+	height={268}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: points = [[0,0],[2,2],[3,10],[5,2],[7,0]] Output: 20 Explanation:
+	<Image
+		alt=""
+		src="https://assets.leetcode.com/uploads/2020/08/26/c.png"
+		width={214}
+		height={268}
+	/>
+	We can connect the points as shown above to get the minimum cost of 20. Notice
+	that there is a unique path between every pair of points.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: points = [[3,12],[-2,5],[-4,1]]
-Output: 18
+<br />
+
+<pre className="overflow-x-auto">
+	Input: points = [[3,12],[-2,5],[-4,1]] Output: 18
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= points.length &lt;= 1000</code>
-	- <code>-10<sup>6</sup> &lt;= x<sub>i</sub>, y<sub>i</sub> &lt;= 10<sup>6</sup></code>
-	- All pairs <code>(x<sub>i</sub>, y<sub>i</sub>)</code> are distinct.
-
-
+    - <code>1 &lt;= points.length &lt;= 1000</code>
+    - <code>-10<sup>6</sup> &lt;= x<sub>i</sub>, y<sub>i</sub> &lt;= 10<sup>6</sup></code>
+    - All pairs <code>(x<sub>i</sub>, y<sub>i</sub>)</code> are distinct.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * Prim's algorithm
@@ -57,71 +66,73 @@ Constraints:
  * @return {number}
  */
 const minCostConnectPoints = (points) => {
-    const isBaseCase = ((points.length === 0) || (1000 <= points.length));
-    if (isBaseCase) return 0;
+	const isBaseCase = points.length === 0 || 1000 <= points.length
+	if (isBaseCase) return 0
 
-    const { graph, seen, minHeap } = buildGraph(points);
+	const { graph, seen, minHeap } = buildGraph(points)
 
-    return search(points, graph, seen, minHeap);
-};
+	return search(points, graph, seen, minHeap)
+}
 
 const initGraph = (points) => ({
-    graph: new Array(points.length).fill().map(() => []),
-    seen: new Array(points.length).fill(false),
-    minHeap: new MinPriorityQueue()
+	graph: new Array(points.length).fill().map(() => []),
+	seen: new Array(points.length).fill(false),
+	minHeap: new MinPriorityQueue(),
 })
 
 const buildGraph = (points) => {
-    const { graph, seen, minHeap } = initGraph(points);
+	const { graph, seen, minHeap } = initGraph(points)
 
-    for (let src = 0; src < (points.length - 1); src++) {
-        for (let dst = (src + 1); (dst < points.length); dst++) {
-            const cost = getCost(points, src, dst);
+	for (let src = 0; src < points.length - 1; src++) {
+		for (let dst = src + 1; dst < points.length; dst++) {
+			const cost = getCost(points, src, dst)
 
-            graph[src].push([ dst, cost ]);
-            graph[dst].push([ src, cost ]);
-        }
-    }
+			graph[src].push([dst, cost])
+			graph[dst].push([src, cost])
+		}
+	}
 
-    const [ src, cost, priority ] = [ 0, 0, 0 ];
-    const node = [ src, cost ];
+	const [src, cost, priority] = [0, 0, 0]
+	const node = [src, cost]
 
-    minHeap.enqueue(node, priority);
+	minHeap.enqueue(node, priority)
 
-    return { graph, seen, minHeap };
+	return { graph, seen, minHeap }
 }
 
 const getCost = (points, src, dst) => {
-    const [ [ x1, y1 ], [ x2, y2 ] ] = [ points[src], points[dst] ];
+	const [[x1, y1], [x2, y2]] = [points[src], points[dst]]
 
-    return (Math.abs(x1 - x2) + Math.abs(y1 - y2));
+	return Math.abs(x1 - x2) + Math.abs(y1 - y2)
 }
 
 const search = (points, graph, seen, minHeap, nodeCount = 0, cost = 0) => {
-    while (nodeCount < points.length) {
-        let [ src, srcCost ] = minHeap.dequeue().element;
+	while (nodeCount < points.length) {
+		let [src, srcCost] = minHeap.dequeue().element
 
-        if (seen[src]) continue;
-        seen[src] = true;
+		if (seen[src]) continue
+		seen[src] = true
 
-        cost += srcCost;
-        nodeCount += 1;
+		cost += srcCost
+		nodeCount += 1
 
-        checkNeighbors(graph, src, seen, minHeap);
-    }
+		checkNeighbors(graph, src, seen, minHeap)
+	}
 
-    return cost;
+	return cost
 }
 
 const checkNeighbors = (graph, src, seen, minHeap) => {
-    for (const [ dst, dstCost ] of graph[src]) {
-        if (seen[dst]) continue;
+	for (const [dst, dstCost] of graph[src]) {
+		if (seen[dst]) continue
 
-        minHeap.enqueue([ dst, dstCost ], dstCost);
-    }
+		minHeap.enqueue([dst, dstCost], dstCost)
+	}
 }
 ```
+
 ### Python
+
 ```python
 class Solution:
     def minCostConnectPoints(self, points: List[List[int]]) -> int:
@@ -151,7 +162,9 @@ class Solution:
         return res
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given array of points, return min cost to connect all points
@@ -168,19 +181,19 @@ class Solution {
 public:
     int minCostConnectPoints(vector<vector<int>>& points) {
         int n = points.size();
-        
+
         int edgesUsed = 0;
         // track visited nodes
         vector<bool> inMST(n);
         vector<int> minDist(n, INT_MAX);
         minDist[0] = 0;
-        
+
         int result = 0;
-        
+
         while (edgesUsed < n) {
             int currMinEdge = INT_MAX;
             int currNode = -1;
-            
+
             // greedily pick lowest cost node not in MST
             for (int i = 0; i < n; i++) {
                 if (!inMST[i] && currMinEdge > minDist[i]) {
@@ -188,28 +201,30 @@ public:
                     currNode = i;
                 }
             }
-            
+
             result += currMinEdge;
             edgesUsed++;
             inMST[currNode] = true;
-            
+
             // update adj nodes of curr node
             for (int i = 0; i < n; i++) {
                 int cost = abs(points[currNode][0] - points[i][0])
                     + abs(points[currNode][1] - points[i][1]);
-                
+
                 if (!inMST[i] && minDist[i] > cost) {
                     minDist[i] = cost;
                 }
             }
         }
-        
+
         return result;
     }
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -249,5 +264,3 @@ class Solution {
 }
 
 ```
-
-

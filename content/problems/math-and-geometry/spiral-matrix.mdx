@@ -11,37 +11,49 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given an <code>m x n</code> <code>matrix</code>, return *all elements of the* <code>matrix</code> *in spiral order*.
 
- 
+Given an <code>m x n</code> <code>matrix</code>, return _all elements of the_ <code>matrix</code> _in spiral order_.
+
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2020/11/13/spiral1.jpg" width={242} height={242} />
-<br /><pre className="overflow-x-auto">
-Input: matrix = [[1,2,3],[4,5,6],[7,8,9]]
-Output: [1,2,3,6,9,8,7,4,5]
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/11/13/spiral1.jpg"
+	width={242}
+	height={242}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: matrix = [[1,2,3],[4,5,6],[7,8,9]] Output: [1,2,3,6,9,8,7,4,5]
 </pre>
 
 Example 2:
-<Image alt="" src="https://assets.leetcode.com/uploads/2020/11/13/spiral.jpg" width={322} height={242} />
-<br /><pre className="overflow-x-auto">
-Input: matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
-Output: [1,2,3,4,8,12,11,10,9,5,6,7]
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/11/13/spiral.jpg"
+	width={322}
+	height={242}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]] Output:
+	[1,2,3,4,8,12,11,10,9,5,6,7]
 </pre>
 
- 
 Constraints:
 
-
-	- <code>m == matrix.length</code>
-	- <code>n == matrix[i].length</code>
-	- <code>1 &lt;= m, n &lt;= 10</code>
-	- <code>-100 &lt;= matrix[i][j] &lt;= 100</code>
-
-
+    - <code>m == matrix.length</code>
+    - <code>n == matrix[i].length</code>
+    - <code>1 &lt;= m, n &lt;= 10</code>
+    - <code>-100 &lt;= matrix[i][j] &lt;= 100</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * Matrix - Spiral Traversal Pre Update
@@ -51,64 +63,89 @@ Constraints:
  * @param {number[][]} matrix
  * @return {number[]}
  */
- var spiralOrder = function(matrix, order = []) {
-    const [ rows, cols ] = [ (matrix.length - 1), (matrix[0].length - 1) ];
-    let [ top, bot, left, right ] = [ 0, rows, 0, cols ];
+var spiralOrder = function (matrix, order = []) {
+	const [rows, cols] = [matrix.length - 1, matrix[0].length - 1]
+	let [top, bot, left, right] = [0, rows, 0, cols]
 
-    const isInBounds = () => ((left <= right) && (top <= bot));
-    while (isInBounds()) {/* Time O(ROWS * COLS) */
-        addTop(
-            matrix, top, bot, left, right, order
-        );                /* Time O(COLS)        | Ignore Auxilary Spsace O(ROWS * COLS) */
-        top++;
+	const isInBounds = () => left <= right && top <= bot
+	while (isInBounds()) {
+		/* Time O(ROWS * COLS) */
+		addTop(
+			matrix,
+			top,
+			bot,
+			left,
+			right,
+			order,
+		) /* Time O(COLS)        | Ignore Auxilary Spsace O(ROWS * COLS) */
+		top++
 
-        addRight(
-            matrix, top, bot, left, right, order
-        );                /* Time O(ROWS)        | Ignore Auxilary Spsace O(ROWS * COLS) */
-        right--;
+		addRight(
+			matrix,
+			top,
+			bot,
+			left,
+			right,
+			order,
+		) /* Time O(ROWS)        | Ignore Auxilary Spsace O(ROWS * COLS) */
+		right--
 
-        const hasRow = (top <= bot);
-        if (hasRow) {
-            addBot(
-                matrix, top, bot, left, right, order
-            );           /* Time O(COLS)         | Ignore Auxilary Spsace O(ROWS * COLS) */
-            bot--;
-        }
+		const hasRow = top <= bot
+		if (hasRow) {
+			addBot(
+				matrix,
+				top,
+				bot,
+				left,
+				right,
+				order,
+			) /* Time O(COLS)         | Ignore Auxilary Spsace O(ROWS * COLS) */
+			bot--
+		}
 
-        const hasCol = (left <= right);
-        if (hasCol) {
-            addLeft(
-                matrix, top, bot, left, right, order
-            );            /* Time O(ROWS)        | Ignore Auxilary Spsace O(ROWS * COLS) */
-            left++;
-        }
-    }
-    
-    return order;
-};
+		const hasCol = left <= right
+		if (hasCol) {
+			addLeft(
+				matrix,
+				top,
+				bot,
+				left,
+				right,
+				order,
+			) /* Time O(ROWS)        | Ignore Auxilary Spsace O(ROWS * COLS) */
+			left++
+		}
+	}
+
+	return order
+}
 
 var addTop = (matrix, top, bot, left, right, order) => {
-    for (let col = left; col <= right; col++) {/* Time O(COLS) */
-        order.push(matrix[top][col]);              /* Ignore Auxilary Spsace O(ROWS * COLS) */
-    }
+	for (let col = left; col <= right; col++) {
+		/* Time O(COLS) */
+		order.push(matrix[top][col]) /* Ignore Auxilary Spsace O(ROWS * COLS) */
+	}
 }
 
 var addRight = (matrix, top, bot, left, right, order) => {
-    for (let row = top; row <= bot; row++) {/* Time O(ROWS) */
-        order.push(matrix[row][right]);         /* Ignore Auxilary Spsace O(ROWS * COLS) */
-    }
+	for (let row = top; row <= bot; row++) {
+		/* Time O(ROWS) */
+		order.push(matrix[row][right]) /* Ignore Auxilary Spsace O(ROWS * COLS) */
+	}
 }
 
 var addBot = (matrix, top, bot, left, right, order) => {
-    for (let col = right; left <= col; col--) {/* Time O(COLS) */
-        order.push(matrix[bot][col]);              /* Ignore Auxilary Spsace O(ROWS * COLS) */
-    }
+	for (let col = right; left <= col; col--) {
+		/* Time O(COLS) */
+		order.push(matrix[bot][col]) /* Ignore Auxilary Spsace O(ROWS * COLS) */
+	}
 }
 
 var addLeft = (matrix, top, bot, left, right, order) => {
-    for (let row = bot; top <= row; row--) {/* Time O(ROWS) */
-        order.push(matrix[row][left]);          /* Ignore Auxilary Spsace O(ROWS * COLS) */
-    }
+	for (let row = bot; top <= row; row--) {
+		/* Time O(ROWS) */
+		order.push(matrix[row][left]) /* Ignore Auxilary Spsace O(ROWS * COLS) */
+	}
 }
 
 /**
@@ -120,57 +157,97 @@ var addLeft = (matrix, top, bot, left, right, order) => {
  * @return {number[]}
  */
 var spiralOrder = (matrix, order = []) => {
-    const [ rows, cols ] = [ matrix.length, matrix[0].length ];
-    const cells = (rows * cols);
-    let [ top, bot, left, right ] = [ 0, (rows - 1), 0, (cols - 1) ];
+	const [rows, cols] = [matrix.length, matrix[0].length]
+	const cells = rows * cols
+	let [top, bot, left, right] = [0, rows - 1, 0, cols - 1]
 
-    while (order.length < cells) {/* Time O(ROWS * COLS) */
-        traverse(
-            matrix, top, bot, left, right, order
-        );                        /* Time O(ROWS * COLS) | Ignore Auxilary Spsace O(ROWS * COLS) */
+	while (order.length < cells) {
+		/* Time O(ROWS * COLS) */
+		traverse(
+			matrix,
+			top,
+			bot,
+			left,
+			right,
+			order,
+		) /* Time O(ROWS * COLS) | Ignore Auxilary Spsace O(ROWS * COLS) */
 
-        top++; bot--;
-        left++; right--;
-    }
-    
-    return order;
+		top++
+		bot--
+		left++
+		right--
+	}
+
+	return order
 }
 
 var traverse = (matrix, top, bot, left, right, order) => {
-    addTop(matrix, top, bot, left, right, order);  /* Time O(COLS) | Ignore Auxilary Spsace O(ROWS * COLS) */
-    addRight(matrix, top, bot, left, right, order);/* Time O(ROWS) | Ignore Auxilary Spsace O(ROWS * COLS)*/
-    addBot(matrix, top, bot, left, right, order);  /* Time O(COLS) | Ignore Auxilary Spsace O(ROWS * COLS)*/
-    addLeft(matrix, top, bot, left, right, order); /* Time O(ROWS) | Ignore Auxilary Spsace O(ROWS * COLS. */
+	addTop(
+		matrix,
+		top,
+		bot,
+		left,
+		right,
+		order,
+	) /* Time O(COLS) | Ignore Auxilary Spsace O(ROWS * COLS) */
+	addRight(
+		matrix,
+		top,
+		bot,
+		left,
+		right,
+		order,
+	) /* Time O(ROWS) | Ignore Auxilary Spsace O(ROWS * COLS)*/
+	addBot(
+		matrix,
+		top,
+		bot,
+		left,
+		right,
+		order,
+	) /* Time O(COLS) | Ignore Auxilary Spsace O(ROWS * COLS)*/
+	addLeft(
+		matrix,
+		top,
+		bot,
+		left,
+		right,
+		order,
+	) /* Time O(ROWS) | Ignore Auxilary Spsace O(ROWS * COLS. */
 }
 
 var addTop = (matrix, top, bot, left, right, order) => {
-    for (let col = left; (col <= right); col++) {/* Time O(COLS) */
-        order.push(matrix[top][col]);                /* Ignore Auxilary Spsace O(ROWS * COLS) */
-    }
+	for (let col = left; col <= right; col++) {
+		/* Time O(COLS) */
+		order.push(matrix[top][col]) /* Ignore Auxilary Spsace O(ROWS * COLS) */
+	}
 }
 
 var addRight = (matrix, top, bot, left, right, order) => {
-    for (let row = (top + 1); (row <= bot); row++) {/* Time O(ROWS) */
-        order.push(matrix[row][right]);                 /* Ignore Auxilary Spsace O(ROWS * COLS) */
-    }
+	for (let row = top + 1; row <= bot; row++) {
+		/* Time O(ROWS) */
+		order.push(matrix[row][right]) /* Ignore Auxilary Spsace O(ROWS * COLS) */
+	}
 }
 
 var addBot = (matrix, top, bot, left, right, order) => {
-    for (let col = (right - 1); (left <= col); col--) {/* Time O(COLS) */
-        const isOutOfBounds = top === bot;
-        if (isOutOfBounds) return;
-        
-        order.push(matrix[bot][col]);                      /* Ignore Auxilary Spsace O(ROWS * COLS) */
-    }
+	for (let col = right - 1; left <= col; col--) {
+		/* Time O(COLS) */
+		const isOutOfBounds = top === bot
+		if (isOutOfBounds) return
+
+		order.push(matrix[bot][col]) /* Ignore Auxilary Spsace O(ROWS * COLS) */
+	}
 }
 
 var addLeft = (matrix, top, bot, left, right, order) => {
-    for (let row = bot - 1; row >= top + 1; row--) {/* Time O(ROWS) */
-        const isOutOfBounds = left === right;
-        if (isOutOfBounds) return;
+	for (let row = bot - 1; row >= top + 1; row--) {
+		/* Time O(ROWS) */
+		const isOutOfBounds = left === right
+		if (isOutOfBounds) return
 
-        order.push(matrix[row][left]);                  /* Ignore Auxilary Spsace O(ROWS * COLS) */
-    }
+		order.push(matrix[row][left]) /* Ignore Auxilary Spsace O(ROWS * COLS) */
+	}
 }
 
 /**
@@ -181,90 +258,116 @@ var addLeft = (matrix, top, bot, left, right, order) => {
  * @param {number[][]} matrix
  * @return {number[]}
  */
- var spiralOrder = (matrix) => {
-    const order = initOrder(matrix);/*                     | Ignore Auxilary Spsace O(ROWS * COLS) */
+var spiralOrder = (matrix) => {
+	const order =
+		initOrder(
+			matrix,
+		) /*                     | Ignore Auxilary Spsace O(ROWS * COLS) */
 
-    spiral(matrix, order);          /* Time O(ROWS * COLS) | Ignore Auxilary Spsace O(ROWS * COLS) */
+	spiral(
+		matrix,
+		order,
+	) /* Time O(ROWS * COLS) | Ignore Auxilary Spsace O(ROWS * COLS) */
 
-    return order;
+	return order
 }
 
 const initOrder = (matrix, VISITED = 101) => {
-    const order = [ matrix[0][0] ];/* Ignore Auxilary Spsace O(ROWS * COLS) */
+	const order = [matrix[0][0]] /* Ignore Auxilary Spsace O(ROWS * COLS) */
 
-    matrix[0][0] = VISITED;        /* Ignore Auxilary Spsace O(ROWS * COLS) */
+	matrix[0][0] = VISITED /* Ignore Auxilary Spsace O(ROWS * COLS) */
 
-    return order;
+	return order
 }
 
 var spiral = (matrix, order) => {
-    let [ row, col, direction, changeDirection ]  = [ 0, 0, 0, 0 ];
+	let [row, col, direction, changeDirection] = [0, 0, 0, 0]
 
-    while (changeDirection < 2) {                 /* Time O(ROWS * COLS) | Ignore Auxilary Spsace O(ROWS * COLS) */
-        [ row, col, direction, changeDirection ] =/* Time O(ROWS * COLS) | Ignore Auxilary Spsace O(ROWS * COLS) */
-            getPointers(matrix, row, col, direction, changeDirection, order);
-    }
+	while (changeDirection < 2) {
+		/* Time O(ROWS * COLS) | Ignore Auxilary Spsace O(ROWS * COLS) */
+		;[row, col, direction, changeDirection] =
+			/* Time O(ROWS * COLS) | Ignore Auxilary Spsace O(ROWS * COLS) */
+			getPointers(matrix, row, col, direction, changeDirection, order)
+	}
 }
 
 const getPointers = (matrix, row, col, direction, changeDirection, order) => {
-    [ row, col, direction, changeDirection ] =/* Time O(ROWS * COLS) | Ignore Auxilary Spsace O(ROWS * COLS) */
-        move(matrix, row, col, direction, changeDirection, order);
+	;[row, col, direction, changeDirection] =
+		/* Time O(ROWS * COLS) | Ignore Auxilary Spsace O(ROWS * COLS) */
+		move(matrix, row, col, direction, changeDirection, order)
 
-    direction = ((direction + 1) % 4);
-    changeDirection += 1;
+	direction = (direction + 1) % 4
+	changeDirection += 1
 
-    return [ row, col, direction, changeDirection ];
+	return [row, col, direction, changeDirection]
 }
 
-const move = (matrix, row, col, direction, changeDirection, order, VISITED = 101) => {
-    const [ rows, cols ] = [ matrix.length, matrix[0].length ];
+const move = (
+	matrix,
+	row,
+	col,
+	direction,
+	changeDirection,
+	order,
+	VISITED = 101,
+) => {
+	const [rows, cols] = [matrix.length, matrix[0].length]
 
-    while (canMove(matrix, row, rows, col, cols, direction)) {/* Time O(ROWS * COLS) */
-        [ row, col ] = getCell(row, col, direction);
+	while (canMove(matrix, row, rows, col, cols, direction)) {
+		/* Time O(ROWS * COLS) */
+		;[row, col] = getCell(row, col, direction)
 
-        order.push(matrix[row][col]);                         /*                     | Ignore Auxilary Spsace O(ROWS * COLS) */
-        matrix[row][col] = VISITED;
+		order.push(
+			matrix[row][col],
+		) /*                     | Ignore Auxilary Spsace O(ROWS * COLS) */
+		matrix[row][col] = VISITED
 
-        changeDirection = 0;
-    }
+		changeDirection = 0
+	}
 
-    return [ row, col, direction, changeDirection ];
+	return [row, col, direction, changeDirection]
 }
 
 const canMove = (matrix, row, rows, col, cols, direction) => {
-    if (!isInBounds(row, rows, col, cols, direction)) return false;
+	if (!isInBounds(row, rows, col, cols, direction)) return false
 
-    return !hasSeen(matrix, row, col, direction)
+	return !hasSeen(matrix, row, col, direction)
 }
 
 const isInBounds = (row, rows, col, cols, direction) => {
-    const [ _row, _col ] = getCell(row, col, direction);
-    const isRowInBounds = ((0 <= _row) && (_row < rows));
-    const isColInBounds = ((0 <= _col) && (_col < cols));
+	const [_row, _col] = getCell(row, col, direction)
+	const isRowInBounds = 0 <= _row && _row < rows
+	const isColInBounds = 0 <= _col && _col < cols
 
-    return (isRowInBounds && isColInBounds);
+	return isRowInBounds && isColInBounds
 }
 
 const hasSeen = (matrix, row, col, direction, VISITED = 101) => {
-    const [ _row, _col ] = getCell(row, col, direction);
+	const [_row, _col] = getCell(row, col, direction)
 
-    return (matrix[_row][_col] === VISITED);
+	return matrix[_row][_col] === VISITED
 }
 
 const getDirection = (direction) => {
-    const directions = [ [0, 1], [1, 0], [0, -1], [-1, 0] ];
-                       /* RIGHT    BOT     LEFT     TOP  */
-    return directions[direction];
+	const directions = [
+		[0, 1],
+		[1, 0],
+		[0, -1],
+		[-1, 0],
+	]
+	/* RIGHT    BOT     LEFT     TOP  */
+	return directions[direction]
 }
 
 const getCell = (row, col, direction) => {
-    const [ _row, _col ] = getDirection(direction);
+	const [_row, _col] = getDirection(direction)
 
-    return [ (row + _row), (col + _col) ];
+	return [row + _row, col + _col]
 }
-
 ```
+
 ### Python
+
 ```python
 class Solution:
     def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
@@ -295,7 +398,9 @@ class Solution:
         return res
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given a matrix, return all elements in spiral order
@@ -313,27 +418,27 @@ public:
         int top = 0;
         int right = matrix[0].size() - 1;
         int bottom = matrix.size() - 1;
-        
+
         vector<int> result;
-        
+
         while (top <= bottom && left <= right) {
             for (int j = left; j <= right; j++) {
                 result.push_back(matrix[top][j]);
             }
             top++;
-            
+
             for (int i = top; i <= bottom; i++) {
                 result.push_back(matrix[i][right]);
             }
             right--;
-            
+
             if (top <= bottom) {
                 for (int j = right; j >= left; j--) {
                     result.push_back(matrix[bottom][j]);
                 }
             }
             bottom--;
-            
+
             if (left <= right) {
                 for (int i = bottom; i >= top; i--) {
                     result.push_back(matrix[i][left]);
@@ -341,13 +446,15 @@ public:
             }
             left++;
         }
-        
+
         return result;
     }
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -389,5 +496,3 @@ class Solution {
 }
 
 ```
-
-

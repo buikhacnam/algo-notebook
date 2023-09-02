@@ -11,52 +11,52 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 Given a list of non-negative integers <code>nums</code>, arrange them such that they form the largest number and return it.
 
 Since the result may be very large, so you need to return a string instead of an integer.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [10,2]
-Output: &quot;210&quot;
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [10,2] Output: &quot;210&quot;
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [3,30,34,5,9]
-Output: &quot;9534330&quot;
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [3,30,34,5,9] Output: &quot;9534330&quot;
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= nums.length &lt;= 100</code>
-	- <code>0 &lt;= nums[i] &lt;= 10<sup>9</sup></code>
-
-
+    - <code>1 &lt;= nums.length &lt;= 100</code>
+    - <code>0 &lt;= nums[i] &lt;= 10<sup>9</sup></code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * @param {number[]} nums
  * @return {string}
  */
 var largestNumber = function (nums) {
-    let largest = nums
-        .map((n) => n.toString())
-        .sort((x, y) => y + x - (x + y))
-        .join('');
-    return largest[0] === '0' ? '0' : largest;
-};
-
+	let largest = nums
+		.map((n) => n.toString())
+		.sort((x, y) => y + x - (x + y))
+		.join('')
+	return largest[0] === '0' ? '0' : largest
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def largestNumber(self, nums: List[int]) -> str:
@@ -74,7 +74,9 @@ class Solution:
         return str(int("".join(nums)))
 
 ```
+
 ### C++
+
 ```cpp
 class Solution {
 public:
@@ -87,7 +89,7 @@ public:
     string largestNumber(vector<int>& nums) {
         string s = "";
         vector<string> all_numbers;
-        
+
         // convert every number to string
         for(int it: nums){
             all_numbers.push_back(to_string(it));
@@ -98,7 +100,7 @@ public:
         if(all_numbers[0]=="0"){
             return "0";
         }
-        
+
         for(string a: all_numbers){
             s += a;
         }
@@ -106,7 +108,9 @@ public:
     }
 };
 ```
+
 ### Java
+
 ```java
 class Solution {
     public String largestNumber(int[] nums) {
@@ -135,5 +139,3 @@ class Solution {
     }
 }
 ```
-
-

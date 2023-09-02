@@ -11,55 +11,54 @@ difficulty: Hard
 </Callout>
 
 ## Description
-Given an input string <code>s</code> and a pattern <code>p</code>, implement regular expression matching with support for <code>&#39;.&#39;</code> and <code>&#39;*&#39;</code> where:
 
+Given an input string <code>s</code> and a pattern <code>p</code>, implement regular expression matching with support for <code>&#39;.&#39;</code> and <code>&#39;\*&#39;</code> where:
 
-	- <code>&#39;.&#39;</code> Matches any single character.​​​​
-	- <code>&#39;*&#39;</code> Matches zero or more of the preceding element.
-
+    - <code>&#39;.&#39;</code> Matches any single character.​​​​
+    - <code>&#39;*&#39;</code> Matches zero or more of the preceding element.
 
 The matching should cover the entire input string (not partial).
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;aa&quot;, p = &quot;a&quot;
-Output: false
-Explanation: &quot;a&quot; does not match the entire string &quot;aa&quot;.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;aa&quot;, p = &quot;a&quot; Output: false Explanation:
+	&quot;a&quot; does not match the entire string &quot;aa&quot;.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;aa&quot;, p = &quot;a*&quot;
-Output: true
-Explanation: &#39;*&#39; means zero or more of the preceding element, &#39;a&#39;. Therefore, by repeating &#39;a&#39; once, it becomes &quot;aa&quot;.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;aa&quot;, p = &quot;a*&quot; Output: true Explanation:
+	&#39;*&#39; means zero or more of the preceding element, &#39;a&#39;.
+	Therefore, by repeating &#39;a&#39; once, it becomes &quot;aa&quot;.
 </pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;ab&quot;, p = &quot;.*&quot;
-Output: true
-Explanation: &quot;.*&quot; means &quot;zero or more (*) of any character (.)&quot;.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;ab&quot;, p = &quot;.*&quot; Output: true Explanation:
+	&quot;.*&quot; means &quot;zero or more (*) of any character (.)&quot;.
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= s.length &lt;= 20</code>
-	- <code>1 &lt;= p.length &lt;= 20</code>
-	- <code>s</code> contains only lowercase English letters.
-	- <code>p</code> contains only lowercase English letters, <code>&#39;.&#39;</code>, and <code>&#39;*&#39;</code>.
-	- It is guaranteed for each appearance of the character <code>&#39;*&#39;</code>, there will be a previous valid character to match.
-
-
+    - <code>1 &lt;= s.length &lt;= 20</code>
+    - <code>1 &lt;= p.length &lt;= 20</code>
+    - <code>s</code> contains only lowercase English letters.
+    - <code>p</code> contains only lowercase English letters, <code>&#39;.&#39;</code>, and <code>&#39;*&#39;</code>.
+    - It is guaranteed for each appearance of the character <code>&#39;*&#39;</code>, there will be a previous valid character to match.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * Brute Force - DFS
@@ -70,18 +69,19 @@ Constraints:
  * @return {boolean}
  */
 var isMatch = (text, pattern) => {
-    const isBaseCase = (pattern.length === 0);
-    if (isBaseCase) return (text.length === 0);
+	const isBaseCase = pattern.length === 0
+	if (isBaseCase) return text.length === 0
 
-    const isTextAndPatternEqual = (pattern[0] === text[0]),
-        isPatternPeriod = (pattern[0] === '.'),
-        isFirstMatch = (text && (isTextAndPatternEqual || isPatternPeriod)),
-        isNextPatternWildCard = (pattern.length >= 2 && pattern[1] === '*');
+	const isTextAndPatternEqual = pattern[0] === text[0],
+		isPatternPeriod = pattern[0] === '.',
+		isFirstMatch = text && (isTextAndPatternEqual || isPatternPeriod),
+		isNextPatternWildCard = pattern.length >= 2 && pattern[1] === '*'
 
-    return isNextPatternWildCard/* Time O((N + M) * 2^(N + (M / 2))) | Space O(N^2 + M^2) */
-        ? (isMatch(text, pattern.slice(2)) || (isFirstMatch && isMatch(text.slice(1), pattern)))
-        : (isFirstMatch && isMatch(text.slice(1), pattern.slice(1)));
-};
+	return isNextPatternWildCard /* Time O((N + M) * 2^(N + (M / 2))) | Space O(N^2 + M^2) */
+		? isMatch(text, pattern.slice(2)) ||
+				(isFirstMatch && isMatch(text.slice(1), pattern))
+		: isFirstMatch && isMatch(text.slice(1), pattern.slice(1))
+}
 
 /**
  * DP - Top Down
@@ -92,32 +92,43 @@ var isMatch = (text, pattern) => {
  * @param {string} p
  * @return {boolean}
  */
-var isMatch = (text, pattern, row = 0, col = 0, memo = initMemo(text, pattern)) => {
-    const hasSeen = (memo[row][col]);
-    if (hasSeen) return memo[row][col];
+var isMatch = (
+	text,
+	pattern,
+	row = 0,
+	col = 0,
+	memo = initMemo(text, pattern),
+) => {
+	const hasSeen = memo[row][col]
+	if (hasSeen) return memo[row][col]
 
-    const isEqual = (col === pattern.length);
-    const ans = isEqual
-        ? row === text.length
-        : check(text, pattern, row, col, memo);/* Time O(N * M) | Space O(N * M) */
+	const isEqual = col === pattern.length
+	const ans = isEqual
+		? row === text.length
+		: check(text, pattern, row, col, memo) /* Time O(N * M) | Space O(N * M) */
 
-    memo[row][col] = ans;
-    return ans;
+	memo[row][col] = ans
+	return ans
 }
 
-var initMemo = (text, pattern) => new Array((text.length + 1)).fill()/* Time O(N) | Space O(N) */
-    .map(() => new Array((pattern.length + 1)).fill(false))              /* Time O(M) | Space O(M) */
+var initMemo = (text, pattern) =>
+	new Array(text.length + 1)
+		.fill() /* Time O(N) | Space O(N) */
+		.map(() =>
+			new Array(pattern.length + 1).fill(false),
+		) /* Time O(M) | Space O(M) */
 
 var check = (text, pattern, row, col, memo) => {
-    const isTextDefined = (row < text.length),
-        isTextAndPatternEqual = (pattern[col] === text[row]),
-        isPatternPeriod = (pattern[col] === '.'),
-        isFirstMatch = (isTextDefined && (isTextAndPatternEqual || isPatternPeriod)),
-        isNextPatternWildCard = (((col + 1) < pattern.length) && pattern[col + 1] === '*');
+	const isTextDefined = row < text.length,
+		isTextAndPatternEqual = pattern[col] === text[row],
+		isPatternPeriod = pattern[col] === '.',
+		isFirstMatch = isTextDefined && (isTextAndPatternEqual || isPatternPeriod),
+		isNextPatternWildCard = col + 1 < pattern.length && pattern[col + 1] === '*'
 
-    return isNextPatternWildCard/* Time O(N * M) | Space O(N * M) */
-        ? (isMatch(text, pattern, row, (col + 2), memo) || isFirstMatch && isMatch(text, pattern, (row + 1), col, memo))
-        : (isFirstMatch && isMatch(text, pattern, (row + 1), (col + 1), memo));
+	return isNextPatternWildCard /* Time O(N * M) | Space O(N * M) */
+		? isMatch(text, pattern, row, col + 2, memo) ||
+				(isFirstMatch && isMatch(text, pattern, row + 1, col, memo))
+		: isFirstMatch && isMatch(text, pattern, row + 1, col + 1, memo)
 }
 
 /**
@@ -127,40 +138,48 @@ var check = (text, pattern, row, col, memo) => {
  * @return {boolean}
  */
 var isMatch = (text, pattern) => {
-    const tabu = initTabu(text, pattern);/* Time O(N * M) | Space O(N * M) */
+	const tabu = initTabu(text, pattern) /* Time O(N * M) | Space O(N * M) */
 
-    search(text, pattern, tabu);         /* Time O(N * M) | Space O(N * M) */
+	search(text, pattern, tabu) /* Time O(N * M) | Space O(N * M) */
 
-    return tabu[0][0];
-
+	return tabu[0][0]
 }
 
 var initTabu = (text, pattern) => {
-    const tabu = new Array((text.length + 1)).fill()        /* Time O(N) | Space O(N) */
-        .map(() => new Array((pattern.length + 1)).fill(false));/* Time O(M) | Space O(M) */
+	const tabu = new Array(text.length + 1)
+		.fill() /* Time O(N) | Space O(N) */
+		.map(() =>
+			new Array(pattern.length + 1).fill(false),
+		) /* Time O(M) | Space O(M) */
 
-    tabu[text.length][pattern.length] = true;               /*           | Space O(N * M) */
+	tabu[text.length][pattern.length] = true /*           | Space O(N * M) */
 
-    return tabu
+	return tabu
 }
 
 var search = (text, pattern, tabu) => {
-    for (let row = text.length; 0 <= row; row--){           /* Time O(N) */
-        for (let col = (pattern.length - 1); (0 <= col); col--){/* Time O(M) */
-            const isTextDefined = row < text.length,
-                isTextAndPatternEqual = pattern[col] === text[row],
-                isPatternPeriod = pattern[col] === '.',
-                isFirstMatch = isTextDefined && (isTextAndPatternEqual || isPatternPeriod),
-                isNextPatternWildCard = col + 1 < pattern.length && pattern[col + 1] === '*';
+	for (let row = text.length; 0 <= row; row--) {
+		/* Time O(N) */
+		for (let col = pattern.length - 1; 0 <= col; col--) {
+			/* Time O(M) */
+			const isTextDefined = row < text.length,
+				isTextAndPatternEqual = pattern[col] === text[row],
+				isPatternPeriod = pattern[col] === '.',
+				isFirstMatch =
+					isTextDefined && (isTextAndPatternEqual || isPatternPeriod),
+				isNextPatternWildCard =
+					col + 1 < pattern.length && pattern[col + 1] === '*'
 
-            tabu[row][col] = isNextPatternWildCard                   /* Space O(N * M) */
-                ? tabu[row][col + 2] || (isFirstMatch && tabu[row + 1][col])
-                : isFirstMatch && tabu[row + 1][col + 1];
-        }
-    }
+			tabu[row][col] = isNextPatternWildCard /* Space O(N * M) */
+				? tabu[row][col + 2] || (isFirstMatch && tabu[row + 1][col])
+				: isFirstMatch && tabu[row + 1][col + 1]
+		}
+	}
 }
 ```
+
 ### Python
+
 ```python
 # BOTTOM-UP Dynamic Programming
 class Solution:
@@ -210,7 +229,9 @@ class Solution:
         return dfs(0, 0)
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given string & pattern, implement RegEx matching
@@ -232,38 +253,40 @@ public:
     }
 private:
     map<pair<int, int>, bool> dp;
-    
+
     bool dfs(string& s, string& p, int i, int j) {
         if (dp.find({i, j}) != dp.end()) {
             return dp[{i, j}];
         }
-        
+
         if (i >= s.size() && j >= p.size()) {
             return true;
         }
         if (j >= p.size()) {
             return false;
         }
-        
+
         bool match = i < s.size() && (s[i] == p[j] || p[j] == '.');
         if (j + 1 < p.size() && p[j + 1] == '*') {
             // choices: either (1) don't use *, or (2) use *
             dp[{i, j}] = dfs(s, p, i, j + 2) || (match && dfs(s, p, i + 1, j));
             return dp[{i, j}];
         }
-        
+
         if (match) {
             dp[{i, j}] = dfs(s, p, i + 1, j + 1);
             return dp[{i, j}];
         }
-        
+
         dp[{i, j}] = false;
         return dp[{i, j}];
     }
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -297,5 +320,3 @@ class Solution {
 }
 
 ```
-
-

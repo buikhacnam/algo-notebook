@@ -11,52 +11,61 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 Given a string <code>s</code>, find two disjoint palindromic subsequences of <code>s</code> such that the product of their lengths is maximized. The two subsequences are disjoint if they do not both pick a character at the same index.
 
-Return *the maximum possible product of the lengths of the two palindromic subsequences*.
+Return _the maximum possible product of the lengths of the two palindromic subsequences_.
 
 A subsequence is a string that can be derived from another string by deleting some or no characters without changing the order of the remaining characters. A string is palindromic if it reads the same forward and backward.
 
- 
 Example 1:
-<Image alt="example-1" src="https://assets.leetcode.com/uploads/2021/08/24/two-palindromic-subsequences.png" width={550} height={124} />
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;leetcodecom&quot;
-Output: 9
-Explanation: An optimal solution is to choose &quot;ete&quot; for the 1<sup>st</sup> subsequence and &quot;cdc&quot; for the 2<sup>nd</sup> subsequence.
-The product of their lengths is: 3 * 3 = 9.
+
+<Image
+	alt="example-1"
+	src="https://assets.leetcode.com/uploads/2021/08/24/two-palindromic-subsequences.png"
+	width={550}
+	height={124}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;leetcodecom&quot; Output: 9 Explanation: An optimal solution
+	is to choose &quot;ete&quot; for the 1<sup>st</sup> subsequence and
+	&quot;cdc&quot; for the 2<sup>nd</sup> subsequence. The product of their
+	lengths is: 3 * 3 = 9.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;bb&quot;
-Output: 1
-Explanation: An optimal solution is to choose &quot;b&quot; (the first character) for the 1<sup>st</sup> subsequence and &quot;b&quot; (the second character) for the 2<sup>nd</sup> subsequence.
-The product of their lengths is: 1 * 1 = 1.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;bb&quot; Output: 1 Explanation: An optimal solution is to
+	choose &quot;b&quot; (the first character) for the 1<sup>st</sup> subsequence
+	and &quot;b&quot; (the second character) for the 2<sup>nd</sup> subsequence.
+	The product of their lengths is: 1 * 1 = 1.
 </pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;accbcaxxcxx&quot;
-Output: 25
-Explanation: An optimal solution is to choose &quot;accca&quot; for the 1<sup>st</sup> subsequence and &quot;xxcxx&quot; for the 2<sup>nd</sup> subsequence.
-The product of their lengths is: 5 * 5 = 25.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;accbcaxxcxx&quot; Output: 25 Explanation: An optimal solution
+	is to choose &quot;accca&quot; for the 1<sup>st</sup> subsequence and
+	&quot;xxcxx&quot; for the 2<sup>nd</sup> subsequence. The product of their
+	lengths is: 5 * 5 = 25.
 </pre>
 
- 
 Constraints:
 
-
-	- <code>2 &lt;= s.length &lt;= 12</code>
-	- <code>s</code> consists of lowercase English letters only.
-
-
+    - <code>2 &lt;= s.length &lt;= 12</code>
+    - <code>s</code> consists of lowercase English letters only.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * @param {string} s
@@ -65,53 +74,54 @@ Constraints:
  * Space Complexity: O(2^N)
  */
 var maxProduct = function (s) {
-    const N = s.length;
-    const first = new Array(1 << N).fill(0),
-        last = new Array(1 << N).fill(0);
-    for (let i = 0; i < N; i++) {
-        for (let j = 1 << i; j < 1 << (i + 1); j++) {
-            first[j] = i;
-        }
-    }
-    for (let i = 0; i < N; i++) {
-        for (let j = 1 << i; j < 1 << N; j += 1 << (i + 1)) {
-            last[j] = i;
-        }
-    }
-    const dp = Memo((m) => {
-        if ((m & (m - 1)) === 0) {
-            return m != 0;
-        }
-        const l = last[m],
-            f = first[m];
-        const lb = 1 << l,
-            fb = 1 << f;
-        return Math.max(
-            dp(m - lb),
-            dp(m - fb),
-            dp(m - lb - fb) + (s[l] == s[f]) * 2
-        );
-    });
-    let ans = 0;
-    for (let m = 1; m < 1 << N; m++) {
-        ans = Math.max(ans, dp(m) * dp((1 << N) - 1 - m));
-    }
-    return ans;
-};
+	const N = s.length
+	const first = new Array(1 << N).fill(0),
+		last = new Array(1 << N).fill(0)
+	for (let i = 0; i < N; i++) {
+		for (let j = 1 << i; j < 1 << (i + 1); j++) {
+			first[j] = i
+		}
+	}
+	for (let i = 0; i < N; i++) {
+		for (let j = 1 << i; j < 1 << N; j += 1 << (i + 1)) {
+			last[j] = i
+		}
+	}
+	const dp = Memo((m) => {
+		if ((m & (m - 1)) === 0) {
+			return m != 0
+		}
+		const l = last[m],
+			f = first[m]
+		const lb = 1 << l,
+			fb = 1 << f
+		return Math.max(
+			dp(m - lb),
+			dp(m - fb),
+			dp(m - lb - fb) + (s[l] == s[f]) * 2,
+		)
+	})
+	let ans = 0
+	for (let m = 1; m < 1 << N; m++) {
+		ans = Math.max(ans, dp(m) * dp((1 << N) - 1 - m))
+	}
+	return ans
+}
 
 var Memo = (func) => {
-    const map = new Map();
-    var wrapper = (m) => {
-        if (!map.get(m)) {
-            map.set(m, func(m));
-        }
-        return map.get(m);
-    };
-    return wrapper;
-};
-
+	const map = new Map()
+	var wrapper = (m) => {
+		if (!map.get(m)) {
+			map.set(m, func(m))
+		}
+		return map.get(m)
+	}
+	return wrapper
+}
 ```
+
 ### Python
+
 ```python
 """
 Time Complexity: O(2^N)
@@ -120,9 +130,9 @@ Space Complexity: O(2^N)
 class Solution:
     def maxProduct(self, s):
         n = len(s)
-        
+
         first, last = [0]*(1<<n), [0]*(1<<n)
-        
+
         for i in range(n):
             for j in range(1<<i, 1<<(i+1)):
                 first[j] = i
@@ -130,26 +140,28 @@ class Solution:
         for i in range(n):
             for j in range(1<<i, 1<<n, 1<<(i+1)):
                 last[j] = i
-        
+
         @lru_cache(None)
         def dp(m):
             if m & (m-1) == 0: return m != 0
             l, f = last[m], first[m]
             lb, fb = 1<<l, 1<<f
             return max(dp(m-lb), dp(m-fb), dp(m-lb-fb) + (s[l] == s[f]) * 2)
-       
+
         ans = 0
         for m in range(1, 1<<n):
             ans = max(ans, dp(m)*dp((1<<n) - 1 - m))
-            
+
         return ans
 ```
+
 ### C++
+
 ```cpp
  /*
-    Approach: 
+    Approach:
     Need to create all the disjoin subsequence and check if they are palindrome.
-    keep track of maximum product 
+    keep track of maximum product
 
     Time complexity : O(N*N^3)
     Space complexity: O(N)
@@ -190,10 +202,10 @@ public:
             }
             return;
         }
-        
+
         char c = s[idx];
 
-        /* 
+        /*
         we have three options
         1. Add the char to the first string
         2. Add the char to the second string
@@ -225,10 +237,12 @@ public:
         return answer;
     }
 
-    
+
 };
 ```
+
 ### Java
+
 ```java
 class Solution {
     public int maxProduct(String s) {
@@ -258,5 +272,3 @@ private int palSize(String s, int mask) {
 }
 }
 ```
-
-

@@ -11,62 +11,61 @@ difficulty: Easy
 </Callout>
 
 ## Description
+
 You are given two integer arrays <code>nums1</code> and <code>nums2</code>, sorted in non-decreasing order, and two integers <code>m</code> and <code>n</code>, representing the number of elements in <code>nums1</code> and <code>nums2</code> respectively.
 
 Merge <code>nums1</code> and <code>nums2</code> into a single array sorted in non-decreasing order.
 
-The final sorted array should not be returned by the function, but instead be *stored inside the array *<code>nums1</code>. To accommodate this, <code>nums1</code> has a length of <code>m + n</code>, where the first <code>m</code> elements denote the elements that should be merged, and the last <code>n</code> elements are set to <code>0</code> and should be ignored. <code>nums2</code> has a length of <code>n</code>.
+The final sorted array should not be returned by the function, but instead be _stored inside the array _<code>nums1</code>. To accommodate this, <code>nums1</code> has a length of <code>m + n</code>, where the first <code>m</code> elements denote the elements that should be merged, and the last <code>n</code> elements are set to <code>0</code> and should be ignored. <code>nums2</code> has a length of <code>n</code>.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3
-Output: [1,2,2,3,5,6]
-Explanation: The arrays we are merging are [1,2,3] and [2,5,6].
-The result of the merge is [<u>1</u>,<u>2</u>,2,<u>3</u>,5,6] with the underlined elements coming from nums1.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3 Output:
+	[1,2,2,3,5,6] Explanation: The arrays we are merging are [1,2,3] and [2,5,6].
+	The result of the merge is [<u>1</u>,<u>2</u>,2,<u>3</u>,5,6] with the
+	underlined elements coming from nums1.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: nums1 = [1], m = 1, nums2 = [], n = 0
-Output: [1]
-Explanation: The arrays we are merging are [1] and [].
-The result of the merge is [1].
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums1 = [1], m = 1, nums2 = [], n = 0 Output: [1] Explanation: The
+	arrays we are merging are [1] and []. The result of the merge is [1].
 </pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: nums1 = [0], m = 0, nums2 = [1], n = 1
-Output: [1]
-Explanation: The arrays we are merging are [] and [1].
-The result of the merge is [1].
-Note that because m = 0, there are no elements in nums1. The 0 is only there to ensure the merge result can fit in nums1.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums1 = [0], m = 0, nums2 = [1], n = 1 Output: [1] Explanation: The
+	arrays we are merging are [] and [1]. The result of the merge is [1]. Note
+	that because m = 0, there are no elements in nums1. The 0 is only there to
+	ensure the merge result can fit in nums1.
 </pre>
 
- 
 Constraints:
 
+    - <code>nums1.length == m + n</code>
+    - <code>nums2.length == n</code>
+    - <code>0 &lt;= m, n &lt;= 200</code>
+    - <code>1 &lt;= m + n &lt;= 200</code>
+    - <code>-10<sup>9</sup> &lt;= nums1[i], nums2[j] &lt;= 10<sup>9</sup></code>
 
-	- <code>nums1.length == m + n</code>
-	- <code>nums2.length == n</code>
-	- <code>0 &lt;= m, n &lt;= 200</code>
-	- <code>1 &lt;= m + n &lt;= 200</code>
-	- <code>-10<sup>9</sup> &lt;= nums1[i], nums2[j] &lt;= 10<sup>9</sup></code>
-
-
- 
 Follow up: Can you come up with an algorithm that runs in <code>O(m + n)</code> time?
-
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
- * Linear 
+ * Linear
  * Time O(N) | Space O(1)
  * https://leetcode.com/problems/merge-sorted-array/
  * @param {number[]} nums1
@@ -75,33 +74,33 @@ Follow up: Can you come up with an algorithm that runs in <code>O(m + n)</code> 
  * @param {number} n
  * @return {void} Do not return anything, modify nums1 in-place instead.
  */
-var merge = function(nums1, m, nums2, n) {
+var merge = function (nums1, m, nums2, n) {
+	let k = m + n - 1
+	m = m - 1
+	n = n - 1
+	while (m >= 0 && n >= 0) {
+		if (nums1[m] > nums2[n]) {
+			nums1[k] = nums1[m]
+			m--
+		} else {
+			nums1[k] = nums2[n]
+			n--
+		}
+		k--
+	}
 
-    let k = m + n - 1;
-    m = m - 1;
-    n = n - 1;
-    while (m >= 0 && n >= 0) {
-        if (nums1[m] > nums2[n]) {
-            nums1[k] = nums1[m];
-            m--;
-        } else {
-            nums1[k] = nums2[n];
-            n--;
-        }
-        k--;
-    }
-
-    if (n >= 0) {
-        while (n >= 0) {
-            nums1[k] = nums2[n];
-            n--;
-            k--;
-        }
-    }
-};
-
+	if (n >= 0) {
+		while (n >= 0) {
+			nums1[k] = nums2[n]
+			n--
+			k--
+		}
+	}
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
@@ -118,7 +117,9 @@ class Solution:
         if n > 0:
             nums1[:n] = nums2[:n]
 ```
+
 ### C++
+
 ```cpp
 class Solution {
 public:
@@ -127,11 +128,11 @@ public:
         int i=0;
         if(n==0) return;
         if(m==0)
-        {  
+        {
          for(int i = 0; i < n; i++){
                 nums1[i] = nums2[i];
             } return;
-        } 
+        }
         while(i<m)
         {
             if(nums1[i]>nums2[j])
@@ -148,12 +149,14 @@ public:
             j++;
             i++;
         }
-        
+
     }
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -175,5 +178,3 @@ class Solution {
     }
 }
 ```
-
-

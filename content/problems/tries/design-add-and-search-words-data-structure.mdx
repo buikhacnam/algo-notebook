@@ -11,52 +11,46 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 Design a data structure that supports adding new words and finding if a string matches any previously added string.
 
 Implement the <code>WordDictionary</code> class:
 
+    - <code>WordDictionary()</code> Initializes the object.
+    - <code>void addWord(word)</code> Adds <code>word</code> to the data structure, it can be matched later.
+    - <code>bool search(word)</code> Returns <code>true</code> if there is any string in the data structure that matches <code>word</code> or <code>false</code> otherwise. <code>word</code> may contain dots <code>&#39;.&#39;</code> where dots can be matched with any letter.
 
-	- <code>WordDictionary()</code> Initializes the object.
-	- <code>void addWord(word)</code> Adds <code>word</code> to the data structure, it can be matched later.
-	- <code>bool search(word)</code> Returns <code>true</code> if there is any string in the data structure that matches <code>word</code> or <code>false</code> otherwise. <code>word</code> may contain dots <code>&#39;.&#39;</code> where dots can be matched with any letter.
-
-
- 
 Example:
 
-<br /><pre className="overflow-x-auto">
-Input
-[&quot;WordDictionary&quot;,&quot;addWord&quot;,&quot;addWord&quot;,&quot;addWord&quot;,&quot;search&quot;,&quot;search&quot;,&quot;search&quot;,&quot;search&quot;]
-[[],[&quot;bad&quot;],[&quot;dad&quot;],[&quot;mad&quot;],[&quot;pad&quot;],[&quot;bad&quot;],[&quot;.ad&quot;],[&quot;b..&quot;]]
-Output
-[null,null,null,null,false,true,true,true]
+<br />
 
-Explanation
-WordDictionary wordDictionary = new WordDictionary();
-wordDictionary.addWord(&quot;bad&quot;);
-wordDictionary.addWord(&quot;dad&quot;);
-wordDictionary.addWord(&quot;mad&quot;);
-wordDictionary.search(&quot;pad&quot;); // return False
-wordDictionary.search(&quot;bad&quot;); // return True
-wordDictionary.search(&quot;.ad&quot;); // return True
-wordDictionary.search(&quot;b..&quot;); // return True
+<pre className="overflow-x-auto">
+	Input
+	[&quot;WordDictionary&quot;,&quot;addWord&quot;,&quot;addWord&quot;,&quot;addWord&quot;,&quot;search&quot;,&quot;search&quot;,&quot;search&quot;,&quot;search&quot;]
+	[[],[&quot;bad&quot;],[&quot;dad&quot;],[&quot;mad&quot;],[&quot;pad&quot;],[&quot;bad&quot;],[&quot;.ad&quot;],[&quot;b..&quot;]]
+	Output [null,null,null,null,false,true,true,true] Explanation WordDictionary
+	wordDictionary = new WordDictionary();
+	wordDictionary.addWord(&quot;bad&quot;);
+	wordDictionary.addWord(&quot;dad&quot;);
+	wordDictionary.addWord(&quot;mad&quot;);
+	wordDictionary.search(&quot;pad&quot;); // return False
+	wordDictionary.search(&quot;bad&quot;); // return True
+	wordDictionary.search(&quot;.ad&quot;); // return True
+	wordDictionary.search(&quot;b..&quot;); // return True
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= word.length &lt;= 25</code>
-	- <code>word</code> in <code>addWord</code> consists of lowercase English letters.
-	- <code>word</code> in <code>search</code> consist of <code>&#39;.&#39;</code> or lowercase English letters.
-	- There will be at most <code>2</code> dots in <code>word</code> for <code>search</code> queries.
-	- At most <code>10<sup>4</sup></code> calls will be made to <code>addWord</code> and <code>search</code>.
-
-
+    - <code>1 &lt;= word.length &lt;= 25</code>
+    - <code>word</code> in <code>addWord</code> consists of lowercase English letters.
+    - <code>word</code> in <code>search</code> consist of <code>&#39;.&#39;</code> or lowercase English letters.
+    - There will be at most <code>2</code> dots in <code>word</code> for <code>search</code> queries.
+    - At most <code>10<sup>4</sup></code> calls will be made to <code>addWord</code> and <code>search</code>.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * Your WordDictionary object will be instantiated and called as such:
@@ -66,61 +60,62 @@ Constraints:
  */
 
 class TrieNode {
-    constructor() {
-        this.children = {};
-        this.isWord = false;
-    }
+	constructor() {
+		this.children = {}
+		this.isWord = false
+	}
 }
 
 class WordDictionary {
-    constructor() {
-        this.root = new TrieNode();
-    }
+	constructor() {
+		this.root = new TrieNode()
+	}
 
-    /* Time O(N) | Space O(N) */
-    addWord(word, node = this.root) {
-        for (const char of word) {
-            const child = node.children[char] || new TrieNode();
+	/* Time O(N) | Space O(N) */
+	addWord(word, node = this.root) {
+		for (const char of word) {
+			const child = node.children[char] || new TrieNode()
 
-            node.children[char] = child;
+			node.children[char] = child
 
-            node = child;
-        }
+			node = child
+		}
 
-        node.isWord = true;
-    }
+		node.isWord = true
+	}
 
-    /* Time O(N) | Space O(N) */
-    search(word) {
-        return this.dfs(word, this.root, 0);
-    }
+	/* Time O(N) | Space O(N) */
+	search(word) {
+		return this.dfs(word, this.root, 0)
+	}
 
-    dfs(word, node, level) {
-        if (!node) return false;
+	dfs(word, node, level) {
+		if (!node) return false
 
-        const isWord = level === word.length;
-        if (isWord) return node.isWord;
+		const isWord = level === word.length
+		if (isWord) return node.isWord
 
-        const isWildCard = word[level] === '.';
-        if (isWildCard) return this.hasWildCard(word, node, level);
+		const isWildCard = word[level] === '.'
+		if (isWildCard) return this.hasWildCard(word, node, level)
 
-        return this.dfs(word, node.children[word[level]], level + 1);
-    }
+		return this.dfs(word, node.children[word[level]], level + 1)
+	}
 
-    hasWildCard(word, node, level) {
-        for (const char of Object.keys(node.children)) {
-            const child = node.children[char];
+	hasWildCard(word, node, level) {
+		for (const char of Object.keys(node.children)) {
+			const child = node.children[char]
 
-            const hasWord = this.dfs(word, child, level + 1);
-            if (hasWord) return true;
-        }
+			const hasWord = this.dfs(word, child, level + 1)
+			if (hasWord) return true
+		}
 
-        return false;
-    }
+		return false
+	}
 }
-
 ```
+
 ### Python
+
 ```python
 class TrieNode:
     def __init__(self):
@@ -160,7 +155,9 @@ class WordDictionary:
         return dfs(0, self.root)
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Design add & search words data structure
@@ -175,7 +172,7 @@ class TrieNode {
 public:
     TrieNode* children[26];
     bool isWord;
-    
+
     TrieNode() {
         for (int i = 0; i < 26; i++) {
             children[i] = NULL;
@@ -189,11 +186,11 @@ public:
     WordDictionary() {
         root = new TrieNode();
     }
-    
+
     void addWord(string word) {
         TrieNode* node = root;
         int curr = 0;
-        
+
         for (int i = 0; i < word.size(); i++) {
             curr = word[i] - 'a';
             if (node->children[curr] == NULL) {
@@ -201,17 +198,17 @@ public:
             }
             node = node->children[curr];
         }
-        
+
         node->isWord = true;
     }
-    
+
     bool search(string word) {
         TrieNode* node = root;
         return searchInNode(word, 0, node);
     }
 private:
     TrieNode* root;
-    
+
     bool searchInNode(string& word, int i, TrieNode* node) {
         if (node == NULL) {
             return false;
@@ -239,7 +236,9 @@ private:
  */
 
 ```
+
 ### Java
+
 ```java
 /**
  * Your WordDictionary object will be instantiated and called as such:
@@ -316,5 +315,3 @@ class WordDictionary {
 }
 
 ```
-
-

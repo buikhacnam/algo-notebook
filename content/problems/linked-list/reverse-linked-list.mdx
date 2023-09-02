@@ -11,45 +11,52 @@ difficulty: Easy
 </Callout>
 
 ## Description
-Given the <code>head</code> of a singly linked list, reverse the list, and return *the reversed list*.
 
- 
+Given the <code>head</code> of a singly linked list, reverse the list, and return _the reversed list_.
+
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/02/19/rev1ex1.jpg" width={542} height={222} />
-<br /><pre className="overflow-x-auto">
-Input: head = [1,2,3,4,5]
-Output: [5,4,3,2,1]
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/02/19/rev1ex1.jpg"
+	width={542}
+	height={222}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: head = [1,2,3,4,5] Output: [5,4,3,2,1]
 </pre>
 
 Example 2:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/02/19/rev1ex2.jpg" width={182} height={222} />
-<br /><pre className="overflow-x-auto">
-Input: head = [1,2]
-Output: [2,1]
-</pre>
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/02/19/rev1ex2.jpg"
+	width={182}
+	height={222}
+/>
+<br />
+
+<pre className="overflow-x-auto">Input: head = [1,2] Output: [2,1]</pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: head = []
-Output: []
-</pre>
+<br />
 
- 
+<pre className="overflow-x-auto">Input: head = [] Output: []</pre>
+
 Constraints:
 
+    - The number of nodes in the list is the range <code>[0, 5000]</code>.
+    - <code>-5000 &lt;= Node.val &lt;= 5000</code>
 
-	- The number of nodes in the list is the range <code>[0, 5000]</code>.
-	- <code>-5000 &lt;= Node.val &lt;= 5000</code>
-
-
- 
 Follow up: A linked list can be reversed either iteratively or recursively. Could you implement both?
-
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/reverse-linked-list/
@@ -58,19 +65,19 @@ Follow up: A linked list can be reversed either iteratively or recursively. Coul
  * @return {ListNode}
  */
 var reverseList = function (head) {
-    const isBaseCase = !head?.next;
-    if (isBaseCase) return head;
+	const isBaseCase = !head?.next
+	if (isBaseCase) return head
 
-    return dfs(head);                   /* Time O(N) | Space O(N) */
+	return dfs(head) /* Time O(N) | Space O(N) */
 }
 
 const dfs = (curr) => {
-    const prev = reverseList(curr.next);/* Time O(N) | Space O(N) */
+	const prev = reverseList(curr.next) /* Time O(N) | Space O(N) */
 
-    curr.next.next = curr;
-    curr.next = null;
+	curr.next.next = curr
+	curr.next = null
 
-    return prev;
+	return prev
 }
 
 /**
@@ -79,21 +86,24 @@ const dfs = (curr) => {
  * @param {ListNode} head
  * @return {ListNode}
  */
- var reverseList = function (head) {
-    let [ prev, curr, next ] = [ null, head, null ];
+var reverseList = function (head) {
+	let [prev, curr, next] = [null, head, null]
 
-    while (curr) {/* Time O(N) */
-        next = curr.next;
-        curr.next = prev;
+	while (curr) {
+		/* Time O(N) */
+		next = curr.next
+		curr.next = prev
 
-        prev = curr;
-        curr = next;
-    }
+		prev = curr
+		curr = next
+	}
 
-    return prev;
-};
+	return prev
+}
 ```
+
 ### Python
+
 ```python
 # Definition for singly-linked list.
 # class ListNode:
@@ -114,7 +124,9 @@ class Solution:
         return prev
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given the head of a singly linked list, reverse list & return
@@ -159,7 +171,9 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
 //Use three pointers and so you can change the next of the mid to the first one without losing the track of the original left.
 //Iterative version
@@ -169,7 +183,7 @@ class Solution {
         ListNode current = head;
         ListNode previous = null;
         ListNode nextCurrent = null;
-    
+
         while (current != null) {
             nextCurrent = current.next;
             current.next = previous;
@@ -197,5 +211,3 @@ class Solution {
 }
 
 ```
-
-

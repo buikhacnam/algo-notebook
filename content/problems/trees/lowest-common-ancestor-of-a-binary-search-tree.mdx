@@ -11,49 +11,62 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 Given a binary search tree (BST), find the lowest common ancestor (LCA) node of two given nodes in the BST.
 
 According to the <a href="https://en.wikipedia.org/wiki/Lowest_common_ancestor" target="_blank">definition of LCA on Wikipedia</a>: &ldquo;The lowest common ancestor is defined between two nodes <code>p</code> and <code>q</code> as the lowest node in <code>T</code> that has both <code>p</code> and <code>q</code> as descendants (where we allow a node to be a descendant of itself).&rdquo;
 
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2018/12/14/binarysearchtree_improved.png" width={200} height={190} />
-<br /><pre className="overflow-x-auto">
-Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
-Output: 6
-Explanation: The LCA of nodes 2 and 8 is 6.
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2018/12/14/binarysearchtree_improved.png"
+	width={200}
+	height={190}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8 Output: 6
+	Explanation: The LCA of nodes 2 and 8 is 6.
 </pre>
 
 Example 2:
-<Image alt="" src="https://assets.leetcode.com/uploads/2018/12/14/binarysearchtree_improved.png" width={200} height={190} />
-<br /><pre className="overflow-x-auto">
-Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4
-Output: 2
-Explanation: The LCA of nodes 2 and 4 is 2, since a node can be a descendant of itself according to the LCA definition.
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2018/12/14/binarysearchtree_improved.png"
+	width={200}
+	height={190}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4 Output: 2
+	Explanation: The LCA of nodes 2 and 4 is 2, since a node can be a descendant
+	of itself according to the LCA definition.
 </pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: root = [2,1], p = 2, q = 1
-Output: 2
+<br />
+
+<pre className="overflow-x-auto">
+	Input: root = [2,1], p = 2, q = 1 Output: 2
 </pre>
 
- 
 Constraints:
 
-
-	- The number of nodes in the tree is in the range <code>[2, 10<sup>5</sup>]</code>.
-	- <code>-10<sup>9</sup> &lt;= Node.val &lt;= 10<sup>9</sup></code>
-	- All <code>Node.val</code> are unique.
-	- <code>p != q</code>
-	- <code>p</code> and <code>q</code> will exist in the BST.
-
-
+    - The number of nodes in the tree is in the range <code>[2, 10<sup>5</sup>]</code>.
+    - <code>-10<sup>9</sup> &lt;= Node.val &lt;= 10<sup>9</sup></code>
+    - All <code>Node.val</code> are unique.
+    - <code>p != q</code>
+    - <code>p</code> and <code>q</code> will exist in the BST.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
@@ -63,15 +76,15 @@ Constraints:
  * @param {TreeNode} q
  * @return {TreeNode}
  */
- var lowestCommonAncestor = function(root, p, q) {
-    const isGreater = (p.val < root.val) && (q.val < root.val);
-    if (isGreater) return lowestCommonAncestor(root.left, p, q);
+var lowestCommonAncestor = function (root, p, q) {
+	const isGreater = p.val < root.val && q.val < root.val
+	if (isGreater) return lowestCommonAncestor(root.left, p, q)
 
-    const isLess = (root.val < p.val) && (root.val < q.val);
-    if (isLess) return lowestCommonAncestor(root.right, p, q);
+	const isLess = root.val < p.val && root.val < q.val
+	if (isLess) return lowestCommonAncestor(root.right, p, q)
 
-    return root;
-};
+	return root
+}
 
 /**
  * https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
@@ -81,28 +94,29 @@ Constraints:
  * @param {TreeNode} q
  * @return {TreeNode}
  */
- var lowestCommonAncestor = function(root, p, q) {
-    while (root !== null) {
-        const isGreater = (root.val < p.val) && (root.val < q.val)
-        if (isGreater) {
-            root = root.right;
-            continue;
-        }
+var lowestCommonAncestor = function (root, p, q) {
+	while (root !== null) {
+		const isGreater = root.val < p.val && root.val < q.val
+		if (isGreater) {
+			root = root.right
+			continue
+		}
 
-        const isLess = (p.val < root.val) && (q.val < root.val);;
-        if (isLess) {
-            root = root.left;
-            continue;
-        }
+		const isLess = p.val < root.val && q.val < root.val
+		if (isLess) {
+			root = root.left
+			continue
+		}
 
-        break;
-    }
+		break
+	}
 
-    return root;
-};
-
+	return root
+}
 ```
+
 ### Python
+
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -126,7 +140,9 @@ class Solution:
                 return cur
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given a binary search tree (BST), find the LCA of 2 given nodes in the BST
@@ -177,7 +193,9 @@ public:
 // };
 
 ```
+
 ### Java
+
 ```java
 /**
  * Definition for a binary tree node.
@@ -211,5 +229,3 @@ class Solution {
 }
 
 ```
-
-

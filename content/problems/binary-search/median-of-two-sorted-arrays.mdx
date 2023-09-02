@@ -11,43 +11,42 @@ difficulty: Hard
 </Callout>
 
 ## Description
+
 Given two sorted arrays <code>nums1</code> and <code>nums2</code> of size <code>m</code> and <code>n</code> respectively, return the median of the two sorted arrays.
 
 The overall run time complexity should be <code>O(log (m+n))</code>.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: nums1 = [1,3], nums2 = [2]
-Output: 2.00000
-Explanation: merged array = [1,2,3] and median is 2.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums1 = [1,3], nums2 = [2] Output: 2.00000 Explanation: merged array =
+	[1,2,3] and median is 2.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: nums1 = [1,2], nums2 = [3,4]
-Output: 2.50000
-Explanation: merged array = [1,2,3,4] and median is (2 + 3) / 2 = 2.5.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums1 = [1,2], nums2 = [3,4] Output: 2.50000 Explanation: merged array
+	= [1,2,3,4] and median is (2 + 3) / 2 = 2.5.
 </pre>
 
- 
 Constraints:
 
-
-	- <code>nums1.length == m</code>
-	- <code>nums2.length == n</code>
-	- <code>0 &lt;= m &lt;= 1000</code>
-	- <code>0 &lt;= n &lt;= 1000</code>
-	- <code>1 &lt;= m + n &lt;= 2000</code>
-	- <code>-10<sup>6</sup> &lt;= nums1[i], nums2[i] &lt;= 10<sup>6</sup></code>
-
-
+    - <code>nums1.length == m</code>
+    - <code>nums2.length == n</code>
+    - <code>0 &lt;= m &lt;= 1000</code>
+    - <code>0 &lt;= n &lt;= 1000</code>
+    - <code>1 &lt;= m + n &lt;= 2000</code>
+    - <code>-10<sup>6</sup> &lt;= nums1[i], nums2[i] &lt;= 10<sup>6</sup></code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * @param {number[]} nums1
@@ -56,53 +55,54 @@ Constraints:
  * @return {number}
  */
 var findMedianSortedArrays = function (nums1, nums2) {
-    const canSwap = nums2.length < nums1.length;
-    if (canSwap) [nums1, nums2] = [nums2, nums1];
+	const canSwap = nums2.length < nums1.length
+	if (canSwap) [nums1, nums2] = [nums2, nums1]
 
-    let [left, right] = [0, nums1.length - 1];
-    const totalLength = nums1.length + nums2.length;
-    const mid = totalLength >> 1;
-    const isEven = totalLength % 2 === 0;
+	let [left, right] = [0, nums1.length - 1]
+	const totalLength = nums1.length + nums2.length
+	const mid = totalLength >> 1
+	const isEven = totalLength % 2 === 0
 
-    while (true) {
-        const mid1 = left + right;
-        const mid2 = mid - mid1 - 2;
-        const { aLeft, aRight, bLeft, bRight } = getPointers(
-            nums1,
-            mid1,
-            nums2,
-            mid2
-        );
+	while (true) {
+		const mid1 = left + right
+		const mid2 = mid - mid1 - 2
+		const { aLeft, aRight, bLeft, bRight } = getPointers(
+			nums1,
+			mid1,
+			nums2,
+			mid2,
+		)
 
-        const isTarget = aLeft <= bRight && bLeft <= aRight;
-        if (isTarget)
-            return isEven
-                ? (Math.max(aLeft, bLeft) + Math.min(aRight, bRight)) / 2
-                : Math.min(aRight, bRight);
+		const isTarget = aLeft <= bRight && bLeft <= aRight
+		if (isTarget)
+			return isEven
+				? (Math.max(aLeft, bLeft) + Math.min(aRight, bRight)) / 2
+				: Math.min(aRight, bRight)
 
-        const isTargetGreater = aLeft <= bRight;
-        if (isTargetGreater) left = mid1 + 1;
+		const isTargetGreater = aLeft <= bRight
+		if (isTargetGreater) left = mid1 + 1
 
-        const isTargetLess = bRight < aLeft;
-        if (isTargetLess) right = mid1 - 1;
-    }
-};
+		const isTargetLess = bRight < aLeft
+		if (isTargetLess) right = mid1 - 1
+	}
+}
 
 const getPointers = (nums1, mid1, nums2, mid2) => {
-    const getLeft = (nums, index) => (0 <= index ? nums[index] : -Infinity);
+	const getLeft = (nums, index) => (0 <= index ? nums[index] : -Infinity)
 
-    const [aLeft, bLeft] = [getLeft(nums1, mid1), getLeft(nums2, mid2)];
+	const [aLeft, bLeft] = [getLeft(nums1, mid1), getLeft(nums2, mid2)]
 
-    const getRight = (nums, index) =>
-        index + 1 < nums.length ? nums[index + 1] : Infinity;
+	const getRight = (nums, index) =>
+		index + 1 < nums.length ? nums[index + 1] : Infinity
 
-    const [aRight, bRight] = [getRight(nums1, mid1), getRight(nums2, mid2)];
+	const [aRight, bRight] = [getRight(nums1, mid1), getRight(nums2, mid2)]
 
-    return { aLeft, aRight, bLeft, bRight };
-};
-
+	return { aLeft, aRight, bLeft, bRight }
+}
 ```
+
 ### Python
+
 ```python
 # Time: log(min(n, m))
 
@@ -139,7 +139,9 @@ class Solution:
                 l = i + 1
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given 2 sorted arrays of size m & n, return the median of these arrays
@@ -160,29 +162,29 @@ public:
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
         int m = nums1.size();
         int n = nums2.size();
-        
+
         if (m > n) {
             return findMedianSortedArrays(nums2, nums1);
         }
-        
+
         int total = m + n;
-        
+
         int low = 0;
         int high = m;
-        
+
         double result = 0.0;
-        
+
         while (low <= high) {
             // nums1
             int i = low + (high - low) / 2;
             // nums2
             int j = (total + 1) / 2 - i;
-            
+
             int left1 = (i > 0) ? nums1[i - 1] : INT_MIN;
             int right1 = (i < m) ? nums1[i] : INT_MAX;
             int left2 = (j > 0) ? nums2[j - 1] : INT_MIN;
             int right2 = (j < n) ? nums2[j] : INT_MAX;
-            
+
             // partition is correct
             if (left1 <= right2 && left2 <= right1) {
                 // even
@@ -199,19 +201,21 @@ public:
                 low = i + 1;
             }
         }
-        
+
         return result;
     }
 };
 
 ```
+
 ### Java
+
 ```java
 /*Brute-force solution (Linear)*/
 /*
 // Runtime: O(m+n)
 // Extra Space: O(m+n)
-// 
+//
 class Solution {
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
         int m = nums1.length;
@@ -290,5 +294,3 @@ class Solution {
 }
 
 ```
-
-

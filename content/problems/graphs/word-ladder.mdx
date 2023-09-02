@@ -11,50 +11,52 @@ difficulty: Hard
 </Callout>
 
 ## Description
+
 A transformation sequence from word <code>beginWord</code> to word <code>endWord</code> using a dictionary <code>wordList</code> is a sequence of words <code>beginWord -&gt; s<sub>1</sub> -&gt; s<sub>2</sub> -&gt; ... -&gt; s<sub>k</sub></code> such that:
 
+    - Every adjacent pair of words differs by a single letter.
+    - Every <code>s<sub>i</sub></code> for <code>1 &lt;= i &lt;= k</code> is in <code>wordList</code>. Note that <code>beginWord</code> does not need to be in <code>wordList</code>.
+    - <code>s<sub>k</sub> == endWord</code>
 
-	- Every adjacent pair of words differs by a single letter.
-	- Every <code>s<sub>i</sub></code> for <code>1 &lt;= i &lt;= k</code> is in <code>wordList</code>. Note that <code>beginWord</code> does not need to be in <code>wordList</code>.
-	- <code>s<sub>k</sub> == endWord</code>
+Given two words, <code>beginWord</code> and <code>endWord</code>, and a dictionary <code>wordList</code>, return _the number of words in the shortest transformation sequence from_ <code>beginWord</code> _to_ <code>endWord</code>_, or _<code>0</code>_ if no such sequence exists._
 
-
-Given two words, <code>beginWord</code> and <code>endWord</code>, and a dictionary <code>wordList</code>, return *the number of words in the shortest transformation sequence from* <code>beginWord</code> *to* <code>endWord</code>*, or *<code>0</code>* if no such sequence exists.*
-
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: beginWord = &quot;hit&quot;, endWord = &quot;cog&quot;, wordList = [&quot;hot&quot;,&quot;dot&quot;,&quot;dog&quot;,&quot;lot&quot;,&quot;log&quot;,&quot;cog&quot;]
-Output: 5
-Explanation: One shortest transformation sequence is &quot;hit&quot; -&gt; &quot;hot&quot; -&gt; &quot;dot&quot; -&gt; &quot;dog&quot; -&gt; cog&quot;, which is 5 words long.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: beginWord = &quot;hit&quot;, endWord = &quot;cog&quot;, wordList =
+	[&quot;hot&quot;,&quot;dot&quot;,&quot;dog&quot;,&quot;lot&quot;,&quot;log&quot;,&quot;cog&quot;]
+	Output: 5 Explanation: One shortest transformation sequence is &quot;hit&quot;
+	-&gt; &quot;hot&quot; -&gt; &quot;dot&quot; -&gt; &quot;dog&quot; -&gt;
+	cog&quot;, which is 5 words long.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: beginWord = &quot;hit&quot;, endWord = &quot;cog&quot;, wordList = [&quot;hot&quot;,&quot;dot&quot;,&quot;dog&quot;,&quot;lot&quot;,&quot;log&quot;]
-Output: 0
-Explanation: The endWord &quot;cog&quot; is not in wordList, therefore there is no valid transformation sequence.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: beginWord = &quot;hit&quot;, endWord = &quot;cog&quot;, wordList =
+	[&quot;hot&quot;,&quot;dot&quot;,&quot;dog&quot;,&quot;lot&quot;,&quot;log&quot;]
+	Output: 0 Explanation: The endWord &quot;cog&quot; is not in wordList,
+	therefore there is no valid transformation sequence.
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= beginWord.length &lt;= 10</code>
-	- <code>endWord.length == beginWord.length</code>
-	- <code>1 &lt;= wordList.length &lt;= 5000</code>
-	- <code>wordList[i].length == beginWord.length</code>
-	- <code>beginWord</code>, <code>endWord</code>, and <code>wordList[i]</code> consist of lowercase English letters.
-	- <code>beginWord != endWord</code>
-	- All the words in <code>wordList</code> are unique.
-
-
+    - <code>1 &lt;= beginWord.length &lt;= 10</code>
+    - <code>endWord.length == beginWord.length</code>
+    - <code>1 &lt;= wordList.length &lt;= 5000</code>
+    - <code>wordList[i].length == beginWord.length</code>
+    - <code>beginWord</code>, <code>endWord</code>, and <code>wordList[i]</code> consist of lowercase English letters.
+    - <code>beginWord != endWord</code>
+    - All the words in <code>wordList</code> are unique.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/word-ladder/
@@ -64,51 +66,61 @@ Constraints:
  * @param {string[]} wordList
  * @return {number}
  */
- var ladderLength = function(beginWord, endWord, wordList) {
-    const [ queue, wordSet, seen ] = [ new Queue([[ beginWord, 1 ]]), new Set(wordList), new Set([ beginWord ]) ];
+var ladderLength = function (beginWord, endWord, wordList) {
+	const [queue, wordSet, seen] = [
+		new Queue([[beginWord, 1]]),
+		new Set(wordList),
+		new Set([beginWord]),
+	]
 
-    return bfs(queue, wordSet, seen, endWord);/* Time O(ROWS * COLS) | Space O(ROWS * COLS) */
-};
+	return bfs(
+		queue,
+		wordSet,
+		seen,
+		endWord,
+	) /* Time O(ROWS * COLS) | Space O(ROWS * COLS) */
+}
 
 const bfs = (queue, wordSet, seen, endWord) => {
-    while (!queue.isEmpty()) {
-        for (let i = (queue.size() - 1); 0 <= i; i--) {
-            const [ word, depth ] = queue.dequeue();
+	while (!queue.isEmpty()) {
+		for (let i = queue.size() - 1; 0 <= i; i--) {
+			const [word, depth] = queue.dequeue()
 
-            const isTarget = word === endWord
-            if (isTarget) return depth
+			const isTarget = word === endWord
+			if (isTarget) return depth
 
-            transform(queue, wordSet, seen, word, depth)
-        }
-    }
+			transform(queue, wordSet, seen, word, depth)
+		}
+	}
 
-    return 0
+	return 0
 }
 
 const transform = (queue, wordSet, seen, word, depth) => {
-    for (const index in word) {
-        for (const char of 'abcdefghijklmnopqrstuvwxyz') {
-            const neighbor = getNeighbor(word, index, char);
+	for (const index in word) {
+		for (const char of 'abcdefghijklmnopqrstuvwxyz') {
+			const neighbor = getNeighbor(word, index, char)
 
-            const hasSeen = !wordSet.has(neighbor) || seen.has(neighbor);
-            if (hasSeen) continue;
+			const hasSeen = !wordSet.has(neighbor) || seen.has(neighbor)
+			if (hasSeen) continue
 
-            queue.enqueue([ neighbor, (depth + 1) ]);
-            seen.add(neighbor);
-        }
-    }
+			queue.enqueue([neighbor, depth + 1])
+			seen.add(neighbor)
+		}
+	}
 }
 
 const getNeighbor = (word, index, char) => {
-    const neighbor = word.split('');
+	const neighbor = word.split('')
 
-    neighbor[index] = char;
+	neighbor[index] = char
 
-    return neighbor.join('');
+	return neighbor.join('')
 }
-
 ```
+
 ### Python
+
 ```python
 class Solution:
     def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
@@ -140,7 +152,9 @@ class Solution:
         return 0
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given 2 words & a dictionary, return min # of words to transform b/w them
@@ -160,24 +174,24 @@ public:
         for (int i = 0; i < wordList.size(); i++) {
             dict.insert(wordList[i]);
         }
-        
+
         queue<string> q;
         q.push(beginWord);
-        
+
         int result = 1;
-        
+
         while (!q.empty()) {
             int count = q.size();
-            
+
             for (int i = 0; i < count; i++) {
                 string word = q.front();
                 q.pop();
-                
+
                 if (word == endWord) {
                     return result;
                 }
                 dict.erase(word);
-                
+
                 for (int j = 0; j < word.size(); j++) {
                     char c = word[j];
                     for (int k = 0; k < 26; k++) {
@@ -190,16 +204,18 @@ public:
                     }
                 }
             }
-            
+
             result++;
         }
-        
+
         return 0;
     }
 };
 
 ```
+
 ### Java
+
 ```java
 package java;
 
@@ -260,5 +276,3 @@ class Solution {
 }
 
 ```
-
-

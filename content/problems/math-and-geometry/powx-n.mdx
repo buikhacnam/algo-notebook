@@ -11,46 +11,44 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 Implement <a href="http://www.cplusplus.com/reference/valarray/pow/" target="_blank">pow(x, n)</a>, which calculates <code>x</code> raised to the power <code>n</code> (i.e., <code>x<sup>n</sup></code>).
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: x = 2.00000, n = 10
-Output: 1024.00000
+<br />
+
+<pre className="overflow-x-auto">
+	Input: x = 2.00000, n = 10 Output: 1024.00000
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: x = 2.10000, n = 3
-Output: 9.26100
-</pre>
+<br />
+
+<pre className="overflow-x-auto">Input: x = 2.10000, n = 3 Output: 9.26100</pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: x = 2.00000, n = -2
-Output: 0.25000
-Explanation: 2<sup>-2</sup> = 1/2<sup>2</sup> = 1/4 = 0.25
+<br />
+
+<pre className="overflow-x-auto">
+	Input: x = 2.00000, n = -2 Output: 0.25000 Explanation: 2<sup>-2</sup> = 1/2
+	<sup>2</sup> = 1/4 = 0.25
 </pre>
 
- 
 Constraints:
 
-
-	- <code>-100.0 &lt; x &lt; 100.0</code>
-	- <code>-2<sup>31</sup> &lt;= n &lt;= 2<sup>31</sup>-1</code>
-	- <code>n</code> is an integer.
-	- Either <code>x</code> is not zero or <code>n &gt; 0</code>.
-	- <code>-10<sup>4</sup> &lt;= x<sup>n</sup> &lt;= 10<sup>4</sup></code>
-
-
+    - <code>-100.0 &lt; x &lt; 100.0</code>
+    - <code>-2<sup>31</sup> &lt;= n &lt;= 2<sup>31</sup>-1</code>
+    - <code>n</code> is an integer.
+    - Either <code>x</code> is not zero or <code>n &gt; 0</code>.
+    - <code>-10<sup>4</sup> &lt;= x<sup>n</sup> &lt;= 10<sup>4</sup></code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * Brute Force - Multiply
@@ -60,46 +58,23 @@ Constraints:
  * @param {number} n
  * @return {number}
  */
- var myPow = (x, n) => {
-    if (n < 0) {
-        x = (1 / x);
-        n = (-n);
-    }
+var myPow = (x, n) => {
+	if (n < 0) {
+		x = 1 / x
+		n = -n
+	}
 
-    return getPow(x, n);/* Time O(N) */
+	return getPow(x, n) /* Time O(N) */
 }
 
 var getPow = (x, n, pow = 1) => {
-    for (let i = 0; i < n; i++) {/* Time O(N) */
-        pow = pow * x;
-    }
+	for (let i = 0; i < n; i++) {
+		/* Time O(N) */
+		pow = pow * x
+	}
 
-    return pow;
+	return pow
 }
-
-/**
- * DFS 
- * Time (log(N)) | Space O(log(N))
- * https://leetcode.com/problems/powx-n/
- * @param {number} x
- * @param {number} n
- * @return {number}
- */
-var myPow = (x, n) => {
-    const isBaseCase1 = ((x === 1.0) || (n === 0));
-    if (isBaseCase1) return 1;
-
-    const isBaseCase2 = (n === 1);
-    if (isBaseCase2) return x;
-
-    const isEven = ((n % 2) === 0);
-    if (isEven) return myPow((x * x), (n / 2));/* Time O(log(N)) | Space O(log(N)) */
-
-    const isOdd = ((n % 2) === 1);
-    if (isOdd) return (x * myPow(x, (n - 1)));/* Time O(log(N)) | Space O(log(N)) */
-
-    return (1 / myPow(x, -n));
-};
 
 /**
  * DFS
@@ -110,51 +85,73 @@ var myPow = (x, n) => {
  * @return {number}
  */
 var myPow = (x, n) => {
-    const isBaseCase = (n === 0);
-    if (isBaseCase) return 1;
+	const isBaseCase1 = x === 1.0 || n === 0
+	if (isBaseCase1) return 1
 
-    const abs = Math.abs(n);
-    const isEven = ((abs % 2) === 0);
+	const isBaseCase2 = n === 1
+	if (isBaseCase2) return x
 
-    const power = isEven
-        ? myPow((x * x), (abs / 2))             /* Time O(log(N)) | Space O(log(N)) */
-        : (myPow((x * x), ((abs - 1) / 2)) * x);/* Time O(log(N)) | Space O(log(N)) */
+	const isEven = n % 2 === 0
+	if (isEven) return myPow(x * x, n / 2) /* Time O(log(N)) | Space O(log(N)) */
 
-    const isNegative = (n < 0);
+	const isOdd = n % 2 === 1
+	if (isOdd) return x * myPow(x, n - 1) /* Time O(log(N)) | Space O(log(N)) */
 
-    return isNegative
-        ? (1 / power)
-        : power;
-};
+	return 1 / myPow(x, -n)
+}
 
 /**
- * Fast Power - Recursive 
+ * DFS
+ * Time (log(N)) | Space O(log(N))
+ * https://leetcode.com/problems/powx-n/
+ * @param {number} x
+ * @param {number} n
+ * @return {number}
+ */
+var myPow = (x, n) => {
+	const isBaseCase = n === 0
+	if (isBaseCase) return 1
+
+	const abs = Math.abs(n)
+	const isEven = abs % 2 === 0
+
+	const power = isEven
+		? myPow(x * x, abs / 2) /* Time O(log(N)) | Space O(log(N)) */
+		: myPow(x * x, (abs - 1) / 2) * x /* Time O(log(N)) | Space O(log(N)) */
+
+	const isNegative = n < 0
+
+	return isNegative ? 1 / power : power
+}
+
+/**
+ * Fast Power - Recursive
  * Time O(log(N)) | Space O(log(N))
  * https://leetcode.com/problems/powx-n/
  * @param {number} x
  * @param {number} n
  * @return {number}
  */
- var myPow = (x, n) => {
-    if (n < 0) {
-        x = 1 / x;
-        n = -n;
-    }
+var myPow = (x, n) => {
+	if (n < 0) {
+		x = 1 / x
+		n = -n
+	}
 
-    return fastPow(x, n);/* Time O(log(N)) | Space O(log(N)) */
+	return fastPow(x, n) /* Time O(log(N)) | Space O(log(N)) */
 }
 
 var fastPow = (x, n) => {
-    const isBaseCase = n === 0;
-    if (isBaseCase) return 1.0;
+	const isBaseCase = n === 0
+	if (isBaseCase) return 1.0
 
-    const half = fastPow(x, n / 2);/* Time O(log(N)) | Space O(log(N)) */
+	const half = fastPow(x, n / 2) /* Time O(log(N)) | Space O(log(N)) */
 
-    const isEven = ((n % 2) === 0);
-    if (isEven) return (half * half);
+	const isEven = n % 2 === 0
+	if (isEven) return half * half
 
-    const isOdd = ((n % 2) === 1);
-    if (isOdd) return ((half * half) * x);
+	const isOdd = n % 2 === 1
+	if (isOdd) return half * half * x
 }
 
 /**
@@ -165,25 +162,26 @@ var fastPow = (x, n) => {
  * @param {number} n
  * @return {number}
  */
- var myPow = (x, n) => {
-    if (n < 0) {
-        x = (1 / x);
-        n = (-n);
-    }
+var myPow = (x, n) => {
+	if (n < 0) {
+		x = 1 / x
+		n = -n
+	}
 
-    let [ pow, product ] = [ 1, x ];
+	let [pow, product] = [1, x]
 
-    for (let i = n; (0 < i); i = (i >> 1)) {/* Time O(log(N)) */
-        const isOdd = ((i % 2) === 1);
-        if (isOdd) pow = (pow * product);
+	for (let i = n; 0 < i; i = i >> 1) {
+		/* Time O(log(N)) */
+		const isOdd = i % 2 === 1
+		if (isOdd) pow = pow * product
 
-        product = (product * product);
-    }
+		product = product * product
+	}
 
-    return pow;
+	return pow
 }
- 
- /**
+
+/**
  * Number - Math
  * Time O(1) | Space O(1)
  * https://leetcode.com/problems/powx-n/
@@ -191,12 +189,13 @@ var fastPow = (x, n) => {
  * @param {number} n
  * @return {number}
  */
- var myPow = (x, n) => {
-    return Math.pow(x,n).toFixed(5);
+var myPow = (x, n) => {
+	return Math.pow(x, n).toFixed(5)
 }
-
 ```
+
 ### Python
+
 ```python
 class Solution:
     def myPow(self, x: float, n: int) -> float:
@@ -213,7 +212,9 @@ class Solution:
         return res if n >= 0 else 1 / res
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Implement pow(x, n), which calculates x raised to the power n
@@ -257,14 +258,14 @@ public:
         long exponent = abs(n);
         double curr = x;
         double result = 1.0;
-        
+
         for (long i = exponent; i > 0; i /= 2) {
             if (i % 2 == 1) {
                 result *= curr;
             }
             curr *= curr;
         }
-        
+
         if (n < 0) {
             return 1.0 / result;
         }
@@ -273,7 +274,9 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
 //Instead of using the classic recursive approach i.e. x*pow(x, n-1) just have (x*x), i.e., pow(x*x, n/2).
 //This will make the TC logarithmic instead of linear.
@@ -308,5 +311,3 @@ class Solution {
 }
 
 ```
-
-

@@ -11,46 +11,43 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given an integer array <code>nums</code>, return *the length of the longest strictly increasing *<span data-keyword="subsequence-array">*subsequence*</span>.
 
- 
+Given an integer array <code>nums</code>, return _the length of the longest strictly increasing _<span data-keyword="subsequence-array">_subsequence_</span>.
+
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [10,9,2,5,3,7,101,18]
-Output: 4
-Explanation: The longest increasing subsequence is [2,3,7,101], therefore the length is 4.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [10,9,2,5,3,7,101,18] Output: 4 Explanation: The longest
+	increasing subsequence is [2,3,7,101], therefore the length is 4.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [0,1,0,3,2,3]
-Output: 4
-</pre>
+<br />
+
+<pre className="overflow-x-auto">Input: nums = [0,1,0,3,2,3] Output: 4</pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [7,7,7,7,7,7,7]
-Output: 1
-</pre>
+<br />
 
- 
+<pre className="overflow-x-auto">Input: nums = [7,7,7,7,7,7,7] Output: 1</pre>
+
 Constraints:
 
+    - <code>1 &lt;= nums.length &lt;= 2500</code>
+    - <code>-10<sup>4</sup> &lt;= nums[i] &lt;= 10<sup>4</sup></code>
 
-	- <code>1 &lt;= nums.length &lt;= 2500</code>
-	- <code>-10<sup>4</sup> &lt;= nums[i] &lt;= 10<sup>4</sup></code>
-
-
- 
-<b>Follow up:</b> Can you come up with an algorithm that runs in <code>O(n log(n))</code> time complexity?
-
+<b>Follow up:</b> Can you come up with an algorithm that runs in <code>
+	O(n log(n))
+</code> time complexity?
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * DP - Bottom Up
@@ -61,25 +58,27 @@ Constraints:
  * @return {number}
  */
 var lengthOfLIS = (nums) => {
-    const tabu = initTabu(nums);/*               | Space O(N) */
+	const tabu = initTabu(nums) /*               | Space O(N) */
 
-    linearSearch(nums, tabu);   /* Time O(N * N) | Space O(N)*/
+	linearSearch(nums, tabu) /* Time O(N * N) | Space O(N)*/
 
-    return Math.max(...tabu);   /* Time O(N) */
-};
+	return Math.max(...tabu) /* Time O(N) */
+}
 
-const initTabu = (nums) => new Array(nums.length).fill(1);
+const initTabu = (nums) => new Array(nums.length).fill(1)
 
 var linearSearch = (nums, tabu) => {
-    for (let right = 1; (right < nums.length); right++) {/* Time O(N) */
-        for (let left = 0; (left < right); left++) {         /* Time O(N) */
-            const canUpdate = nums[left] < nums[right];
-            if (!canUpdate) continue;
+	for (let right = 1; right < nums.length; right++) {
+		/* Time O(N) */
+		for (let left = 0; left < right; left++) {
+			/* Time O(N) */
+			const canUpdate = nums[left] < nums[right]
+			if (!canUpdate) continue
 
-            const [ _left, _right ] = [ (tabu[left] + 1), tabu[right] ];
-            tabu[right] = Math.max(_right, _left);           /* Space O(N) */
-        }
-    }
+			const [_left, _right] = [tabu[left] + 1, tabu[right]]
+			tabu[right] = Math.max(_right, _left) /* Space O(N) */
+		}
+	}
 }
 
 /**
@@ -90,32 +89,35 @@ var linearSearch = (nums, tabu) => {
  * @return {number}
  */
 var lengthOfLIS = (nums) => {
-    const subsequence = linearSort(nums);/* Time O(N * N) | Space O(N) */
+	const subsequence = linearSort(nums) /* Time O(N * N) | Space O(N) */
 
-    return subsequence.length;
+	return subsequence.length
 }
 
 var linearSort = (nums, subsequence = []) => {
-    for (const num of nums) {/* Time O(N) */
-        const max = subsequence[subsequence.length - 1];
+	for (const num of nums) {
+		/* Time O(N) */
+		const max = subsequence[subsequence.length - 1]
 
-        const canAdd = max < num;
-        if (canAdd) { subsequence.push(num); continue; }/* Space O(N) */
+		const canAdd = max < num
+		if (canAdd) {
+			subsequence.push(num)
+			continue
+		} /* Space O(N) */
 
-        const index = getMax(subsequence, num);         /* Time O(N) */
+		const index = getMax(subsequence, num) /* Time O(N) */
 
-        subsequence[index] = num;
-    }
+		subsequence[index] = num
+	}
 
-    return subsequence;
+	return subsequence
 }
 
-
 const getMax = (subsequence, num, index = 0) => {
-    const isLess = () => subsequence[index] < num;
-    while (isLess()) index++;/* Time O(N) */
+	const isLess = () => subsequence[index] < num
+	while (isLess()) index++ /* Time O(N) */
 
-    return index;
+	return index
 }
 
 /**
@@ -126,47 +128,54 @@ const getMax = (subsequence, num, index = 0) => {
  * @return {number}
  */
 var lengthOfLIS = (nums) => {
-    const subsequence = logarithmicSort(nums);/* Time O(N * log(N) */
+	const subsequence = logarithmicSort(nums) /* Time O(N * log(N) */
 
-    return subsequence.length;
+	return subsequence.length
 }
 
 var logarithmicSort = (nums, subsequence = []) => {
-    for (const num of nums) {/* Time O(N) */
-        const max = subsequence[(subsequence.length - 1)];
+	for (const num of nums) {
+		/* Time O(N) */
+		const max = subsequence[subsequence.length - 1]
 
-        const canAdd = (max < num);
-        if (canAdd) { subsequence.push(num); continue; }/* Space O(N) */
+		const canAdd = max < num
+		if (canAdd) {
+			subsequence.push(num)
+			continue
+		} /* Space O(N) */
 
-        const index = binarySearch(num, subsequence);   /* Time O(log(N)) */
+		const index = binarySearch(num, subsequence) /* Time O(log(N)) */
 
-        subsequence[index] = num;
-    }
+		subsequence[index] = num
+	}
 
-    return subsequence;
+	return subsequence
 }
 
 const binarySearch = (num, subsequence) => {
-    let [ left, right ] = [ 0, (subsequence.length - 1) ];
+	let [left, right] = [0, subsequence.length - 1]
 
-    while (left < right) {/* Time O(log(N)) */
-        const mid = ((left + right) >> 1);
-        const guess = subsequence[mid];
+	while (left < right) {
+		/* Time O(log(N)) */
+		const mid = (left + right) >> 1
+		const guess = subsequence[mid]
 
-        const isNumTarget = (num === guess);
-        if (isNumTarget) return mid;
+		const isNumTarget = num === guess
+		if (isNumTarget) return mid
 
-        const isNumGreater = (guess < num);
-        if (isNumGreater) left = (mid + 1);
+		const isNumGreater = guess < num
+		if (isNumGreater) left = mid + 1
 
-        const isNumLess = (num < guess);
-        if (isNumLess) right = mid;
-    }
+		const isNumLess = num < guess
+		if (isNumLess) right = mid
+	}
 
-    return left;
+	return left
 }
 ```
+
 ### Python
+
 ```python
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
@@ -179,7 +188,9 @@ class Solution:
         return max(LIS)
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given int array, return length of longest increasing subsequence
@@ -206,9 +217,9 @@ public:
     int lengthOfLIS(vector<int>& nums) {
         int n = nums.size();
         vector<int> dp(n, 1);
-        
+
         int result = 1;
-        
+
         for (int i = 1; i < n; i++) {
             for (int j = 0; j < i; j++) {
                 if (nums[j] < nums[i]) {
@@ -217,13 +228,15 @@ public:
             }
             result = max(result, dp[i]);
         }
-        
+
         return result;
     }
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -264,5 +277,3 @@ class Solution {
 }
 
 ```
-
-

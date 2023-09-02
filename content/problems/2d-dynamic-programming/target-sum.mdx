@@ -11,51 +11,43 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 You are given an integer array <code>nums</code> and an integer <code>target</code>.
 
 You want to build an expression out of nums by adding one of the symbols <code>&#39;+&#39;</code> and <code>&#39;-&#39;</code> before each integer in nums and then concatenate all the integers.
 
-
-	- For example, if <code>nums = [2, 1]</code>, you can add a <code>&#39;+&#39;</code> before <code>2</code> and a <code>&#39;-&#39;</code> before <code>1</code> and concatenate them to build the expression <code>&quot;+2-1&quot;</code>.
-
+    - For example, if <code>nums = [2, 1]</code>, you can add a <code>&#39;+&#39;</code> before <code>2</code> and a <code>&#39;-&#39;</code> before <code>1</code> and concatenate them to build the expression <code>&quot;+2-1&quot;</code>.
 
 Return the number of different expressions that you can build, which evaluates to <code>target</code>.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [1,1,1,1,1], target = 3
-Output: 5
-Explanation: There are 5 ways to assign symbols to make the sum of nums be target 3.
--1 + 1 + 1 + 1 + 1 = 3
-+1 - 1 + 1 + 1 + 1 = 3
-+1 + 1 - 1 + 1 + 1 = 3
-+1 + 1 + 1 - 1 + 1 = 3
-+1 + 1 + 1 + 1 - 1 = 3
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [1,1,1,1,1], target = 3 Output: 5 Explanation: There are 5 ways
+	to assign symbols to make the sum of nums be target 3. -1 + 1 + 1 + 1 + 1 = 3
+	+1 - 1 + 1 + 1 + 1 = 3 +1 + 1 - 1 + 1 + 1 = 3 +1 + 1 + 1 - 1 + 1 = 3 +1 + 1 +
+	1 + 1 - 1 = 3
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [1], target = 1
-Output: 1
-</pre>
+<br />
 
- 
+<pre className="overflow-x-auto">Input: nums = [1], target = 1 Output: 1</pre>
+
 Constraints:
 
-
-	- <code>1 &lt;= nums.length &lt;= 20</code>
-	- <code>0 &lt;= nums[i] &lt;= 1000</code>
-	- <code>0 &lt;= sum(nums[i]) &lt;= 1000</code>
-	- <code>-1000 &lt;= target &lt;= 1000</code>
-
-
+    - <code>1 &lt;= nums.length &lt;= 20</code>
+    - <code>0 &lt;= nums[i] &lt;= 1000</code>
+    - <code>0 &lt;= sum(nums[i]) &lt;= 1000</code>
+    - <code>-1000 &lt;= target &lt;= 1000</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * Brute Force - DFS
@@ -65,23 +57,33 @@ Constraints:
  * @param {number} target
  * @return {number}
  */
- var findTargetSumWays = (nums, target, index = 0, sum = 0) => {
-    const isBaseCase = (index === nums.length);
-    if (isBaseCase) {
-        const isTarget = (sum === target);
-        if (isTarget) return 1;
+var findTargetSumWays = (nums, target, index = 0, sum = 0) => {
+	const isBaseCase = index === nums.length
+	if (isBaseCase) {
+		const isTarget = sum === target
+		if (isTarget) return 1
 
-        return 0;
-    }
+		return 0
+	}
 
-    return dfs(nums, target, index, sum);/* Time O(2^N) | Space O(HEIGHT) */
+	return dfs(nums, target, index, sum) /* Time O(2^N) | Space O(HEIGHT) */
 }
 
 var dfs = (nums, target, index, sum) => {
-    const left = findTargetSumWays(nums, target, (index + 1), (sum + nums[index])); /* Time O(2^N) | Space O(HEIGHT) */
-    const right = findTargetSumWays(nums, target, (index + 1), (sum - nums[index]));/* Time O(2^N) | Space O(HEIGHT) */
+	const left = findTargetSumWays(
+		nums,
+		target,
+		index + 1,
+		sum + nums[index],
+	) /* Time O(2^N) | Space O(HEIGHT) */
+	const right = findTargetSumWays(
+		nums,
+		target,
+		index + 1,
+		sum - nums[index],
+	) /* Time O(2^N) | Space O(HEIGHT) */
 
-    return (left + right);
+	return left + right
 }
 
 /**
@@ -94,35 +96,71 @@ var dfs = (nums, target, index, sum) => {
  * @return {number}
  */
 var findTargetSumWays = (nums, target) => {
-    const total = nums.reduce((sum, num) => (sum + num), 0);/* Time O(N) */
+	const total = nums.reduce((sum, num) => sum + num, 0) /* Time O(N) */
 
-    return calculate(nums, target, total);                  /* Time O(N * M) | Space O((N * M) + HEIGHT) */
+	return calculate(
+		nums,
+		target,
+		total,
+	) /* Time O(N * M) | Space O((N * M) + HEIGHT) */
 }
 
-var initMemo = (nums, total) => new Array(nums.length).fill()/* Time O(N) | Space O(N) */
-    .map(() => new Array(((total + 1) << 1)).fill(null));        /* Time O(M) | Space O(M) */
+var initMemo = (nums, total) =>
+	new Array(nums.length)
+		.fill() /* Time O(N) | Space O(N) */
+		.map(() =>
+			new Array((total + 1) << 1).fill(null),
+		) /* Time O(M) | Space O(M) */
 
-const calculate = (nums, target, total, index = 0, sum = 0, memo = initMemo(nums, total)) => {
-    const isBaseCase = (index === nums.length);
-    if (isBaseCase) {
-        const isTarget = (sum === target);
-        if (isTarget) return 1;
+const calculate = (
+	nums,
+	target,
+	total,
+	index = 0,
+	sum = 0,
+	memo = initMemo(nums, total),
+) => {
+	const isBaseCase = index === nums.length
+	if (isBaseCase) {
+		const isTarget = sum === target
+		if (isTarget) return 1
 
-        return 0;
-    }
+		return 0
+	}
 
-    const hasSeen = (memo[index][(sum + total)] != null);
-    if (hasSeen) return memo[index][(sum + total)];
+	const hasSeen = memo[index][sum + total] != null
+	if (hasSeen) return memo[index][sum + total]
 
-    return dfs(nums, target, total, index, sum, memo);/* Time O(N * M) | Space O((N * M) + HEIGHT) */
+	return dfs(
+		nums,
+		target,
+		total,
+		index,
+		sum,
+		memo,
+	) /* Time O(N * M) | Space O((N * M) + HEIGHT) */
 }
 
 var dfs = (nums, target, total, index, sum, memo) => {
-    const left = calculate(nums, target, total, (index + 1), (sum + nums[index]), memo); /* Time O(N * M) | Space O(HEIGHT) */
-    const right = calculate(nums, target, total, (index + 1), (sum - nums[index]), memo);/* Time O(N * M) | Space O(HEIGHT) */
+	const left = calculate(
+		nums,
+		target,
+		total,
+		index + 1,
+		sum + nums[index],
+		memo,
+	) /* Time O(N * M) | Space O(HEIGHT) */
+	const right = calculate(
+		nums,
+		target,
+		total,
+		index + 1,
+		sum - nums[index],
+		memo,
+	) /* Time O(N * M) | Space O(HEIGHT) */
 
-    memo[index][(sum + total)] = (left + right);                                         /*               | Space O(N * M) */
-    return memo[index][(sum + total)];
+	memo[index][sum + total] = left + right /*               | Space O(N * M) */
+	return memo[index][sum + total]
 }
 
 /**
@@ -135,41 +173,42 @@ var dfs = (nums, target, total, index, sum, memo) => {
  * @return {number}
  */
 var findTargetSumWays = (nums, target) => {
-    const total = nums.reduce((sum, num) => (sum + num), 0);/* Time O(N) */
-    const tabu = initTabu(nums, total);                     /* Time O(N * M) | Space O(N * M) */
+	const total = nums.reduce((sum, num) => sum + num, 0) /* Time O(N) */
+	const tabu = initTabu(nums, total) /* Time O(N * M) | Space O(N * M) */
 
-    search(nums, total, tabu);                              /* Time O(N * M) | Space O(N * M) */
+	search(nums, total, tabu) /* Time O(N * M) | Space O(N * M) */
 
-    return (Math.abs(target) <= total)
-        ? tabu[(nums.length - 1)][(target + total)]
-        : 0;
-};
+	return Math.abs(target) <= total ? tabu[nums.length - 1][target + total] : 0
+}
 
 var initTabu = (nums, total) => {
-    const tabu = new Array(nums.length).fill()        /* Time O(N) | Space O(N) */
-        .map(() => new Array(((total + 1) << 1)).fill(0));/* Time O(M) | Space O(M) */
-    const [ left, right ] = [ (total + nums[0]), (total - nums[0]) ];
+	const tabu = new Array(nums.length)
+		.fill() /* Time O(N) | Space O(N) */
+		.map(() => new Array((total + 1) << 1).fill(0)) /* Time O(M) | Space O(M) */
+	const [left, right] = [total + nums[0], total - nums[0]]
 
-    tabu[0][left] = 1;                                 /*          | Space O(N * M) */
-    tabu[0][right] += 1;                               /*          | Space O(N * M) */
+	tabu[0][left] = 1 /*          | Space O(N * M) */
+	tabu[0][right] += 1 /*          | Space O(N * M) */
 
-    return tabu;
+	return tabu
 }
 
 var search = (nums, total, tabu) => {
-    for (let i = 1; (i < nums.length); i++) {/* Time O(N) */
-        for (let sum = (-total); (sum <= total); sum++) {/* Time O(M) */
-            const isInvalid = (tabu[(i - 1)][(sum + total)] <= 0);
-            if (isInvalid) continue;
+	for (let i = 1; i < nums.length; i++) {
+		/* Time O(N) */
+		for (let sum = -total; sum <= total; sum++) {
+			/* Time O(M) */
+			const isInvalid = tabu[i - 1][sum + total] <= 0
+			if (isInvalid) continue
 
-            const dpSum = tabu[(i - 1)][sum + total];
-            const left = ((sum + nums[i]) + total);
-            const right = ((sum - nums[i]) + total);
+			const dpSum = tabu[i - 1][sum + total]
+			const left = sum + nums[i] + total
+			const right = sum - nums[i] + total
 
-            tabu[i][left] += dpSum;                           /* Space O(N * M) */
-            tabu[i][right] += dpSum;                          /* Space O(N * M) */
-        }
-    }
+			tabu[i][left] += dpSum /* Space O(N * M) */
+			tabu[i][right] += dpSum /* Space O(N * M) */
+		}
+	}
 }
 
 /**
@@ -182,56 +221,59 @@ var search = (nums, total, tabu) => {
  * @return {number}
  */
 var findTargetSumWays = (nums, target) => {
-    const total = nums.reduce((sum, num) => (sum + num), 0);/* Time O(N) */
-    let tabu = getTabu(nums, total);                        /* Time O(M)     | Space O(M) */
+	const total = nums.reduce((sum, num) => sum + num, 0) /* Time O(N) */
+	let tabu = getTabu(nums, total) /* Time O(M)     | Space O(M) */
 
-    tabu = search(nums, total, tabu);                       /* Time O(N * M) | Space O(M) */
+	tabu = search(nums, total, tabu) /* Time O(N * M) | Space O(M) */
 
-    return (Math.abs(target) <= total)
-        ? tabu[(target + total)]
-        : 0
+	return Math.abs(target) <= total ? tabu[target + total] : 0
 }
 
-var initTabu = (total) => new Array((total + 1) << 1).fill(0);/* Time O(M) | Space O(M) */
+var initTabu = (total) =>
+	new Array((total + 1) << 1).fill(0) /* Time O(M) | Space O(M) */
 
 var getTabu = (nums, total) => {
-    const tabu = initTabu(total);/* Time O(M) | Space O(M) */
-    const [ left, right ] = [ (total + nums[0]), (total - nums[0]) ];
+	const tabu = initTabu(total) /* Time O(M) | Space O(M) */
+	const [left, right] = [total + nums[0], total - nums[0]]
 
-    tabu[left] = 1;              /*           | Space O(M) */
-    tabu[right] += 1;            /*           | Space O(M) */
+	tabu[left] = 1 /*           | Space O(M) */
+	tabu[right] += 1 /*           | Space O(M) */
 
-    return tabu;
+	return tabu
 }
 
 var search = (nums, total, tabu) => {
-    for (let i = 1; (i < nums.length); i++) {        /* Time O(N) */
-        const num = nums[i];
-        const temp = initTabu(total);                    /* Time O(M) | Space O(M) */
+	for (let i = 1; i < nums.length; i++) {
+		/* Time O(N) */
+		const num = nums[i]
+		const temp = initTabu(total) /* Time O(M) | Space O(M) */
 
-        tabu = update(num, total, tabu, temp);           /* Time O(M) | Space O(M) */
-    }
+		tabu = update(num, total, tabu, temp) /* Time O(M) | Space O(M) */
+	}
 
-    return tabu;
+	return tabu
 }
 
 var update = (num, total, tabu, temp) => {
-    for (let sum = (-total); (sum <= total); sum++) {/* Time O(M) */
-        const isInvalid = (tabu[sum + total] <= 0);
-        if (isInvalid) continue;
+	for (let sum = -total; sum <= total; sum++) {
+		/* Time O(M) */
+		const isInvalid = tabu[sum + total] <= 0
+		if (isInvalid) continue
 
-        const dpSum = tabu[sum + total];
-        const left = ((sum + num) + total);
-        const right = ((sum - num) + total);
+		const dpSum = tabu[sum + total]
+		const left = sum + num + total
+		const right = sum - num + total
 
-        temp[left] += dpSum;                              /* Space O(M) */
-        temp[right] += dpSum;                             /* Space O(M) */
-    }
+		temp[left] += dpSum /* Space O(M) */
+		temp[right] += dpSum /* Space O(M) */
+	}
 
-    return temp;
+	return temp
 }
 ```
+
 ### Python
+
 ```python
 class Solution:
     def findTargetSumWays(self, nums: List[int], target: int) -> int:
@@ -251,7 +293,9 @@ class Solution:
         return backtrack(0, 0)
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given int array & a target, want to build expressions w/ '+' & '-'
@@ -272,7 +316,7 @@ public:
 private:
     // {(index, total) -> # of ways}
     map<pair<int, int>, int> dp;
-    
+
     int backtrack(vector<int>& nums, int target, int i, int total) {
         if (i == nums.size()) {
             return total == target ? 1 : 0;
@@ -280,35 +324,37 @@ private:
         if (dp.find({i, total}) != dp.end()) {
             return dp[{i, total}];
         }
-        
+
         dp[{i, total}] = backtrack(nums, target, i + 1, total + nums[i])
                        + backtrack(nums, target, i + 1, total - nums[i]);
-        
+
         return dp[{i, total}];
     }
 };
 
 ```
+
 ### Java
+
 ```java
 // Solution Shown In Video
 
 public class Solution {
     HashMap<String, Integer> dp;
-   
+
     public int findTargetSumWays(int[] nums, int S) {
         dp = new HashMap<>();
         return calculate(nums, 0, 0, S);
     }
-    
+
     public int calculate(int[] nums, int i, int sum, int S) {
         String s = i + "," + sum;
-        
+
         if (i == nums.length) {
-           return (sum == S)? 1 : 0; 
+           return (sum == S)? 1 : 0;
         }
         if(dp.containsKey(s)){
-            return dp.get(s); 
+            return dp.get(s);
         }
 
         int res = calculate(nums, i + 1, sum + nums[i], S) + calculate(nums, i + 1, sum - nums[i], S);
@@ -324,11 +370,11 @@ public class Solution {
 
  * Calculate for the sum of all the potential positive numbers (targetSum)
  *
- * Formula: targetSum = (∑nums + target) / 2 
+ * Formula: targetSum = (∑nums + target) / 2
  * (must be even otherwise there's no valid answer so return 0)
  *
  * Return all the possible ways to get the targetSum
- * since the remaining numbers would be negative we just need to account 
+ * since the remaining numbers would be negative we just need to account
  * for the sum of the positive numbers (targetSum)
  *
  * The formula for the targetSum was derived as follows:
@@ -336,7 +382,7 @@ public class Solution {
  * N = potential negative numbers
  * ∑P - ∑N = target
  * ∑P - ∑N + ∑nums = target + ∑nums
- * ∑P - ∑N + (∑P + ∑N) = target + ∑nums       
+ * ∑P - ∑N + (∑P + ∑N) = target + ∑nums
  * ∑P + ∑P = target + ∑nums
  * 2 * ∑P = target + ∑nums
  * (2 * ∑P) / 2 = (target + ∑nums) / 2
@@ -349,13 +395,13 @@ class Solution {
 
         for (int n : nums) {
             for (int i = targetSum; i >= n; i--) {
-                dp[i] += dp[i - n]; 
+                dp[i] += dp[i - n];
             }
         }
 
         return dp[targetSum];
     }
-  
+
     public int findTargetSumWays(int[] nums, int target) {
         int targetSum = 0;
 
@@ -363,9 +409,9 @@ class Solution {
             targetSum += n;
         }
 
-        return (targetSum < target 
+        return (targetSum < target
                     || targetSum + target < 0
-                    || (targetSum + target) % 2 != 0) 
+                    || (targetSum + target) % 2 != 0)
                ? 0
                : subsetSum(nums, (targetSum + target) / 2);
     }
@@ -374,5 +420,3 @@ class Solution {
 */
 
 ```
-
-

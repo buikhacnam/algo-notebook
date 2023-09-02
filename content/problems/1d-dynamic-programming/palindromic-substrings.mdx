@@ -11,41 +11,41 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given a string <code>s</code>, return *the number of palindromic substrings in it*.
+
+Given a string <code>s</code>, return _the number of palindromic substrings in it_.
 
 A string is a palindrome when it reads the same backward as forward.
 
 A substring is a contiguous sequence of characters within the string.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;abc&quot;
-Output: 3
-Explanation: Three palindromic strings: &quot;a&quot;, &quot;b&quot;, &quot;c&quot;.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;abc&quot; Output: 3 Explanation: Three palindromic strings:
+	&quot;a&quot;, &quot;b&quot;, &quot;c&quot;.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;aaa&quot;
-Output: 6
-Explanation: Six palindromic strings: &quot;a&quot;, &quot;a&quot;, &quot;a&quot;, &quot;aa&quot;, &quot;aa&quot;, &quot;aaa&quot;.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;aaa&quot; Output: 6 Explanation: Six palindromic strings:
+	&quot;a&quot;, &quot;a&quot;, &quot;a&quot;, &quot;aa&quot;, &quot;aa&quot;,
+	&quot;aaa&quot;.
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= s.length &lt;= 1000</code>
-	- <code>s</code> consists of lowercase English letters.
-
-
+    - <code>1 &lt;= s.length &lt;= 1000</code>
+    - <code>s</code> consists of lowercase English letters.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * Brut Force - Check All Substrings
@@ -55,24 +55,28 @@ Constraints:
  * @return {number}
  */
 var countSubstrings = (s, count = 0) => {
-    for (let left = 0; (left < s.length); left++) {      /* Time O(N) */
-        for (let right = left; (right < s.length); right++) {/* Time O(N) */
-            count += Number(isPalindrome(s, left, right));      /* Time O(N) */
-        }
-    }
+	for (let left = 0; left < s.length; left++) {
+		/* Time O(N) */
+		for (let right = left; right < s.length; right++) {
+			/* Time O(N) */
+			count += Number(isPalindrome(s, left, right)) /* Time O(N) */
+		}
+	}
 
-    return count;
+	return count
 }
 
 const isPalindrome = (s, left, right) => {
-    while (left < right) {/* Time O(N) */
-        const isEqual = (s[left] === s[right]);
-        if (!isEqual) return false;
+	while (left < right) {
+		/* Time O(N) */
+		const isEqual = s[left] === s[right]
+		if (!isEqual) return false
 
-        left++; right--;
-    }
+		left++
+		right--
+	}
 
-    return true;
+	return true
 }
 
 /**
@@ -85,62 +89,69 @@ const isPalindrome = (s, left, right) => {
  * @return {number}
  */
 var countSubstrings = (s, count = 0) => {
-    const tabu = initTabu(s);       /* Time O(N * N)  | Space O(N *  N) */
+	const tabu = initTabu(s) /* Time O(N * N)  | Space O(N *  N) */
 
-    count += singleLetters(s, tabu);/* Time O(N)      | Space O(N *  N) */
-    count += doubleLetters(s, tabu);/* Time O(N)      | Space O(N *  N) */
-    count += multiLetters(s, tabu); /* Time O(N *  N) | Space O(N *  N) */
+	count += singleLetters(s, tabu) /* Time O(N)      | Space O(N *  N) */
+	count += doubleLetters(s, tabu) /* Time O(N)      | Space O(N *  N) */
+	count += multiLetters(s, tabu) /* Time O(N *  N) | Space O(N *  N) */
 
-    return count;
-};
+	return count
+}
 
-const initTabu = (s) => new Array(s.length).fill()/* Space O(N) */
-    .map(() => new Array(s.length).fill(false));      /* Space O(N) */
+const initTabu = (s) =>
+	new Array(s.length)
+		.fill() /* Space O(N) */
+		.map(() => new Array(s.length).fill(false)) /* Space O(N) */
 
 const singleLetters = (s, tabu, count = 0) => {
-    for (let index = 0; (index < s.length); index++) {/* Time O(N) */
-        tabu[index][index] = true;                        /* Space O(N * N) */
+	for (let index = 0; index < s.length; index++) {
+		/* Time O(N) */
+		tabu[index][index] = true /* Space O(N * N) */
 
-        count += Number(tabu[index][index]);
-    }
+		count += Number(tabu[index][index])
+	}
 
-    return count;
+	return count
 }
 
 const doubleLetters = (s, tabu, count = 0) => {
-    for (let curr = 0; curr < (s.length - 1); curr++) {/* Time O(N) */
-        const next = (curr + 1);
-        const isEqual = (s[curr] === s[next]);
+	for (let curr = 0; curr < s.length - 1; curr++) {
+		/* Time O(N) */
+		const next = curr + 1
+		const isEqual = s[curr] === s[next]
 
-        tabu[curr][next] = isEqual;                        /* Space O(N * N) */
-        count += Number(tabu[curr][next]);
-    }
+		tabu[curr][next] = isEqual /* Space O(N * N) */
+		count += Number(tabu[curr][next])
+	}
 
-    return count;
+	return count
 }
 
 const multiLetters = (s, tabu, count = 0) => {
-    for (let window = 3; (window <= s.length); window++) {/* Time O(N) */
-        count += slideWindow(s, tabu, window);              /* Time O(N) | Space O(N * N) */
-    }
+	for (let window = 3; window <= s.length; window++) {
+		/* Time O(N) */
+		count += slideWindow(s, tabu, window) /* Time O(N) | Space O(N * N) */
+	}
 
-    return count;
+	return count
 }
 
 const slideWindow = (s, tabu, window, count = 0) => {
-    let [ left, right ] = [ 0, (window - 1) ];
+	let [left, right] = [0, window - 1]
 
-    while (right < s.length) {/* Time O(N) */
-        const isTrue = tabu[(left + 1)][(right - 1)];
-        const isEqual = (s[left] === s[right]);
+	while (right < s.length) {
+		/* Time O(N) */
+		const isTrue = tabu[left + 1][right - 1]
+		const isEqual = s[left] === s[right]
 
-        tabu[left][right] = (isTrue && isEqual);/* Space O(N * N) */
-        count += Number(tabu[left][right]);
+		tabu[left][right] = isTrue && isEqual /* Space O(N * N) */
+		count += Number(tabu[left][right])
 
-        left++; right++;
-    }
+		left++
+		right++
+	}
 
-    return count;
+	return count
 }
 
 /**
@@ -151,32 +162,37 @@ const slideWindow = (s, tabu, window, count = 0) => {
  * @return {number}
  */
 var countSubstrings = (s, count = 0) => {
-    for (let i = 0; (i < s.length); i++) {/* Time O(N) */
-        const [ odd, even ] = [ i, (i + 1) ];
-        /* odd-length: single character center */
-        count += isPalindromeFromCenter(s, i, odd); /* Time O(N) */
-        /* even-length: consecutive characters center */
-        count += isPalindromeFromCenter(s, i, even);/* Time O(N) */
-    }
+	for (let i = 0; i < s.length; i++) {
+		/* Time O(N) */
+		const [odd, even] = [i, i + 1]
+		/* odd-length: single character center */
+		count += isPalindromeFromCenter(s, i, odd) /* Time O(N) */
+		/* even-length: consecutive characters center */
+		count += isPalindromeFromCenter(s, i, even) /* Time O(N) */
+	}
 
-    return count;
+	return count
 }
 
 const isPalindromeFromCenter = (s, left, right, count = 0) => {
-    const isInBounds = () => ((0 <= left) && (right < s.length));
-    while (isInBounds()) {/* Time O(N) */
-        const isEqual = (s[left] === s[right]);
-        if (!isEqual) break;
+	const isInBounds = () => 0 <= left && right < s.length
+	while (isInBounds()) {
+		/* Time O(N) */
+		const isEqual = s[left] === s[right]
+		if (!isEqual) break
 
-        count++;
+		count++
 
-        left--; right++;
-    }
+		left--
+		right++
+	}
 
-    return count;
+	return count
 }
 ```
+
 ### Python
+
 ```python
 class Solution:
     def countSubstrings(self, s: str) -> int:
@@ -196,7 +212,9 @@ class Solution:
         return res
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given a string, return # of palindromic substrings in it
@@ -212,12 +230,12 @@ class Solution {
 public:
     int countSubstrings(string s) {
         int result = 0;
-        
+
         for (int i = 0; i < s.size(); i++) {
             middleOut(s, i, i, result);
             middleOut(s, i, i + 1, result);
         }
-        
+
         return result;
     }
 private:
@@ -231,7 +249,9 @@ private:
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -270,5 +290,3 @@ class Solution {
 }
 
 ```
-
-

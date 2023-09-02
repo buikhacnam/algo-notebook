@@ -146,7 +146,9 @@ process.argv.forEach(async function (val, index, arr) {
 			.replace(/<strong>/g, '')
 			.replace(/<\/strong>/g, '')
 			.replace(/<strong class="example">/g, '')
-			.replace(/<pre>/g, '<br /><pre className="overflow-x-auto">')
+			.replace(/<pre>/g, '<br />
+
+<pre className="overflow-x-auto">')
 			// .replace(/<\/pre>/g, '```')
 			.replace(/<p>/g, '')
 			.replace(/<\/p>/g, '')

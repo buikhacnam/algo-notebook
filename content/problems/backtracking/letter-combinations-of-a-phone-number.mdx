@@ -11,44 +11,50 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 Given a string containing digits from <code>2-9</code> inclusive, return all possible letter combinations that the number could represent. Return the answer in any order.
 
 A mapping of digits to letters (just like on the telephone buttons) is given below. Note that 1 does not map to any letters.
-<Image alt="" src="https://assets.leetcode.com/uploads/2022/03/15/1200px-telephone-keypad2svg.png" width={300} height={243} />
- 
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2022/03/15/1200px-telephone-keypad2svg.png"
+	width={300}
+	height={243}
+/>
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: digits = &quot;23&quot;
-Output: [&quot;ad&quot;,&quot;ae&quot;,&quot;af&quot;,&quot;bd&quot;,&quot;be&quot;,&quot;bf&quot;,&quot;cd&quot;,&quot;ce&quot;,&quot;cf&quot;]
+<br />
+
+<pre className="overflow-x-auto">
+	Input: digits = &quot;23&quot; Output:
+	[&quot;ad&quot;,&quot;ae&quot;,&quot;af&quot;,&quot;bd&quot;,&quot;be&quot;,&quot;bf&quot;,&quot;cd&quot;,&quot;ce&quot;,&quot;cf&quot;]
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: digits = &quot;&quot;
-Output: []
-</pre>
+<br />
+
+<pre className="overflow-x-auto">Input: digits = &quot;&quot; Output: []</pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: digits = &quot;2&quot;
-Output: [&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]
+<br />
+
+<pre className="overflow-x-auto">
+	Input: digits = &quot;2&quot; Output:
+	[&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]
 </pre>
 
- 
 Constraints:
 
-
-	- <code>0 &lt;= digits.length &lt;= 4</code>
-	- <code>digits[i]</code> is a digit in the range <code>[&#39;2&#39;, &#39;9&#39;]</code>.
-
-
+    - <code>0 &lt;= digits.length &lt;= 4</code>
+    - <code>digits[i]</code> is a digit in the range <code>[&#39;2&#39;, &#39;9&#39;]</code>.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/letter-combinations-of-a-phone-number/
@@ -56,42 +62,47 @@ Constraints:
  * @param {string} digits
  * @return {string[]}
  */
- var letterCombinations = function(digits, combination = [], combinations = []) {
-    const isBaseCase = !digits
-    if (isBaseCase) {
-        if (combination.length) combinations.push(combination.join(''))
+var letterCombinations = function (
+	digits,
+	combination = [],
+	combinations = [],
+) {
+	const isBaseCase = !digits
+	if (isBaseCase) {
+		if (combination.length) combinations.push(combination.join(''))
 
-        return combinations;
-    }
+		return combinations
+	}
 
-    const letters = phoneButtons[ digits[0] ];
+	const letters = phoneButtons[digits[0]]
 
-    for (const char of letters) {
-        backTrack(digits, char, combination, combinations);
-    }
+	for (const char of letters) {
+		backTrack(digits, char, combination, combinations)
+	}
 
-    return combinations;
-};
-
-const backTrack = (digits, char, combination, combinations) => {
-    combination.push(char)
-        letterCombinations(digits.slice(1), combination, combinations)
-    combination.pop()
+	return combinations
 }
 
-const phoneButtons = ({
-    2: ['a', 'b', 'c'],
-    3: ['d', 'e', 'f'],
-    4: ['g', 'h', 'i'],
-    5: ['j', 'k', 'l'],
-    6: ['m', 'n', 'o'],
-    7: ['p', 'q', 'r', 's'],
-    8: ['t', 'u', 'v'],
-    9: ['w', 'x', 'y', 'z'],
-})
+const backTrack = (digits, char, combination, combinations) => {
+	combination.push(char)
+	letterCombinations(digits.slice(1), combination, combinations)
+	combination.pop()
+}
 
+const phoneButtons = {
+	2: ['a', 'b', 'c'],
+	3: ['d', 'e', 'f'],
+	4: ['g', 'h', 'i'],
+	5: ['j', 'k', 'l'],
+	6: ['m', 'n', 'o'],
+	7: ['p', 'q', 'r', 's'],
+	8: ['t', 'u', 'v'],
+	9: ['w', 'x', 'y', 'z'],
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def letterCombinations(self, digits: str) -> List[str]:
@@ -120,7 +131,9 @@ class Solution:
         return res
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given cell phone pad, return all possible letter combos that the number could represent
@@ -138,7 +151,7 @@ public:
         if (digits.empty()) {
             return {};
         }
-        
+
         unordered_map<char, string> m = {
             {'2', "abc"},
             {'3', "def"},
@@ -151,7 +164,7 @@ public:
         };
         string curr = "";
         vector<string> result;
-        
+
         dfs(digits, 0, m, curr, result);
         return result;
     }
@@ -171,7 +184,9 @@ private:
 };
 
 ```
+
 ### Java
+
 ```java
 import java.util.ArrayList;
 import java.util.List;
@@ -230,5 +245,3 @@ class Solution {
 }
 
 ```
-
-

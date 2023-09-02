@@ -11,36 +11,43 @@ difficulty: Easy
 </Callout>
 
 ## Description
-Given the <code>head</code> of a sorted linked list, *delete all duplicates such that each element appears only once*. Return *the linked list sorted as well*.
 
- 
+Given the <code>head</code> of a sorted linked list, _delete all duplicates such that each element appears only once_. Return _the linked list sorted as well_.
+
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/01/04/list1.jpg" width={302} height={242} />
-<br /><pre className="overflow-x-auto">
-Input: head = [1,1,2]
-Output: [1,2]
-</pre>
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/01/04/list1.jpg"
+	width={302}
+	height={242}
+/>
+<br />
+
+<pre className="overflow-x-auto">Input: head = [1,1,2] Output: [1,2]</pre>
 
 Example 2:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/01/04/list2.jpg" width={542} height={222} />
-<br /><pre className="overflow-x-auto">
-Input: head = [1,1,2,3,3]
-Output: [1,2,3]
-</pre>
 
- 
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/01/04/list2.jpg"
+	width={542}
+	height={222}
+/>
+<br />
+
+<pre className="overflow-x-auto">Input: head = [1,1,2,3,3] Output: [1,2,3]</pre>
+
 Constraints:
 
-
-	- The number of nodes in the list is in the range <code>[0, 300]</code>.
-	- <code>-100 &lt;= Node.val &lt;= 100</code>
-	- The list is guaranteed to be sorted in ascending order.
-
-
+    - The number of nodes in the list is in the range <code>[0, 300]</code>.
+    - <code>-100 &lt;= Node.val &lt;= 100</code>
+    - The list is guaranteed to be sorted in ascending order.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/remove-duplicates-from-sorted-list/
@@ -55,19 +62,20 @@ Constraints:
  * @return {ListNode}
  */
 var deleteDuplicates = function (head) {
-    let cur = head;
-    while (cur != null && cur.next != null) {
-        if (cur.next.val === cur.val) {
-            cur.next = cur.next.next;
-        } else {
-            cur = cur.next;
-        }
-    }
-    return head;
-};
-
+	let cur = head
+	while (cur != null && cur.next != null) {
+		if (cur.next.val === cur.val) {
+			cur.next = cur.next.next
+		} else {
+			cur = cur.next
+		}
+	}
+	return head
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def deleteDuplicates(self, head: Optional[ListNode]) -> Optional[ListNode]:
@@ -79,7 +87,9 @@ class Solution:
         return head
 
 ```
+
 ### C++
+
 ```cpp
 // Time Complexity is O(N).
 // Space Complexity is O(1).
@@ -89,23 +99,25 @@ public:
     ListNode* deleteDuplicates(ListNode* head) {
       ListNode * fast = head;
       ListNode * slow = head;
-      
+
       while(slow != NULL)
       {
         while(fast != NULL && slow->val == fast->val)
           fast = fast -> next;
-        
+
         slow->next = fast;
         slow = slow -> next;
       }
-      
+
       return head;
-        
+
     }
 };
 
 ```
+
 ### Java
+
 ```java
 //Three pointer approach that we use in in-place reversal of linked list.
 
@@ -130,5 +142,3 @@ class Solution {
 }
 
 ```
-
-

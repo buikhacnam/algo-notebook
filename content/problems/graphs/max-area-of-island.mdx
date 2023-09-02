@@ -11,42 +11,49 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 You are given an <code>m x n</code> binary matrix <code>grid</code>. An island is a group of <code>1</code>&#39;s (representing land) connected 4-directionally (horizontal or vertical.) You may assume all four edges of the grid are surrounded by water.
 
 The area of an island is the number of cells with a value <code>1</code> in the island.
 
-Return *the maximum area of an island in *<code>grid</code>. If there is no island, return <code>0</code>.
+Return _the maximum area of an island in _<code>grid</code>. If there is no island, return <code>0</code>.
 
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/05/01/maxarea1-grid.jpg" width={500} height={310} />
-<br /><pre className="overflow-x-auto">
-Input: grid = [[0,0,1,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,1,1,0,1,0,0,0,0,0,0,0,0],[0,1,0,0,1,1,0,0,1,0,1,0,0],[0,1,0,0,1,1,0,0,1,1,1,0,0],[0,0,0,0,0,0,0,0,0,0,1,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,0,0,0,0,0,0,1,1,0,0,0,0]]
-Output: 6
-Explanation: The answer is not 11, because the island must be connected 4-directionally.
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/05/01/maxarea1-grid.jpg"
+	width={500}
+	height={310}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: grid =
+	[[0,0,1,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,1,1,0,1,0,0,0,0,0,0,0,0],[0,1,0,0,1,1,0,0,1,0,1,0,0],[0,1,0,0,1,1,0,0,1,1,1,0,0],[0,0,0,0,0,0,0,0,0,0,1,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,0,0,0,0,0,0,1,1,0,0,0,0]]
+	Output: 6 Explanation: The answer is not 11, because the island must be
+	connected 4-directionally.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: grid = [[0,0,0,0,0,0,0,0]]
-Output: 0
+<br />
+
+<pre className="overflow-x-auto">
+	Input: grid = [[0,0,0,0,0,0,0,0]] Output: 0
 </pre>
 
- 
 Constraints:
 
-
-	- <code>m == grid.length</code>
-	- <code>n == grid[i].length</code>
-	- <code>1 &lt;= m, n &lt;= 50</code>
-	- <code>grid[i][j]</code> is either <code>0</code> or <code>1</code>.
-
-
+    - <code>m == grid.length</code>
+    - <code>n == grid[i].length</code>
+    - <code>1 &lt;= m, n &lt;= 50</code>
+    - <code>grid[i][j]</code> is either <code>0</code> or <code>1</code>.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/max-area-of-island
@@ -54,99 +61,133 @@ Constraints:
  * @param {number[][]} grid
  * @return {number}
  */
- var maxAreaOfIsland = function(grid, maxArea = 0) {
-    const [ rows, cols ] = [ grid.length, grid[0].length ];
-    const seen = new Array(rows).fill().map(() => new Array(cols));
+var maxAreaOfIsland = function (grid, maxArea = 0) {
+	const [rows, cols] = [grid.length, grid[0].length]
+	const seen = new Array(rows).fill().map(() => new Array(cols))
 
-    for (let row = 0; row < rows; row++) {/* Time O(ROWS) */
-        for (let col = 0; col < cols; col++) {/* Time O(COLS) */
-            const area = getArea(grid, row, rows, col, cols, seen);/* Space O(ROWS * COLS) */
+	for (let row = 0; row < rows; row++) {
+		/* Time O(ROWS) */
+		for (let col = 0; col < cols; col++) {
+			/* Time O(COLS) */
+			const area = getArea(
+				grid,
+				row,
+				rows,
+				col,
+				cols,
+				seen,
+			) /* Space O(ROWS * COLS) */
 
-            maxArea = Math.max(maxArea, area);
-        }
-    }
+			maxArea = Math.max(maxArea, area)
+		}
+	}
 
-    return maxArea;
-};
+	return maxArea
+}
 
 var getArea = (grid, row, rows, col, cols, seen) => {
-    const isBaseCase = grid[row][col] === 0;
-    if (isBaseCase) return 0;
+	const isBaseCase = grid[row][col] === 0
+	if (isBaseCase) return 0
 
-    if (seen[row][col]) return 0;
-    seen[row][col] = true;                                          /* Space O(ROWS * COLS) */
+	if (seen[row][col]) return 0
+	seen[row][col] = true /* Space O(ROWS * COLS) */
 
-    return dfs(grid, row, rows, col, cols, seen) + 1;               /* Space O(ROWS * COLS) */
+	return dfs(grid, row, rows, col, cols, seen) + 1 /* Space O(ROWS * COLS) */
 }
 
 const dfs = (grid, row, rows, col, cols, seen, area = 0) => {
-    for (const [ _row, _col ] of getNeighbors(row, rows, col, cols)) {
-        area += getArea(grid, _row, rows, _col, cols, seen);
-    }
+	for (const [_row, _col] of getNeighbors(row, rows, col, cols)) {
+		area += getArea(grid, _row, rows, _col, cols, seen)
+	}
 
-    return area
-} 
+	return area
+}
 
-var getNeighbors = (row, rows, col, cols) => [[ 0, 1 ], [ 0, -1 ], [ 1, 0 ], [ -1, 0 ]]
-    .map(([ _row, _col]) => [ (row + _row), (col + _col) ])
-    .filter(([ _row, _col ]) => (0 <= _row) && (_row < rows) && (0 <= _col) && (_col < cols))
+var getNeighbors = (row, rows, col, cols) =>
+	[
+		[0, 1],
+		[0, -1],
+		[1, 0],
+		[-1, 0],
+	]
+		.map(([_row, _col]) => [row + _row, col + _col])
+		.filter(
+			([_row, _col]) => 0 <= _row && _row < rows && 0 <= _col && _col < cols,
+		)
 
- /**
+/**
  * https://leetcode.com/problems/number-of-islands/
  * Time O(ROWS * COLS) | Space O(ROWS * COLS)
  * @param {character[][]} grid
  * @return {number}
  */
 var maxAreaOfIsland = (grid, maxArea = 0) => {
-    const [ rows, cols ] = [ grid.length, grid[0].length ]
-    const seen = new Array(rows).fill().map(() => new Array(cols));
+	const [rows, cols] = [grid.length, grid[0].length]
+	const seen = new Array(rows).fill().map(() => new Array(cols))
 
-    for (let row = 0; row < rows; row++) {/* Time O(ROWS) */
-        for (let col = 0; col < cols; col++) {/* Time O(COLS) */
-            const isBaseCase = grid[row][col] === 0
-            if (isBaseCase) continue;
+	for (let row = 0; row < rows; row++) {
+		/* Time O(ROWS) */
+		for (let col = 0; col < cols; col++) {
+			/* Time O(COLS) */
+			const isBaseCase = grid[row][col] === 0
+			if (isBaseCase) continue
 
-            if (seen[row][col]) continue;
-            seen[row][col] = true;                                      /* Space O(ROWS * COLS) */
+			if (seen[row][col]) continue
+			seen[row][col] = true /* Space O(ROWS * COLS) */
 
-            const area = getArea(new Queue([[ row, col ]]), grid, seen);/* Space O(ROWS * COLS) */
+			const area = getArea(
+				new Queue([[row, col]]),
+				grid,
+				seen,
+			) /* Space O(ROWS * COLS) */
 
-            maxArea = Math.max(maxArea, area);
-        }
-    }
+			maxArea = Math.max(maxArea, area)
+		}
+	}
 
-    return maxArea
+	return maxArea
 }
 
 var getArea = (queue, grid, seen, area = 0) => {
-    const [ rows, cols ] = [ grid.length, grid[0].length ];
+	const [rows, cols] = [grid.length, grid[0].length]
 
-    while (!queue.isEmpty()) {
-        for (let i = (queue.size() - 1); 0 <= i; i--) {/* Time O(WIDTH) */
-            const [ row, col ] = queue.dequeue();
+	while (!queue.isEmpty()) {
+		for (let i = queue.size() - 1; 0 <= i; i--) {
+			/* Time O(WIDTH) */
+			const [row, col] = queue.dequeue()
 
-            for (const [ _row, _col ] of getNeighbors(row, rows, col, cols)) {
-                const isBaseCase = grid[_row][_col] === 0;
-                if (isBaseCase) continue;
+			for (const [_row, _col] of getNeighbors(row, rows, col, cols)) {
+				const isBaseCase = grid[_row][_col] === 0
+				if (isBaseCase) continue
 
-                if (seen[_row][_col]) continue;
-                seen[_row][_col] = true;                                /* Space O(ROWS * COLS) */
-    
-                queue.enqueue([ _row, _col ]);                          /* Space O(HEIGHT) */
-            }
+				if (seen[_row][_col]) continue
+				seen[_row][_col] = true /* Space O(ROWS * COLS) */
 
-            area++;
-        }
-    }
+				queue.enqueue([_row, _col]) /* Space O(HEIGHT) */
+			}
 
-    return area;
+			area++
+		}
+	}
+
+	return area
 }
 
-var getNeighbors = (row, rows, col, cols) => [ [ 0, 1 ], [ 0, -1 ], [ 1, 0 ], [ -1, 0 ] ]
-    .map(([ _row, _col]) => [ (row + _row), (col + _col) ])
-    .filter(([ _row, _col ]) => (0 <= _row) && (_row < rows) && (0 <= _col) && (_col < cols))
+var getNeighbors = (row, rows, col, cols) =>
+	[
+		[0, 1],
+		[0, -1],
+		[1, 0],
+		[-1, 0],
+	]
+		.map(([_row, _col]) => [row + _row, col + _col])
+		.filter(
+			([_row, _col]) => 0 <= _row && _row < rows && 0 <= _col && _col < cols,
+		)
 ```
+
 ### Python
+
 ```python
 class Solution:
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
@@ -173,7 +214,9 @@ class Solution:
         return area
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given grid where '1' is land & '0' is water, return largest island
@@ -189,9 +232,9 @@ public:
     int maxAreaOfIsland(vector<vector<int>>& grid) {
         int m = grid.size();
         int n = grid[0].size();
-        
+
         int result = 0;
-        
+
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (grid[i][j] == 1) {
@@ -199,7 +242,7 @@ public:
                 }
             }
         }
-        
+
         return result;
     }
 private:
@@ -208,22 +251,24 @@ private:
             return 0;
         }
         grid[i][j] = 0;
-        
+
         return 1 + dfs(grid, i - 1, j, m, n) + dfs(grid, i + 1, j, m, n)
             + dfs(grid, i, j - 1, m, n) + dfs(grid, i, j + 1, m, n);
     }
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
   int maxArea = 0;
-  
+
   public int maxAreaOfIsland(int[][] grid) {
     for (int i = 0; i < grid.length; i++) {
       for (int j = 0; j < grid[0].length; j++) {
-        maxArea = Math.max(maxArea, 
+        maxArea = Math.max(maxArea,
                     maxAreaOfIsland(grid, i, j));
       }
     }
@@ -232,15 +277,15 @@ class Solution {
   }
 
   public int maxAreaOfIsland(int[][] grid, int r, int c) {
-    if (r < 0 || c < 0 || 
-        r == grid.length || 
-        c == grid[0].length || 
+    if (r < 0 || c < 0 ||
+        r == grid.length ||
+        c == grid[0].length ||
         grid[r][c] == 0) {
-          return 0;  
+          return 0;
     }
 
     grid[r][c] = 0;
-    
+
     return (1 + maxAreaOfIsland(grid, r + 1, c) +
                 maxAreaOfIsland(grid, r - 1, c) +
                 maxAreaOfIsland(grid, r, c + 1) +
@@ -249,5 +294,3 @@ class Solution {
 }
 
 ```
-
-

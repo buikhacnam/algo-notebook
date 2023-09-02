@@ -11,44 +11,51 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given an <code>m x n</code> matrix <code>board</code> containing <code>&#39;X&#39;</code> and <code>&#39;O&#39;</code>, *capture all regions that are 4-directionally surrounded by* <code>&#39;X&#39;</code>.
+
+Given an <code>m x n</code> matrix <code>board</code> containing <code>&#39;X&#39;</code> and <code>&#39;O&#39;</code>, _capture all regions that are 4-directionally surrounded by_ <code>&#39;X&#39;</code>.
 
 A region is captured by flipping all <code>&#39;O&#39;</code>s into <code>&#39;X&#39;</code>s in that surrounded region.
 
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/02/19/xogrid.jpg" width={550} height={237} />
-<br /><pre className="overflow-x-auto">
-Input: board = [[&quot;X&quot;,&quot;X&quot;,&quot;X&quot;,&quot;X&quot;],[&quot;X&quot;,&quot;O&quot;,&quot;O&quot;,&quot;X&quot;],[&quot;X&quot;,&quot;X&quot;,&quot;O&quot;,&quot;X&quot;],[&quot;X&quot;,&quot;O&quot;,&quot;X&quot;,&quot;X&quot;]]
-Output: [[&quot;X&quot;,&quot;X&quot;,&quot;X&quot;,&quot;X&quot;],[&quot;X&quot;,&quot;X&quot;,&quot;X&quot;,&quot;X&quot;],[&quot;X&quot;,&quot;X&quot;,&quot;X&quot;,&quot;X&quot;],[&quot;X&quot;,&quot;O&quot;,&quot;X&quot;,&quot;X&quot;]]
-Explanation: Notice that an &#39;O&#39; should not be flipped if:
-- It is on the border, or
-- It is adjacent to an &#39;O&#39; that should not be flipped.
-The bottom &#39;O&#39; is on the border, so it is not flipped.
-The other three &#39;O&#39; form a surrounded region, so they are flipped.
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/02/19/xogrid.jpg"
+	width={550}
+	height={237}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: board =
+	[[&quot;X&quot;,&quot;X&quot;,&quot;X&quot;,&quot;X&quot;],[&quot;X&quot;,&quot;O&quot;,&quot;O&quot;,&quot;X&quot;],[&quot;X&quot;,&quot;X&quot;,&quot;O&quot;,&quot;X&quot;],[&quot;X&quot;,&quot;O&quot;,&quot;X&quot;,&quot;X&quot;]]
+	Output:
+	[[&quot;X&quot;,&quot;X&quot;,&quot;X&quot;,&quot;X&quot;],[&quot;X&quot;,&quot;X&quot;,&quot;X&quot;,&quot;X&quot;],[&quot;X&quot;,&quot;X&quot;,&quot;X&quot;,&quot;X&quot;],[&quot;X&quot;,&quot;O&quot;,&quot;X&quot;,&quot;X&quot;]]
+	Explanation: Notice that an &#39;O&#39; should not be flipped if: - It is on
+	the border, or - It is adjacent to an &#39;O&#39; that should not be flipped.
+	The bottom &#39;O&#39; is on the border, so it is not flipped. The other three
+	&#39;O&#39; form a surrounded region, so they are flipped.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: board = [[&quot;X&quot;]]
-Output: [[&quot;X&quot;]]
+<br />
+
+<pre className="overflow-x-auto">
+	Input: board = [[&quot;X&quot;]] Output: [[&quot;X&quot;]]
 </pre>
 
- 
 Constraints:
 
-
-	- <code>m == board.length</code>
-	- <code>n == board[i].length</code>
-	- <code>1 &lt;= m, n &lt;= 200</code>
-	- <code>board[i][j]</code> is <code>&#39;X&#39;</code> or <code>&#39;O&#39;</code>.
-
-
+    - <code>m == board.length</code>
+    - <code>n == board[i].length</code>
+    - <code>1 &lt;= m, n &lt;= 200</code>
+    - <code>board[i][j]</code> is <code>&#39;X&#39;</code> or <code>&#39;O&#39;</code>.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/surrounded-regions/
@@ -56,59 +63,70 @@ Constraints:
  * @param {character[][]} board
  * @return {void} Do not return anything, modify board in-place instead.
  */
- var solve = function solve(board) {
-    searchRows(board);/* Time O(ROWS * COLS) | Space O(ROWS * COLS) */
-    searchCols(board);/* Time O(ROWS * COLS) | Space O(ROWS * COLS) */
-    searchGrid(board);/* Time O(ROWS * COLS) | Space O(ROWS * COLS) */
+var solve = function solve(board) {
+	searchRows(board) /* Time O(ROWS * COLS) | Space O(ROWS * COLS) */
+	searchCols(board) /* Time O(ROWS * COLS) | Space O(ROWS * COLS) */
+	searchGrid(board) /* Time O(ROWS * COLS) | Space O(ROWS * COLS) */
 }
 
 var searchRows = (board) => {
-    const [ rows, cols ] = [ board.length, board[0].length ];
+	const [rows, cols] = [board.length, board[0].length]
 
-    for (let row = 0; row < rows; row++) {      /* Time O(ROWS) */
-        dfs(board, row, rows, 0, cols);         /* Space O(ROWS) */
-        dfs(board, row, rows, (cols - 1), cols);/* Space O(ROWS) */
-    }
+	for (let row = 0; row < rows; row++) {
+		/* Time O(ROWS) */
+		dfs(board, row, rows, 0, cols) /* Space O(ROWS) */
+		dfs(board, row, rows, cols - 1, cols) /* Space O(ROWS) */
+	}
 }
 
 var searchCols = (board) => {
-    const [ rows, cols ] = [ board.length, board[0].length ];
+	const [rows, cols] = [board.length, board[0].length]
 
-    for (let col = 1; col < (cols - 1); col++) {/* Time O(COLS) */
-        dfs(board, 0, rows, col, cols);         /* Space O(COLS) */
-        dfs(board, (rows - 1), rows, col, cols);/* Space O(COLS) */
-    }
+	for (let col = 1; col < cols - 1; col++) {
+		/* Time O(COLS) */
+		dfs(board, 0, rows, col, cols) /* Space O(COLS) */
+		dfs(board, rows - 1, rows, col, cols) /* Space O(COLS) */
+	}
 }
 
 var searchGrid = (board) => {
-    const [ rows, cols ] = [ board.length, board[0].length ];
+	const [rows, cols] = [board.length, board[0].length]
 
-    for (let row = 0; row < rows; row++) {/* Time O(ROWS) */
-        for (let col = 0; col < cols; col++) {/* Time O(COLS) */
-            const isO = board[row][col] === 'O';
-            if (isO) board[row][col] = 'X';
+	for (let row = 0; row < rows; row++) {
+		/* Time O(ROWS) */
+		for (let col = 0; col < cols; col++) {
+			/* Time O(COLS) */
+			const isO = board[row][col] === 'O'
+			if (isO) board[row][col] = 'X'
 
-            const isStar = board[row][col] === '*';
-            if (isStar) board[row][col] = 'O';
-        }
-    }
+			const isStar = board[row][col] === '*'
+			if (isStar) board[row][col] = 'O'
+		}
+	}
 }
 
 const dfs = (board, row, rows, col, cols) => {
-    const isBaseCase = board[row][col] !== 'O';
-    if (isBaseCase) return;
+	const isBaseCase = board[row][col] !== 'O'
+	if (isBaseCase) return
 
-    board[row][col] = '*';
+	board[row][col] = '*'
 
-    for (const [ _row, _col ] of getNeighbors(row, rows, col, cols)) {
-        dfs(board, _row, rows, _col, cols);/* Time O(HEIGHT) | Space O(HEIGHT) */
-    }
+	for (const [_row, _col] of getNeighbors(row, rows, col, cols)) {
+		dfs(board, _row, rows, _col, cols) /* Time O(HEIGHT) | Space O(HEIGHT) */
+	}
 }
 
-var getNeighbors = (row, rows, col, cols) => [ [0, 1], [0, -1], [1, 0], [-1, 0] ]
-    .map(([ _row, _col ]) => [ (row + _row), (col + _col)])
-    .filter(([ _row, _col ]) => (0 <= _row) && (_row < rows) && (0 <= _col) && (_col < cols))
-
+var getNeighbors = (row, rows, col, cols) =>
+	[
+		[0, 1],
+		[0, -1],
+		[1, 0],
+		[-1, 0],
+	]
+		.map(([_row, _col]) => [row + _row, col + _col])
+		.filter(
+			([_row, _col]) => 0 <= _row && _row < rows && 0 <= _col && _col < cols,
+		)
 
 /**
  * https://leetcode.com/problems/surrounded-regions/
@@ -116,65 +134,72 @@ var getNeighbors = (row, rows, col, cols) => [ [0, 1], [0, -1], [1, 0], [-1, 0] 
  * @param {character[][]} board
  * @return {void} Do not return anything, modify board in-place instead.
  */
- var solve = function solve(board, queue = new Queue([])) {
-    searchRows(board, queue);/* Time O(ROWS + COLS) | Space O(ROWS + COLS) */
-    searchCols(board, queue);/* Time O(ROWS + COLS) | Space O(ROWS + COLS) */
-    bfs(board, queue);       /* Time O(ROWS * COLS) | Space O(ROWS * COLS) */
-    searchGrid(board);       /* Time O(ROWS * COLS) */
+var solve = function solve(board, queue = new Queue([])) {
+	searchRows(board, queue) /* Time O(ROWS + COLS) | Space O(ROWS + COLS) */
+	searchCols(board, queue) /* Time O(ROWS + COLS) | Space O(ROWS + COLS) */
+	bfs(board, queue) /* Time O(ROWS * COLS) | Space O(ROWS * COLS) */
+	searchGrid(board) /* Time O(ROWS * COLS) */
 }
 
 var searchRows = (board, queue) => {
-    const [ rows, cols ] = [ board.length, board[0].length ]
+	const [rows, cols] = [board.length, board[0].length]
 
-    for (let row = 0; row < rows; row++) { /* Time O(ROWS) */
-        queue.enqueue([ row, 0 ]);         /* Space O(ROWS) */
-        queue.enqueue([ row, (cols - 1) ]);/* Space O(ROWS) */
-    }
+	for (let row = 0; row < rows; row++) {
+		/* Time O(ROWS) */
+		queue.enqueue([row, 0]) /* Space O(ROWS) */
+		queue.enqueue([row, cols - 1]) /* Space O(ROWS) */
+	}
 }
 
 var searchCols = (board, queue) => {
-    const [ rows, cols ] = [ board.length, board[0].length ]
+	const [rows, cols] = [board.length, board[0].length]
 
-    for (let col = 0; col < (cols - 1); col++) {/* Time O(COLS) */
-        queue.enqueue([ 0, col ]);              /* Space O(COLS) */
-        queue.enqueue([ (rows - 1), col ]);     /* Space O(COLS) */
-    }
+	for (let col = 0; col < cols - 1; col++) {
+		/* Time O(COLS) */
+		queue.enqueue([0, col]) /* Space O(COLS) */
+		queue.enqueue([rows - 1, col]) /* Space O(COLS) */
+	}
 }
 
 var bfs = (board, queue) => {
-    const [ rows, cols ] = [ board.length, board[0].length ];
+	const [rows, cols] = [board.length, board[0].length]
 
-    while (!queue.isEmpty()) {
-        for (let i = (queue.size() - 1); 0 <= i; i--) {/* Time O(WIDTH) */
-            const [ row, col ] = queue.dequeue();
+	while (!queue.isEmpty()) {
+		for (let i = queue.size() - 1; 0 <= i; i--) {
+			/* Time O(WIDTH) */
+			const [row, col] = queue.dequeue()
 
-            const isBaseCase = board[row][col] !== 'O';
-            if (isBaseCase) continue;
+			const isBaseCase = board[row][col] !== 'O'
+			if (isBaseCase) continue
 
-            board[row][col] = '*';
+			board[row][col] = '*'
 
-            for (const [ _row, _col ] of getNeighbors(row, rows, col, cols)) {
-                queue.enqueue([ _row, _col ]);         /* Space O(WIDTH) */
-            }
-        }
-    } 
+			for (const [_row, _col] of getNeighbors(row, rows, col, cols)) {
+				queue.enqueue([_row, _col]) /* Space O(WIDTH) */
+			}
+		}
+	}
 }
 
 var searchGrid = (board) => {
-    const [ rows, cols ] = [ board.length, board[0].length ];
+	const [rows, cols] = [board.length, board[0].length]
 
-    for (let row = 0; row < rows; row++) {/* Time O(ROWS) */
-        for (let col = 0; col < cols; col++) {/* Time O(COLS) */
-            const isO = board[row][col] === 'O';
-            if (isO) board[row][col] = 'X';
+	for (let row = 0; row < rows; row++) {
+		/* Time O(ROWS) */
+		for (let col = 0; col < cols; col++) {
+			/* Time O(COLS) */
+			const isO = board[row][col] === 'O'
+			if (isO) board[row][col] = 'X'
 
-            const isStar = board[row][col] === '*';
-            if (isStar) board[row][col] = 'O';
-        }
-    }
+			const isStar = board[row][col] === '*'
+			if (isStar) board[row][col] = 'O'
+		}
+	}
 }
 ```
+
 ### Python
+
 ```python
 class Solution:
     def solve(self, board: List[List[str]]) -> None:
@@ -208,7 +233,9 @@ class Solution:
                     board[r][c] = "O"
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given a matrix, capture ('X') all regions that are surrounded ('O')
@@ -224,18 +251,18 @@ public:
     void solve(vector<vector<char>>& board) {
         int m = board.size();
         int n = board[0].size();
-        
+
         // marking escaped cells along the border
         for (int i = 0; i < m; i++) {
             dfs(board,i,0,m,n);
             dfs(board,i,n-1,m,n);
         }
-        
+
         for (int j = 0; j < n; j++) {
             dfs(board,0,j,m,n);
             dfs(board,m-1,j,m,n);
         }
-        
+
         // flip cells to correct final states
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
@@ -253,9 +280,9 @@ private:
         if (i < 0 || i >= m || j < 0 || j >= n || board[i][j] != 'O') {
             return;
         }
-        
+
         board[i][j] = 'E';
-        
+
         dfs(board, i - 1, j, m, n);
         dfs(board, i + 1, j, m, n);
         dfs(board, i, j - 1, m, n);
@@ -264,7 +291,9 @@ private:
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -308,5 +337,3 @@ class Solution {
 }
 
 ```
-
-

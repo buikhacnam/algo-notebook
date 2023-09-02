@@ -11,100 +11,90 @@ difficulty: Easy
 </Callout>
 
 ## Description
+
 Design a class to find the <code>k<sup>th</sup></code> largest element in a stream. Note that it is the <code>k<sup>th</sup></code> largest element in the sorted order, not the <code>k<sup>th</sup></code> distinct element.
 
 Implement <code>KthLargest</code> class:
 
+    - <code>KthLargest(int k, int[] nums)</code> Initializes the object with the integer <code>k</code> and the stream of integers <code>nums</code>.
+    - <code>int add(int val)</code> Appends the integer <code>val</code> to the stream and returns the element representing the <code>k<sup>th</sup></code> largest element in the stream.
 
-	- <code>KthLargest(int k, int[] nums)</code> Initializes the object with the integer <code>k</code> and the stream of integers <code>nums</code>.
-	- <code>int add(int val)</code> Appends the integer <code>val</code> to the stream and returns the element representing the <code>k<sup>th</sup></code> largest element in the stream.
-
-
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input
-[&quot;KthLargest&quot;, &quot;add&quot;, &quot;add&quot;, &quot;add&quot;, &quot;add&quot;, &quot;add&quot;]
-[[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]
-Output
-[null, 4, 5, 5, 8, 8]
+<br />
 
-Explanation
-KthLargest kthLargest = new KthLargest(3, [4, 5, 8, 2]);
-kthLargest.add(3);   // return 4
-kthLargest.add(5);   // return 5
-kthLargest.add(10);  // return 5
-kthLargest.add(9);   // return 8
-kthLargest.add(4);   // return 8
+<pre className="overflow-x-auto">
+	Input [&quot;KthLargest&quot;, &quot;add&quot;, &quot;add&quot;,
+	&quot;add&quot;, &quot;add&quot;, &quot;add&quot;] [[3, [4, 5, 8, 2]], [3],
+	[5], [10], [9], [4]] Output [null, 4, 5, 5, 8, 8] Explanation KthLargest
+	kthLargest = new KthLargest(3, [4, 5, 8, 2]); kthLargest.add(3); // return 4
+	kthLargest.add(5); // return 5 kthLargest.add(10); // return 5
+	kthLargest.add(9); // return 8 kthLargest.add(4); // return 8
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= k &lt;= 10<sup>4</sup></code>
-	- <code>0 &lt;= nums.length &lt;= 10<sup>4</sup></code>
-	- <code>-10<sup>4</sup> &lt;= nums[i] &lt;= 10<sup>4</sup></code>
-	- <code>-10<sup>4</sup> &lt;= val &lt;= 10<sup>4</sup></code>
-	- At most <code>10<sup>4</sup></code> calls will be made to <code>add</code>.
-	- It is guaranteed that there will be at least <code>k</code> elements in the array when you search for the <code>k<sup>th</sup></code> element.
-
-
+    - <code>1 &lt;= k &lt;= 10<sup>4</sup></code>
+    - <code>0 &lt;= nums.length &lt;= 10<sup>4</sup></code>
+    - <code>-10<sup>4</sup> &lt;= nums[i] &lt;= 10<sup>4</sup></code>
+    - <code>-10<sup>4</sup> &lt;= val &lt;= 10<sup>4</sup></code>
+    - At most <code>10<sup>4</sup></code> calls will be made to <code>add</code>.
+    - It is guaranteed that there will be at least <code>k</code> elements in the array when you search for the <code>k<sup>th</sup></code> element.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-/** 
+/**
  * https://leetcode.com/problems/kth-largest-element-in-a-stream/
  * Time O(N * (K * log(K))) | Space O(K)
  * Your KthLargest object will be instantiated and called as such:
  * var obj = new KthLargest(k, nums)
  * var param_1 = obj.add(val)
  */
- class KthLargest {
-    /**
-     * @param {number} k
-     * @param {number[]} nums
-     * @constructor
-     */
-    constructor(k, nums) {
-        this.k = k
-        this.minHeap = new MinPriorityQueue();
+class KthLargest {
+	/**
+	 * @param {number} k
+	 * @param {number[]} nums
+	 * @constructor
+	 */
+	constructor(k, nums) {
+		this.k = k
+		this.minHeap = new MinPriorityQueue()
 
-        nums.forEach((num) => this.add(num))
-    }
+		nums.forEach((num) => this.add(num))
+	}
 
-    /**
-     * @param {number} val
-     * @return {number}
-     */
-    add(val, { minHeap } = this) {
-        const isUnderCapacity = minHeap.size() < this.k;
-        if (isUnderCapacity) {
-            minHeap.enqueue(val);
-        
-            return this.top();
-        }
+	/**
+	 * @param {number} val
+	 * @return {number}
+	 */
+	add(val, { minHeap } = this) {
+		const isUnderCapacity = minHeap.size() < this.k
+		if (isUnderCapacity) {
+			minHeap.enqueue(val)
 
-        const isLarger = this.top() < val;
-        if (isLarger) {
-            minHeap.dequeue()
-            minHeap.enqueue(val);
-        }
-        
-        return this.top();
-    }
+			return this.top()
+		}
 
-    top ({ minHeap } = this) {
-        return minHeap.front()?.element || 0
-    }
+		const isLarger = this.top() < val
+		if (isLarger) {
+			minHeap.dequeue()
+			minHeap.enqueue(val)
+		}
+
+		return this.top()
+	}
+
+	top({ minHeap } = this) {
+		return minHeap.front()?.element || 0
+	}
 }
-
-
 ```
+
 ### Python
+
 ```python
 class KthLargest:
     def __init__(self, k: int, nums: List[int]):
@@ -121,7 +111,9 @@ class KthLargest:
         return self.minHeap[0]
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Design a class to find the kth largest element in a stream
@@ -144,7 +136,7 @@ public:
             pq.pop();
         }
     }
-    
+
     int add(int val) {
         pq.push(val);
         if (pq.size() > k) {
@@ -164,7 +156,9 @@ private:
  */
 
 ```
+
 ### Java
+
 ```java
 class KthLargest {
 
@@ -187,5 +181,3 @@ class KthLargest {
 }
 
 ```
-
-

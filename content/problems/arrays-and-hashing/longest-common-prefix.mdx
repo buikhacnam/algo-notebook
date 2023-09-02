@@ -11,64 +11,62 @@ difficulty: Easy
 </Callout>
 
 ## Description
+
 Write a function to find the longest common prefix string amongst an array of strings.
 
 If there is no common prefix, return an empty string <code>&quot;&quot;</code>.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: strs = [&quot;flower&quot;,&quot;flow&quot;,&quot;flight&quot;]
-Output: &quot;fl&quot;
+<br />
+
+<pre className="overflow-x-auto">
+	Input: strs = [&quot;flower&quot;,&quot;flow&quot;,&quot;flight&quot;] Output:
+	&quot;fl&quot;
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: strs = [&quot;dog&quot;,&quot;racecar&quot;,&quot;car&quot;]
-Output: &quot;&quot;
-Explanation: There is no common prefix among the input strings.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: strs = [&quot;dog&quot;,&quot;racecar&quot;,&quot;car&quot;] Output:
+	&quot;&quot; Explanation: There is no common prefix among the input strings.
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= strs.length &lt;= 200</code>
-	- <code>0 &lt;= strs[i].length &lt;= 200</code>
-	- <code>strs[i]</code> consists of only lowercase English letters.
-
-
+    - <code>1 &lt;= strs.length &lt;= 200</code>
+    - <code>0 &lt;= strs[i].length &lt;= 200</code>
+    - <code>strs[i]</code> consists of only lowercase English letters.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * Time O(N^2) | Space O(N)
  * @param {string[]} strs
  * @return {string}
  */
-var longestCommonPrefix = function(strs) {
-    
-    let pre = strs[0];
-    
-    for(let word of strs) {
-                
-        for(let i = pre.length - 1; i >= 0; i--) {
-                             
-            if(pre[i] !== word[i]) {
-                pre = pre.slice(0, i);
-            }
-        }
-    }
-    
-    return pre;
-};
+var longestCommonPrefix = function (strs) {
+	let pre = strs[0]
 
+	for (let word of strs) {
+		for (let i = pre.length - 1; i >= 0; i--) {
+			if (pre[i] !== word[i]) {
+				pre = pre.slice(0, i)
+			}
+		}
+	}
+
+	return pre
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def longestCommonPrefix(self, strs: List[str]) -> str:
@@ -81,14 +79,16 @@ class Solution:
         return res
 
 ```
+
 ### C++
+
 ```cpp
 class Solution {
 public:
     string longestCommonPrefix(vector<string>& strs) {
         string result = strs[0];
         int charIndex = 0;
-        
+
         //finding minimum string length  - that could be max common prefix
         long maxCharIndex = strs[0].length();
         for (int i = 1; i < strs.size(); ++i) {
@@ -113,7 +113,9 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
     public String longestCommonPrefix(String[] strs) {
@@ -129,5 +131,3 @@ class Solution {
 }
 
 ```
-
-

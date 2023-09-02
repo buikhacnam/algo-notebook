@@ -11,40 +11,46 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given two integer arrays <code>preorder</code> and <code>inorder</code> where <code>preorder</code> is the preorder traversal of a binary tree and <code>inorder</code> is the inorder traversal of the same tree, construct and return *the binary tree*.
 
- 
+Given two integer arrays <code>preorder</code> and <code>inorder</code> where <code>preorder</code> is the preorder traversal of a binary tree and <code>inorder</code> is the inorder traversal of the same tree, construct and return _the binary tree_.
+
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/02/19/tree.jpg" width={277} height={302} />
-<br /><pre className="overflow-x-auto">
-Input: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
-Output: [3,9,20,null,null,15,7]
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/02/19/tree.jpg"
+	width={277}
+	height={302}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7] Output:
+	[3,9,20,null,null,15,7]
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: preorder = [-1], inorder = [-1]
-Output: [-1]
+<br />
+
+<pre className="overflow-x-auto">
+	Input: preorder = [-1], inorder = [-1] Output: [-1]
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= preorder.length &lt;= 3000</code>
-	- <code>inorder.length == preorder.length</code>
-	- <code>-3000 &lt;= preorder[i], inorder[i] &lt;= 3000</code>
-	- <code>preorder</code> and <code>inorder</code> consist of unique values.
-	- Each value of <code>inorder</code> also appears in <code>preorder</code>.
-	- <code>preorder</code> is guaranteed to be the preorder traversal of the tree.
-	- <code>inorder</code> is guaranteed to be the inorder traversal of the tree.
-
-
+    - <code>1 &lt;= preorder.length &lt;= 3000</code>
+    - <code>inorder.length == preorder.length</code>
+    - <code>-3000 &lt;= preorder[i], inorder[i] &lt;= 3000</code>
+    - <code>preorder</code> and <code>inorder</code> consist of unique values.
+    - Each value of <code>inorder</code> also appears in <code>preorder</code>.
+    - <code>preorder</code> is guaranteed to be the preorder traversal of the tree.
+    - <code>inorder</code> is guaranteed to be the inorder traversal of the tree.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
@@ -53,30 +59,30 @@ Constraints:
  * @param {number[]} inorder
  * @return {TreeNode}
  */
- var buildTree = function(preorder, inorder) {
-    const isBaseCase = !preorder.length || !inorder.length;
-    if (isBaseCase) return null;
+var buildTree = function (preorder, inorder) {
+	const isBaseCase = !preorder.length || !inorder.length
+	if (isBaseCase) return null
 
-    return dfs(preorder, inorder);
+	return dfs(preorder, inorder)
 }
 
 var dfs = (preorder, inorder) => {
-    const { leftInorder, mid, rightInorder } = getPointers(preorder, inorder);
-    const root = new TreeNode(inorder[mid]);
+	const { leftInorder, mid, rightInorder } = getPointers(preorder, inorder)
+	const root = new TreeNode(inorder[mid])
 
-    root.left = buildTree(preorder, leftInorder);
-    root.right = buildTree(preorder, rightInorder);
+	root.left = buildTree(preorder, leftInorder)
+	root.right = buildTree(preorder, rightInorder)
 
-    return root;
+	return root
 }
 
 const getPointers = (preorder, inorder) => {
-    const next = preorder.shift();
-    const mid = inorder.indexOf(next);
-    const leftInorder = inorder.slice(0, mid);
-    const rightInorder = inorder.slice(mid + 1);
+	const next = preorder.shift()
+	const mid = inorder.indexOf(next)
+	const leftInorder = inorder.slice(0, mid)
+	const rightInorder = inorder.slice(mid + 1)
 
-    return { leftInorder, mid, rightInorder };
+	return { leftInorder, mid, rightInorder }
 }
 
 /**
@@ -86,31 +92,37 @@ const getPointers = (preorder, inorder) => {
  * @param {number[]} inorder
  * @return {TreeNode}
  */
- var buildTree = function(preorder, inorder, max = -Infinity, indices = { preorder: 0, inorder: 0 }) {
-    const isBaseCase = preorder.length <= indices.inorder;
-    if (isBaseCase) return null;
+var buildTree = function (
+	preorder,
+	inorder,
+	max = -Infinity,
+	indices = { preorder: 0, inorder: 0 },
+) {
+	const isBaseCase = preorder.length <= indices.inorder
+	if (isBaseCase) return null
 
-    const isAtEnd = inorder[indices.inorder] === max;
-    if (isAtEnd) {
-        indices.inorder++;
-        return null;
-    }
+	const isAtEnd = inorder[indices.inorder] === max
+	if (isAtEnd) {
+		indices.inorder++
+		return null
+	}
 
-    return dfs(preorder, inorder, max, indices);
+	return dfs(preorder, inorder, max, indices)
 }
 
 var dfs = (preorder, inorder, max, indices) => {
-    const val = preorder[indices.preorder++]
-    const root = new TreeNode(val);
+	const val = preorder[indices.preorder++]
+	const root = new TreeNode(val)
 
-    root.left = buildTree(preorder, inorder, root.val, indices);
-    root.right = buildTree(preorder, inorder, max, indices);
+	root.left = buildTree(preorder, inorder, root.val, indices)
+	root.right = buildTree(preorder, inorder, max, indices)
 
-    return root;
+	return root
 }
-
 ```
+
 ### Python
+
 ```python
 class Solution:
     def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
@@ -124,7 +136,9 @@ class Solution:
         return root
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given 2 integer arrays preorder & inorder, construct & return the binary tree
@@ -158,9 +172,9 @@ private:
         if (i > j) {
             return NULL;
         }
-        
+
         TreeNode* root = new TreeNode(preorder[index]);
-        
+
         int split = 0;
         for (int i = 0; i < inorder.size(); i++) {
             if (preorder[index] == inorder[i]) {
@@ -169,16 +183,18 @@ private:
             }
         }
         index++;
-        
+
         root->left = build(preorder, inorder, index, i, split - 1);
         root->right = build(preorder, inorder, index, split + 1, j);
-        
+
         return root;
     }
 };
 
 ```
+
 ### Java
+
 ```java
 /**
  * Definition for a binary tree node.
@@ -264,5 +280,3 @@ class Solution {
 }
 
 ```
-
-

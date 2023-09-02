@@ -11,50 +11,42 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 A <a href="https://en.wikipedia.org/wiki/Trie" target="_blank">trie</a> (pronounced as &quot;try&quot;) or prefix tree is a tree data structure used to efficiently store and retrieve keys in a dataset of strings. There are various applications of this data structure, such as autocomplete and spellchecker.
 
 Implement the Trie class:
 
+    - <code>Trie()</code> Initializes the trie object.
+    - <code>void insert(String word)</code> Inserts the string <code>word</code> into the trie.
+    - <code>boolean search(String word)</code> Returns <code>true</code> if the string <code>word</code> is in the trie (i.e., was inserted before), and <code>false</code> otherwise.
+    - <code>boolean startsWith(String prefix)</code> Returns <code>true</code> if there is a previously inserted string <code>word</code> that has the prefix <code>prefix</code>, and <code>false</code> otherwise.
 
-	- <code>Trie()</code> Initializes the trie object.
-	- <code>void insert(String word)</code> Inserts the string <code>word</code> into the trie.
-	- <code>boolean search(String word)</code> Returns <code>true</code> if the string <code>word</code> is in the trie (i.e., was inserted before), and <code>false</code> otherwise.
-	- <code>boolean startsWith(String prefix)</code> Returns <code>true</code> if there is a previously inserted string <code>word</code> that has the prefix <code>prefix</code>, and <code>false</code> otherwise.
-
-
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input
-[&quot;Trie&quot;, &quot;insert&quot;, &quot;search&quot;, &quot;search&quot;, &quot;startsWith&quot;, &quot;insert&quot;, &quot;search&quot;]
-[[], [&quot;apple&quot;], [&quot;apple&quot;], [&quot;app&quot;], [&quot;app&quot;], [&quot;app&quot;], [&quot;app&quot;]]
-Output
-[null, null, true, false, true, null, true]
+<br />
 
-Explanation
-Trie trie = new Trie();
-trie.insert(&quot;apple&quot;);
-trie.search(&quot;apple&quot;);   // return True
-trie.search(&quot;app&quot;);     // return False
-trie.startsWith(&quot;app&quot;); // return True
-trie.insert(&quot;app&quot;);
-trie.search(&quot;app&quot;);     // return True
+<pre className="overflow-x-auto">
+	Input [&quot;Trie&quot;, &quot;insert&quot;, &quot;search&quot;,
+	&quot;search&quot;, &quot;startsWith&quot;, &quot;insert&quot;,
+	&quot;search&quot;] [[], [&quot;apple&quot;], [&quot;apple&quot;],
+	[&quot;app&quot;], [&quot;app&quot;], [&quot;app&quot;], [&quot;app&quot;]]
+	Output [null, null, true, false, true, null, true] Explanation Trie trie = new
+	Trie(); trie.insert(&quot;apple&quot;); trie.search(&quot;apple&quot;); //
+	return True trie.search(&quot;app&quot;); // return False
+	trie.startsWith(&quot;app&quot;); // return True trie.insert(&quot;app&quot;);
+	trie.search(&quot;app&quot;); // return True
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= word.length, prefix.length &lt;= 2000</code>
-	- <code>word</code> and <code>prefix</code> consist only of lowercase English letters.
-	- At most <code>3 * 10<sup>4</sup></code> calls in total will be made to <code>insert</code>, <code>search</code>, and <code>startsWith</code>.
-
-
+    - <code>1 &lt;= word.length, prefix.length &lt;= 2000</code>
+    - <code>word</code> and <code>prefix</code> consist only of lowercase English letters.
+    - At most <code>3 * 10<sup>4</sup></code> calls in total will be made to <code>insert</code>, <code>search</code>, and <code>startsWith</code>.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * Your Trie object will be instantiated and called as such:
@@ -65,59 +57,60 @@ Constraints:
  */
 
 class TrieNode {
-    constructor() {
-        this.children = {};
-        this.isWord = false;
-    }
+	constructor() {
+		this.children = {}
+		this.isWord = false
+	}
 }
 
 class Trie {
-    constructor() {
-        this.root = new TrieNode();
-    }
+	constructor() {
+		this.root = new TrieNode()
+	}
 
-    /* Time O(N) | Space O(N) */
-    insert(word, node = this.root) {
-        for (const char of word) {
-            const child = node.children[char] || new TrieNode();
+	/* Time O(N) | Space O(N) */
+	insert(word, node = this.root) {
+		for (const char of word) {
+			const child = node.children[char] || new TrieNode()
 
-            node.children[char] = child;
+			node.children[char] = child
 
-            node = child;
-        }
+			node = child
+		}
 
-        node.isWord = true;
-    }
+		node.isWord = true
+	}
 
-    /* Time O(N) | Space O(1) */
-    search(word, node = this.root) {
-        for (const char of word) {
-            const child = node.children[char] || null;
+	/* Time O(N) | Space O(1) */
+	search(word, node = this.root) {
+		for (const char of word) {
+			const child = node.children[char] || null
 
-            if (!child) return false;
+			if (!child) return false
 
-            node = child;
-        }
+			node = child
+		}
 
-        return node.isWord;
-    }
+		return node.isWord
+	}
 
-    /* Time O(N) | Space O(1) */
-    startsWith(prefix, node = this.root) {
-        for (const char of prefix) {
-            const child = node.children[char] || null;
+	/* Time O(N) | Space O(1) */
+	startsWith(prefix, node = this.root) {
+		for (const char of prefix) {
+			const child = node.children[char] || null
 
-            if (!child) return false;
+			if (!child) return false
 
-            node = child;
-        }
+			node = child
+		}
 
-        return true;
-    }
+		return true
+	}
 }
-
 ```
+
 ### Python
+
 ```python
 class TrieNode:
     def __init__(self):
@@ -169,7 +162,9 @@ class Trie:
         return True
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Implement trie (store/retrieve keys in dataset of strings)
@@ -184,7 +179,7 @@ class TrieNode {
 public:
     TrieNode* children[26];
     bool isWord;
-    
+
     TrieNode() {
         for (int i = 0; i < 26; i++) {
             children[i] = NULL;
@@ -198,11 +193,11 @@ public:
     Trie() {
         root = new TrieNode();
     }
-    
+
     void insert(string word) {
         TrieNode* node = root;
         int curr = 0;
-        
+
         for (int i = 0; i < word.size(); i++) {
             curr = word[i] - 'a';
             if (node->children[curr] == NULL) {
@@ -210,14 +205,14 @@ public:
             }
             node = node->children[curr];
         }
-        
+
         node->isWord = true;
     }
-    
+
     bool search(string word) {
         TrieNode* node = root;
         int curr = 0;
-        
+
         for (int i = 0; i < word.size(); i++) {
             curr = word[i] - 'a';
             if (node->children[curr] == NULL) {
@@ -225,14 +220,14 @@ public:
             }
             node = node->children[curr];
         }
-        
+
         return node->isWord;
     }
-    
+
     bool startsWith(string prefix) {
         TrieNode* node = root;
         int curr = 0;
-        
+
         for (int i = 0; i < prefix.size(); i++) {
             curr = prefix[i] - 'a';
             if (node->children[curr] == NULL) {
@@ -240,7 +235,7 @@ public:
             }
             node = node->children[curr];
         }
-        
+
         return true;
     }
 private:
@@ -256,7 +251,9 @@ private:
  */
 
 ```
+
 ### Java
+
 ```java
 class Trie {
 
@@ -316,5 +313,3 @@ class Trie {
 }
 
 ```
-
-

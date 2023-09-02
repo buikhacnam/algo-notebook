@@ -11,44 +11,55 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 In this problem, a tree is an undirected graph that is connected and has no cycles.
 
 You are given a graph that started as a tree with <code>n</code> nodes labeled from <code>1</code> to <code>n</code>, with one additional edge added. The added edge has two different vertices chosen from <code>1</code> to <code>n</code>, and was not an edge that already existed. The graph is represented as an array <code>edges</code> of length <code>n</code> where <code>edges[i] = [a<sub>i</sub>, b<sub>i</sub>]</code> indicates that there is an edge between nodes <code>a<sub>i</sub></code> and <code>b<sub>i</sub></code> in the graph.
 
-Return *an edge that can be removed so that the resulting graph is a tree of *<code>n</code>* nodes*. If there are multiple answers, return the answer that occurs last in the input.
+Return _an edge that can be removed so that the resulting graph is a tree of _<code>n</code>_ nodes_. If there are multiple answers, return the answer that occurs last in the input.
 
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/05/02/reduntant1-1-graph.jpg" width={222} height={222} />
-<br /><pre className="overflow-x-auto">
-Input: edges = [[1,2],[1,3],[2,3]]
-Output: [2,3]
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/05/02/reduntant1-1-graph.jpg"
+	width={222}
+	height={222}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: edges = [[1,2],[1,3],[2,3]] Output: [2,3]
 </pre>
 
 Example 2:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/05/02/reduntant1-2-graph.jpg" width={382} height={222} />
-<br /><pre className="overflow-x-auto">
-Input: edges = [[1,2],[2,3],[3,4],[1,4],[1,5]]
-Output: [1,4]
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/05/02/reduntant1-2-graph.jpg"
+	width={382}
+	height={222}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: edges = [[1,2],[2,3],[3,4],[1,4],[1,5]] Output: [1,4]
 </pre>
 
- 
 Constraints:
 
-
-	- <code>n == edges.length</code>
-	- <code>3 &lt;= n &lt;= 1000</code>
-	- <code>edges[i].length == 2</code>
-	- <code>1 &lt;= a<sub>i</sub> &lt; b<sub>i</sub> &lt;= edges.length</code>
-	- <code>a<sub>i</sub> != b<sub>i</sub></code>
-	- There are no repeated edges.
-	- The given graph is connected.
-
-
+    - <code>n == edges.length</code>
+    - <code>3 &lt;= n &lt;= 1000</code>
+    - <code>edges[i].length == 2</code>
+    - <code>1 &lt;= a<sub>i</sub> &lt; b<sub>i</sub> &lt;= edges.length</code>
+    - <code>a<sub>i</sub> != b<sub>i</sub></code>
+    - There are no repeated edges.
+    - The given graph is connected.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/redundant-connection/
@@ -57,33 +68,33 @@ Constraints:
  * @return {number[]}
  */
 var findRedundantConnection = function (edges) {
-    const graph = new Array((1000 + 1)).fill().map(() => []);
+	const graph = new Array(1000 + 1).fill().map(() => [])
 
-    for (const [ src, dst ] of edges) {
-        const hasNodes = (src in graph) && (dst in graph)
-        if (hasNodes && hasRedundantConnection(graph, src, dst)) return [ src, dst ];
+	for (const [src, dst] of edges) {
+		const hasNodes = src in graph && dst in graph
+		if (hasNodes && hasRedundantConnection(graph, src, dst)) return [src, dst]
 
-        graph[src].push(dst);
-        graph[dst].push(src);
-    }
+		graph[src].push(dst)
+		graph[dst].push(src)
+	}
 }
 
 const hasRedundantConnection = (graph, source, target, seen = new Set()) => {
-    if (seen.has(source)) return false
-    seen.add(source);
+	if (seen.has(source)) return false
+	seen.add(source)
 
-    const isEqual = source === target
-    if (isEqual) return true;
+	const isEqual = source === target
+	if (isEqual) return true
 
-    return dfs(graph, source, target, seen);
+	return dfs(graph, source, target, seen)
 }
 
 const dfs = (graph, source, target, seen) => {
-    for (const neighbor of graph[source]) {
-        if (hasRedundantConnection(graph, neighbor, target, seen)) return true;
-    }
+	for (const neighbor of graph[source]) {
+		if (hasRedundantConnection(graph, neighbor, target, seen)) return true
+	}
 
-    return false;
+	return false
 }
 
 /**
@@ -93,72 +104,72 @@ const dfs = (graph, source, target, seen) => {
  * @return {number[]}
  */
 var findRedundantConnection = function (edges) {
-    return new UnionFind(edges)
-        .redundantConnection;
-};
-
-class UnionFind {
-    constructor (edges) {
-        this.parent = new Array(edges.length + 1).fill().map((_, index) => index);
-        this.rank = new Array(edges.length + 1).fill(1);
-        this.redundantConnection = [ -1, -1 ];
-
-        this.search(edges);
-    }
-
-    search (edges) {
-        for (let [ src, dst ] of edges) {
-            const hasConnection = this.union(src, dst);
-            if (!hasConnection) return (this.redundantConnection = [ src, dst ]);
-        }
-    }
-
-    find (node, { parent } = this) {
-        let head = parent[node];
-
-        const isEqual = () => head === parent[head];
-        while (!isEqual()) {
-            const tail = parent[parent[head]];
-
-            this.compress(head, tail);
-            head = parent[head];
-        }
-
-        return head;
-    }
-
-    compress (tail, head, { parent } = this) {
-        parent[tail] = head;
-    }
-    
-    increaseRank (head, tail, { rank } = this) {
-        rank[head] += rank[tail];
-    }
-
-    union (src, dst, { rank } = this) {
-        const [ rootSrc, rootDst ] = [ this.find(src), this.find(dst) ];
-
-        const hasCycle = rootSrc === rootDst;
-        if (hasCycle) return false;
-
-        const isSrcGreater = rank[rootDst] < rank[rootSrc];
-        if (isSrcGreater) {
-            this.increaseRank(rootDst, rootSrc)
-            this.compress(rootSrc, rootDst)
-        }
-
-        const isDstGreater = rank[rootSrc] <= rank[rootDst];
-        if (isDstGreater) {
-            this.increaseRank(rootSrc, rootDst)
-            this.compress(rootDst, rootSrc)
-        }
-
-        return true;
-    }
+	return new UnionFind(edges).redundantConnection
 }
 
+class UnionFind {
+	constructor(edges) {
+		this.parent = new Array(edges.length + 1).fill().map((_, index) => index)
+		this.rank = new Array(edges.length + 1).fill(1)
+		this.redundantConnection = [-1, -1]
+
+		this.search(edges)
+	}
+
+	search(edges) {
+		for (let [src, dst] of edges) {
+			const hasConnection = this.union(src, dst)
+			if (!hasConnection) return (this.redundantConnection = [src, dst])
+		}
+	}
+
+	find(node, { parent } = this) {
+		let head = parent[node]
+
+		const isEqual = () => head === parent[head]
+		while (!isEqual()) {
+			const tail = parent[parent[head]]
+
+			this.compress(head, tail)
+			head = parent[head]
+		}
+
+		return head
+	}
+
+	compress(tail, head, { parent } = this) {
+		parent[tail] = head
+	}
+
+	increaseRank(head, tail, { rank } = this) {
+		rank[head] += rank[tail]
+	}
+
+	union(src, dst, { rank } = this) {
+		const [rootSrc, rootDst] = [this.find(src), this.find(dst)]
+
+		const hasCycle = rootSrc === rootDst
+		if (hasCycle) return false
+
+		const isSrcGreater = rank[rootDst] < rank[rootSrc]
+		if (isSrcGreater) {
+			this.increaseRank(rootDst, rootSrc)
+			this.compress(rootSrc, rootDst)
+		}
+
+		const isDstGreater = rank[rootSrc] <= rank[rootDst]
+		if (isDstGreater) {
+			this.increaseRank(rootSrc, rootDst)
+			this.compress(rootDst, rootSrc)
+		}
+
+		return true
+	}
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
@@ -191,7 +202,9 @@ class Solution:
                 return [n1, n2]
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given undirected graph, return an edge that can be removed to make a tree
@@ -209,15 +222,15 @@ class Solution {
 public:
     vector<int> findRedundantConnection(vector<vector<int>>& edges) {
         int n = edges.size();
-        
+
         vector<int> parents;
         vector<int> ranks;
         for (int i = 0; i < n + 1; i++) {
             parents.push_back(i);
             ranks.push_back(1);
-            
+
         }
-        
+
         vector<int> result;
         for (int i = 0; i < n; i++) {
             int n1 = edges[i][0];
@@ -238,14 +251,14 @@ private:
         }
         return p;
     }
-    
+
     bool doUnion(vector<int>& parents, vector<int>& ranks, int n1, int n2) {
         int p1 = doFind(parents, n1);
         int p2 = doFind(parents, n2);
         if (p1 == p2) {
             return false;
         }
-        
+
         if (ranks[p1] > ranks[p2]) {
             parents[p2] = p1;
             ranks[p1] += ranks[p2];
@@ -253,13 +266,15 @@ private:
             parents[p1] = p2;
             ranks[p2] += ranks[p1];
         }
-        
+
         return true;
     }
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -290,5 +305,3 @@ class Solution {
 }
 
 ```
-
-

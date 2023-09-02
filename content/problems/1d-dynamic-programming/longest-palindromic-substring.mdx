@@ -11,36 +11,35 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given a string <code>s</code>, return *the longest* <span data-keyword="palindromic-string">*palindromic*</span> <span data-keyword="substring-nonempty">*substring*</span> in <code>s</code>.
 
- 
+Given a string <code>s</code>, return _the longest_ <span data-keyword="palindromic-string">_palindromic_</span> <span data-keyword="substring-nonempty">_substring_</span> in <code>s</code>.
+
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;babad&quot;
-Output: &quot;bab&quot;
-Explanation: &quot;aba&quot; is also a valid answer.
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;babad&quot; Output: &quot;bab&quot; Explanation:
+	&quot;aba&quot; is also a valid answer.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;cbbd&quot;
-Output: &quot;bb&quot;
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;cbbd&quot; Output: &quot;bb&quot;
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= s.length &lt;= 1000</code>
-	- <code>s</code> consist of only digits and English letters.
-
-
+    - <code>1 &lt;= s.length &lt;= 1000</code>
+    - <code>s</code> consist of only digits and English letters.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * Expand Around Center
@@ -50,44 +49,52 @@ Constraints:
  * @return {string}
  */
 var longestPalindrome = (s) => {
-    const isEmpty = s.length === 0;
-    if (isEmpty) return '';
+	const isEmpty = s.length === 0
+	if (isEmpty) return ''
 
-    const [ left, right ] = search(s);/* Time O(N * N) */
+	const [left, right] = search(s) /* Time O(N * N) */
 
-    return s.slice(left, (right + 1));/* Time O(N * N) | Ignore Auxillary Space (N) */
+	return s.slice(
+		left,
+		right + 1,
+	) /* Time O(N * N) | Ignore Auxillary Space (N) */
 }
 
 const search = (s, left = 0, right = 0) => {
-    for (let index = 0; index < s.length; index++) {/* Time O(N) */
-        const len1 = getLength(s, index, index);        /* Time O(N) */
-        const len2 = getLength(s, index, (index + 1));  /* Time O(N) */
-        const [ length, window ] = [ (Math.max(len1, len2)), (right - left) ];
+	for (let index = 0; index < s.length; index++) {
+		/* Time O(N) */
+		const len1 = getLength(s, index, index) /* Time O(N) */
+		const len2 = getLength(s, index, index + 1) /* Time O(N) */
+		const [length, window] = [Math.max(len1, len2), right - left]
 
-        const canSkip = (length <= window);
-        if (canSkip) continue;
+		const canSkip = length <= window
+		if (canSkip) continue
 
-        left = (index - ((length - 1) >> 1));
-        right = (index + (length >> 1));
-    }
+		left = index - ((length - 1) >> 1)
+		right = index + (length >> 1)
+	}
 
-    return [ left, right ];
+	return [left, right]
 }
 
 const getLength = (s, left, right) => {
-    const canExpand = () => ((0 <= left) && (right < s.length));
-    const isSame = () => (s[left] === s[right]);
+	const canExpand = () => 0 <= left && right < s.length
+	const isSame = () => s[left] === s[right]
 
-    const isPalindrome = () => (canExpand() && isSame());
-    while (isPalindrome()) { left--; right++; }/* Time O(N) */
+	const isPalindrome = () => canExpand() && isSame()
+	while (isPalindrome()) {
+		left--
+		right++
+	} /* Time O(N) */
 
-    const window = ((right - left) - 1);
+	const window = right - left - 1
 
-    return window;
+	return window
 }
-
 ```
+
 ### Python
+
 ```python
 class Solution:
     def longestPalindrome(self, s: str) -> str:
@@ -116,7 +123,9 @@ class Solution:
         return res
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given a string s, return the longest palindromic substring in s
@@ -133,12 +142,12 @@ public:
     string longestPalindrome(string s) {
         int maxStart = 0;
         int maxLength = 1;
-        
+
         for (int i = 0; i < s.size() - 1; i++) {
             middleOut(s, i, i, maxStart, maxLength);
             middleOut(s, i, i + 1, maxStart, maxLength);
         }
-        
+
         return s.substr(maxStart, maxLength);
     }
 private:
@@ -155,7 +164,9 @@ private:
 };
 
 ```
+
 ### Java
+
 ```java
 // Solution: Expanding Around Center
 
@@ -287,5 +298,3 @@ class Solution3 {
 }
 
 ```
-
-

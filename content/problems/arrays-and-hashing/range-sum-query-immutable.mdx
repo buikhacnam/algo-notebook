@@ -11,83 +11,78 @@ difficulty: Easy
 </Callout>
 
 ## Description
+
 Given an integer array <code>nums</code>, handle multiple queries of the following type:
 
 <ol>
-	- Calculate the sum of the elements of <code>nums</code> between indices <code>left</code> and <code>right</code> inclusive where <code>left &lt;= right</code>.
+	- Calculate the sum of the elements of <code>nums</code> between indices{' '}
+	<code>left</code> and <code>right</code> inclusive where{' '}
+	<code>left &lt;= right</code>.
 </ol>
 
 Implement the <code>NumArray</code> class:
 
+    - <code>NumArray(int[] nums)</code> Initializes the object with the integer array <code>nums</code>.
+    - <code>int sumRange(int left, int right)</code> Returns the sum of the elements of <code>nums</code> between indices <code>left</code> and <code>right</code> inclusive (i.e. <code>nums[left] + nums[left + 1] + ... + nums[right]</code>).
 
-	- <code>NumArray(int[] nums)</code> Initializes the object with the integer array <code>nums</code>.
-	- <code>int sumRange(int left, int right)</code> Returns the sum of the elements of <code>nums</code> between indices <code>left</code> and <code>right</code> inclusive (i.e. <code>nums[left] + nums[left + 1] + ... + nums[right]</code>).
-
-
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input
-[&quot;NumArray&quot;, &quot;sumRange&quot;, &quot;sumRange&quot;, &quot;sumRange&quot;]
-[[[-2, 0, 3, -5, 2, -1]], [0, 2], [2, 5], [0, 5]]
-Output
-[null, 1, -1, -3]
+<br />
 
-Explanation
-NumArray numArray = new NumArray([-2, 0, 3, -5, 2, -1]);
-numArray.sumRange(0, 2); // return (-2) + 0 + 3 = 1
-numArray.sumRange(2, 5); // return 3 + (-5) + 2 + (-1) = -1
-numArray.sumRange(0, 5); // return (-2) + 0 + 3 + (-5) + 2 + (-1) = -3
+<pre className="overflow-x-auto">
+	Input [&quot;NumArray&quot;, &quot;sumRange&quot;, &quot;sumRange&quot;,
+	&quot;sumRange&quot;] [[[-2, 0, 3, -5, 2, -1]], [0, 2], [2, 5], [0, 5]] Output
+	[null, 1, -1, -3] Explanation NumArray numArray = new NumArray([-2, 0, 3, -5,
+	2, -1]); numArray.sumRange(0, 2); // return (-2) + 0 + 3 = 1
+	numArray.sumRange(2, 5); // return 3 + (-5) + 2 + (-1) = -1
+	numArray.sumRange(0, 5); // return (-2) + 0 + 3 + (-5) + 2 + (-1) = -3
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= nums.length &lt;= 10<sup>4</sup></code>
-	- <code>-10<sup>5</sup> &lt;= nums[i] &lt;= 10<sup>5</sup></code>
-	- <code>0 &lt;= left &lt;= right &lt; nums.length</code>
-	- At most <code>10<sup>4</sup></code> calls will be made to <code>sumRange</code>.
-
-
+    - <code>1 &lt;= nums.length &lt;= 10<sup>4</sup></code>
+    - <code>-10<sup>5</sup> &lt;= nums[i] &lt;= 10<sup>5</sup></code>
+    - <code>0 &lt;= left &lt;= right &lt; nums.length</code>
+    - At most <code>10<sup>4</sup></code> calls will be made to <code>sumRange</code>.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/range-sum-query-immutable/
  * @param {number[]} nums
  */
 class NumArray {
-    constructor(nums) {
-        this.arr = nums;
-    }
+	constructor(nums) {
+		this.arr = nums
+	}
 
-    /** 
-     * Time O(n) | Space O(1)
-     * @param {number} left 
-     * @param {number} right
-     * @return {number}
-     */
-    sumRange(left, right) {
-        let total = 0;
-        for (let i = left; i < right + 1; i++) {
-            total += this.arr[i];
-        }
-        return total;
-    }
+	/**
+	 * Time O(n) | Space O(1)
+	 * @param {number} left
+	 * @param {number} right
+	 * @return {number}
+	 */
+	sumRange(left, right) {
+		let total = 0
+		for (let i = left; i < right + 1; i++) {
+			total += this.arr[i]
+		}
+		return total
+	}
 }
 
-/** 
+/**
  * Your NumArray object will be instantiated and called as such:
  * var obj = new NumArray(nums)
  * var param_1 = obj.sumRange(left,right)
  */
-
 ```
+
 ### Python
+
 ```python
 class NumArray:
 
@@ -97,15 +92,17 @@ class NumArray:
         for n in nums:
             cur += n
             self.prefix.append(cur)
-        
-        
+
+
     def sumRange(self, left: int, right: int) -> int:
-        r = self.prefix[right] 
+        r = self.prefix[right]
         l = self.prefix[left - 1] if left > 0 else 0
         return r - l
 
 ```
+
 ### C++
+
 ```cpp
 /*
 Given an integer array nums, handle multiple queries of the following type:
@@ -115,7 +112,7 @@ Calculate the sum of the elements of nums between indices left and right inclusi
 Implement the NumArray class:
 
   - NumArray(int[] nums) Initializes the object with the integer array nums.
-  - int sumRange(int left, int right) Returns the sum of the elements of nums between indices left and right 
+  - int sumRange(int left, int right) Returns the sum of the elements of nums between indices left and right
     inclusive (i.e. nums[left] + nums[left + 1] + ... + nums[right]).
 
 */
@@ -131,7 +128,7 @@ public:
             prefixSum.push_back(count);
         }
     }
-    
+
     int sumRange(int left, int right) {
         int answer=prefixSum[right];
 
@@ -148,7 +145,9 @@ public:
  * int param_1 = obj->sumRange(left,right);
  */
 ```
+
 ### Java
+
 ```java
 class NumArray {
 
@@ -159,7 +158,7 @@ class NumArray {
             arr[i]+=arr[i-1];
         }
     }
-    
+
     public int sumRange(int left, int right) {
         if(left==0){
             return arr[right];
@@ -175,5 +174,3 @@ class NumArray {
  */
 
 ```
-
-

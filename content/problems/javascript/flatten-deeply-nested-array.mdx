@@ -37,30 +37,24 @@ Passing a depth of n=0 will always result in the original array. This is because
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input
-arr = [1, 2, 3, [4, 5, 6], [7, 8, [9, 10, 11], 12], [13, 14, 15]]
-n = 1
-Output
-[1, 2, 3, 4, 5, 6, 7, 8, [9, 10, 11], 12, 13, 14, 15]
+<br />
 
-Explanation
-The subarrays starting with 4, 7, and 13 are all flattened. This is because their depth of 0 is less than 1. However [9, 10, 11] remains unflattened because its depth is 1.
-
+<pre className="overflow-x-auto">
+	Input arr = [1, 2, 3, [4, 5, 6], [7, 8, [9, 10, 11], 12], [13, 14, 15]] n = 1
+	Output [1, 2, 3, 4, 5, 6, 7, 8, [9, 10, 11], 12, 13, 14, 15] Explanation The
+	subarrays starting with 4, 7, and 13 are all flattened. This is because their
+	depth of 0 is less than 1. However [9, 10, 11] remains unflattened because its
+	depth is 1.
 </pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input
-arr = [[1, 2, 3], [4, 5, 6], [7, 8, [9, 10, 11], 12], [13, 14, 15]]
-n = 2
-Output
-[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+<br />
 
-Explanation
-The maximum depth of any subarray is 1. Thus, all of them are flattened.
-
+<pre className="overflow-x-auto">
+	Input arr = [[1, 2, 3], [4, 5, 6], [7, 8, [9, 10, 11], 12], [13, 14, 15]] n =
+	2 Output [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] Explanation The
+	maximum depth of any subarray is 1. Thus, all of them are flattened.
 </pre>
 
 Constraints:

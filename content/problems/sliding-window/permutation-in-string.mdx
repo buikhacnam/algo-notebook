@@ -11,38 +11,37 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given two strings <code>s1</code> and <code>s2</code>, return <code>true</code>* if *<code>s2</code>* contains a permutation of *<code>s1</code>*, or *<code>false</code>* otherwise*.
+
+Given two strings <code>s1</code> and <code>s2</code>, return <code>true</code>_ if _<code>s2</code>_ contains a permutation of _<code>s1</code>_, or _<code>false</code>_ otherwise_.
 
 In other words, return <code>true</code> if one of <code>s1</code>&#39;s permutations is the substring of <code>s2</code>.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: s1 = &quot;ab&quot;, s2 = &quot;eidbaooo&quot;
-Output: true
-Explanation: s2 contains one permutation of s1 (&quot;ba&quot;).
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s1 = &quot;ab&quot;, s2 = &quot;eidbaooo&quot; Output: true
+	Explanation: s2 contains one permutation of s1 (&quot;ba&quot;).
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: s1 = &quot;ab&quot;, s2 = &quot;eidboaoo&quot;
-Output: false
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s1 = &quot;ab&quot;, s2 = &quot;eidboaoo&quot; Output: false
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= s1.length, s2.length &lt;= 10<sup>4</sup></code>
-	- <code>s1</code> and <code>s2</code> consist of lowercase English letters.
-
-
+    - <code>1 &lt;= s1.length, s2.length &lt;= 10<sup>4</sup></code>
+    - <code>s1</code> and <code>s2</code> consist of lowercase English letters.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/permutation-in-string/
@@ -52,70 +51,70 @@ Constraints:
  * @return {boolean}
  */
 var checkInclusion = (s1, s2) => {
-    const isInvalid = s2.length < s1.length;
-    if (isInvalid) return false;
+	const isInvalid = s2.length < s1.length
+	if (isInvalid) return false
 
-    let [left, right] = [0, 0];
-    const [s1FrequencyMap, s2FrequencyMap] = getFrequencyMaps(s1);
+	let [left, right] = [0, 0]
+	const [s1FrequencyMap, s2FrequencyMap] = getFrequencyMaps(s1)
 
-    while (right < s2.length) {
-        addRightFrequency(s2, right, s2FrequencyMap);
+	while (right < s2.length) {
+		addRightFrequency(s2, right, s2FrequencyMap)
 
-        const window = right - left + 1;
-        const isPermutation =
-            window === s1.length && isSame(s1FrequencyMap, s2FrequencyMap);
-        if (isPermutation) return true;
+		const window = right - left + 1
+		const isPermutation =
+			window === s1.length && isSame(s1FrequencyMap, s2FrequencyMap)
+		if (isPermutation) return true
 
-        const canSlide = s1.length <= window;
-        if (canSlide) {
-            subtractLeftFrequency(s2, left, s2FrequencyMap);
-            left++;
-        }
+		const canSlide = s1.length <= window
+		if (canSlide) {
+			subtractLeftFrequency(s2, left, s2FrequencyMap)
+			left++
+		}
 
-        right++;
-    }
+		right++
+	}
 
-    return false;
-};
+	return false
+}
 
 const getFrequencyMaps = (s1) => {
-    const [s1FrequencyMap, s2FrequencyMap] = new Array(2)
-        .fill()
-        .map(() => new Array(26).fill(0));
+	const [s1FrequencyMap, s2FrequencyMap] = new Array(2)
+		.fill()
+		.map(() => new Array(26).fill(0))
 
-    for (const char of s1) s1FrequencyMap[getCode(char)]++;
+	for (const char of s1) s1FrequencyMap[getCode(char)]++
 
-    return [s1FrequencyMap, s2FrequencyMap];
-};
+	return [s1FrequencyMap, s2FrequencyMap]
+}
 
-const getCode = (char) => char.charCodeAt(0) - 'a'.charCodeAt(0);
+const getCode = (char) => char.charCodeAt(0) - 'a'.charCodeAt(0)
 
 const addRightFrequency = (s, right, frequencyMap) => {
-    const char = s[right];
-    const index = getCode(char);
+	const char = s[right]
+	const index = getCode(char)
 
-    frequencyMap[index]++;
+	frequencyMap[index]++
 
-    return frequencyMap[index];
-};
+	return frequencyMap[index]
+}
 
 const subtractLeftFrequency = (s, left, frequencyMap) => {
-    const char = s[left];
-    const index = getCode(char);
+	const char = s[left]
+	const index = getCode(char)
 
-    frequencyMap[index]--;
+	frequencyMap[index]--
 
-    return frequencyMap[index];
-};
+	return frequencyMap[index]
+}
 
 const isSame = (a, b) => {
-    for (let i = 0; i < 26; i++) {
-        const isMatch = a[i] === b[i];
-        if (!isMatch) return false;
-    }
+	for (let i = 0; i < 26; i++) {
+		const isMatch = a[i] === b[i]
+		if (!isMatch) return false
+	}
 
-    return true;
-};
+	return true
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // Static Sliding Window
@@ -133,66 +132,66 @@ const isSame = (a, b) => {
  * @return {boolean}
  */
 function checkInclusion(s1, s2) {
-    if (s1.length > s2.length) {
-        return false;
-    }
+	if (s1.length > s2.length) {
+		return false
+	}
 
-    const s1Chars = Object.create(null);
-    const s2Chars = Object.create(null);
+	const s1Chars = Object.create(null)
+	const s2Chars = Object.create(null)
 
-    for (const ch of s1) {
-        if (!(ch in s1Chars)) {
-            s1Chars[ch] = 0;
-            s2Chars[ch] = 0;
-        }
-        ++s1Chars[ch];
-    }
+	for (const ch of s1) {
+		if (!(ch in s1Chars)) {
+			s1Chars[ch] = 0
+			s2Chars[ch] = 0
+		}
+		++s1Chars[ch]
+	}
 
-    for (let i = 0; i < s1.length; ++i) {
-        const ch = s2[i];
-        if (ch in s1Chars) {
-            ++s2Chars[ch];
-        }
-    }
+	for (let i = 0; i < s1.length; ++i) {
+		const ch = s2[i]
+		if (ch in s1Chars) {
+			++s2Chars[ch]
+		}
+	}
 
-    let matches = 0;
-    let matched = 0;
+	let matches = 0
+	let matched = 0
 
-    for (const ch in s1Chars) {
-        if (s1Chars[ch] === s2Chars[ch]) {
-            ++matches;
-        }
-        ++matched;
-    }
+	for (const ch in s1Chars) {
+		if (s1Chars[ch] === s2Chars[ch]) {
+			++matches
+		}
+		++matched
+	}
 
-    const last = s2.length - s1.length;
+	const last = s2.length - s1.length
 
-    for (let i = 0; i < last; ++i) {
-        if (matches === matched) {
-            return true;
-        }
+	for (let i = 0; i < last; ++i) {
+		if (matches === matched) {
+			return true
+		}
 
-        const ch1 = s2[i];
-        const ch2 = s2[i + s1.length];
+		const ch1 = s2[i]
+		const ch2 = s2[i + s1.length]
 
-        if (ch1 in s1Chars) {
-            if (s1Chars[ch1] === s2Chars[ch1]--) {
-                --matches;
-            } else if (s1Chars[ch1] === s2Chars[ch1]) {
-                ++matches;
-            }
-        }
+		if (ch1 in s1Chars) {
+			if (s1Chars[ch1] === s2Chars[ch1]--) {
+				--matches
+			} else if (s1Chars[ch1] === s2Chars[ch1]) {
+				++matches
+			}
+		}
 
-        if (ch2 in s1Chars) {
-            if (s1Chars[ch2] === s2Chars[ch2]++) {
-                --matches;
-            } else if (s1Chars[ch2] === s2Chars[ch2]) {
-                ++matches;
-            }
-        }
-    }
+		if (ch2 in s1Chars) {
+			if (s1Chars[ch2] === s2Chars[ch2]++) {
+				--matches
+			} else if (s1Chars[ch2] === s2Chars[ch2]) {
+				++matches
+			}
+		}
+	}
 
-    return matches === matched;
+	return matches === matched
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -211,68 +210,69 @@ function checkInclusion(s1, s2) {
  * @return {boolean}
  */
 function checkInclusion(s1, s2) {
-    if (s1.length > s2.length) {
-        return false;
-    }
+	if (s1.length > s2.length) {
+		return false
+	}
 
-    const s1Chars = Object.create(null);
+	const s1Chars = Object.create(null)
 
-    for (const ch of s1) {
-        if (!(ch in s1Chars)) {
-            s1Chars[ch] = 0;
-        }
-        ++s1Chars[ch];
-    }
+	for (const ch of s1) {
+		if (!(ch in s1Chars)) {
+			s1Chars[ch] = 0
+		}
+		++s1Chars[ch]
+	}
 
-    const last = s2.length - s1.length;
-    let i = 0;
+	const last = s2.length - s1.length
+	let i = 0
 
-    while (i <= last) {
-        while (i <= last && !(s2[i] in s1Chars)) {
-            ++i;
-        }
+	while (i <= last) {
+		while (i <= last && !(s2[i] in s1Chars)) {
+			++i
+		}
 
-        if (i > last) {
-            return false;
-        }
+		if (i > last) {
+			return false
+		}
 
-        const subChars = Object.create(null);
-        let j = i;
+		const subChars = Object.create(null)
+		let j = i
 
-        while (j < s2.length && s2[j] in s1Chars) {
-            const ch = s2[j];
+		while (j < s2.length && s2[j] in s1Chars) {
+			const ch = s2[j]
 
-            if (!(ch in subChars)) {
-                subChars[ch] = 0;
-            }
-            ++subChars[ch];
+			if (!(ch in subChars)) {
+				subChars[ch] = 0
+			}
+			++subChars[ch]
 
-            if (subChars[ch] > s1Chars[ch]) {
-                break;
-            }
+			if (subChars[ch] > s1Chars[ch]) {
+				break
+			}
 
-            ++j;
-        }
+			++j
+		}
 
-        if (s1.length === j - i) {
-            return true;
-        }
+		if (s1.length === j - i) {
+			return true
+		}
 
-        if (j < s2.length && s2[j] in s1Chars) {
-            while (s2[i] !== s2[j]) {
-                ++i;
-            }
-            ++i;
-        } else {
-            i = j;
-        }
-    }
+		if (j < s2.length && s2[j] in s1Chars) {
+			while (s2[i] !== s2[j]) {
+				++i
+			}
+			++i
+		} else {
+			i = j
+		}
+	}
 
-    return false;
+	return false
 }
-
 ```
+
 ### Python
+
 ```python
 class Solution:
     def checkInclusion(self, s1: str, s2: str) -> bool:
@@ -310,7 +310,9 @@ class Solution:
         return matches == 26
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given 2 strings, return true if s2 contains permutation of s1
@@ -330,7 +332,7 @@ public:
         if (m > n) {
             return false;
         }
-        
+
         vector<int> count(26);
         for (int i = 0; i < m; i++) {
             count[s1[i] - 'a']++;
@@ -339,7 +341,7 @@ public:
         if (isPermutation(count)) {
             return true;
         }
-        
+
         for (int i = m; i < n; i++) {
             count[s2[i] - 'a']--;
             count[s2[i - m] - 'a']++;
@@ -347,7 +349,7 @@ public:
                 return true;
             }
         }
-        
+
         return false;
     }
 private:
@@ -362,7 +364,9 @@ private:
 };
 
 ```
+
 ### Java
+
 ```java
 public class Solution {
     public boolean checkInclusion(String s1, String s2) {
@@ -385,5 +389,3 @@ public class Solution {
     }
 }
 ```
-
-

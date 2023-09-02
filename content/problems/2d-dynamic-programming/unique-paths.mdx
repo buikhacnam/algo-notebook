@@ -11,42 +11,42 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 There is a robot on an <code>m x n</code> grid. The robot is initially located at the top-left corner (i.e., <code>grid[0][0]</code>). The robot tries to move to the bottom-right corner (i.e., <code>grid[m - 1][n - 1]</code>). The robot can only move either down or right at any point in time.
 
-Given the two integers <code>m</code> and <code>n</code>, return *the number of possible unique paths that the robot can take to reach the bottom-right corner*.
+Given the two integers <code>m</code> and <code>n</code>, return _the number of possible unique paths that the robot can take to reach the bottom-right corner_.
 
-The test cases are generated so that the answer will be less than or equal to <code>2 * 10<sup>9</sup></code>.
+The test cases are generated so that the answer will be less than or equal to <code>2 \* 10<sup>9</sup></code>.
 
- 
 Example 1:
-<Image src="https://assets.leetcode.com/uploads/2018/10/22/robot_maze.png" width={400} height={183} />
-<br /><pre className="overflow-x-auto">
-Input: m = 3, n = 7
-Output: 28
-</pre>
+
+<Image
+	src="https://assets.leetcode.com/uploads/2018/10/22/robot_maze.png"
+	width={400}
+	height={183}
+/>
+<br />
+
+<pre className="overflow-x-auto">Input: m = 3, n = 7 Output: 28</pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: m = 3, n = 2
-Output: 3
-Explanation: From the top-left corner, there are a total of 3 ways to reach the bottom-right corner:
-1. Right -&gt; Down -&gt; Down
-2. Down -&gt; Down -&gt; Right
-3. Down -&gt; Right -&gt; Down
+<br />
+
+<pre className="overflow-x-auto">
+	Input: m = 3, n = 2 Output: 3 Explanation: From the top-left corner, there are
+	a total of 3 ways to reach the bottom-right corner: 1. Right -&gt; Down -&gt;
+	Down 2. Down -&gt; Down -&gt; Right 3. Down -&gt; Right -&gt; Down
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= m, n &lt;= 100</code>
-
-
+    - <code>1 &lt;= m, n &lt;= 100</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * Brute Force - DFS
@@ -56,18 +56,18 @@ Constraints:
  * @param {number} n
  * @return {number}
  */
- var uniquePaths = (row, col) => {
-    const isBaseCase = ((row == 1) || (col == 1));
-    if (isBaseCase) return 1;
+var uniquePaths = (row, col) => {
+	const isBaseCase = row == 1 || col == 1
+	if (isBaseCase) return 1
 
-    return dfs(row, col);/* Time O(2^N) | Space O(HEIGHT) */
+	return dfs(row, col) /* Time O(2^N) | Space O(HEIGHT) */
 }
 
 var dfs = (row, col) => {
-    const left = uniquePaths((row - 1), col); /* Time O(2^N) | Space O(HEIGHT) */
-    const right = uniquePaths(row, (col - 1));/* Time O(2^N) | Space O(HEIGHT) */
+	const left = uniquePaths(row - 1, col) /* Time O(2^N) | Space O(HEIGHT) */
+	const right = uniquePaths(row, col - 1) /* Time O(2^N) | Space O(HEIGHT) */
 
-    return (left + right);
+	return left + right
 }
 
 /**
@@ -80,24 +80,38 @@ var dfs = (row, col) => {
  * @return {number}
  */
 var uniquePaths = (row, col, memo = getMemo(row, col)) => {
-    const isBaseCase = ((row === 1) || (col === 1));
-    if (isBaseCase) return 1;
+	const isBaseCase = row === 1 || col === 1
+	if (isBaseCase) return 1
 
-    const hasSeen = (memo[row][col] !== 0);
-    if (hasSeen) return memo[row][col];
+	const hasSeen = memo[row][col] !== 0
+	if (hasSeen) return memo[row][col]
 
-    return dfs(row, col, memo);/* Time O(ROWS * COLS) | Space O((ROWS * COLS) + HEIGHT) */
-};
+	return dfs(
+		row,
+		col,
+		memo,
+	) /* Time O(ROWS * COLS) | Space O((ROWS * COLS) + HEIGHT) */
+}
 
-var getMemo = (row, col) => new Array((row + 1)).fill()/* Time O(ROWS)| Space O(ROWS) */
-    .map(() => new Array((col + 1)).fill(0));                /* Time O(COLS)| Space O(COLS) */
+var getMemo = (row, col) =>
+	new Array(row + 1)
+		.fill() /* Time O(ROWS)| Space O(ROWS) */
+		.map(() => new Array(col + 1).fill(0)) /* Time O(COLS)| Space O(COLS) */
 
 var dfs = (row, col, memo) => {
-    const left = uniquePaths((row - 1), col, memo); /* Time O(ROWS * COLS) | Space O(HEIGHT) */
-    const right = uniquePaths(row, (col - 1), memo);/* Time O(ROWS * COLS) | Space O(HEIGHT) */
+	const left = uniquePaths(
+		row - 1,
+		col,
+		memo,
+	) /* Time O(ROWS * COLS) | Space O(HEIGHT) */
+	const right = uniquePaths(
+		row,
+		col - 1,
+		memo,
+	) /* Time O(ROWS * COLS) | Space O(HEIGHT) */
 
-    memo[row][col] = (left + right);                /*                     | Space O(ROWS * COLS) */
-    return memo[row][col];
+	memo[row][col] = left + right /*                     | Space O(ROWS * COLS) */
+	return memo[row][col]
 }
 
 /**
@@ -110,37 +124,45 @@ var dfs = (row, col, memo) => {
  * @return {number}
  */
 var uniquePaths = (row, col) => {
-    const tabu = initTabu(row, col);/* Time O(ROWS * COLS) | Space O(ROWS * COLS) */
+	const tabu = initTabu(
+		row,
+		col,
+	) /* Time O(ROWS * COLS) | Space O(ROWS * COLS) */
 
-    search(row, col, tabu);         /* Time O(ROWS * COLS) | Space O(ROWS * COLS) */
+	search(row, col, tabu) /* Time O(ROWS * COLS) | Space O(ROWS * COLS) */
 
-    return tabu[row - 1][col - 1];
-};
+	return tabu[row - 1][col - 1]
+}
 
 var search = (row, col, tabu) => {
-    for (let _row = 1; (_row < row); _row++) {/* Time O(ROWS)*/
-        for (let _col = 1; (_col < col); _col++) {/* Time O(COLS)*/
-            const left = (tabu[(_row - 1)][_col])
-            const right = (tabu[_row][(_col - 1)]);
+	for (let _row = 1; _row < row; _row++) {
+		/* Time O(ROWS)*/
+		for (let _col = 1; _col < col; _col++) {
+			/* Time O(COLS)*/
+			const left = tabu[_row - 1][_col]
+			const right = tabu[_row][_col - 1]
 
-            tabu[_row][_col] = (left + right);        /* Space O(ROWS * COLS) */
-        }
-    }
+			tabu[_row][_col] = left + right /* Space O(ROWS * COLS) */
+		}
+	}
 }
 
 var initTabu = (row, col) => {
-    const tabu = new Array(row).fill()        /* Time O(ROWS)     | Space O(ROWS) */ 
-        .map(() => new Array(col).fill(0));       /* Time O(COLS) | Space O(COLS) */ 
-    
-    for (let _row = 0; (_row < row); _row++) {/* Time O(ROWS) */ 
-        tabu[_row][0] = 1;                        /*              | Space O(ROWS * COLS) */ 
-    }
+	const tabu = new Array(row)
+		.fill() /* Time O(ROWS)     | Space O(ROWS) */
+		.map(() => new Array(col).fill(0)) /* Time O(COLS) | Space O(COLS) */
 
-    for (let _col = 0; (_col < col); _col++) {/* Time O(COLS) */ 
-        tabu[0][_col] = 1;                        /*              | Space O(ROWS * COLS) */ 
-    }
+	for (let _row = 0; _row < row; _row++) {
+		/* Time O(ROWS) */
+		tabu[_row][0] = 1 /*              | Space O(ROWS * COLS) */
+	}
 
-    return tabu;
+	for (let _col = 0; _col < col; _col++) {
+		/* Time O(COLS) */
+		tabu[0][_col] = 1 /*              | Space O(ROWS * COLS) */
+	}
+
+	return tabu
 }
 
 /**
@@ -153,26 +175,31 @@ var initTabu = (row, col) => {
  * @return {number}
  */
 var uniquePaths = (row, col) => {
-    const tabu = initTabu(col);/* Time O(COLS)        | Space O(COLS) */ 
+	const tabu = initTabu(col) /* Time O(COLS)        | Space O(COLS) */
 
-    search(row, col, tabu);    /* Time O(ROWS * COLS) | Space O(COLS) */ 
+	search(row, col, tabu) /* Time O(ROWS * COLS) | Space O(COLS) */
 
-    return tabu[(col - 1)];
-};
+	return tabu[col - 1]
+}
 
-var initTabu = (col) => new Array(col).fill(1); /* Time O(COLS) | Space O(COLS) */ 
+var initTabu = (col) =>
+	new Array(col).fill(1) /* Time O(COLS) | Space O(COLS) */
 
 var search = (row, col, tabu) => {
-    for (let _row = 1; (_row < row); _row++) {/* Time O(ROWS) */ 
-        for (let _col = 1; (_col < col); _col++) {/* Time O(COLS) */ 
-            const prev = tabu[(_col - 1)];
+	for (let _row = 1; _row < row; _row++) {
+		/* Time O(ROWS) */
+		for (let _col = 1; _col < col; _col++) {
+			/* Time O(COLS) */
+			const prev = tabu[_col - 1]
 
-            tabu[_col] += prev;                     /* Space O(COLS) */ 
-        }
-    }
+			tabu[_col] += prev /* Space O(COLS) */
+		}
+	}
 }
 ```
+
 ### Python
+
 ```python
 class Solution:
     def uniquePaths(self, m: int, n: int) -> int:
@@ -188,7 +215,9 @@ class Solution:
         # O(n * m) O(n)
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given grid, return # of unique paths from top-left to bottom-right
@@ -205,7 +234,7 @@ class Solution {
 public:
     int uniquePaths(int m, int n) {
         vector<vector<int>> grid(m, vector<int>(n, 0));
-        
+
         for (int i = 0; i < m; i++) {
             grid[i][0] = 1;
         }
@@ -217,13 +246,15 @@ public:
                 grid[i][j] = grid[i - 1][j] + grid[i][j - 1];
             }
         }
-        
+
         return grid[m - 1][n - 1];
     }
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -283,5 +314,3 @@ class Solution {
 }
 
 ```
-
-

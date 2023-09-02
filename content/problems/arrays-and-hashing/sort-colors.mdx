@@ -11,98 +11,92 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 Given an array <code>nums</code> with <code>n</code> objects colored red, white, or blue, sort them <a href="https://en.wikipedia.org/wiki/In-place_algorithm" target="_blank">in-place</a> so that objects of the same color are adjacent, with the colors in the order red, white, and blue.
 
 We will use the integers <code>0</code>, <code>1</code>, and <code>2</code> to represent the color red, white, and blue, respectively.
 
 You must solve this problem without using the library&#39;s sort function.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [2,0,2,1,1,0]
-Output: [0,0,1,1,2,2]
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [2,0,2,1,1,0] Output: [0,0,1,1,2,2]
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [2,0,1]
-Output: [0,1,2]
-</pre>
+<br />
 
- 
+<pre className="overflow-x-auto">Input: nums = [2,0,1] Output: [0,1,2]</pre>
+
 Constraints:
 
+    - <code>n == nums.length</code>
+    - <code>1 &lt;= n &lt;= 300</code>
+    - <code>nums[i]</code> is either <code>0</code>, <code>1</code>, or <code>2</code>.
 
-	- <code>n == nums.length</code>
-	- <code>1 &lt;= n &lt;= 300</code>
-	- <code>nums[i]</code> is either <code>0</code>, <code>1</code>, or <code>2</code>.
-
-
- 
 Follow up: Could you come up with a one-pass algorithm using only constant extra space?
-
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 // problem link https://leetcode.com/problems/sort-colors
 
 // brute force approche O(n^2);
-var sortColors = function(nums) {
+var sortColors = function (nums) {
+	for (let i = 0; i < nums.length; i++) {
+		for (let j = i + 1; j < nums.length; j++) {
+			if (nums[j] < nums[i]) {
+				swap(nums, j, i)
+			}
+		}
+	}
 
-    for(let i = 0; i < nums.length; i++) {
-        for(let j = i +1; j < nums.length;  j++) {
-            if(nums[j] < nums[i]) {
-                swap(nums, j, i);
-            }
-        }
-    }  
-  
-    return nums;
-  };
-  
+	return nums
+}
+
 function swap(nums, j, i) {
-
-    const temp = nums[j];
-    nums[j] = nums[i];
-    nums[i] = temp;
+	const temp = nums[j]
+	nums[j] = nums[i]
+	nums[i] = temp
 }
 
 // optimized approche O(n);
 
 function sortColors(nums) {
- 
-    let i = 0;
-    let l = 0;
-    let r = nums.length - 1;
-   
-    while(i <= r) {
-        const num = nums[i];
-        if(num ===  0) {
-            swap(nums,i,l);
-            i++;
-            l++;
-        } else if(num === 2) {
-            swap(nums,i,r);
-            r--;
-        } else {
-            i++;
-        }
-    } 
-   
-    return nums;
-   }
-   
-   function swap(nums,i,j) {
-       [nums[i], nums[j]] = [nums[j],nums[i]];
-   }
+	let i = 0
+	let l = 0
+	let r = nums.length - 1
 
+	while (i <= r) {
+		const num = nums[i]
+		if (num === 0) {
+			swap(nums, i, l)
+			i++
+			l++
+		} else if (num === 2) {
+			swap(nums, i, r)
+			r--
+		} else {
+			i++
+		}
+	}
+
+	return nums
+}
+
+function swap(nums, i, j) {
+	;[nums[i], nums[j]] = [nums[j], nums[i]]
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def sortColors(self, nums: List[int]) -> None:
@@ -123,7 +117,9 @@ class Solution:
         return nums
 
 ```
+
 ### C++
+
 ```cpp
 class Solution {
 public:
@@ -143,13 +139,15 @@ public:
                 i--;
             }
         }
-        
-        
+
+
     }
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -173,5 +171,3 @@ class Solution {
 }
 
 ```
-
-

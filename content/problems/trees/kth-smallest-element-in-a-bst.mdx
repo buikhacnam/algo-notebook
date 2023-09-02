@@ -11,39 +11,49 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given the <code>root</code> of a binary search tree, and an integer <code>k</code>, return *the* <code>k<sup>th</sup></code> *smallest value (1-indexed) of all the values of the nodes in the tree*.
 
- 
+Given the <code>root</code> of a binary search tree, and an integer <code>k</code>, return _the_ <code>k<sup>th</sup></code> _smallest value (1-indexed) of all the values of the nodes in the tree_.
+
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/01/28/kthtree1.jpg" width={212} height={301} />
-<br /><pre className="overflow-x-auto">
-Input: root = [3,1,4,null,2], k = 1
-Output: 1
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/01/28/kthtree1.jpg"
+	width={212}
+	height={301}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: root = [3,1,4,null,2], k = 1 Output: 1
 </pre>
 
 Example 2:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/01/28/kthtree2.jpg" width={382} height={302} />
-<br /><pre className="overflow-x-auto">
-Input: root = [5,3,6,2,4,null,null,1], k = 3
-Output: 3
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/01/28/kthtree2.jpg"
+	width={382}
+	height={302}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: root = [5,3,6,2,4,null,null,1], k = 3 Output: 3
 </pre>
 
- 
 Constraints:
 
+    - The number of nodes in the tree is <code>n</code>.
+    - <code>1 &lt;= k &lt;= n &lt;= 10<sup>4</sup></code>
+    - <code>0 &lt;= Node.val &lt;= 10<sup>4</sup></code>
 
-	- The number of nodes in the tree is <code>n</code>.
-	- <code>1 &lt;= k &lt;= n &lt;= 10<sup>4</sup></code>
-	- <code>0 &lt;= Node.val &lt;= 10<sup>4</sup></code>
-
-
- 
 Follow up: If the BST is modified often (i.e., we can do insert and delete operations) and you need to find the kth smallest frequently, how would you optimize?
-
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/kth-smallest-element-in-a-bst/
@@ -52,20 +62,20 @@ Follow up: If the BST is modified often (i.e., we can do insert and delete opera
  * @param {number} k
  * @return {number}
  */
- var kthSmallest = function(root, k, inOrder = []) {
-    if (!root) return inOrder
+var kthSmallest = function (root, k, inOrder = []) {
+	if (!root) return inOrder
 
-    return dfs(root, k, inOrder);
-};
+	return dfs(root, k, inOrder)
+}
 
 const dfs = (root, k, inOrder) => {
-    if (root.left) kthSmallest(root.left, k, inOrder);
+	if (root.left) kthSmallest(root.left, k, inOrder)
 
-    inOrder.push(root.val);
+	inOrder.push(root.val)
 
-    if (root.right) kthSmallest(root.right, k, inOrder);
+	if (root.right) kthSmallest(root.right, k, inOrder)
 
-    return inOrder[(k - 1)];
+	return inOrder[k - 1]
 }
 
 /**
@@ -75,28 +85,29 @@ const dfs = (root, k, inOrder) => {
  * @param {number} k
  * @return {number}
  */
- var kthSmallest = function(root, k, stack = []) {
-    while (k--) {
-        root = moveLeft(root, stack);
+var kthSmallest = function (root, k, stack = []) {
+	while (k--) {
+		root = moveLeft(root, stack)
 
-        const isSmallest = k === 0;
-        if (isSmallest) return root.val;
+		const isSmallest = k === 0
+		if (isSmallest) return root.val
 
-        root = root.right;
-    }
+		root = root.right
+	}
 }
 
 const moveLeft = (root, stack) => {
-    while (root !== null) {
-        stack.push(root);
-        root = root.left;
-    }
+	while (root !== null) {
+		stack.push(root)
+		root = root.left
+	}
 
-    return stack.pop();
+	return stack.pop()
 }
-
 ```
+
 ### Python
+
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -122,7 +133,9 @@ class Solution:
             curr = curr.right
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given root of BST & int k, return kth smallest value (1-indexed) of all values in tree
@@ -168,7 +181,9 @@ private:
 };
 
 ```
+
 ### Java
+
 ```java
 /**
  * Definition for a binary tree node.
@@ -203,5 +218,3 @@ class Solution {
 }
 
 ```
-
-
