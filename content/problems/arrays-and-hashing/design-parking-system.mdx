@@ -1,0 +1,100 @@
+---
+title: Design Parking System
+category: Arrays And Hashing
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/design-parking-system)
+
+</Callout>
+
+## Description
+
+Design a parking system for a parking lot. The parking lot has three kinds of parking spaces: big, medium, and small, with a fixed number of slots for each size.
+
+Implement the <code>ParkingSystem</code> class:
+
+    - <code>ParkingSystem(int big, int medium, int small)</code> Initializes object of the <code>ParkingSystem</code> class. The number of slots for each parking space are given as part of the constructor.
+    - <code>bool addCar(int carType)</code> Checks whether there is a parking space of <code>carType</code> for the car that wants to get into the parking lot. <code>carType</code> can be of three kinds: big, medium, or small, which are represented by <code>1</code>, <code>2</code>, and <code>3</code> respectively. A car can only park in a parking space of its <code>carType</code>. If there is no space available, return <code>false</code>, else park the car in that size space and return <code>true</code>.
+
+Example 1:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input [&quot;ParkingSystem&quot;, &quot;addCar&quot;, &quot;addCar&quot;,
+	&quot;addCar&quot;, &quot;addCar&quot;] [[1, 1, 0], [1], [2], [3], [1]] Output
+	[null, true, true, false, false] Explanation ParkingSystem parkingSystem = new
+	ParkingSystem(1, 1, 0); parkingSystem.addCar(1); // return true because there
+	is 1 available slot for a big car parkingSystem.addCar(2); // return true
+	because there is 1 available slot for a medium car parkingSystem.addCar(3); //
+	return false because there is no available slot for a small car
+	parkingSystem.addCar(1); // return false because there is no available slot
+	for a big car. It is already occupied.
+</pre>
+
+Constraints:
+
+    - <code>0 &lt;= big, medium, small &lt;= 1000</code>
+    - <code>carType</code> is <code>1</code>, <code>2</code>, or <code>3</code>
+    - At most <code>1000</code> calls will be made to <code>addCar</code>
+
+## Solution
+
+### Javascript
+
+```javascript
+Solution will be updated soon
+```
+
+### Python
+
+```python
+class ParkingSystem:
+
+    def __init__(self, big: int, medium: int, small: int):
+
+        # [total_occupied, max_capacity]
+        self.parking = {
+            1: [0 ,big],
+            2: [0, medium],
+            3: [0, small]
+        }
+
+    def addCar(self, carType: int) -> bool:
+        new_total = self.parking[carType][0] + 1
+        if new_total <= self.parking[carType][1]:
+            self.parking[carType][0] += 1
+            return True
+        return False
+
+```
+
+### C++
+
+```cpp
+Solution will be updated soon
+```
+
+### Java
+
+```java
+class ParkingSystem {
+
+    int[] space;
+
+    public ParkingSystem(int big, int medium, int small) {
+        this.space = new int[] { big, medium, small };
+    }
+
+    public boolean addCar(int carType) {
+        if (this.space[carType - 1] == 0) {
+            return false;
+        }
+        this.space[carType - 1]--;
+        return true;
+    }
+}
+```

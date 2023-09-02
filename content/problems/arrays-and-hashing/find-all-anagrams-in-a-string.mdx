@@ -1,0 +1,209 @@
+---
+title: Find All Anagrams in a String
+category: Arrays And Hashing
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/find-all-anagrams-in-a-string)
+
+</Callout>
+
+## Description
+
+Given two strings <code>s</code> and <code>p</code>, return _an array of all the start indices of _<code>p</code>_&#39;s anagrams in _<code>s</code>. You may return the answer in any order.
+
+An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
+
+Example 1:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;cbaebabacd&quot;, p = &quot;abc&quot; Output: [0,6]
+	Explanation: The substring with start index = 0 is &quot;cba&quot;, which is
+	an anagram of &quot;abc&quot;. The substring with start index = 6 is
+	&quot;bac&quot;, which is an anagram of &quot;abc&quot;.
+</pre>
+
+Example 2:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;abab&quot;, p = &quot;ab&quot; Output: [0,1,2] Explanation:
+	The substring with start index = 0 is &quot;ab&quot;, which is an anagram of
+	&quot;ab&quot;. The substring with start index = 1 is &quot;ba&quot;, which is
+	an anagram of &quot;ab&quot;. The substring with start index = 2 is
+	&quot;ab&quot;, which is an anagram of &quot;ab&quot;.
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= s.length, p.length &lt;= 3 * 10<sup>4</sup></code>
+    - <code>s</code> and <code>p</code> consist of lowercase English letters.
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * @param {string} s
+ * @param {string} p
+ * @return {number[]}
+ */
+var findAnagrams = function (s, p) {
+	const charMap = new Map()
+	let matches = 0
+	const matchIdx = []
+
+	for (const char of p) {
+		const charCount = charMap.get(char) || 0
+		charMap.set(char, charCount + 1)
+	}
+
+	let leftWindow = 0
+	for (let rightWindow = 0; rightWindow < s.length; rightWindow++) {
+		const rightChar = s[rightWindow]
+		if (charMap.has(rightChar)) {
+			const rightCharCount = charMap.get(rightChar)
+			charMap.set(rightChar, rightCharCount - 1)
+			if (charMap.get(rightChar) === 0) {
+				matches++
+			}
+		}
+		if (rightWindow >= p.length) {
+			const leftChar = s[leftWindow]
+			if (charMap.has(leftChar)) {
+				const leftCharCount = charMap.get(leftChar)
+				charMap.set(leftChar, leftCharCount + 1)
+				if (leftCharCount === 0) {
+					matches--
+				}
+			}
+			leftWindow++
+		}
+		if (matches === charMap.size) {
+			matchIdx.push(leftWindow)
+		}
+	}
+	return matchIdx
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def findAnagrams(self, s: str, p: str) -> List[int]:
+
+        startIndex = 0
+        pMap, sMap = {}, {}
+        res = []
+
+        for char in p:
+            pMap[char] = 1 + pMap.get(char, 0)
+
+        for i in range(len(s)):
+            sMap[s[i]] = 1 + sMap.get(s[i], 0)
+
+            if i >= len(p) - 1:
+                if sMap == pMap:
+                    res.append(startIndex)
+
+                # If current character is in sMap, remove it and re-update the map.
+                if s[startIndex] in sMap:
+                    sMap[s[startIndex]] -= 1
+                    if sMap[s[startIndex]] == 0:
+                        del sMap[s[startIndex]]
+                startIndex += 1
+
+        return res
+```
+
+### C++
+
+```cpp
+class Solution{
+    public:
+        unordered_map<char, int> Create(string p){
+            unordered_map<char, int> Mapp;
+            for(char & i : p){
+                if(Mapp.find(i) == Mapp.end()){
+                    Mapp.insert(make_pair(i, 1));
+                }
+                else{
+                    Mapp[i]++;
+                }
+            }
+            return Mapp;
+        }
+        vector<int> findAnagrams(string s, string p){
+            unordered_map<char, int> Maps, Mapp = {};
+            vector<int> nums = {};
+            int Fp, Sp;
+            int lens, lenp;
+            Fp = 0;
+            Sp = p.length();
+            lens = s.length();
+            lenp = p.length();
+            Mapp = Create(p);
+            Maps = Create(s.substr(0, p.length()));
+            for(Fp = 0; Fp < lens - lenp + 1; Fp++){
+                if(Maps == Mapp){
+                    nums.push_back(Fp);
+                }
+                if(Maps.find(s[Sp]) != Maps.end()){
+                    Maps[s[Sp]]++;
+                }
+                else{
+                    Maps.insert(make_pair(s[Sp], 1));
+                }
+                Sp++;
+                Maps[s[Fp]]--;
+                if(Maps[s[Fp]] == 0){
+                    Maps.erase(s[Fp]);
+                }
+            }
+            return nums;
+        }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        int startIndex = 0;
+        Map<Character, Integer> pMap = new HashMap<>(), sMap = new HashMap<>();
+        List<Integer> res = new ArrayList<>();
+
+        for(char c: p.toCharArray())
+            pMap.put(c, 1 + pMap.getOrDefault(c, 0));
+
+        for(int i = 0; i < s.length(); i++) {
+            sMap.put(s.charAt(i), 1 + sMap.getOrDefault(s.charAt(i), 0));
+
+            if(i >= p.length() - 1) {
+                if(sMap.equals(pMap))
+                    res.add(startIndex);
+
+                //if current character is in sMap, remove it and re-update the map.
+                if(sMap.containsKey(s.charAt(startIndex))) {
+                    sMap.put(s.charAt(startIndex), sMap.get(s.charAt(startIndex)) - 1);
+                    if(sMap.get(s.charAt(startIndex)) == 0)
+                        sMap.remove(s.charAt(startIndex));
+                }
+                startIndex += 1;
+            }
+        }
+
+        return res;
+    }
+}
+
+```

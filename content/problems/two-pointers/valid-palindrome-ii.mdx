@@ -1,0 +1,169 @@
+---
+title: Valid Palindrome II
+category: Two Pointers
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/valid-palindrome-ii)
+
+</Callout>
+
+## Description
+
+Given a string <code>s</code>, return <code>true</code> _if the _<code>s</code>_ can be palindrome after deleting at most one character from it_.
+
+Example 1:
+
+<br />
+
+<pre className="overflow-x-auto">Input: s = &quot;aba&quot; Output: true</pre>
+
+Example 2:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;abca&quot; Output: true Explanation: You could delete the
+	character &#39;c&#39;.
+</pre>
+
+Example 3:
+
+<br />
+
+<pre className="overflow-x-auto">Input: s = &quot;abc&quot; Output: false</pre>
+
+Constraints:
+
+    - <code>1 &lt;= s.length &lt;= 10<sup>5</sup></code>
+    - <code>s</code> consists of lowercase English letters.
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * @param {string} s
+ * @return {boolean}
+ */
+var validPalindrome = function (s) {
+	let l = 0
+	let r = s.length - 1
+
+	while (l < r) {
+		console.log(l, r)
+		if (s[l] !== s[r]) {
+			const skipL = s.slice(l + 1, r + 1)
+			const skipR = s.slice(l, r)
+			return isPalindrome(skipL) || isPalindrome(skipR)
+		}
+		l++
+		r--
+	}
+	return true
+}
+
+const isPalindrome = (s) => {
+	let l = 0
+	let r = s.length - 1
+
+	while (l < r) {
+		if (s[l] !== s[r]) {
+			return false
+		}
+		l++
+		r--
+	}
+	return true
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def validPalindrome(self, s: str) -> bool:
+        i, j = 0, len(s) - 1
+
+        while i < j:
+            if s[i] == s[j]:
+                i += 1
+                j -= 1
+            else:
+                return self.validPalindromeUtil(s, i + 1, j) or self.validPalindromeUtil(s, i, j - 1)
+        return True
+
+    def validPalindromeUtil(self, s, i, j):
+        while i < j:
+            if s[i] == s[j]:
+                i += 1
+                j -= 1
+            else:
+                return False
+
+        return True
+
+```
+
+### C++
+
+```cpp
+class Solution {
+private:
+    bool validPalindromeUtil(string s, int i, int j) {
+        while(i < j)
+            if(s[i] == s[j]) {
+                i += 1;
+                j -= 1;
+            } else
+                return false;
+        return true;
+    }
+public:
+    bool validPalindrome(string s) {
+        int i = 0, j = s.length() - 1;
+
+        while(i < j)
+            if(s[i] == s[j]) {
+                i += 1;
+                j -= 1;
+            } else
+                return validPalindromeUtil(s, i + 1, j) || validPalindromeUtil(s, i, j - 1);
+        return true;
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+    public boolean validPalindrome(String s) {
+        int i = 0, j = s.length() - 1;
+        while(i < j)
+            if(s.charAt(i) == s.charAt(j)) {
+                i += 1;
+                j -= 1;
+            }else
+                return validPalindromeUtil(s, i + 1, j) || validPalindromeUtil(s, i, j - 1);
+        return true;
+    }
+
+    boolean validPalindromeUtil(String s, int i, int j) {
+        while(i < j)
+            if(s.charAt(i) == s.charAt(j)) {
+                i += 1;
+                j -= 1;
+            } else {
+                return false;
+            }
+
+        return true;
+    }
+}
+
+```

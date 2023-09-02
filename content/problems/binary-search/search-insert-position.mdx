@@ -1,0 +1,156 @@
+---
+title: Search Insert Position
+category: Binary Search
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/search-insert-position)
+
+</Callout>
+
+## Description
+
+Given a sorted array of distinct integers and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
+
+You must write an algorithm with <code>O(log n)</code> runtime complexity.
+
+Example 1:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [1,3,5,6], target = 5 Output: 2
+</pre>
+
+Example 2:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [1,3,5,6], target = 2 Output: 1
+</pre>
+
+Example 3:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [1,3,5,6], target = 7 Output: 4
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= nums.length &lt;= 10<sup>4</sup></code>
+    - <code>-10<sup>4</sup> &lt;= nums[i] &lt;= 10<sup>4</sup></code>
+    - <code>nums</code> contains distinct values sorted in ascending order.
+    - <code>-10<sup>4</sup> &lt;= target &lt;= 10<sup>4</sup></code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
+ */
+var searchInsert = function (nums, target) {
+	let left = 0
+	let right = nums.length - 1
+	while (left <= right) {
+		let midIdx = Math.floor((left + right) / 2)
+		if (target === nums[midIdx]) {
+			return midIdx
+		}
+
+		if (target > nums[midIdx]) {
+			left = midIdx + 1
+		} else {
+			right = midIdx - 1
+		}
+	}
+
+	return left
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def searchInsert(self, nums: List[int], target: int) -> int:
+        # O(log n) and O(1)
+
+
+        low, high = 0, len(nums)
+        while low<high:
+            mid = low +(high - low) // 2
+            if target > nums[mid]:
+                low = mid + 1
+            else:
+                high = mid
+        return low
+
+```
+
+### C++
+
+```cpp
+/*
+    Given a sorted array of distinct integers and a target value, return the index if the target is found.
+    If not, return the index where it would be if it were inserted in order.
+
+    Ex.
+    Input: nums = [1,3,5,6], target = 5
+    Output: 2
+
+    1.- Find the number in the middle of the vector.
+    2.- Takes a part (first or second), depending on whether or not the target is greater than the middel.
+    3.- Change the current left or right part.
+    3.- Do this process until the left exceeds the right.
+
+    Time: O(log n)
+    Space: O(1)
+*/
+
+class Solution {
+public:
+    int searchInsert(vector<int>& nums, int target) {
+        int left = 0;
+        int right = nums.size() - 1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+
+            if (nums[mid] < target)
+                left = mid + 1;
+            else
+                right = mid - 1;
+        }
+        return left;
+    }
+};
+```
+
+### Java
+
+```java
+class Solution {
+    public int searchInsert(int[] nums, int target) {
+        //o(log n) and o(1)
+        int low = 0, high = nums.length;
+        while(low < high) {
+            int mid = low + (high - low)/2;
+            if(target > nums[mid])
+                low = mid + 1;
+            else
+                high = mid;
+        }
+        return low;
+    }
+}
+
+```

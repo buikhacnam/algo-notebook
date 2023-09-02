@@ -1,0 +1,105 @@
+---
+title: Symmetric Tree
+category: Trees
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/symmetric-tree)
+
+</Callout>
+
+## Description
+
+Given the <code>root</code> of a binary tree, _check whether it is a mirror of itself_ (i.e., symmetric around its center).
+
+Example 1:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/02/19/symtree1.jpg"
+	width={354}
+	height={291}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: root = [1,2,2,3,4,4,3] Output: true
+</pre>
+
+Example 2:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/02/19/symtree2.jpg"
+	width={308}
+	height={258}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: root = [1,2,2,null,3,null,3] Output: false
+</pre>
+
+Constraints:
+
+    - The number of nodes in the tree is in the range <code>[1, 1000]</code>.
+    - <code>-100 &lt;= Node.val &lt;= 100</code>
+
+Follow up: Could you solve it both recursively and iteratively?
+
+## Solution
+
+### Javascript
+
+```javascript
+Solution will be updated soon
+```
+
+### Python
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isSymmetric(self, root: Optional[TreeNode]) -> bool:
+        if not root.left and not root.right:
+            return True
+        queueLeft = deque()
+        queueRight = deque()
+
+        queueLeft.appendleft(root.left)
+        queueRight.appendleft(root.right)
+
+        while queueLeft and queueRight:
+            nodeLeft, nodeRight = queueLeft.pop(), queueRight.pop()
+            if not nodeLeft and not nodeRight:
+                continue
+            # both node must exist
+            # if exists thet must have the same value
+            if not nodeLeft or not nodeRight or nodeLeft.val != nodeRight.val:
+                return False
+
+            queueLeft.appendleft(nodeLeft.left)
+            queueLeft.appendleft(nodeLeft.right)
+
+            queueRight.appendleft(nodeRight.right)
+            queueRight.appendleft(nodeRight.left)
+        return not (queueLeft or queueRight)
+
+```
+
+### C++
+
+```cpp
+Solution will be updated soon
+```
+
+### Java
+
+```java
+Solution will be updated soon
+```

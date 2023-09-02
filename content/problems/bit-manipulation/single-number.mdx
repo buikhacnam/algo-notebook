@@ -1,0 +1,113 @@
+---
+title: Single Number
+category: Bit Manipulation
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/single-number)
+
+</Callout>
+
+## Description
+
+Given a non-empty array of integers <code>nums</code>, every element appears _twice_ except for one. Find that single one.
+
+You must implement a solution with a linear runtime complexity and use only constant extra space.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">Input: nums = [2,2,1] Output: 1</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">Input: nums = [4,1,2,1,2] Output: 4</pre>
+
+Example
+3:
+
+<br />
+<pre className="overflow-x-auto">Input: nums = [1] Output: 1</pre>
+Constraints:
+
+    - <code>1 &lt;= nums.length &lt;= 3 * 10<sup>4</sup></code>
+    - <code>-3 * 10<sup>4</sup> &lt;= nums[i] &lt;= 3 * 10<sup>4</sup></code>
+    - Each element in the array appears twice except for one element which appears only once.
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/single-number/
+ * Time O(N) | Space O(1)
+ * @param {number[]} nums
+ * @return {number}
+ */
+var singleNumber = function (nums, xor = 0) {
+	for (num of nums) {
+		xor ^= num
+	}
+
+	return xor
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def singleNumber(self, nums: List[int]) -> int:
+        res = 0
+        for n in nums:
+            res = n ^ res
+        return res
+
+```
+
+### C++
+
+```cpp
+/*
+    Given int array, every element appears twice except 1, find it
+    Ex. nums = [2,2,1] -> 1, nums = [4,1,2,1,2] -> 4
+
+    a XOR a returns 0, so returns 0 for all except the unique one
+
+    Time: O(n)
+    Space: O(1)
+*/
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int result = 0;
+
+        for (int i = 0; i < nums.size(); i++) {
+            result = result ^ nums[i];
+        }
+
+        return result;
+    }
+};
+
+```
+
+### Java
+
+```java
+//We can use xor operation as it cancel out itself (i.e. only when values are different in binary representation then give output). See how xor operation works if confused.
+class Solution {
+
+    public int singleNumber(int[] nums) {
+        int ans = nums[0];
+        for (int i = 1; i < nums.length; i++) ans ^= nums[i];
+        return ans;
+    }
+}
+
+```

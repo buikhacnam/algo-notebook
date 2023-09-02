@@ -1,0 +1,142 @@
+---
+title: Minimum Number of Flips to Make the Binary String Alternating
+category: Sliding Window
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/minimum-number-of-flips-to-make-the-binary-string-alternating)
+
+</Callout>
+
+## Description
+
+You are given a binary string <code>s</code>. You are allowed to perform two types of operations on the string in any sequence:
+
+    - Type-1: Remove the character at the start of the string <code>s</code> and append it to the end of the string.
+    - Type-2: Pick any character in <code>s</code> and flip its value, i.e., if its value is <code>&#39;0&#39;</code> it becomes <code>&#39;1&#39;</code> and vice-versa.
+
+Return _the minimum number of type-2 operations you need to perform_ _such that _<code>s</code> _becomes alternating._
+
+The string is called alternating if no two adjacent characters are equal.
+
+    - For example, the strings <code>&quot;010&quot;</code> and <code>&quot;1010&quot;</code> are alternating, while the string <code>&quot;0100&quot;</code> is not.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;111000&quot; Output: 2 Explanation: Use the first operation
+	two times to make s = &quot;100011&quot;. Then, use the second operation on
+	the third and sixth elements to make s = &quot;10<u>1</u>01<u>0</u>&quot;.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;010&quot; Output: 0 Explanation: The string is already
+	alternating.
+</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;1110&quot; Output: 1 Explanation: Use the second operation on
+	the second element to make s = &quot;1<u>0</u>10&quot;.
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= s.length &lt;= 10<sup>5</sup></code>
+    - <code>s[i]</code> is either <code>&#39;0&#39;</code> or <code>&#39;1&#39;</code>.
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/minimum-number-of-flips-to-make-the-binary-string-alternating/
+ * Time O(n), Space O(1)
+ * @param {string} s
+ * @return {number}
+ */
+var minFlips = (s) => {
+	if (!s || s.length < 1) return 0
+
+	const initialLen = s.length
+	if (initialLen % 2 === 1) s += s
+
+	let evenCmp = 0
+	let oddCmp = 0
+	let result = Infinity
+	let end = 0
+	let start = 0
+
+	while (end < s.length) {
+		if (end % 2 !== Number(s[end])) evenCmp++
+		if ((end % 2 ^ 1) !== Number(s[end])) oddCmp++
+
+		if (end >= initialLen) {
+			if (start % 2 !== Number(s[start])) evenCmp--
+			if ((start % 2 ^ 1) !== Number(s[start])) oddCmp--
+			start++
+		}
+
+		if (end >= initialLen - 1) {
+			result = Math.min(evenCmp, oddCmp, result)
+		}
+		end++
+	}
+
+	return result
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def minFlips(self, s: str) -> int:
+        n = len(s)
+        s = s + s
+        alt1, alt2 = "", ""
+
+        for i in range(len(s)):
+            alt1 += "0" if i % 2 == 0 else "1"
+            alt2 += "1" if i % 2 == 0 else "0"
+
+        res = float('inf')
+        diff1, diff2 = 0, 0
+        l = 0
+        for r in range(len(s)):
+            if s[r] != alt1[r]:
+                diff1 += 1
+            if s[r] != alt2[r]:
+                diff2 += 1
+            if (r - l + 1) > n:
+                if s[l] != alt1[l]:
+                    diff1 -= 1
+                if s[l] != alt2[l]:
+                    diff2 -= 1
+                l += 1
+            if (r - l + 1) == n:
+                res = min(res, diff1, diff2)
+        return res
+
+```
+
+### C++
+
+```cpp
+Solution will be updated soon
+```
+
+### Java
+
+```java
+Solution will be updated soon
+```

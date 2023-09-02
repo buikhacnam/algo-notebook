@@ -1,0 +1,135 @@
+---
+title: Maximum Number of Vowels in a Substring of Given Length
+category: Sliding Window
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/maximum-number-of-vowels-in-a-substring-of-given-length)
+
+</Callout>
+
+## Description
+
+Given a string <code>s</code> and an integer <code>k</code>, return _the maximum number of vowel letters in any substring of _<code>s</code>_ with length _<code>k</code>.
+
+Vowel letters in English are <code>&#39;a&#39;</code>, <code>&#39;e&#39;</code>, <code>&#39;i&#39;</code>, <code>&#39;o&#39;</code>, and <code>&#39;u&#39;</code>.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;abciiidef&quot;, k = 3 Output: 3 Explanation: The substring
+	&quot;iii&quot; contains 3 vowel letters.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;aeiou&quot;, k = 2 Output: 2 Explanation: Any substring of
+	length 2 contains 2 vowels.
+</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;leetcode&quot;, k = 3 Output: 2 Explanation: &quot;lee&quot;,
+	&quot;eet&quot; and &quot;ode&quot; contain 2 vowels.
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= s.length &lt;= 10<sup>5</sup></code>
+    - <code>s</code> consists of lowercase English letters.
+    - <code>1 &lt;= k &lt;= s.length</code>
+
+## Solution
+
+### Javascript
+
+```javascript
+Solution will be updated soon
+```
+
+### Python
+
+```python
+class Solution:
+    def maxVowels(self, s: str, k: int) -> int:
+        l, res, total = 0, 0, 0
+        vowels = "aeiou"
+
+        for r in range(len(s)):
+            if s[r] in vowels:
+                total += 1
+            if (r - l + 1) > k:
+                if s[l] in vowels:
+                    total -= 1
+                l += 1
+            res = max(res, total)
+        return res
+
+
+
+
+```
+
+### C++
+
+```cpp
+/*
+  Given a string s and an integer k, return the maximum number of vowel letters in any substring of s with length k.
+  Vowel letters in English are 'a', 'e', 'i', 'o', and 'u'.
+
+  Ex.
+  Input: s = "abciiidef", k = 3
+  Output: 3
+  Explanation: The substring "iii" contains 3 vowel letters.
+
+  Approach : Sliding Window
+
+  Time  : O(N)
+  Space : O(1)
+*/
+
+
+class Solution {
+public:
+    bool isVowel(char ch) {
+        if(ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u')
+            return true;
+        return false;
+    }
+    int maxVowels(string s, int k) {
+        int ptr1 = 0, ptr2 = 0, count = 0, maxi = INT_MIN;
+        while(ptr2 < s.size()) {
+            if(ptr2 - ptr1 == k) {
+                maxi = max(count, maxi);
+                if(maxi == k)
+                    return count;
+                if(isVowel(s[ptr1++]))
+                    count--;
+                if(isVowel(s[ptr2++]))
+                    count++;
+
+            } else {
+                if(isVowel(s[ptr2]))
+                    count++;
+                ptr2++;
+            }
+        }
+        maxi = max(count, maxi);
+        return maxi;
+    }
+};
+
+```
+
+### Java
+
+```java
+Solution will be updated soon
+```

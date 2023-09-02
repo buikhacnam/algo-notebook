@@ -1,0 +1,202 @@
+---
+title: Subsets II
+category: Backtracking
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/subsets-ii)
+
+</Callout>
+
+## Description
+
+Given an integer array <code>nums</code> that may contain duplicates, return _all possible_ <span data-keyword="subset">_subsets_</span>_ (the power set)_.
+
+The solution set must not contain duplicate subsets. Return the solution in any order.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [1,2,2] Output: [[],[1],[1,2],[1,2,2],[2],[2,2]]
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">Input: nums = [0] Output: [[],[0]]</pre>
+Constraints:
+
+    - <code>1 &lt;= nums.length &lt;= 10</code>
+    - <code>-10 &lt;= nums[i] &lt;= 10</code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/subsets-ii/
+ * Time O(N * 2^N) | Space O(N)
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var subsetsWithDup = function (nums) {
+	nums.sort((a, b) => a - b)
+
+	return dfs(nums)
+}
+
+const dfs = (nums, index = 0, set = [], subset = []) => {
+	subset.push(set.slice())
+
+	for (let i = index; i < nums.length; i++) {
+		const isDuplicate = index < i && nums[i - 1] === nums[i]
+		if (isDuplicate) continue
+
+		backTrack(nums, i, set, subset)
+	}
+
+	return subset
+}
+
+const backTrack = (nums, i, set, subset) => {
+	set.push(nums[i])
+	dfs(nums, i + 1, set, subset)
+	set.pop()
+}
+
+/**
+ * https://leetcode.com/problems/subsets-ii/
+ * Time O(N * 2^N) | Space O(N * 2^N)
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var subsetsWithDup = (nums) => {
+	nums.sort((a, b) => a - b)
+
+	return bfs(nums)
+}
+
+const bfs = (nums, subsets = [[]]) => {
+	let levels = subsets.length - 1
+
+	for (let i = 0; i < nums.length; i++) {
+		const isPrevDuplicate = 0 < i && nums[i - 1] === nums[i]
+		const start = isPrevDuplicate ? levels + 1 : 0
+
+		levels = subsets.length - 1
+
+		for (let level = start; level < levels + 1; level++) {
+			const nextLevel = [...subsets[level], nums[i]]
+
+			subsets.push(nextLevel)
+		}
+	}
+
+	return subsets
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        nums.sort()
+
+        def backtrack(i, subset):
+            if i == len(nums):
+                res.append(subset[::])
+                return
+
+            # All subsets that include nums[i]
+            subset.append(nums[i])
+            backtrack(i + 1, subset)
+            subset.pop()
+            # All subsets that don't include nums[i]
+            while i + 1 < len(nums) and nums[i] == nums[i + 1]:
+                i += 1
+            backtrack(i + 1, subset)
+
+        backtrack(0, [])
+        return res
+
+```
+
+### C++
+
+```cpp
+/*
+    Given an integer array of unique elements, return all possible subsets (the power set)
+    Ex. nums = [1,2,2] -> [[],[1],[1,2],[1,2,2],[2],[2,2]]
+
+    Backtracking, generate all combos, push/pop + to explore new combos, skip duplicates
+
+    Time: O(n x 2^n)
+    Space: O(n)
+*/
+
+class Solution {
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+
+        vector<int> curr;
+        vector<vector<int>> result;
+
+        dfs(nums, 0, curr, result);
+        return result;
+    }
+private:
+    void dfs(vector<int>& nums, int start, vector<int>& curr, vector<vector<int>>& result) {
+        result.push_back(curr);
+        for (int i = start; i < nums.size(); i++) {
+            if (i > start && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            curr.push_back(nums[i]);
+            dfs(nums, i + 1, curr, result);
+            curr.pop_back();
+        }
+    }
+};
+
+```
+
+### Java
+
+```java
+// Similar to subsets 1. Here, we'll just take care of the duplicates.
+class Solution {
+
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
+        subSet(nums, 0, ans, list);
+        return ans;
+    }
+
+    public void subSet(
+        int[] nums,
+        int idx,
+        List<List<Integer>> ans,
+        List<Integer> list
+    ) {
+        ans.add(new ArrayList<>(list));
+
+        for (int i = idx; i < nums.length; i++) {
+            //skip the duplicate elements
+            if (i > idx && nums[i] == nums[i - 1]) continue;
+            list.add(nums[i]);
+            subSet(nums, i + 1, ans, list);
+            list.remove(list.size() - 1);
+        }
+    }
+}
+
+```

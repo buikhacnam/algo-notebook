@@ -1,0 +1,232 @@
+---
+title: Convert Sorted Array to Binary Search Tree
+category: Trees
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree)
+
+</Callout>
+
+## Description
+
+Given an integer array <code>nums</code> where the elements are sorted in ascending order, convert _it to a _<span data-keyword="height-balanced">_height-balanced_</span> _binary search tree_.
+
+Example 1:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/02/18/btree1.jpg"
+	width={302}
+	height={222}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [-10,-3,0,5,9] Output: [0,-3,9,-10,null,5] Explanation:
+	[0,-10,5,null,-3,null,9] is also accepted:
+	<Image
+		alt=""
+		src="https://assets.leetcode.com/uploads/2021/02/18/btree2.jpg"
+		width={302}
+		height={222}
+	/>
+</pre>
+
+Example 2:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/02/18/btree.jpg"
+	width={342}
+	height={142}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [1,3] Output: [3,1] Explanation: [1,null,3] and [3,1] are both
+	height-balanced BSTs.
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= nums.length &lt;= 10<sup>4</sup></code>
+    - <code>-10<sup>4</sup> &lt;= nums[i] &lt;= 10<sup>4</sup></code>
+    - <code>nums</code> is sorted in a strictly increasing order.
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+
+/**
+ * DFS - Preorder | Left as mid
+ * Time O(N) | Space O(log(N))
+ * https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/
+ * @param {number[]} nums
+ * @return {TreeNode}
+ */
+var sortedArrayToBST = (nums, left = 0, right = nums.length - 1) => {
+	const isBaseCase = right < left
+	if (isBaseCase) return null
+
+	return dfs(nums, left, right) /* Time O(N) | Space O(log(N)) */
+}
+
+var dfs = (nums, left, right) => {
+	const mid = (left + right) >> 1
+
+	const root = new TreeNode(
+		nums[mid],
+	) /*           | Ignore Auxillary Space O(N) */
+
+	root.left = sortedArrayToBST(
+		nums,
+		left,
+		mid - 1,
+	) /* Time O(N) | Space O(log(N)) */
+	root.right = sortedArrayToBST(
+		nums,
+		mid + 1,
+		right,
+	) /* Time O(N) | Space O(log(N)) */
+
+	return root
+}
+
+/**
+ * DFS - Preorder | Right as mid
+ * Time O(N) | Space O(log(N))
+ * https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/
+ * @param {number[]} nums
+ * @return {TreeNode}
+ */
+var sortedArrayToBST = (nums, left = 0, right = nums.length - 1) => {
+	const isBaseCase = right < left
+	if (isBaseCase) return null
+
+	return dfs(nums, left, right) /* Time O(N) | Space O(log(N)) */
+}
+
+var dfs = (nums, left, right) => {
+	let mid = (left + right) >> 1
+
+	const isOdd = (left + right) % 2 === 1
+	if (isOdd) mid += 1
+
+	const root = new TreeNode(
+		nums[mid],
+	) /*           | Ignore Auxillary Space O(N) */
+
+	root.left = sortedArrayToBST(
+		nums,
+		left,
+		mid - 1,
+	) /* Time O(N) | Space O(log(N)) */
+	root.right = sortedArrayToBST(
+		nums,
+		mid + 1,
+		right,
+	) /* Time O(N) | Space O(log(N)) */
+
+	return root
+}
+
+/**
+ * DFS - Preorder | Random as mid
+ * Time O(N) | Space O(log(N))
+ * https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/
+ * @param {number[]} nums
+ * @return {TreeNode}
+ */
+var sortedArrayToBST = (nums, left = 0, right = nums.length - 1) => {
+	const isBaseCase = right < left
+	if (isBaseCase) return null
+
+	return dfs(nums, left, right) /* Time O(N) | Space O(log(N)) */
+}
+
+var dfs = (nums, left, right) => {
+	let mid = (left + right) >> 1
+
+	const isOdd = (left + right) % 2 === 1
+	if (isOdd) mid += Math.floor(Math.random() * 2)
+
+	const root = new TreeNode(
+		nums[mid],
+	) /*           | Ignore Auxillary Space O(N) */
+
+	root.left = sortedArrayToBST(
+		nums,
+		left,
+		mid - 1,
+	) /* Time O(N) | Space O(log(N)) */
+	root.right = sortedArrayToBST(
+		nums,
+		mid + 1,
+		right,
+	) /* Time O(N) | Space O(log(N)) */
+
+	return root
+}
+```
+
+### Python
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def sortedArrayToBST(self, nums: List[int]) -> Optional[TreeNode]:
+        if not nums:
+            return None
+        mid = len(nums)//2
+        root = TreeNode(nums[mid])
+        root.left = self.sortedArrayToBST(nums[:mid])
+        root.right = self.sortedArrayToBST(nums[mid+1:])
+        return root
+
+```
+
+### C++
+
+```cpp
+Solution will be updated soon
+```
+
+### Java
+
+```java
+class Solution {
+    public TreeNode sortedArrayToBST(int[] nums) {
+        return generateTree(nums, 0, nums.length - 1);
+    }
+
+    public TreeNode generateTree(int[] nums, int low, int high) {
+        if (low > high) {
+            return null;
+        }
+
+        int mid = low + ((high - low) / 2);
+        TreeNode node = new TreeNode(nums[mid]);
+
+        node.left = generateTree(nums, low, mid - 1);
+        node.right = generateTree(nums, mid + 1, high);
+
+        return node;
+    }
+}
+```

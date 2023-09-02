@@ -1,0 +1,208 @@
+---
+title: Hand of Straights
+category: Greedy
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/hand-of-straights)
+
+</Callout>
+
+## Description
+
+Alice has some number of cards and she wants to rearrange the cards into groups so that each group is of size <code>groupSize</code>, and consists of <code>groupSize</code> consecutive cards.
+
+Given an integer array <code>hand</code> where <code>hand[i]</code> is the value written on the <code>i<sup>th</sup></code> card and an integer <code>groupSize</code>, return <code>true</code> if she can rearrange the cards, or <code>false</code> otherwise.
+
+Example 1:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: hand = [1,2,3,6,2,3,4,7,8], groupSize = 3 Output: true Explanation:
+	Alice&#39;s hand can be rearranged as [1,2,3],[2,3,4],[6,7,8]
+</pre>
+
+Example 2:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: hand = [1,2,3,4,5], groupSize = 4 Output: false Explanation:
+	Alice&#39;s hand can not be rearranged into groups of 4.
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= hand.length &lt;= 10<sup>4</sup></code>
+    - <code>0 &lt;= hand[i] &lt;= 10<sup>9</sup></code>
+    - <code>1 &lt;= groupSize &lt;= hand.length</code>
+
+Note: This question is the same as 1296: <a href="https://leetcode.com/problems/divide-array-in-sets-of-k-consecutive-numbers/" target="_blank">https://leetcode.com/problems/divide-array-in-sets-of-k-consecutive-numbers/</a>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/hand-of-straights/
+ * Time O(N * K) | Space O(N)
+ * @param {number[]} hand
+ * @param {number} groupSize
+ * @return {boolean}
+ */
+var isNStraightHand = function (hand, groupSize, count = new Map()) {
+	const map = getFrequencyMap(hand) /* Time O(N) | Space O(N) */
+	const sortUniqHand = getUniqueHand(hand) /* Time O(N * Log(N)) | Space O(N) */
+
+	return search(groupSize, map, sortUniqHand) /* Time O(N * K) */
+}
+
+const getFrequencyMap = (hand, map = new Map()) => {
+	for (const _hand of hand) {
+		/* Time O(N) */
+		const val = (map.get(_hand) || 0) + 1
+
+		map.set(_hand, val) /* Space O(N) */
+	}
+
+	return map
+}
+
+const getUniqueHand = (hand) =>
+	[...new Set(hand)] /* Time O(N) | Space O(N) */
+		.sort(
+			(a, b) => b - a,
+		) /* Time O(N * Log(N)) | Space HeapSort O(1) | Space QuickSort O(log(N)) */
+
+const search = (groupSize, map, sortUniqHand) => {
+	while (sortUniqHand.length) {
+		/* Time O(N) */
+		const smallest = sortUniqHand[sortUniqHand.length - 1]
+
+		for (let i = smallest; i < smallest + groupSize; i++) {
+			/* Time O(K) */
+			if (!map.has(i)) return false
+
+			const val = map.get(i) - 1
+
+			map.set(i, val)
+
+			let isEqual = map.get(i) === 0
+			if (!isEqual) continue
+
+			isEqual = i === sortUniqHand[sortUniqHand.length - 1]
+			if (!isEqual) return false
+
+			sortUniqHand.pop()
+		}
+	}
+
+	return true
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
+        if len(hand) % groupSize:
+            return False
+
+        count = {}
+        for n in hand:
+            count[n] = 1 + count.get(n, 0)
+
+        minH = list(count.keys())
+        heapq.heapify(minH)
+        while minH:
+            first = minH[0]
+            for i in range(first, first + groupSize):
+                if i not in count:
+                    return False
+                count[i] -= 1
+                if count[i] == 0:
+                    if i != minH[0]:
+                        return False
+                    heapq.heappop(minH)
+        return True
+
+```
+
+### C++
+
+```cpp
+/*
+    Given int array, return true if can rearrange cards into groupSize consecutive
+    Ex. hand = [1,2,3,6,2,3,4,7,8], groupSize = 3 -> true, [1,2,3],[2,3,4],[6,7,8]
+
+    Loop thru ordered map, for a value, check groupSize consecutive & remove
+
+    Time: O(n log n)
+    Space: O(n)
+*/
+
+class Solution {
+public:
+    bool isNStraightHand(vector<int>& hand, int groupSize) {
+        int n = hand.size();
+
+        if (n % groupSize != 0) {
+            return false;
+        }
+
+        // map {card value -> count}
+        map<int, int> m;
+        for (int i = 0; i < n; i++) {
+            m[hand[i]]++;
+        }
+
+        while (!m.empty()) {
+            int curr = m.begin()->first;
+            for (int i = 0; i < groupSize; i++) {
+                if (m[curr + i] == 0) {
+                    return false;
+                }
+                m[curr + i]--;
+                if (m[curr + i] < 1) {
+                    m.erase(curr + i);
+                }
+            }
+        }
+
+        return true;
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+
+    public boolean isNStraightHand(int[] hand, int groupSize) {
+        if (hand.length % groupSize != 0) return false;
+
+        HashMap<Integer, Integer> hm = new HashMap<>();
+        for (int card : hand) hm.put(card, hm.getOrDefault(card, 0) + 1);
+
+        Arrays.sort(hand);
+        for (int card : hand) {
+            if (hm.get(card) <= 0) continue;
+            for (int i = 1; i < groupSize; i++) {
+                int count = hm.getOrDefault(card + i, 0);
+                if (count > 0) hm.put(card + i, count - 1); else return false;
+            }
+            hm.put(card, hm.get(card) - 1);
+        }
+
+        return true;
+    }
+}
+
+```

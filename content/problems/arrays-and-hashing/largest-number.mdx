@@ -1,0 +1,141 @@
+---
+title: Largest Number
+category: Arrays And Hashing
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/largest-number)
+
+</Callout>
+
+## Description
+
+Given a list of non-negative integers <code>nums</code>, arrange them such that they form the largest number and return it.
+
+Since the result may be very large, so you need to return a string instead of an integer.
+
+Example 1:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [10,2] Output: &quot;210&quot;
+</pre>
+
+Example 2:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [3,30,34,5,9] Output: &quot;9534330&quot;
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= nums.length &lt;= 100</code>
+    - <code>0 &lt;= nums[i] &lt;= 10<sup>9</sup></code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {string}
+ */
+var largestNumber = function (nums) {
+	let largest = nums
+		.map((n) => n.toString())
+		.sort((x, y) => y + x - (x + y))
+		.join('')
+	return largest[0] === '0' ? '0' : largest
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def largestNumber(self, nums: List[int]) -> str:
+        for i, n in enumerate(nums):
+            nums[i] = str(n)
+
+        def compare(n1, n2):
+            if n1 + n2 > n2 + n1:
+                return -1
+            else:
+                return 1
+
+        nums = sorted(nums, key = cmp_to_key(compare))
+
+        return str(int("".join(nums)))
+
+```
+
+### C++
+
+```cpp
+class Solution {
+public:
+
+    // to check which should come first
+    // see that by adding in which way gives bigger number
+    static bool mysort(string a, string b){
+        return a+b > b+a;
+    }
+    string largestNumber(vector<int>& nums) {
+        string s = "";
+        vector<string> all_numbers;
+
+        // convert every number to string
+        for(int it: nums){
+            all_numbers.push_back(to_string(it));
+        }
+
+        // sort accoring to custom sort function
+        sort(all_numbers.begin(),all_numbers.end(),mysort);
+        if(all_numbers[0]=="0"){
+            return "0";
+        }
+
+        for(string a: all_numbers){
+            s += a;
+        }
+        return s;
+    }
+};
+```
+
+### Java
+
+```java
+class Solution {
+    public String largestNumber(int[] nums) {
+        String[] arr = new String[nums.length];
+
+        for(int i=0; i<nums.length; i++) {
+            arr[i] = String.valueOf(nums[i]);
+        }
+
+        Arrays.sort(arr, new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                String n1 = s1 + s2, n2 = s2 + s1;
+                return n2.compareTo(n1);
+            }
+        });
+
+        if(arr[0].equals("0")) return "0";
+
+        StringBuilder sb = new StringBuilder();
+        for(String s : arr) {
+            sb.append(s);
+        }
+
+        return sb.toString();
+    }
+}
+```

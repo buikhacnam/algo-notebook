@@ -1,0 +1,139 @@
+---
+title: Guess Number Higher or Lower
+category: Binary Search
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/guess-number-higher-or-lower)
+
+</Callout>
+
+## Description
+
+We are playing the Guess Game. The game is as follows:
+
+I pick a number from <code>1</code> to <code>n</code>. You have to guess which number I picked.
+
+Every time you guess wrong, I will tell you whether the number I picked is higher or lower than your guess.
+
+You call a pre-defined API <code>int guess(int num)</code>, which returns three possible results:
+
+    - <code>-1</code>: Your guess is higher than the number I picked (i.e. <code>num &gt; pick</code>).
+    - <code>1</code>: Your guess is lower than the number I picked (i.e. <code>num &lt; pick</code>).
+    - <code>0</code>: your guess is equal to the number I picked (i.e. <code>num == pick</code>).
+
+Return _the number that I picked_.
+
+Example 1:
+
+<br />
+
+<pre className="overflow-x-auto">Input: n = 10, pick = 6 Output: 6</pre>
+
+Example 2:
+
+<br />
+
+<pre className="overflow-x-auto">Input: n = 1, pick = 1 Output: 1</pre>
+
+Example 3:
+
+<br />
+
+<pre className="overflow-x-auto">Input: n = 2, pick = 1 Output: 1</pre>
+
+Constraints:
+
+    - <code>1 &lt;= n &lt;= 2<sup>31</sup> - 1</code>
+    - <code>1 &lt;= pick &lt;= n</code>
+
+## Solution
+
+### Javascript
+
+```javascript
+var guessNumber = function (n) {
+	let low = 1
+	let high = n
+
+	while (true) {
+		let mid = low + Math.floor((high - low) / 2)
+		let myGuess = guess(mid)
+		if (myGuess == 1) low = mid + 1
+		else if (myGuess == -1) high = mid - 1
+		else return mid
+	}
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def guessNumber(self, n: int) -> int:
+        # return a num btw 1,..,n
+
+        low = 1
+        high = n
+
+        while True:
+            mid = low + (high - low) // 2
+            myGuess = guess(mid)
+            if myGuess == 1:
+                low = mid + 1
+            elif myGuess == -1:
+                high = mid - 1
+            else:
+                return mid
+
+```
+
+### C++
+
+```cpp
+class Solution {
+public:
+    int guessNumber(int n) {
+        int low = 1;
+        int high = n;
+
+        while(true) {
+            int mid = low + (high - low)/2;
+            int myGuess = guess(mid);
+            if(myGuess == 1)
+                low = mid + 1;
+            else if(myGuess == -1)
+                high = mid - 1;
+            else
+                return mid;
+        }
+    }
+};
+
+```
+
+### Java
+
+```java
+public class Solution extends GuessGame {
+    public int guessNumber(int n) {
+        //return a num between 1,...,n
+        int low = 1;
+        int high = n;
+
+        while(true) {
+            int mid = low + (high - low)/2;
+            int myGuess = guess(mid);
+            if(myGuess == 1)
+                low = mid + 1;
+            else if(myGuess == -1)
+                high = mid - 1;
+            else
+                return mid;
+        }
+    }
+}
+
+```

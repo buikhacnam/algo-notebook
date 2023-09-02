@@ -1,0 +1,289 @@
+---
+title: Multiply Strings
+category: Math And Geometry
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/multiply-strings)
+
+</Callout>
+
+## Description
+
+Given two non-negative integers <code>num1</code> and <code>num2</code> represented as strings, return the product of <code>num1</code> and <code>num2</code>, also represented as a string.
+
+Note: You must not use any built-in BigInteger library or convert the inputs to integer directly.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">Input: num1 = "2", num2 = "3" Output: "6"</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: num1 = "123", num2 = "456" Output: "56088"
+</pre>
+Constraints:
+
+    - <code>1 &lt;= num1.length, num2.length &lt;= 200</code>
+    - <code>num1</code> and <code>num2</code> consist of digits only.
+    - Both <code>num1</code> and <code>num2</code> do not contain any leading zero, except the number <code>0</code> itself.
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * Matrix
+ * Time O(N * M) | Space O(N + M)
+ * https://leetcode.com/problems/multiply-strings/
+ * @param {string} num1
+ * @param {string} num2
+ * @return {string}
+ */
+var multiply = (num1, num2) => {
+	const isZero = num1 === '0' || num2 === '0'
+	if (isZero) return '0'
+
+	const buffer = initBuffer(num1, num2) /*               | Space (N + M) */
+
+	multiplication(num1, num2, buffer) /* Time O(N * M) */
+	removeLeadingZero(buffer) /* Time O(N + M) | Time O(N + M)*/
+
+	return buffer.join('') /* Time O(N + M) | Space O(N + M) */
+}
+
+var initBuffer = (num1, num2) => {
+	const size = num1.length + num2.length
+
+	return new Array(size).fill(0) /* Space (N + M) */
+}
+
+var multiplication = (num1, num2, buffer) => {
+	for (let i = num1.length - 1; 0 <= i; i--) {
+		/* Time O(N) */
+		for (let j = num2.length - 1; 0 <= j; j--) {
+			/* Time O(M) */
+			update(num1, i, num2, j, buffer) /* Space O(N + M) */
+		}
+	}
+}
+
+var removeLeadingZero = (buffer) => {
+	const isLeadZero = buffer[0] === 0
+	if (!isLeadZero) return
+
+	buffer.shift() /* Time O(N + M) | Time O(N + M) */
+}
+
+var update = (num1, i, num2, j, buffer) => {
+	const curPos = i + j
+	const prevPos = curPos + 1
+
+	const carry = buffer[prevPos]
+	const product = getProduct(num1, i, num2, j)
+	const sum = carry + product
+
+	const remainder = sum % 10
+	const value = (sum - remainder) / 10
+
+	buffer[prevPos] = remainder /* Space O(N + M) */
+	buffer[curPos] += value /* Space O(N + M) */
+}
+
+var getProduct = (num1, i, num2, j) => {
+	const [iNum, jNum] = [Number(num1[i]), Number(num2[j])]
+
+	return iNum * jNum
+}
+
+/**
+ * Matrix
+ * Time O(N * M) | Space O(N + M)
+ * https://leetcode.com/problems/multiply-strings/
+ * @param {string} num1
+ * @param {string} num2
+ * @return {string}
+ */
+var multiply = (num1, num2) => {
+	const isZero = num1 === '0' || num2 === '0'
+	if (isZero) return '0'
+
+	const buffer = initBuffer(num1, num2) /*               | Space O(N + M) */
+
+	multiplication(num1, num2, buffer) /* Time O(N * M) | Space O(N + M) */
+	removeLeadingZero(buffer) /* Time O(N + M) | Space O(N + M) */
+
+	return buffer.join('') /* Time O(N + M) | Space O(N + M) */
+}
+
+var initBuffer = (num1, num2) =>
+	new Array(num1.length + num2.length).fill(0) /* Space O(N + M) */
+
+var multiplication = (num1, num2, buffer) => {
+	;[num1, num2] = /* Time O(N + M) */ [reverse(num1), reverse(num2)]
+
+	for (var i1 in num1) {
+		/* Time O(N) */
+		for (var i2 in num2) {
+			/* Time O(M) */
+			update(num1, i1, num2, i2, buffer) /* Space O(N + M) */
+		}
+	}
+
+	buffer.reverse() /* Time O(N + M) */
+}
+
+const reverse = (s) =>
+	s
+		.split('') /* Time O(K) | Space O (K) */
+		.reverse() /* Time O(K) */
+
+var update = (num1, i1, num2, i2, buffer) => {
+	const product = num1[i1] * num2[i2]
+	const index = Number(i1) + Number(i2)
+
+	buffer[index] += product /* Space O(N + M) */
+	buffer[index + 1] += Math.floor(buffer[index] / 10) /* Space O(N + M) */
+	buffer[index] = buffer[index] % 10 /* Space O(N + M) */
+}
+
+var removeLeadingZero = (buffer) => {
+	const isZero = buffer[0] === 0
+	if (!isZero) return
+
+	buffer.shift() /* Time O(N + M) | Space O(N + M) */
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def multiply(self, num1: str, num2: str) -> str:
+        if "0" in [num1, num2]:
+            return "0"
+
+        res = [0] * (len(num1) + len(num2))
+        num1, num2 = num1[::-1], num2[::-1]
+        for i1 in range(len(num1)):
+            for i2 in range(len(num2)):
+                digit = int(num1[i1]) * int(num2[i2])
+                res[i1 + i2] += digit
+                res[i1 + i2 + 1] += res[i1 + i2] // 10
+                res[i1 + i2] = res[i1 + i2] % 10
+
+        res, beg = res[::-1], 0
+        while beg < len(res) and res[beg] == 0:
+            beg += 1
+        res = map(str, res[beg:])
+        return "".join(res)
+
+```
+
+### C++
+
+```cpp
+/*
+    Given 2 ints represented as strings, return product, also represented as a string
+    Ex. num1 = "2" num2 = "3" -> "6", num1 = "123" num2 = "456" -> "56088"
+
+    Standard multiplication, right to left per digit, compute sums & carries at each pos
+
+    Time: O(m x n)
+    Space: O(m + n)
+*/
+
+class Solution {
+public:
+    string multiply(string num1, string num2) {
+        int m = num1.size();
+        int n = num2.size();
+
+        string result(m + n, '0');
+
+        for (int i = m - 1; i >= 0; i--) {
+            for (int j = n - 1; j >= 0; j--) {
+                int sum = (num1[i] - '0') * (num2[j] - '0') + (result[i + j + 1] - '0');
+                result[i + j + 1] = sum % 10 + '0';
+                result[i + j] += sum / 10;
+            }
+        }
+
+        for (int i = 0; i < m + n; i++) {
+            if (result[i] != '0') {
+                return result.substr(i);
+            }
+        }
+        return "0";
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+
+    public String multiply(String num1, String num2) {
+        if ("0".equals(num1) || "0".equals(num2)) {
+            return "0";
+        }
+
+        int[] res = new int[num1.length() + num2.length()];
+
+        num1 = reverseString(num1);
+        num2 = reverseString(num2);
+
+        for (int i = 0; i < num1.length(); i++) {
+            for (int j = 0; j < num2.length(); j++) {
+                int digit =
+                    Integer.valueOf(String.valueOf(num1.charAt(i))) *
+                    Integer.valueOf(String.valueOf(num2.charAt(j)));
+                res[i + j] += digit;
+                res[i + j + 1] += res[i + j] / 10;
+                res[i + j] = res[i + j] % 10;
+            }
+        }
+
+        reverseArrayInPlace(res);
+
+        // Get the proper starting point to avoid leading zeros
+        int startIndex = 0;
+        while (startIndex < res.length) {
+            if (res[startIndex] != 0) {
+                break;
+            }
+            startIndex++;
+        }
+
+        StringBuilder buildResponse = new StringBuilder();
+        for (int i = startIndex; i < res.length; i++) {
+            buildResponse.append(res[i]);
+        }
+
+        return buildResponse.toString();
+    }
+
+    private String reverseString(String str) {
+        StringBuilder reversedStr = new StringBuilder(str);
+        reversedStr.reverse();
+        return reversedStr.toString();
+    }
+
+    private void reverseArrayInPlace(int[] arr) {
+        for (int i = 0; i < arr.length / 2; i++) {
+            int temp = arr[i];
+            arr[i] = arr[arr.length - i - 1];
+            arr[arr.length - i - 1] = temp;
+        }
+    }
+}
+
+```

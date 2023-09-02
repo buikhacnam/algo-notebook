@@ -1,0 +1,124 @@
+---
+title: Splitting a String Into Descending Consecutive Values
+category: Backtracking
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/splitting-a-string-into-descending-consecutive-values)
+
+</Callout>
+
+## Description
+
+You are given a string <code>s</code> that consists of only digits.
+
+Check if we can split <code>s</code> into two or more non-empty substrings such that the numerical values of the substrings are in descending order and the difference between numerical values of every two adjacent substrings is equal to <code>1</code>.
+
+    - For example, the string <code>s = &quot;0090089&quot;</code> can be split into <code>[&quot;0090&quot;, &quot;089&quot;]</code> with numerical values <code>[90,89]</code>. The values are in descending order and adjacent values differ by <code>1</code>, so this way is valid.
+    - Another example, the string <code>s = &quot;001&quot;</code> can be split into <code>[&quot;0&quot;, &quot;01&quot;]</code>, <code>[&quot;00&quot;, &quot;1&quot;]</code>, or <code>[&quot;0&quot;, &quot;0&quot;, &quot;1&quot;]</code>. However all the ways are invalid because they have numerical values <code>[0,1]</code>, <code>[0,1]</code>, and <code>[0,0,1]</code> respectively, all of which are not in descending order.
+
+Return <code>true</code> _if it is possible to split_ <code>s</code>​​​​​​ _as described above\*\*, or _<code>false</code>_ otherwise._
+
+A substring is a contiguous sequence of characters in a string.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;1234&quot; Output: false Explanation: There is no valid way
+	to split s.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;050043&quot; Output: true Explanation: s can be split into
+	[&quot;05&quot;, &quot;004&quot;, &quot;3&quot;] with numerical values
+	[5,4,3]. The values are in descending order with adjacent values differing by
+	1.
+</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;9080701&quot; Output: false Explanation: There is no valid
+	way to split s.
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= s.length &lt;= 20</code>
+    - <code>s</code> only consists of digits.
+
+## Solution
+
+### Javascript
+
+```javascript
+Solution will be updated soon
+```
+
+### Python
+
+```python
+class Solution:
+    def splitString(self, s: str) -> bool:
+
+        def dfs(index, prev):
+            if index == len(s):
+                return True
+
+            for j in range(index, len(s)):
+                val = int(s[index:j+1])
+                if val + 1 == prev and dfs(j+1, val):
+                    return True
+            return False
+
+        for i in range(len(s) - 1):
+            val = int(s[:i + 1])
+            if dfs(i+1, val): return True
+
+        return False
+
+```
+
+### C++
+
+```cpp
+typedef unsigned long long ll;
+class Solution {
+public:
+    bool solve(string & s , ll last , int index,int cnt){
+
+        if(index >= s.size()) return cnt > 1;
+
+        ll num = 0;
+        bool ret = false;
+
+        for(int i = index ; i < s.size() ; i++){
+            num = num * 10;
+            num += (s[i] - '0');
+
+            if(last == -1 || last == num + 1){
+                ret |= solve(s , num , i + 1 , cnt + 1);
+            }else if(last != -1 && num >= last)break;
+        }
+
+        return ret;
+    }
+    bool splitString(string s) {
+        return solve(s,-1,0,0);
+    }
+};
+
+```
+
+### Java
+
+```java
+Solution will be updated soon
+```

@@ -1,0 +1,150 @@
+---
+title: Middle of the Linked List
+category: Linked List
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/middle-of-the-linked-list)
+
+</Callout>
+
+## Description
+
+Given the <code>head</code> of a singly linked list, return _the middle node of the linked list_.
+
+If there are two middle nodes, return the second middle node.
+
+Example 1:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/07/23/lc-midlist1.jpg"
+	width={544}
+	height={65}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: head = [1,2,3,4,5] Output: [3,4,5] Explanation: The middle node of the
+	list is node 3.
+</pre>
+
+Example 2:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/07/23/lc-midlist2.jpg"
+	width={664}
+	height={65}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: head = [1,2,3,4,5,6] Output: [4,5,6] Explanation: Since the list has
+	two middle nodes with values 3 and 4, we return the second one.
+</pre>
+
+Constraints:
+
+    - The number of nodes in the list is in the range <code>[1, 100]</code>.
+    - <code>1 &lt;= Node.val &lt;= 100</code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/middle-of-the-linked-list/
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var middleNode = function (head) {
+	let first = head
+	let second = head
+	while (second != null && second.next != null) {
+		first = first.next
+		second = second.next.next
+	}
+	return first
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def middleNode(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if not head or not head.next:
+            return head
+
+        slow = fast = head
+        while fast and fast.next:
+            slow, fast = slow.next, fast.next.next
+
+        return slow
+
+```
+
+### C++
+
+```cpp
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+
+class Solution {
+public:
+    ListNode* middleNode(ListNode* head) {
+        /*
+        The slow and fast pointer algorithm is used to find the middle
+        of a linked list by iterating through the list with a slow
+        pointer that moves one step at a time and a fast pointer that
+        moves two steps at a time. When the fast pointer reaches the
+        end of the list, the slow pointer will be at the midpoint of the list.
+        */
+        ListNode *slow_pointer = head, *fast_pointer = head;
+        while (fast_pointer != NULL && fast_pointer->next != NULL) {
+            slow_pointer = slow_pointer->next;
+            fast_pointer = fast_pointer->next->next;
+        }
+        return slow_pointer;
+    }
+};
+
+```
+
+### Java
+
+```java
+//fast and slow pointer
+class Solution {
+
+    public ListNode middleNode(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        return slow;
+    }
+}
+
+```

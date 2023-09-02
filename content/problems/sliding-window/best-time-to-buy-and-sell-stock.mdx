@@ -1,44 +1,46 @@
 ---
-title: Best Time to Buy And Sell Stock
+title: Best Time to Buy and Sell Stock
 category: Sliding Window
 difficulty: Easy
 ---
 
 <Callout>
 
-[Leetcode Link](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/)
+[Leetcode Link](https://leetcode.com/problems/best-time-to-buy-and-sell-stock)
 
 </Callout>
 
 ## Description
 
-You are given an array `prices` where `prices[i]` is the price of a given stock on the <code>i<sup>th</sup></code> day.
+You are given an array <code>prices</code> where <code>prices[i]</code> is the price of a given stock on the <code>i<sup>th</sup></code> day.
 
 You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
 
-Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return `0`.
+Return _the maximum profit you can achieve from this transaction_. If you cannot achieve any profit, return <code>0</code>.
 
-- Example 1
+Example 1:
 
-```mdx
-Input: prices = [7,1,5,3,6,4]
-Output: 5
-Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.
-Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.
-```
+<br />
 
-- Example 2
+<pre className="overflow-x-auto">
+	Input: prices = [7,1,5,3,6,4] Output: 5 Explanation: Buy on day 2 (price = 1)
+	and sell on day 5 (price = 6), profit = 6-1 = 5. Note that buying on day 2 and
+	selling on day 1 is not allowed because you must buy before you sell.
+</pre>
 
-```mdx
-Input: prices = [7,6,4,3,1]
-Output: 0
-Explanation: In this case, no transactions are done and the max profit = 0.
-```
+Example 2:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: prices = [7,6,4,3,1] Output: 0 Explanation: In this case, no
+	transactions are done and the max profit = 0.
+</pre>
 
 Constraints:
 
-- 1 `<=` prices.length `<=` <code>10<sup>5</sup></code>
-- 0 `<=` prices[i] `<=` <code>10<sup>4</sup></code>
+    - <code>1 &lt;= prices.length &lt;= 10<sup>5</sup></code>
+    - <code>0 &lt;= prices[i] &lt;= 10<sup>4</sup></code>
 
 ## Solution
 
@@ -110,6 +112,15 @@ class Solution:
 ### C++
 
 ```cpp
+/*
+    Given array prices, return max profit w/ 1 buy & 1 sell
+    Ex. prices = [7,1,5,3,6,4] -> 5 (buy at $1, sell at $6)
+
+    For each, get diff b/w that & min value before, store max
+
+    Time: O(n)
+    Space: O(1)
+*/
 
 class Solution {
 public:

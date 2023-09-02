@@ -1,44 +1,47 @@
 ---
 title: Contains Duplicate
-category: Arrays and Hashing
+category: Arrays And Hashing
 difficulty: Easy
 ---
 
 <Callout>
 
-[Leetcode link](https://leetcode.com/problems/contains-duplicate/)
+[Leetcode Link](https://leetcode.com/problems/contains-duplicate)
 
 </Callout>
-Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.
 
-- Example 1:
+## Description
 
-```mdx
-Input: nums = [1,2,3,1]
-Output: true
-```
+Given an integer array <code>nums</code>, return <code>true</code> if any value appears at least twice in the array, and return <code>false</code> if every element is distinct.
 
-- Example 2:
+Example 1:
 
-```mdx
-Input: nums = [1,2,3,4]
-Output: false
-```
+<br />
+<pre className="overflow-x-auto">Input: nums = [1,2,3,1] Output: true</pre>
 
-- Example 3:
+Example
+2:
 
-```mdx
-Input: nums = [1,1,1,3,3,4,3,2,4,2]
-Output: true
-```
+<br />
+<pre className="overflow-x-auto">Input: nums = [1,2,3,4] Output: false</pre>
 
----
+Example
+3:
 
-## Solutions
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [1,1,1,3,3,4,3,2,4,2] Output: true
+</pre>
+Constraints:
+
+    - <code>1 &lt;= nums.length &lt;= 10<sup>5</sup></code>
+    - <code>-10<sup>9</sup> &lt;= nums[i] &lt;= 10<sup>9</sup></code>
+
+## Solution
 
 ### Javascript
 
-```js
+```javascript
 /**
  * Brute Force - Linear Search
  * Time O(N^2) | Space O(1)
@@ -129,11 +132,22 @@ class Solution:
                 return True
             hashset.add(n)
         return False
+
 ```
 
 ### C++
 
 ```cpp
+/*
+    Given int array, return true if any value appears at least twice
+    Ex. nums = [1,2,3,1] -> true, nums = [1,2,3,4] -> false
+
+    If the number has been seen previously, then it has a duplicate. Otherwise, insert it into the hash set.
+
+    Time: O(n)
+    Space: O(n)
+*/
+
 class Solution {
 public:
     bool containsDuplicate(vector<int>& nums) {
@@ -149,6 +163,7 @@ public:
         return false;
     }
 };
+
 ```
 
 ### Java
@@ -156,15 +171,16 @@ public:
 ```java
 class Solution {
 
-  public boolean containsDuplicate(int[] nums) {
-      Set<Integer> uniques = new HashSet<>();
-      for (int i = 0; i < nums.length; i++) {
-          if (uniques.contains(nums[i])) {
-              return true;
-          }
-          uniques.add(nums[i]);
-      }
-      return false;
-  }
+    public boolean containsDuplicate(int[] nums) {
+        Set<Integer> uniques = new HashSet<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (uniques.contains(nums[i])) {
+                return true;
+            }
+            uniques.add(nums[i]);
+        }
+        return false;
+    }
 }
+
 ```

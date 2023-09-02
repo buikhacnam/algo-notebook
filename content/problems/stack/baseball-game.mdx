@@ -1,0 +1,239 @@
+---
+title: Baseball Game
+category: Stack
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/baseball-game)
+
+</Callout>
+
+## Description
+
+You are keeping the scores for a baseball game with strange rules. At the beginning of the game, you start with an empty record.
+
+You are given a list of strings <code>operations</code>, where <code>operations[i]</code> is the <code>i<sup>th</sup></code> operation you must apply to the record and is one of the following:
+
+    - An integer <code>x</code>.
+
+
+    	- Record a new score of <code>x</code>.
+
+
+    - <code>&#39;+&#39;</code>.
+
+    	- Record a new score that is the sum of the previous two scores.
+
+
+    - <code>&#39;D&#39;</code>.
+
+    	- Record a new score that is the double of the previous score.
+
+
+    - <code>&#39;C&#39;</code>.
+
+    	- Invalidate the previous score, removing it from the record.
+
+Return _the sum of all the scores on the record after applying all the operations_.
+
+The test cases are generated such that the answer and all intermediate calculations fit in a 32-bit integer and that all operations are valid.
+
+Example 1:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: ops =
+	[&quot;5&quot;,&quot;2&quot;,&quot;C&quot;,&quot;D&quot;,&quot;+&quot;]
+	Output: 30 Explanation: &quot;5&quot; - Add 5 to the record, record is now
+	[5]. &quot;2&quot; - Add 2 to the record, record is now [5, 2]. &quot;C&quot;
+	- Invalidate and remove the previous score, record is now [5]. &quot;D&quot; -
+	Add 2 * 5 = 10 to the record, record is now [5, 10]. &quot;+&quot; - Add 5 +
+	10 = 15 to the record, record is now [5, 10, 15]. The total sum is 5 + 10 + 15
+	= 30.
+</pre>
+
+Example 2:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: ops =
+	[&quot;5&quot;,&quot;-2&quot;,&quot;4&quot;,&quot;C&quot;,&quot;D&quot;,&quot;9&quot;,&quot;+&quot;,&quot;+&quot;]
+	Output: 27 Explanation: &quot;5&quot; - Add 5 to the record, record is now
+	[5]. &quot;-2&quot; - Add -2 to the record, record is now [5, -2].
+	&quot;4&quot; - Add 4 to the record, record is now [5, -2, 4]. &quot;C&quot; -
+	Invalidate and remove the previous score, record is now [5, -2]. &quot;D&quot;
+	- Add 2 * -2 = -4 to the record, record is now [5, -2, -4]. &quot;9&quot; -
+	Add 9 to the record, record is now [5, -2, -4, 9]. &quot;+&quot; - Add -4 + 9
+	= 5 to the record, record is now [5, -2, -4, 9, 5]. &quot;+&quot; - Add 9 + 5
+	= 14 to the record, record is now [5, -2, -4, 9, 5, 14]. The total sum is 5 +
+	-2 + -4 + 9 + 5 + 14 = 27.
+</pre>
+
+Example 3:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: ops = [&quot;1&quot;,&quot;C&quot;] Output: 0 Explanation:
+	&quot;1&quot; - Add 1 to the record, record is now [1]. &quot;C&quot; -
+	Invalidate and remove the previous score, record is now []. Since the record
+	is empty, the total sum is 0.
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= operations.length &lt;= 1000</code>
+    - <code>operations[i]</code> is <code>&quot;C&quot;</code>, <code>&quot;D&quot;</code>, <code>&quot;+&quot;</code>, or a string representing an integer in the range <code>[-3 * 10<sup>4</sup>, 3 * 10<sup>4</sup>]</code>.
+    - For operation <code>&quot;+&quot;</code>, there will always be at least two previous scores on the record.
+    - For operations <code>&quot;C&quot;</code> and <code>&quot;D&quot;</code>, there will always be at least one previous score on the record.
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * @param {string[]} operations
+ * @return {number}
+ */
+var calPoints = function (operations) {
+	let runningSum = 0
+	const stack = []
+	for (const o of operations) {
+		if (o === 'C') {
+			runningSum -= stack.pop()
+			continue
+		}
+		if (o === 'D') {
+			const val = stack[stack.length - 1] * 2
+			stack.push(val)
+			runningSum += val
+			continue
+		}
+		if (o === '+') {
+			const val = stack[stack.length - 1] + stack[stack.length - 2]
+			stack.push(val)
+			runningSum += val
+			continue
+		}
+		stack.push(+o)
+		runningSum += +o
+	}
+	return runningSum
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def calPoints(self, operations: List[str]) -> int:
+
+        score_stack = []
+
+        for o in operations:
+
+            # it is +, D, or C
+            # if stack isn't of sufficient length, then operation is voided
+            if o == "+" and len(score_stack) >= 2:
+                summed = score_stack[-2] + score_stack[-1]
+                score_stack.append(summed)
+
+            elif o == "D" and len(score_stack) >= 1:
+                doubled = score_stack[-1] * 2
+                score_stack.append(doubled)
+
+            elif o == "C" and len(score_stack) >= 1:
+                score_stack.pop()
+
+            else:
+                score_stack.append(int(o))
+
+        return sum(score_stack)
+```
+
+### C++
+
+```cpp
+class Solution {
+public:
+    int calPoints(vector<string>& ops) {
+        stack<int> stack;
+        int sum =  0;
+
+        for (int i = 0; i < ops.size(); i++){
+            if (ops[i] == "+"){
+                int first = stack.top();
+                stack.pop();
+
+                int second = stack.top();
+
+                stack.push(first);
+
+                stack.push(first + second);
+
+                sum += first + second;
+            }
+
+            else if (ops[i] == "D"){
+                sum += 2 * stack.top();
+                stack.push(2 * stack.top());
+            }
+
+            else if (ops[i] == "C"){
+                sum -= stack.top();
+                stack.pop();
+            }
+
+            else{
+                sum += stoi(ops[i]);
+                stack.push(stoi(ops[i]));
+            }
+        }
+
+        return sum;
+
+
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+    public int calPoints(String[] operations) {
+        Stack<Integer> st = new Stack<>();
+
+        for(String op : operations) {
+            if(op.equals("+") && st.size() >= 2) {
+                int score1 = st.pop();
+                int score2 = st.peek();
+                int score3 = score1 + score2;
+                st.push(score1);
+                st.push(score3);
+            } else if(op.equals("D") && !st.isEmpty()) {
+                int score = st.peek();
+                st.push(score*2);
+            } else if(op.equals("C") && !st.isEmpty()) {
+                st.pop();
+            } else {
+                st.push(Integer.parseInt(op));
+            }
+        }
+
+        int sum = 0;
+        while(!st.isEmpty()) {
+            sum += st.pop();
+        }
+
+        return sum;
+    }
+}
+
+```

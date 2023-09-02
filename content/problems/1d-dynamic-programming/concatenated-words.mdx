@@ -1,0 +1,109 @@
+---
+title: Concatenated Words
+category: 1d Dynamic Programming
+difficulty: Hard
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/concatenated-words)
+
+</Callout>
+
+## Description
+
+Given an array of strings <code>words</code> (without duplicates), return _all the concatenated words in the given list of_ <code>words</code>.
+
+A concatenated word is defined as a string that is comprised entirely of at least two shorter words (not necesssarily distinct) in the given array.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: words =
+	[&quot;cat&quot;,&quot;cats&quot;,&quot;catsdogcats&quot;,&quot;dog&quot;,&quot;dogcatsdog&quot;,&quot;hippopotamuses&quot;,&quot;rat&quot;,&quot;ratcatdogcat&quot;]
+	Output:
+	[&quot;catsdogcats&quot;,&quot;dogcatsdog&quot;,&quot;ratcatdogcat&quot;]
+	Explanation: &quot;catsdogcats&quot; can be concatenated by &quot;cats&quot;,
+	&quot;dog&quot; and &quot;cats&quot;; &quot;dogcatsdog&quot; can be
+	concatenated by &quot;dog&quot;, &quot;cats&quot; and &quot;dog&quot;;
+	&quot;ratcatdogcat&quot; can be concatenated by &quot;rat&quot;,
+	&quot;cat&quot;, &quot;dog&quot; and &quot;cat&quot;.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: words = [&quot;cat&quot;,&quot;dog&quot;,&quot;catdog&quot;] Output:
+	[&quot;catdog&quot;]
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= words.length &lt;= 10<sup>4</sup></code>
+    - <code>1 &lt;= words[i].length &lt;= 30</code>
+    - <code>words[i]</code> consists of only lowercase English letters.
+    - All the strings of <code>words</code> are unique.
+    - <code>1 &lt;= sum(words[i].length) &lt;= 10<sup>5</sup></code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * @param {string[]} words
+ * @return {string[]}
+ */
+var findAllConcatenatedWordsInADict = function (words) {
+	let wordSet = new Set(words)
+	let res = []
+
+	for (let w of words) {
+		if (dfs(w)) {
+			res.push(w)
+		}
+	}
+
+	return res
+
+	/**
+	 *
+	 * @param {string} word
+	 * @returns {boolean}
+	 */
+	function dfs(word) {
+		for (let i = 1; i < word.length; i++) {
+			let prefix = word.slice(0, i)
+			let suffix = word.slice(i, word.length)
+
+			if (
+				(wordSet.has(prefix) && wordSet.has(suffix)) ||
+				(wordSet.has(prefix) && dfs(suffix))
+			) {
+				return true
+			}
+		}
+		return false
+	}
+}
+```
+
+### Python
+
+```python
+Solution will be updated soon
+```
+
+### C++
+
+```cpp
+Solution will be updated soon
+```
+
+### Java
+
+```java
+Solution will be updated soon
+```

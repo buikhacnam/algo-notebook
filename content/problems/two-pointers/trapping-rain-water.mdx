@@ -1,0 +1,265 @@
+---
+title: Trapping Rain Water
+category: Two Pointers
+difficulty: Hard
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/trapping-rain-water)
+
+</Callout>
+
+## Description
+
+Given <code>n</code> non-negative integers representing an elevation map where the width of each bar is <code>1</code>, compute how much water it can trap after raining.
+
+Example 1:
+
+<Image
+	src="https://assets.leetcode.com/uploads/2018/10/22/rainwatertrap.png"
+	width={412}
+	height={161}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: height = [0,1,0,2,1,0,1,3,2,1,2,1] Output: 6 Explanation: The above
+	elevation map (black section) is represented by array
+	[0,1,0,2,1,0,1,3,2,1,2,1]. In this case, 6 units of rain water (blue section)
+	are being trapped.
+</pre>
+
+Example 2:
+
+<br />
+
+<pre className="overflow-x-auto">Input: height = [4,2,0,3,2,5] Output: 9</pre>
+
+Constraints:
+
+    - <code>n == height.length</code>
+    - <code>1 &lt;= n &lt;= 2 * 10<sup>4</sup></code>
+    - <code>0 &lt;= height[i] &lt;= 10<sup>5</sup></code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * Linear
+ * Time O(n) | Space O(n)
+ * https://leetcode.com/problems/trapping-rain-water
+ * @param {number[]} height
+ * @return {number}
+ *
+ */
+var trap = function (height) {
+	const maxLeft = []
+	const maxRight = []
+	const minLeftRight = []
+
+	let current = 0
+	for (let i = 0; i < height.length; i++) {
+		maxLeft.push(current)
+		current = Math.max(current, height[i])
+	}
+	current = 0
+	for (let i = height.length - 1; i > -1; i--) {
+		maxRight.push(current)
+		current = Math.max(current, height[i])
+	}
+	// because the elements were added reverse.
+	maxRight.reverse()
+
+	for (let i = 0; i < height.length; i++) {
+		const minofLeftRight = Math.min(maxLeft[i], maxRight[i])
+		minLeftRight.push(minofLeftRight)
+	}
+
+	let water = 0
+	for (let i = 0; i < height.length; i++) {
+		if (minLeftRight[i] - height[i] > 0) {
+			water += minLeftRight[i] - height[i]
+		}
+	}
+
+	return water
+}
+
+/**
+ * https://leetcode.com/problems/trapping-rain-water/
+ * Time O(N) | Space O(1)
+ * @param {number[]} height
+ * @return {number}
+ */
+var trap = function (height) {
+	let [left, right] = [0, height.length - 1]
+	let [maxLeft, maxRight, area] = [0, 0, 0]
+
+	while (left < right) {
+		const [leftHeight, rightHeight] = getHeights(height, left, right)
+		const [leftWindow, rightWindow] = getWindows(
+			height,
+			left,
+			maxLeft,
+			right,
+			maxRight,
+		)
+
+		const isRightGreater = leftHeight <= rightHeight
+		if (isRightGreater) {
+			if (hasNewMax(maxLeft, leftHeight)) maxLeft = leftHeight
+			else area += leftWindow
+
+			left++
+		}
+
+		const isRightLess = rightHeight < leftHeight
+		if (isRightLess) {
+			if (hasNewMax(maxRight, rightHeight)) maxRight = rightHeight
+			else area += rightWindow
+
+			right--
+		}
+	}
+
+	return area
+}
+
+const hasNewMax = (max, height) => max < height
+
+const getHeights = (height, left, right) => [height[left], height[right]]
+
+const getWindows = (height, left, maxLeft, right, maxRight) => {
+	const [leftHeight, rightHeight] = getHeights(height, left, right)
+	const [leftWindow, rightWindow] = [
+		maxLeft - leftHeight,
+		maxRight - rightHeight,
+	]
+
+	return [leftWindow, rightWindow]
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def trap(self, height: List[int]) -> int:
+
+        c = height.index(max(height))
+
+        vol = 0
+        for arr in [height[:c], height[:c:-1]]:
+            first = 0
+            for i in arr:
+                if i < first:
+                    vol += first - i
+                else:
+                    first = i
+
+        return vol
+
+
+```
+
+### C++
+
+```cpp
+/*
+    Given elevation map array, compute trapped water
+    Ex. height = [0,1,0,2,1,0,1,3,2,1,2,1] -> 6
+
+    2 pointers, outside in, track max left/right
+    For lower max, curr only dependent on that one
+    Compute height of these, iterate lower one
+
+    Time: O(n)
+    Space: O(1)
+*/
+
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int i = 0;
+        int j = height.size() - 1;
+
+        int maxLeft = height[i];
+        int maxRight = height[j];
+
+        int result = 0;
+
+        while (i < j) {
+            if (maxLeft <= maxRight) {
+                i++;
+                maxLeft = max(maxLeft, height[i]);
+                result += maxLeft - height[i];
+            } else {
+                j--;
+                maxRight = max(maxRight, height[j]);
+                result += maxRight - height[j];
+            }
+        }
+
+        return result;
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+
+    public int trap(int[] heights) {
+        int left[] = new int[heights.length], right[] = new int[heights.length], max =
+            heights[0], c = 0;
+
+        for (int i = 0; i < heights.length; i++) {
+            left[i] = Math.max(heights[i], max);
+            max = left[i];
+        }
+
+        max = heights[heights.length - 1];
+        for (int i = heights.length - 1; i >= 0; i--) {
+            right[i] = Math.max(heights[i], max);
+            max = right[i];
+        }
+
+        for (int i = 0; i < heights.length; i++) {
+            c = c + Math.min(left[i], right[i]) - heights[i];
+        }
+        return c;
+    }
+}
+
+//O(1) space
+class Solution {
+
+    public int trap(int[] heights) {
+        if (heights.length == 0) return 0;
+
+        int l = 0, r = heights.length - 1;
+        int leftMax = heights[l], rightMax = heights[r];
+        int res = 0;
+
+        while (l < r) {
+            if (leftMax < rightMax) {
+                l++;
+                leftMax = Math.max(leftMax, heights[l]);
+                res += leftMax - heights[l];
+            } else {
+                r--;
+                rightMax = Math.max(rightMax, heights[r]);
+                res += rightMax - heights[r];
+            }
+        }
+
+        return res;
+    }
+}
+
+```

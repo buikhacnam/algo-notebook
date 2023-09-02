@@ -1,0 +1,130 @@
+---
+title: Number of Subsequences That Satisfy the Given Sum Condition
+category: Two Pointers
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition)
+
+</Callout>
+
+## Description
+
+You are given an array of integers <code>nums</code> and an integer <code>target</code>.
+
+Return _the number of non-empty subsequences of _<code>nums</code>_ such that the sum of the minimum and maximum element on it is less or equal to _<code>target</code>. Since the answer may be too large, return it modulo <code>10<sup>9</sup> + 7</code>.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [3,5,6,7], target = 9 Output: 4 Explanation: There are 4
+	subsequences that satisfy the condition. [3] -&gt; Min value + max value &lt;=
+	target (3 + 3 &lt;= 9) [3,5] -&gt; (3 + 5 &lt;= 9) [3,5,6] -&gt; (3 + 6 &lt;=
+	9) [3,6] -&gt; (3 + 6 &lt;= 9)
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [3,3,6,8], target = 10 Output: 6 Explanation: There are 6
+	subsequences that satisfy the condition. (nums can have repeated numbers). [3]
+	, [3] , [3,3], [3,6] , [3,6] , [3,3,6]
+</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [2,3,3,4,6,7], target = 12 Output: 61 Explanation: There are 63
+	non-empty subsequences, two of them do not satisfy the condition ([6,7], [7]).
+	Number of valid subsequences (63 - 2 = 61).
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= nums.length &lt;= 10<sup>5</sup></code>
+    - <code>1 &lt;= nums[i] &lt;= 10<sup>6</sup></code>
+    - <code>1 &lt;= target &lt;= 10<sup>6</sup></code>
+
+## Solution
+
+### Javascript
+
+```javascript
+Solution will be updated soon
+```
+
+### Python
+
+```python
+# Time Complexity - O(nlogn)
+# Space Complexity - O(1)
+
+class Solution:
+    def numSubseq(self, nums: List[int], target: int) -> int:
+        nums.sort()
+
+        res, mod = 0, (10**9 + 7)
+
+        left, right = 0, len(nums) - 1
+        while  left <= right:
+            if (nums[left] + nums[right]) > target:
+                right -= 1
+            else:
+                res += 1 << (right - left)
+                left += 1
+        return res % mod
+
+```
+
+### C++
+
+```cpp
+// Time Complexity - O(nlogn)
+// Space Complexity - O(n)
+
+class Solution {
+public:
+    int numSubseq(vector<int>& nums, int target) {
+        sort(nums.begin(), nums.end());
+        int n = nums.size();
+
+        int left = 0, right = n - 1;
+        int res = 0, mod = 1e9 + 7;
+        while (left <= right) {
+            if (nums[left] + nums[right] > target) {
+                right--;
+            }
+            else {
+                res = (res + fastPower(2, right - left, mod)) % mod;
+                left++;
+            }
+        }
+        return res;
+    }
+
+    int fastPower(int a, int b, int mod) {
+        long long ans = 1;
+        long long base = a;
+        while (b != 0) {
+            if (b % 2 == 1) {
+                ans = (ans * base) % mod;
+            }
+            base = (base * base) % mod;
+            b /= 2;
+        }
+        return ans;
+    }
+};
+
+```
+
+### Java
+
+```java
+Solution will be updated soon
+```

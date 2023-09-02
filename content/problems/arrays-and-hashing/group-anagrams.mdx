@@ -1,0 +1,210 @@
+---
+title: Group Anagrams
+category: Arrays And Hashing
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/group-anagrams)
+
+</Callout>
+
+## Description
+
+Given an array of strings <code>strs</code>, group the anagrams together. You can return the answer in any order.
+
+An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: strs = ["eat","tea","tan","ate","nat","bat"] Output:
+	[["bat"],["nat","tan"],["ate","eat","tea"]]
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">Input: strs = [""] Output: [[""]]</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">Input: strs = ["a"] Output: [["a"]]</pre>
+Constraints:
+
+    - <code>1 &lt;= strs.length &lt;= 10<sup>4</sup></code>
+    - <code>0 &lt;= strs[i].length &lt;= 100</code>
+    - <code>strs[i]</code> consists of lowercase English letters.
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * Sort - HeapSort Space O(1) | QuickSort Space O(log(K))
+ * Hash Map - Adjacency List
+ * Time O(N * (K * log(K))) | Space O(N * K)
+ * https://leetcode.com/problems/group-anagrams/
+ * @param {string[]} strs
+ * @return {string[][]}
+ */
+var groupAnagrams = (words, map = new Map()) => {
+	if (!words.length) return []
+
+	groupWords(words, map) /* Time O(N * (K * log(K)) | Space O(N * K) */
+
+	return [...map.values()] /* Time O(N)               | Space O(N * K) */
+}
+
+var groupWords = (words, map) => {
+	for (const original of words) {
+		/* Time O(N) */
+		const sorted = reorder(original) /* Time O(K * log(K)) | Space O(K) */
+		const values = map.get(sorted) || []
+
+		values.push(original) /*                    | Space O(N) */
+		map.set(sorted, values) /*                    | Space O(N * K) */
+	}
+}
+
+const reorder = (str) =>
+	str
+		.split('') /* Time O(K)          | Space O(K) */
+		.sort((a, b) =>
+			a.localeCompare(b),
+		) /* Time O(K * log(K)) | Space O(1 || log(K)) */
+		.join('') /* Time O(K)          | Space O(K) */
+
+/**
+ * Hash Map
+ * Time O(N * K) | Space O(N * K)
+ * https://leetcode.com/problems/group-anagrams/
+ * @param {string[]} words
+ * @return {string[][]}
+ */
+var groupAnagrams = (words, map = new Map()) => {
+	if (!words.length) return []
+
+	groupWords(words, map) /* Time O(N * K) | Space O(N * K) */
+
+	return [...map.values()] /* Time O(N)     | Space O(N * K) */
+}
+
+var groupWords = (words, map) => {
+	for (const original of words) {
+		/* Time O(N) */
+		const hash = getHash(original) /* Time O(K) | Space O(1) */
+		const values = map.get(hash) || []
+
+		values.push(original) /*           | Space O(N) */
+		map.set(hash, values) /*           | Space O(N * K) */
+	}
+}
+
+const getHash = (word) => {
+	const frequency = new Array(26).fill(0)
+
+	for (const char of word) {
+		/* Time O(K) */
+		const charCode = getCode(char) /* Time O(1) | Space (1) */
+
+		frequency[charCode]++ /*           | Space O(1) */
+	}
+
+	return buildHash(frequency)
+}
+
+const getCode = (char) => char.charCodeAt(0) - 'a'.charCodeAt(0)
+
+const buildHash = (frequency) => frequency.toString()
+```
+
+### Python
+
+```python
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        ans = collections.defaultdict(list)
+
+        for s in strs:
+            count = [0] * 26
+            for c in s:
+                count[ord(c) - ord("a")] += 1
+            ans[tuple(count)].append(s)
+        return ans.values()
+
+```
+
+### C++
+
+```cpp
+/*
+    Given array of strings, group anagrams together (same letters diff order)
+    Ex. strs = ["eat","tea","tan","ate","nat","bat"] -> [["bat"],["nat","tan"],["ate","eat","tea"]]
+
+    Count chars, for each string use total char counts (naturally sorted) as key
+
+    Time: O(n x l) -> n = length of strs, l = max length of a string in strs
+    Space: O(n x l)
+*/
+
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map<string, vector<string>> m;
+        for (int i = 0; i < strs.size(); i++) {
+            string key = getKey(strs[i]);
+            m[key].push_back(strs[i]);
+        }
+
+        vector<vector<string>> result;
+        for (auto it = m.begin(); it != m.end(); it++) {
+            result.push_back(it->second);
+        }
+        return result;
+    }
+private:
+    string getKey(string str) {
+        vector<int> count(26);
+        for (int j = 0; j < str.size(); j++) {
+            count[str[j] - 'a']++;
+        }
+
+        string key = "";
+        for (int i = 0; i < count.size(); i++) {
+            key.append(to_string(count[i]) + '#');
+        }
+        return key;
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        Map<String, List<String>> map = new HashMap<>();
+
+        for (String word : strs) {
+            char[] chars = word.toCharArray();
+            Arrays.sort(chars);
+            String sortedWord = new String(chars);
+
+            if (!map.containsKey(sortedWord)) {
+                map.put(sortedWord, new ArrayList<>());
+            }
+
+            map.get(sortedWord).add(word);
+        }
+
+        return new ArrayList<>(map.values());
+    }
+}
+
+```

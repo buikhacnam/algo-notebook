@@ -1,0 +1,82 @@
+---
+title: Maximize Score After N Operations
+category: 1d Dynamic Programming
+difficulty: Hard
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/maximize-score-after-n-operations)
+
+</Callout>
+
+## Description
+
+You are given <code>nums</code>, an array of positive integers of size <code>2 \* n</code>. You must perform <code>n</code> operations on this array.
+
+In the <code>i<sup>th</sup></code> operation (1-indexed), you will:
+
+    - Choose two elements, <code>x</code> and <code>y</code>.
+    - Receive a score of <code>i * gcd(x, y)</code>.
+    - Remove <code>x</code> and <code>y</code> from <code>nums</code>.
+
+Return _the maximum score you can receive after performing _<code>n</code>_ operations._
+
+The function <code>gcd(x, y)</code> is the greatest common divisor of <code>x</code> and <code>y</code>.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [1,2] Output: 1 Explanation: The optimal choice of operations
+	is: (1 * gcd(1, 2)) = 1
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [3,4,6,8] Output: 11 Explanation: The optimal choice of
+	operations is: (1 * gcd(3, 6)) + (2 * gcd(4, 8)) = 3 + 8 = 11
+</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [1,2,3,4,5,6] Output: 14 Explanation: The optimal choice of
+	operations is: (1 * gcd(1, 5)) + (2 * gcd(2, 4)) + (3 * gcd(3, 6)) = 1 + 4 + 9
+	= 14
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= n &lt;= 7</code>
+    - <code>nums.length == 2 * n</code>
+    - <code>1 &lt;= nums[i] &lt;= 10<sup>6</sup></code>
+
+## Solution
+
+### Javascript
+
+```javascript
+Solution will be updated soon
+```
+
+### Python
+
+```python
+Solution will be updated soon
+```
+
+### C++
+
+```cpp
+Solution will be updated soon
+```
+
+### Java
+
+```java
+Solution will be updated soon
+```

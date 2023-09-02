@@ -1,0 +1,115 @@
+---
+title: Check If a String Contains All Binary Codes of Size K
+category: Arrays And Hashing
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/check-if-a-string-contains-all-binary-codes-of-size-k)
+
+</Callout>
+
+## Description
+
+Given a binary string <code>s</code> and an integer <code>k</code>, return <code>true</code> _if every binary code of length_ <code>k</code> _is a substring of_ <code>s</code>. Otherwise, return <code>false</code>.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;00110110&quot;, k = 2 Output: true Explanation: The binary
+	codes of length 2 are &quot;00&quot;, &quot;01&quot;, &quot;10&quot; and
+	&quot;11&quot;. They can be all found as substrings at indices 0, 1, 3 and 2
+	respectively.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;0110&quot;, k = 1 Output: true Explanation: The binary codes
+	of length 1 are &quot;0&quot; and &quot;1&quot;, it is clear that both exist
+	as a substring.
+</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;0110&quot;, k = 2 Output: false Explanation: The binary code
+	&quot;00&quot; is of length 2 and does not exist in the array.
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= s.length &lt;= 5 * 10<sup>5</sup></code>
+    - <code>s[i]</code> is either <code>&#39;0&#39;</code> or <code>&#39;1&#39;</code>.
+    - <code>1 &lt;= k &lt;= 20</code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/check-if-a-string-contains-all-binary-codes-of-size-k/
+ *
+ * Hashing
+ * Time O(n*k) | Space O(2^k) (it can't get any bigger than 2^k in the worst case)
+ * @param {string} s
+ * @param {number} k
+ * @return {boolean}
+ */
+var hasAllCodes = function (s, k) {
+	const bitSet = new Set()
+
+	for (let i = 0; i < s.length; i++) {
+		if (s.substring(i, i + k).length === k) {
+			bitSet.add(s.substring(i, i + k))
+		}
+	}
+
+	return bitSet.size === 1 << k
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def hasAllCodes(self, s: str, k: int) -> bool:
+        return len(set(s[i : i + k] for i in range(len(s) - k + 1))) == 2**k
+
+```
+
+### C++
+
+```cpp
+class Solution {
+public:
+    bool hasAllCodes(string s, int k) {
+
+        set<string> all_substrings;
+        int total = 1 <<k; // this is equal to 2 power k (2^k)
+
+        // get all the substring of len k and store it in a set
+        for(int i =0;i+k<=s.length();i++){
+            all_substrings.insert(s.substr(i,k));
+            // size of set equals 2 power k
+            if (all_substrings.size() == total){
+                return true;
+            }
+        }
+
+        return false;
+    }
+};
+
+```
+
+### Java
+
+```java
+Solution will be updated soon
+```

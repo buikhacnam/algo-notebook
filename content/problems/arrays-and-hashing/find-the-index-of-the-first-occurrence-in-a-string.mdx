@@ -1,0 +1,169 @@
+---
+title: Find the Index of the First Occurrence in a String
+category: Arrays And Hashing
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string)
+
+</Callout>
+
+## Description
+
+Given two strings <code>needle</code> and <code>haystack</code>, return the index of the first occurrence of <code>needle</code> in <code>haystack</code>, or <code>-1</code> if <code>needle</code> is not part of <code>haystack</code>.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: haystack = &quot;sadbutsad&quot;, needle = &quot;sad&quot; Output: 0
+	Explanation: &quot;sad&quot; occurs at index 0 and 6. The first occurrence is
+	at index 0, so we return 0.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: haystack = &quot;leetcode&quot;, needle = &quot;leeto&quot; Output: -1
+	Explanation: &quot;leeto&quot; did not occur in &quot;leetcode&quot;, so we
+	return -1.
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= haystack.length, needle.length &lt;= 10<sup>4</sup></code>
+    - <code>haystack</code> and <code>needle</code> consist of only lowercase English characters.
+
+## Solution
+
+### Javascript
+
+```javascript
+Solution will be updated soon
+```
+
+### Python
+
+```python
+class Solution:
+    def strStr(self, haystack: str, needle: str) -> int:
+        if needle == "":
+            return 0
+        lps = [0] * len(needle)
+
+        prevLPS, i = 0, 1
+        while i < len(needle):
+            if needle[i] == needle[prevLPS]:
+                lps[i] = prevLPS + 1
+                prevLPS += 1
+                i += 1
+            elif prevLPS == 0:
+                lps[i] = 0
+                i += 1
+            else:
+                prevLPS = lps[prevLPS - 1]
+
+        i = 0  # ptr for haystack
+        j = 0  # ptr for needle
+        while i < len(haystack):
+            if haystack[i] == needle[j]:
+                i, j = i + 1, j + 1
+            else:
+                if j == 0:
+                    i += 1
+                else:
+                    j = lps[j - 1]
+            if j == len(needle):
+                return i - len(needle)
+        return -1
+
+```
+
+### C++
+
+```cpp
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        if(haystack.size()<needle.size()) return -1;
+        int found=0;
+        for(int i=0;i<haystack.size()-needle.size()+1;i++){
+            if(haystack[i]==needle[0]){
+                found=1;
+                for(int j=1;j<needle.size();j++){
+                    if(haystack[i+j]!=needle[j]){
+                        found=0;break;
+                    }
+                }if(found==1) return i;
+            }
+        }return -1;
+    }
+};
+
+```
+
+### Java
+
+```java
+// Solution One
+public class Solution {
+    public int strStr(String haystack, String needle) {
+        if (needle.isEmpty()) {
+            return 0;
+        }
+        int[] lps = new int[needle.length()];
+
+        int prevLPS = 0, i = 1;
+        while (i < needle.length()) {
+            if (needle.charAt(i) == needle.charAt(prevLPS)) {
+                lps[i] = ++prevLPS;
+                i++;
+            } else {
+                if (prevLPS == 0) {
+                    lps[i] = 0;
+                    i++;
+                } else {
+                    prevLPS = lps[prevLPS - 1];
+                }
+            }
+        }
+
+        int j = 0;  // ptr for needle
+        for (i = 0; i < haystack.length(); ) {
+            if (haystack.charAt(i) == needle.charAt(j)) {
+                i++;
+                j++;
+            } else {
+                if (j == 0) {
+                    i++;
+                } else {
+                    j = lps[j - 1];
+                }
+            }
+            if (j == needle.length()) {
+                return i - j;
+            }
+        }
+        return -1;
+    }
+}
+
+// Solution Two (Linear search using indexOf method for arrays)
+class Solution {
+    public int strStr(String haystack, String needle) {
+        int result = 0;
+        if (haystack.length() <= 0 && needle.length() > 0) return -1;
+        if (haystack.length() != 0) {
+            int occurence = haystack.indexOf(needle);
+            if (occurence == -1)
+                return occurence;
+            result = occurence;
+        }
+        return result;
+    }
+}
+
+```

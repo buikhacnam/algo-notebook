@@ -1,0 +1,148 @@
+---
+title: Contains Duplicate II
+category: Sliding Window
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/contains-duplicate-ii)
+
+</Callout>
+
+## Description
+
+Given an integer array <code>nums</code> and an integer <code>k</code>, return <code>true</code> _if there are two distinct indices _<code>i</code>_ and _<code>j</code>_ in the array such that _<code>nums[i] == nums[j]</code>_ and _<code>abs(i - j) &lt;= k</code>.
+
+Example 1:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [1,2,3,1], k = 3 Output: true
+</pre>
+
+Example 2:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [1,0,1,1], k = 1 Output: true
+</pre>
+
+Example 3:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [1,2,3,1,2,3], k = 2 Output: false
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= nums.length &lt;= 10<sup>5</sup></code>
+    - <code>-10<sup>9</sup> &lt;= nums[i] &lt;= 10<sup>9</sup></code>
+    - <code>0 &lt;= k &lt;= 10<sup>5</sup></code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {boolean}
+ */
+var containsNearbyDuplicate = function (nums, k) {
+	let leftPtr = 0
+	let rightPtr = 0
+	let windowHashMap = new Map()
+	while (rightPtr < nums.length) {
+		if (windowHashMap.has(nums[rightPtr])) {
+			return true
+		} else {
+			windowHashMap.set(nums[rightPtr], 1)
+		}
+		rightPtr++
+		if (rightPtr - leftPtr > k) {
+			let leftPtrValue = windowHashMap.get(nums[leftPtr])
+			leftPtrValue--
+			if (leftPtrValue == 0) {
+				windowHashMap.delete(nums[leftPtr])
+			} else {
+				windowHashMap.set(nums[leftPtr], leftPtrValue)
+			}
+			leftPtr++
+		}
+	}
+	return false
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def containsNearbyDuplicate(self, nums: List[int], k: int) -> bool:
+        window = set()
+        L = 0
+
+        for R in range(len(nums)):
+            if R - L > k:
+                window.remove(nums[L])
+                L += 1
+            if nums[R] in window:
+                return True
+            window.add(nums[R])
+        return False
+
+```
+
+### C++
+
+```cpp
+class Solution {
+public:
+    bool containsNearbyDuplicate(vector<int>& nums, int k) {
+        unordered_map<int,int> number_map;
+        for (int i = 0; i < nums.size(); ++i) {
+            int num = nums[i];
+            if (number_map.find(num) != number_map.end() && i - number_map[num] <= k) {
+                return true;
+            }else {
+                number_map[num] = i;
+            }
+        }
+        return false;
+    }
+};
+```
+
+### Java
+
+```java
+class Solution {
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+
+        Set<Integer> window = new HashSet<>();
+        int left = 0;
+        for (int right = 0; right < nums.length; right++) {
+
+            if (window.size() > k) {
+                window.remove(nums[left]);
+                left++;
+            }
+
+            if (window.contains(nums[right])) {
+                return true;
+            }
+
+            window.add(nums[right]);
+        }
+
+        return false;
+    }
+}
+
+```

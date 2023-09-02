@@ -1,0 +1,139 @@
+---
+title: Isomorphic Strings
+category: Arrays And Hashing
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/isomorphic-strings)
+
+</Callout>
+
+## Description
+
+Given two strings <code>s</code> and <code>t</code>, _determine if they are isomorphic_.
+
+Two strings <code>s</code> and <code>t</code> are isomorphic if the characters in <code>s</code> can be replaced to get <code>t</code>.
+
+All occurrences of a character must be replaced with another character while preserving the order of characters. No two characters may map to the same character, but a character may map to itself.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">Input: s = "egg", t = "add" Output: true</pre>
+
+Example
+2:
+
+<br />
+<pre className="overflow-x-auto">Input: s = "foo", t = "bar" Output: false</pre>
+
+Example
+3:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = "paper", t = "title" Output: true
+</pre>
+Constraints:
+
+    - <code>1 &lt;= s.length &lt;= 5 * 10<sup>4</sup></code>
+    - <code>t.length == s.length</code>
+    - <code>s</code> and <code>t</code> consist of any valid ascii character.
+
+## Solution
+
+### Javascript
+
+```javascript
+var isIsomorphic = function (s, t) {
+	if (s.length !== t.length) return false
+
+	const mapOne = new Map()
+	const mapTwo = new Map()
+
+	for (let i = 0; i < s.length; i++) {
+		if (mapOne.has(s[i])) {
+			if (mapOne.get(s[i]) !== t[i]) return false
+		} else mapOne.set(s[i], t[i])
+
+		if (mapTwo.has(t[i])) {
+			if (mapTwo.get(t[i]) !== s[i]) return false
+		} else mapTwo.set(t[i], s[i])
+	}
+
+	return true
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def isIsomorphic(self, s: str, t: str) -> bool:
+        mapST, mapTS = {}, {}
+
+        for c1, c2 in zip(s, t):
+            if (c1 in mapST and mapST[c1] != c2) or (c2 in mapTS and mapTS[c2] != c1):
+                return False
+            mapST[c1] = c2
+            mapTS[c2] = c1
+
+        return True
+```
+
+### C++
+
+```cpp
+/*Given two strings s and t, determine if they are isomorphic.
+
+Two strings s and t are isomorphic if the characters in s can be replaced to get t.
+
+All occurrences of a character must be replaced with another character while preserving the order of characters. No two characters may map to the same character, but a character may map to itself.
+
+ */
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+       unordered_map<char,vector<int>>m1;
+         unordered_map<char,vector<int>>m2;
+        for(int i=0;i<s.length();i++){
+            m1[s[i]].push_back(i);
+             m2[t[i]].push_back(i);
+
+            if(m1[s[i]]!=m2[t[i]])
+                return false;
+        }
+        return true;
+
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        HashMap<Character, Character> mapS = new HashMap<>();
+        HashMap<Character, Character> mapT = new HashMap<>();
+
+        int s1=0, t1=0;
+
+        while(s1 < s.length() && t1 < t.length()){
+            if((mapS.containsKey(s.charAt(s1)) && mapS.get(s.charAt(s1)) != t.charAt(t1)) ||
+            (mapT.containsKey(t.charAt(t1)) && mapT.get(t.charAt(t1)) != s.charAt(s1))){
+                return false;
+            }
+            mapS.put(s.charAt(s1), t.charAt(t1));
+            mapT.put(t.charAt(t1), s.charAt(s1));
+            s1 += 1;
+            t1 += 1;
+        }
+        return true;
+    }
+}
+
+```

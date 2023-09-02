@@ -1,0 +1,378 @@
+---
+title: Partition Equal Subset Sum
+category: 1d Dynamic Programming
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/partition-equal-subset-sum)
+
+</Callout>
+
+## Description
+
+Given an integer array <code>nums</code>, return <code>true</code> _if you can partition the array into two subsets such that the sum of the elements in both subsets is equal or _<code>false</code>_ otherwise_.
+
+Example 1:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [1,5,11,5] Output: true Explanation: The array can be
+	partitioned as [1, 5, 5] and [11].
+</pre>
+
+Example 2:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: nums = [1,2,3,5] Output: false Explanation: The array cannot be
+	partitioned into equal sum subsets.
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= nums.length &lt;= 200</code>
+    - <code>1 &lt;= nums[i] &lt;= 100</code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * Brute Force - DFS
+ * Time O(N^2) | Space O(N)
+ * https://leetcode.com/problems/partition-equal-subset-sum/
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var canPartition = (nums) => {
+	const sum = getSum(nums) /* Time O(N) */
+	const subSetSum = sum / 2
+
+	const isEven = sum % 2 === 0
+	if (!isEven) return false
+
+	const index = nums.length - 1
+
+	return dfs(nums, index, subSetSum)
+}
+
+var getSum = (nums, sum = 0) => {
+	for (const num of nums) sum += num /* Time O(N) */
+
+	return sum
+}
+
+var dfs = (nums, index, subSetSum) => {
+	const isBaseCase1 = subSetSum === 0
+	if (isBaseCase1) return true
+
+	const isBaseCase2 = index === 0 || subSetSum < 0
+	if (isBaseCase2) return false
+
+	const difference = subSetSum - nums[index - 1]
+
+	const left = dfs(nums, index - 1, difference)
+	const right = dfs(nums, index - 1, subSetSum)
+
+	return left || right
+}
+
+/**
+ * DP - Top Down
+ * Matrix - Memo
+ * Time O(N * M) | Space O(N * M)
+ * https://leetcode.com/problems/partition-equal-subset-sum/
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var canPartition = (nums) => {
+	const isEmpty = nums.length === 0
+	if (isEmpty) return false
+
+	const sum = getSum(nums) /* Time O(N) */
+
+	const isEven = sum % 2 === 0
+	if (!isEven) return false
+
+	const subSetSum = sum >> 1
+	const memo = initMemo(nums, subSetSum) /*               | Space O(N * M) */
+	const index = nums.length - 1
+
+	return dfs(nums, index, subSetSum, memo) /* Time O(N * M) | Space O(N * M) */
+}
+
+var initMemo = (nums, subSetSum) =>
+	new Array(nums.length + 1)
+		.fill() /* Space O(N) */
+		.map(() => new Array(subSetSum + 1).fill(null)) /* Space O(M) */
+
+var dfs = (nums, index, subSetSum, memo) => {
+	const isBaseCase1 = subSetSum === 0
+	if (isBaseCase1) return true
+
+	const isBaseCase2 = index === 0 || subSetSum < 0
+	if (isBaseCase2) return false
+
+	const hasSeen = memo[index][subSetSum] !== null
+	if (hasSeen) return memo[index][subSetSum]
+
+	const difference = subSetSum - nums[index - 1]
+
+	const left = dfs(nums, index - 1, difference, memo)
+	const right = dfs(nums, index - 1, subSetSum, memo)
+
+	memo[index][subSetSum] = left || right
+	return memo[index][subSetSum]
+}
+
+/**
+ * DP - Bottom Up
+ * Matrix - Tabulation
+ * Time O(N * M) | Space O(N * M)
+ * https://leetcode.com/problems/partition-equal-subset-sum/
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var canPartition = (nums) => {
+	const isEmpty = nums.length === 0
+	if (isEmpty) return false
+
+	const sum = getSum(nums) /* Time O(N) */
+
+	const isEven = sum % 2 === 0
+	if (!isEven) return false
+
+	const subSetSum = sum >> 1
+	const tabu = initTabu(nums, subSetSum) /*            | Space O(N * M) */
+
+	search(nums, subSetSum, tabu)
+
+	return tabu[nums.length][subSetSum]
+}
+
+var getSum = (nums, sum = 0) => {
+	for (const num of nums) {
+		sum += num
+	} /* Time O(N) */
+
+	return sum
+}
+
+var initTabu = (nums, subSetSum) => {
+	const tabu = new Array(nums.length + 1)
+		.fill() /* Space O(N) */
+		.map(() => new Array(subSetSum + 1).fill(false)) /* Space O(M) */
+
+	tabu[0][0] = true /* Space O(N * M) */
+
+	return tabu
+}
+
+var search = (nums, subSetSum, tabu) => {
+	for (let numIndex = 1; numIndex <= nums.length; numIndex++) {
+		/* Time O(N) */
+		update(nums, numIndex, subSetSum, tabu) /* Time O(N) | Space O(N * M) */
+	}
+}
+
+var update = (nums, numIndex, subSetSum, tabu) => {
+	const num = numIndex - 1
+	const prevNum = nums[num]
+
+	for (let subSet = 0; subSet <= subSetSum; subSet++) {
+		/* Time O(M) */
+		const isNumGreater = subSet < prevNum
+
+		tabu[numIndex][subSet] = isNumGreater /* Space O(N * M) */
+			? tabu[num][subSet]
+			: tabu[num][subSet] || tabu[num][subSet - prevNum]
+	}
+}
+
+/**
+ * DP - Bottom Up
+ * Array - Tabulation
+ * Time O(N * M) | Space O(M)
+ * https://leetcode.com/problems/partition-equal-subset-sum/
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var canPartition = (nums) => {
+	const isEmpty = nums.length === 0
+	if (isEmpty) return false
+
+	const sum = getSum(nums) /* Time O(N) */
+
+	const isEven = sum % 2 === 0
+	if (!isEven) return false
+
+	const subSetSum = sum >> 1
+	const tabu = initTabu(subSetSum) /*               | Space O(M) */
+
+	search(nums, subSetSum, tabu) /* Time O(N * M) | Space O(M) */
+
+	return tabu[subSetSum]
+}
+
+var getSum = (nums, sum = 0) => {
+	for (const num of nums) {
+		sum += num
+	} /* Time O(N) */
+
+	return sum
+}
+
+var initTabu = (subSetSum) => {
+	const tabu = new Array(subSetSum + 1).fill(false) /* Space O(M) */
+
+	tabu[0] = true /* Space O(M) */
+
+	return tabu
+}
+
+var search = (nums, subSetSum, tabu) => {
+	for (const num of nums) {
+		/* Time O(N) */
+		update(num, subSetSum, tabu) /* Time O(M) | Space O(M) */
+	}
+}
+
+var update = (num, subSetSum, tabu) => {
+	for (let subSet = subSetSum; num <= subSet; subSet--) {
+		/* Time O(M) */
+		const difference = subSet - num
+
+		tabu[subSet] |= tabu[difference] /* Space O(M) */
+	}
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        if sum(nums) % 2:
+            return False
+
+        dp = set()
+        dp.add(0)
+        target = sum(nums) // 2
+
+        for i in range(len(nums) - 1, -1, -1):
+            nextDP = set()
+            for t in dp:
+                if (t + nums[i]) == target:
+                    return True
+                nextDP.add(t + nums[i])
+                nextDP.add(t)
+            dp = nextDP
+        return False
+
+```
+
+### C++
+
+```cpp
+/*
+    Given non-empty, non-negative integer array nums, find if:
+    Can be partitionined into 2 subsets such that sums are equal
+    Ex. nums = [1,5,11,5] -> true, [1,5,5] & [11], both add to 11
+
+    Maintain DP set, for each num, check if num in set + curr = target
+    If not, add curr to every num in set we checked & iterate
+
+    Time: O(n x sum(nums))
+    Space: O(sum(nums))
+*/
+
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        int target = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            target += nums[i];
+        }
+        if (target % 2 != 0) {
+            return false;
+        }
+        target /= 2;
+
+        unordered_set<int> dp;
+        dp.insert(0);
+
+        for (int i = 0; i < nums.size(); i++) {
+            unordered_set<int> dpNext;
+            for (auto it = dp.begin(); it != dp.end(); it++) {
+                if (*it + nums[i] == target) {
+                    return true;
+                }
+                dpNext.insert(*it + nums[i]);
+                dpNext.insert(*it);
+            }
+            dp = dpNext;
+        }
+
+        return false;
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+
+    // TC = O(n*sum), SC = O(n*sum)
+    public boolean canPartition(int[] nums) {
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+        }
+        if (sum % 2 != 0) return false;
+        int target = sum / 2;
+        boolean[][] dp = new boolean[nums.length + 1][target + 1];
+        int n = nums.length;
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= target; j++) {
+                if (i == 0 || j == 0) {
+                    if (i == 0) dp[i][j] = false; else if (j == 0) dp[i][j] =
+                        true;
+                } else if (j >= nums[i - 1]) {
+                    dp[i][j] = dp[i - 1][j] || dp[i - 1][j - nums[i - 1]];
+                } else {
+                    dp[i][j] = dp[i - 1][j];
+                }
+            }
+        }
+        return dp[n][target];
+    }
+
+    // TC = O(n*sum), SC = O(sum)
+    public boolean canPartition(int[] nums) {
+        int sum = Arrays.stream(nums).sum();
+        if (sum % 2 != 0) return false;
+
+        int target = sum / 2;
+        boolean[] dp = new boolean[target];
+        dp[0] = true;
+
+        for (int no : nums) {
+            for (int i = target; i >= no; i--) {
+                if (dp[i - no] == true) {
+                    if (i == target) return true;
+                    dp[i] = true;
+                }
+            }
+        }
+        return false;
+    }
+}
+
+```

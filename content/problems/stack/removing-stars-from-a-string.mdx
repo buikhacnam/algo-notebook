@@ -1,0 +1,132 @@
+---
+title: Removing Stars From a String
+category: Stack
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/removing-stars-from-a-string)
+
+</Callout>
+
+## Description
+
+You are given a string <code>s</code>, which contains stars <code>\*</code>.
+
+In one operation, you can:
+
+    - Choose a star in <code>s</code>.
+    - Remove the closest non-star character to its left, as well as remove the star itself.
+
+Return _the string after all stars have been removed_.
+
+Note:
+
+    - The input will be generated such that the operation is always possible.
+    - It can be shown that the resulting string will always be unique.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;leet**cod*e&quot; Output: &quot;lecoe&quot; Explanation:
+	Performing the removals from left to right: - The closest character to the 1
+	<sup>st</sup> star is &#39;t&#39; in &quot;lee<u>t</u>**cod*e&quot;. s becomes
+	&quot;lee*cod*e&quot;. - The closest character to the 2<sup>nd</sup> star is
+	&#39;e&#39; in &quot;le<u>e</u>*cod*e&quot;. s becomes &quot;lecod*e&quot;. -
+	The closest character to the 3<sup>rd</sup> star is &#39;d&#39; in &quot;leco
+	<u>d</u>*e&quot;. s becomes &quot;lecoe&quot;. There are no more stars, so we return
+	&quot;lecoe&quot;.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;erase*****&quot; Output: &quot;&quot; Explanation: The entire
+	string is removed, so we return an empty string.
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= s.length &lt;= 10<sup>5</sup></code>
+    - <code>s</code> consists of lowercase English letters and stars <code>*</code>.
+    - The operation above can be performed on <code>s</code>.
+
+## Solution
+
+### Javascript
+
+```javascript
+var removeStars = function (s) {
+	if (!s.length) return ''
+
+	const result = []
+
+	for (let char of s) {
+		if (char == '*') result.pop()
+		else result.push(char)
+	}
+	return result.join('')
+}
+// Time Complexity: O(n)
+// Space Complexity: O(n)
+```
+
+### Python
+
+```python
+# https://leetcode.com/problems/removing-stars-from-a-string/submissions/1011668695/
+class Solution(object) :
+    def removeStars(self, s) :
+        res = []
+        for c in s :
+            if res and c == '*':
+                res.pop()
+            else:
+                res.append(c)
+        return ''.join(res)
+
+```
+
+### C++
+
+```cpp
+Solution will be updated soon
+```
+
+### Java
+
+```java
+class Solution {
+    public String removeStars(String s) {
+
+        // Create a new stack to keep track of characters encountered so far
+        Stack<Character> stk = new Stack<>();
+
+        // Iterate over each character in the input string
+        for (char c : s.toCharArray()) {
+            // If the current character is a star,
+            // remove the topmost character from the stack
+            if (c == '*') {
+                stk.pop();
+            }
+            // If the current character is not a star, add it to the stack
+            else {
+                stk.push(c);
+            }
+        }
+
+        // StringBuilder to store the characters in the stack
+        StringBuilder sb = new StringBuilder();
+        for (char c : stk) {
+            sb.append(c);
+        }
+
+        // Convert the StringBuilder to a string and return it as the output
+        return sb.toString();
+    }
+}
+
+```

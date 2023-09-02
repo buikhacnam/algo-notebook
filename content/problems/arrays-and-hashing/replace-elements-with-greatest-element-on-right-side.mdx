@@ -1,0 +1,162 @@
+---
+title: Replace Elements with Greatest Element on Right Side
+category: Arrays And Hashing
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/replace-elements-with-greatest-element-on-right-side)
+
+</Callout>
+
+## Description
+
+Given an array <code>arr</code>, replace every element in that array with the greatest element among the elements to its right, and replace the last element with <code>-1</code>.
+
+After doing so, return the array.
+
+Example 1:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: arr = [17,18,5,4,6,1] Output: [18,6,6,6,1,-1] Explanation: - index 0
+	--&gt; the greatest element to the right of index 0 is index 1 (18). - index 1
+	--&gt; the greatest element to the right of index 1 is index 4 (6). - index 2
+	--&gt; the greatest element to the right of index 2 is index 4 (6). - index 3
+	--&gt; the greatest element to the right of index 3 is index 4 (6). - index 4
+	--&gt; the greatest element to the right of index 4 is index 5 (1). - index 5
+	--&gt; there are no elements to the right of index 5, so we put -1.
+</pre>
+
+Example 2:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: arr = [400] Output: [-1] Explanation: There are no elements to the
+	right of index 0.
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= arr.length &lt;= 10<sup>4</sup></code>
+    - <code>1 &lt;= arr[i] &lt;= 10<sup>5</sup></code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * Reverse - Space O(1)
+ * Time O(N) | Space O(N)
+ * https://leetcode.com/problems/replace-elements-with-greatest-element-on-right-side/
+ * @param {number[]} arr
+ * @return {number[]}
+ */
+var replaceElements = (arr, max = -1, ans = [-1]) => {
+	arr = arr.reverse() /* Time O(N) */
+
+	for (let i = 0; i < arr.length - 1; i++) {
+		/* Time O(N) */
+		max = Math.max(max, arr[i])
+		ans[i + 1] = max /* Space O(N) */
+	}
+
+	return ans.reverse() /* Time O(N) */
+}
+
+/**
+ * Backward - In-Place
+ * Time O(N) | Space O(1)
+ * https://leetcode.com/problems/replace-elements-with-greatest-element-on-right-side/
+ * @param {number[]} arr
+ * @return {number[]}
+ */
+var replaceElements = (arr, max = -1) => {
+	for (let i = arr.length - 1; 0 <= i; i--) {
+		/* Time O(N) */
+		const num = arr[i]
+
+		arr[i] = max
+		max = Math.max(max, num)
+	}
+
+	return arr
+}
+//  This is brute force with O(n^2). Just for reference's sake.
+// submission link: https://leetcode.com/problems/replace-elements-with-greatest-element-on-right-side/submissions/844439163/
+var replaceElementsBrute = function (arr) {
+	for (let i = 0; i < arr.length; i++) {
+		arr[i] = biggestElement(i, arr)
+	}
+
+	arr[arr.length - 1] = -1
+	return arr
+}
+
+function biggestElement(index, arr) {
+	let biggest = 0
+	for (let i = index + 1; i < arr.length; i++) {
+		biggest = Math.max(biggest, arr[i])
+	}
+
+	return biggest
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def replaceElements(self, arr: List[int]) -> List[int]:
+        rightMax = -1
+        for i in range(len(arr) -1, -1, -1):
+            newMax = max(rightMax, arr[i])
+            arr[i] = rightMax
+            rightMax = newMax
+        return arr
+
+```
+
+### C++
+
+```cpp
+class Solution {
+public:
+    vector<int> replaceElements(vector<int>& arr) {
+    // O(N) Time Complexity , O(1) Space complexity
+      int n = arr.size();
+      int maxSoFar = arr[n-1];
+      arr[n-1] = -1;
+
+      for(int i=n-2;i>=0;i--)
+      {
+        int temp = maxSoFar;
+        if(maxSoFar < arr[i]) maxSoFar = arr[i];
+        arr[i] = temp;
+      }
+      return arr;
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+    public int[] replaceElements(int[] arr) {
+        int rightMax = -1;
+        for (int i = arr.length - 1; i >= 0; i--) {
+            int newMax = Math.max(rightMax, arr[i]);
+            arr[i] = rightMax;
+            rightMax = newMax;
+        }
+        return arr;
+    }
+}
+
+```

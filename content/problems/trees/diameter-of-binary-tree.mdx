@@ -1,0 +1,182 @@
+---
+title: Diameter of Binary Tree
+category: Trees
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/diameter-of-binary-tree)
+
+</Callout>
+
+## Description
+
+Given the <code>root</code> of a binary tree, return _the length of the diameter of the tree_.
+
+The diameter of a binary tree is the length of the longest path between any two nodes in a tree. This path may or may not pass through the <code>root</code>.
+
+The length of a path between two nodes is represented by the number of edges between them.
+
+Example 1:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/03/06/diamtree.jpg"
+	width={292}
+	height={302}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: root = [1,2,3,4,5] Output: 3 Explanation: 3 is the length of the path
+	[4,2,1,3] or [5,2,1,3].
+</pre>
+
+Example 2:
+
+<br />
+
+<pre className="overflow-x-auto">Input: root = [1,2] Output: 1</pre>
+
+Constraints:
+
+    - The number of nodes in the tree is in the range <code>[1, 10<sup>4</sup>]</code>.
+    - <code>-100 &lt;= Node.val &lt;= 100</code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/diameter-of-binary-tree/
+ * TIme O(N) | Space O(H)
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var diameterOfBinaryTree = function (root, max = [0]) {
+	diameterOfTree(root, max)
+
+	return max[0]
+}
+
+const diameterOfTree = (root, max) => {
+	const isBaseCase = root === null
+	if (isBaseCase) return 0
+
+	return dfs(root, max)
+}
+
+const dfs = (root, max) => {
+	const left = diameterOfTree(root.left, max)
+	const right = diameterOfTree(root.right, max)
+
+	const diameter = left + right
+	max[0] = Math.max(max[0], diameter)
+
+	const height = Math.max(left, right)
+
+	return height + 1
+}
+```
+
+### Python
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        res = 0
+
+        def dfs(root):
+            nonlocal res
+
+            if not root:
+                return 0
+            left = dfs(root.left)
+            right = dfs(root.right)
+            res = max(res, left + right)
+
+            return 1 + max(left, right)
+
+        dfs(root)
+        return res
+
+```
+
+### C++
+
+```cpp
+/*
+    Given root of binary tree, return length of diameter of tree (longest path b/w any 2 nodes)
+
+    Max path b/w 2 leaf nodes, "1 +" to add path
+
+    Time: O(n)
+    Space: O(n)
+*/
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int diameterOfBinaryTree(TreeNode* root) {
+        int result = 0;
+        dfs(root, result);
+        return result;
+    }
+private:
+    int dfs(TreeNode* root, int& result) {
+        if (root == NULL) {
+            return 0;
+        }
+
+        int left = dfs(root->left, result);
+        int right = dfs(root->right, result);
+
+        result = max(result, left + right);
+        return 1 + max(left, right);
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+
+    int result = -1;
+
+    public int diameterOfBinaryTree(TreeNode root) {
+        dfs(root);
+        return result;
+    }
+
+    private int dfs(TreeNode current) {
+        if (current == null) {
+            return -1;
+        }
+        int left = 1 + dfs(current.left);
+        int right = 1 + dfs(current.right);
+        result = Math.max(result, (left + right));
+        return Math.max(left, right);
+    }
+}
+
+```

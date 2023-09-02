@@ -1,0 +1,90 @@
+---
+title: Flip String to Monotone Increasing
+category: 2d Dynamic Programming
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/flip-string-to-monotone-increasing)
+
+</Callout>
+
+## Description
+
+A binary string is monotone increasing if it consists of some number of <code>0</code>&#39;s (possibly none), followed by some number of <code>1</code>&#39;s (also possibly none).
+
+You are given a binary string <code>s</code>. You can flip <code>s[i]</code> changing it from <code>0</code> to <code>1</code> or from <code>1</code> to <code>0</code>.
+
+Return _the minimum number of flips to make _<code>s</code>_ monotone increasing_.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;00110&quot; Output: 1 Explanation: We flip the last digit to
+	get 00111.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;010110&quot; Output: 2 Explanation: We flip to get 011111, or
+	alternatively 000111.
+</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;00011000&quot; Output: 2 Explanation: We flip to get
+	00000000.
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= s.length &lt;= 10<sup>5</sup></code>
+    - <code>s[i]</code> is either <code>&#39;0&#39;</code> or <code>&#39;1&#39;</code>.
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var minFlipsMonoIncr = function (s) {
+	let [res, countOne] = [0, 0]
+
+	for (ch of s) {
+		if (ch == '1') {
+			countOne++
+		} else {
+			res = Math.min(res + 1, countOne)
+		}
+	}
+
+	return res
+}
+```
+
+### Python
+
+```python
+Solution will be updated soon
+```
+
+### C++
+
+```cpp
+Solution will be updated soon
+```
+
+### Java
+
+```java
+Solution will be updated soon
+```

@@ -1,0 +1,128 @@
+---
+title: Number of Sub-arrays of Size K and Average Greater than or Equal to Threshold
+category: Sliding Window
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/number-of-sub-arrays-of-size-k-and-average-greater-than-or-equal-to-threshold)
+
+</Callout>
+
+## Description
+
+Given an array of integers <code>arr</code> and two integers <code>k</code> and <code>threshold</code>, return _the number of sub-arrays of size _<code>k</code>_ and average greater than or equal to _<code>threshold</code>.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: arr = [2,2,2,2,5,5,5,8], k = 3, threshold = 4 Output: 3 Explanation:
+	Sub-arrays [2,5,5],[5,5,5] and [5,5,8] have averages 4, 5 and 6 respectively.
+	All other sub-arrays of size 3 have averages less than 4 (the threshold).
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: arr = [11,13,17,23,29,31,7,5,2,3], k = 3, threshold = 5 Output: 6
+	Explanation: The first 6 sub-arrays of size 3 have averages greater than 5.
+	Note that averages are not integers.
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= arr.length &lt;= 10<sup>5</sup></code>
+    - <code>1 &lt;= arr[i] &lt;= 10<sup>4</sup></code>
+    - <code>1 &lt;= k &lt;= arr.length</code>
+    - <code>0 &lt;= threshold &lt;= 10<sup>4</sup></code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * @param {number[]} arr
+ * @param {number} k
+ * @param {number} threshold
+ * @return {number}
+ */
+var numOfSubarrays = function (arr, k, threshold) {
+	let [leftPtr, rightPtr, result, windowSum] = [0, 0, 0, 0]
+	while (rightPtr < arr.length) {
+		windowSum += arr[rightPtr]
+		if (rightPtr - leftPtr >= k - 1) {
+			if (rightPtr - leftPtr > k - 1) {
+				windowSum -= arr[leftPtr]
+				leftPtr++
+			}
+			if (windowSum / k >= threshold) {
+				result++
+			}
+		}
+		rightPtr++
+	}
+	return result
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def numOfSubarrays(self, arr: List[int], k: int, threshold: int) -> int:
+        res = 0
+        curSum = sum(arr[:k-1])
+
+        for L in range(len(arr) - k + 1):
+            curSum += arr[L + k - 1]
+            if (curSum / k) >= threshold:
+                res += 1
+            curSum -= arr[L]
+        return res
+
+```
+
+### C++
+
+```cpp
+/*
+Using Sliding window.
+First we calculate sum of first k elements in vector then we check if the average is greater than or equal to the threshold.
+If the condition is met then we append the res variable.
+Then we maintain the k size window and traverse over the vector and check for the condition.
+
+Since we are traversing only once
+T.C -> O(N)
+S.c -> O(1)
+*/
+class Solution {
+public:
+    int numOfSubarrays(vector<int>& arr, int k, int threshold) {
+        int sum = 0;
+        int n = arr.size();
+        for(int i=0;i<k;i++){
+            sum += arr[i];
+        }
+        int left = 0;
+        int right = k;
+        int res = 0;
+        if(sum/k >= threshold) res++;
+        while(right < n){
+            sum -= arr[left++];
+            sum += arr[right++];
+            if(sum/k >= threshold) res++;
+        }
+        return res;
+    }
+};
+```
+
+### Java
+
+```java
+Solution will be updated soon
+```

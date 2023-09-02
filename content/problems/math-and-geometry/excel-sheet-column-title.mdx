@@ -1,0 +1,103 @@
+---
+title: Excel Sheet Column Title
+category: Math And Geometry
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/excel-sheet-column-title)
+
+</Callout>
+
+## Description
+
+Given an integer <code>columnNumber</code>, return _its corresponding column title as it appears in an Excel sheet_.
+
+For example:
+
+<br />
+<pre className="overflow-x-auto">
+	A -&gt; 1 B -&gt; 2 C -&gt; 3 ... Z -&gt; 26 AA -&gt; 27 AB -&gt; 28 ...
+</pre>
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: columnNumber = 1 Output: &quot;A&quot;
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: columnNumber = 28 Output: &quot;AB&quot;
+</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: columnNumber = 701 Output: &quot;ZY&quot;
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= columnNumber &lt;= 2<sup>31</sup> - 1</code>
+
+## Solution
+
+### Javascript
+
+```javascript
+Solution will be updated soon
+```
+
+### Python
+
+```python
+class Solution:
+    def convertToTitle(self, columnNumber: int) -> str:
+        # Time: O(logn) - Log base 26 of n
+        res = ""
+        while columnNumber > 0:
+            remainder = (columnNumber - 1) % 26
+            res += chr(ord('A') + remainder)
+            columnNumber = (columnNumber - 1) // 26
+
+        return res[::-1] # reverse output
+
+```
+
+### C++
+
+```cpp
+Solution will be updated soon
+```
+
+### Java
+
+```java
+class Solution {
+    public String convertToTitle(int columnNumber) {
+        Map<Integer, Character> map = new HashMap<>();
+        char c = 'A';
+
+        for (int i = 1; i <= 26; i++) {
+            map.put(i, c);
+            c++;
+        }
+
+        StringBuilder res = new StringBuilder();
+
+        while (columnNumber > 0) {
+            int r = (columnNumber - 1) % 26;
+            res.insert(0, map.get(r + 1));
+            columnNumber = (columnNumber - 1) / 26;
+        }
+
+        return res.toString();
+    }
+}
+```

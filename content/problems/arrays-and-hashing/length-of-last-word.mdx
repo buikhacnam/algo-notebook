@@ -1,0 +1,154 @@
+---
+title: Length of Last Word
+category: Arrays And Hashing
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/length-of-last-word)
+
+</Callout>
+
+## Description
+
+Given a string <code>s</code> consisting of words and spaces, return _the length of the last word in the string._
+
+A word is a maximal <span data-keyword="substring-nonempty">substring</span> consisting of non-space characters only.
+
+Example 1:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;Hello World&quot; Output: 5 Explanation: The last word is
+	&quot;World&quot; with length 5.
+</pre>
+
+Example 2:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot; fly me to the moon &quot; Output: 4 Explanation: The last
+	word is &quot;moon&quot; with length 4.
+</pre>
+
+Example 3:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;luffy is still joyboy&quot; Output: 6 Explanation: The last
+	word is &quot;joyboy&quot; with length 6.
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= s.length &lt;= 10<sup>4</sup></code>
+    - <code>s</code> consists of only English letters and spaces <code>&#39; &#39;</code>.
+    - There will be at least one word in <code>s</code>.
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLastWord = function (s) {
+	let len = 0
+
+	for (let i in s) {
+		if (s[i] != ' ') {
+			if (s[i - 1] == ' ') len = 1
+			else len += 1
+		}
+	}
+	return len
+}
+
+// another approach. starting out from the last so we don't have to go all the way to the end.
+var lengthOfLastWord = function (s) {
+	let firstCharOccurance = false
+	let lastWordLen = 0
+
+	for (let i = s.length - 1; i > -1; i--) {
+		if (s[i] !== ' ') {
+			firstCharOccurance = true
+			lastWordLen++
+		}
+		if (firstCharOccurance && s[i] === ' ') {
+			break
+		}
+	}
+	return lastWordLen
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def lengthOfLastWord(self, s: str) -> int:
+        """
+	one shortcut
+	"""
+	#	return len(s.split()[-1])
+        c = 0
+        for i in s[::-1]:
+            if i == " ":
+                if c >= 1:
+                    return c
+            else:
+                c += 1
+        return c
+
+```
+
+### C++
+
+```cpp
+class Solution {
+public:
+    /*
+    Approach:
+    Traverse from end to the first whitespace character and count the number of letters.
+    Return the count as our pointer hits the whitespace character.
+
+    Time complexity: O(n)
+    Space complexity: O(1)
+    */
+    int lengthOfLastWord(string s) {
+        int n = s.length();
+
+        int ptr = n-1;
+        while(ptr >= 0 && s[ptr] == ' ') ptr--; /* Skip the trailing whitespaces */
+
+        int len = 0;
+        while(ptr >= 0 && s[ptr--] != ' ') len++; /* Counting the letters in the last word */
+        return len;
+    }
+};
+```
+
+### Java
+
+```java
+class Solution {
+    public int lengthOfLastWord(String s) {
+       int i = s.length() - 1, length = 0;
+       while (s.charAt(i) == ' ') {
+           i -= 1;
+       }
+       while (i >= 0 && s.charAt(i) != ' ') {
+           length += 1;
+           i -= 1;
+       }
+       return length;
+    }
+}
+
+```

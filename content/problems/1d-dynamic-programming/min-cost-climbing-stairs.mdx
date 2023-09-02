@@ -1,0 +1,191 @@
+---
+title: Min Cost Climbing Stairs
+category: 1d Dynamic Programming
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/min-cost-climbing-stairs)
+
+</Callout>
+
+## Description
+
+You are given an integer array <code>cost</code> where <code>cost[i]</code> is the cost of <code>i<sup>th</sup></code> step on a staircase. Once you pay the cost, you can either climb one or two steps.
+
+You can either start from the step with index <code>0</code>, or the step with index <code>1</code>.
+
+Return _the minimum cost to reach the top of the floor_.
+
+Example 1:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: cost = [10,<u>15</u>,20] Output: 15 Explanation: You will start at
+	index 1. - Pay 15 and climb two steps to reach the top. The total cost is 15.
+</pre>
+
+Example 2:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: cost = [<u>1</u>,100,<u>1</u>,1,<u>1</u>,100,<u>1</u>,<u>1</u>,100,
+	<u>1</u>] Output: 6 Explanation: You will start at index 0. - Pay 1 and climb
+	two steps to reach index 2. - Pay 1 and climb two steps to reach index 4. -
+	Pay 1 and climb two steps to reach index 6. - Pay 1 and climb one step to
+	reach index 7. - Pay 1 and climb two steps to reach index 9. - Pay 1 and climb
+	one step to reach the top. The total cost is 6.
+</pre>
+
+Constraints:
+
+    - <code>2 &lt;= cost.length &lt;= 1000</code>
+    - <code>0 &lt;= cost[i] &lt;= 999</code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * DP - Top Down
+ * Hash Map - Memoization
+ * Time O(N) | Space O(N)
+ * https://leetcode.com/problems/min-cost-climbing-stairs/
+ * @param {number[]} cost
+ * @return {number}
+ */
+var minCostClimbingStairs = (cost, i = cost.length, memo = new Map()) => {
+	const isBaseCase = i <= 1
+	if (isBaseCase) return 0
+
+	if (memo.has(i)) return memo.get(i)
+
+	const [prev, prevPrev] = [i - 1, i - 2]
+	const downOne =
+		minCostClimbingStairs(cost, prev, memo) +
+		cost[prev] /* Time O(N) | Space O(N) */
+	const downTwo =
+		minCostClimbingStairs(cost, prevPrev, memo) +
+		cost[prevPrev] /* Time O(N) | Space O(N) */
+
+	memo.set(i, Math.min(downOne, downTwo))
+
+	return memo.get(i)
+}
+
+/**
+ * DP - Bottom Up
+ * Array - Tabulation
+ * Time O(N) | Space O(N)
+ * https://leetcode.com/problems/min-cost-climbing-stairs/
+ * @param {number[]} cost
+ * @return {number}
+ */
+var minCostClimbingStairs = (cost) => {
+	const tabu = new Array(cost.length + 1).fill(0)
+
+	for (let i = 2; i < tabu.length; i++) {
+		const [prev, prevPrev] = [i - 1, i - 2]
+		const downOne = tabu[prev] + cost[prev]
+		const downTwo = tabu[prevPrev] + cost[prevPrev]
+
+		tabu[i] = Math.min(downOne, downTwo)
+	}
+
+	return tabu[tabu.length - 1]
+}
+
+/**
+ * DP - Bottom Up
+ * Time O(N) | Space O(1)
+ * https://leetcode.com/problems/min-cost-climbing-stairs/
+ * @param {number[]} cost
+ * @return {number}
+ */
+var minCostClimbingStairs = (cost) => {
+	let [downOne, downTwo] = [0, 0]
+
+	for (let i = 2; i < cost.length + 1; i++) {
+		/* Time O(N) */
+		const temp = downOne
+
+		const [_prev, _prevPrev] = [i - 1, i - 2]
+		const prev = downOne + cost[_prev]
+		const prevPrev = downTwo + cost[_prevPrev]
+
+		downOne = Math.min(prev, prevPrev)
+		downTwo = temp
+	}
+
+	return downOne
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def minCostClimbingStairs(self, cost: List[int]) -> int:
+        for i in range(len(cost) - 3, -1, -1):
+            cost[i] += min(cost[i + 1], cost[i + 2])
+
+        return min(cost[0], cost[1])
+
+```
+
+### C++
+
+```cpp
+/*
+    Given cost array, ith step is cost[i], can climb 1 or 2 steps
+    Return min cost to reach top floor, can start at index 0 or 1
+    Ex. cost = [10,15,20] -> 15, start at idx 1, pay 15, climb 2
+
+    Recursion w/ memoization -> DP, min cost to reach 1/2 steps below curr step
+    Recurrence relation: minCost[i] = min(minCost[i-1] + cost[i-1], minCost[i-2] + cost[i-2])
+
+    Time: O(n)
+    Space: O(1)
+*/
+
+class Solution {
+public:
+    int minCostClimbingStairs(vector<int>& cost) {
+        int downOne = 0;
+        int downTwo = 0;
+
+        for (int i = 2; i <= cost.size(); i++) {
+            int temp = downOne;
+            downOne = min(downOne + cost[i - 1], downTwo + cost[i - 2]);
+            downTwo = temp;
+        }
+
+        return downOne;
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+    public int minCostClimbingStairs(int[] cost) {
+        int one = 0;
+        int two = 0;
+
+        for (int i = cost.length - 1; i >= 0; i--) {
+            cost[i] += Math.min(one, two);
+            two = one;
+            one = cost[i];
+        }
+
+        return Math.min(cost[0], cost[1]);
+    }
+}
+
+```

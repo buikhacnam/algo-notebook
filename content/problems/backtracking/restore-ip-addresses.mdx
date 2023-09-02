@@ -1,0 +1,106 @@
+---
+title: Restore IP Addresses
+category: Backtracking
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/restore-ip-addresses)
+
+</Callout>
+
+## Description
+
+A valid IP address consists of exactly four integers separated by single dots. Each integer is between <code>0</code> and <code>255</code> (inclusive) and cannot have leading zeros.
+
+    - For example, <code>&quot;0.1.2.201&quot;</code> and <code>&quot;192.168.1.1&quot;</code> are valid IP addresses, but <code>&quot;0.011.255.245&quot;</code>, <code>&quot;192.168.1.312&quot;</code> and <code>&quot;192.168@1.1&quot;</code> are invalid IP addresses.
+
+Given a string <code>s</code> containing only digits, return _all possible valid IP addresses that can be formed by inserting dots into _<code>s</code>. You are not allowed to reorder or remove any digits in <code>s</code>. You may return the valid IP addresses in any order.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;25525511135&quot; Output:
+	[&quot;255.255.11.135&quot;,&quot;255.255.111.35&quot;]
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;0000&quot; Output: [&quot;0.0.0.0&quot;]
+</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;101023&quot; Output:
+	[&quot;1.0.10.23&quot;,&quot;1.0.102.3&quot;,&quot;10.1.0.23&quot;,&quot;10.10.2.3&quot;,&quot;101.0.2.3&quot;]
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= s.length &lt;= 20</code>
+    - <code>s</code> consists of digits only.
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * @param {string} s
+ * @return {string[]}
+ */
+var restoreIpAddresses = function (s) {
+	let res = []
+
+	if (s.length > 12) return res
+
+	/**
+	 *
+	 * @param {number} i
+	 * @param {number} dots
+	 * @param {string} currentIP
+	 */
+	function backtracking(i, dots, currentIP) {
+		if (dots === 4 && i == s.length) {
+			res.push(currentIP.slice(0, currentIP.length - 1))
+			return
+		} else if (dots > 4) {
+			return
+		}
+
+		for (let j = i; j < Math.min(i + 3, s.length); j++) {
+			if (+s.slice(i, j + 1) < 256 && (i == j || s[i] != '0')) {
+				backtracking(j + 1, dots + 1, currentIP + s.slice(i, j + 1) + '.')
+			}
+		}
+	}
+
+	backtracking(0, 0, '')
+
+	return res
+}
+```
+
+### Python
+
+```python
+Solution will be updated soon
+```
+
+### C++
+
+```cpp
+Solution will be updated soon
+```
+
+### Java
+
+```java
+Solution will be updated soon
+```

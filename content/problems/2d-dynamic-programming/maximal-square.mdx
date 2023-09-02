@@ -1,0 +1,154 @@
+---
+title: Maximal Square
+category: 2d Dynamic Programming
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/maximal-square)
+
+</Callout>
+
+## Description
+
+Given an <code>m x n</code> binary <code>matrix</code> filled with <code>0</code>&#39;s and <code>1</code>&#39;s, _find the largest square containing only_ <code>1</code>&#39;s _and return its area_.
+
+Example 1:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/11/26/max1grid.jpg"
+	width={400}
+	height={319}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: matrix =
+	[[&quot;1&quot;,&quot;0&quot;,&quot;1&quot;,&quot;0&quot;,&quot;0&quot;],[&quot;1&quot;,&quot;0&quot;,&quot;1&quot;,&quot;1&quot;,&quot;1&quot;],[&quot;1&quot;,&quot;1&quot;,&quot;1&quot;,&quot;1&quot;,&quot;1&quot;],[&quot;1&quot;,&quot;0&quot;,&quot;0&quot;,&quot;1&quot;,&quot;0&quot;]]
+	Output: 4
+</pre>
+
+Example 2:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/11/26/max2grid.jpg"
+	width={165}
+	height={165}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: matrix = [[&quot;0&quot;,&quot;1&quot;],[&quot;1&quot;,&quot;0&quot;]]
+	Output: 1
+</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: matrix = [[&quot;0&quot;]] Output: 0
+</pre>
+
+Constraints:
+
+    - <code>m == matrix.length</code>
+    - <code>n == matrix[i].length</code>
+    - <code>1 &lt;= m, n &lt;= 300</code>
+    - <code>matrix[i][j]</code> is <code>&#39;0&#39;</code> or <code>&#39;1&#39;</code>.
+
+## Solution
+
+### Javascript
+
+```javascript
+Solution will be updated soon
+```
+
+### Python
+
+```python
+class Solution:
+    def maximalSquare(self, matrix: List[List[str]]) -> int:
+        ROWS, COLS = len(matrix), len(matrix[0])
+        cache = {}  # map each (r, c) -> maxLength of square
+
+        def helper(r, c):
+            if r >= ROWS or c >= COLS:
+                return 0
+
+            if (r, c) not in cache:
+                down = helper(r + 1, c)
+                right = helper(r, c + 1)
+                diag = helper(r + 1, c + 1)
+
+                cache[(r, c)] = 0
+                if matrix[r][c] == "1":
+                    cache[(r, c)] = 1 + min(down, right, diag)
+            return cache[(r, c)]
+
+        helper(0, 0)
+        return max(cache.values()) ** 2
+
+```
+
+### C++
+
+```cpp
+/*
+  Given an m x n binary matrix filled with 0's and 1's, find the largest square containing only 1's and return its area.
+
+  Ex. Input: matrix = [["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]
+      Output: 4
+
+  Time  : O(m*n)
+  Space : O(m*n)
+*/
+
+class Solution {
+public:
+    int maximalSquare(vector<vector<char>>& matrix) {
+        int rows = matrix.size(), cols = matrix[0].size();
+
+        vector<vector<int>> dp (rows+1, vector<int>(cols+1, 0));
+        int maxi = 0;
+        for(int i = rows-1 ; i >= 0; --i) {
+            for(int j = cols-1 ; j >=0 ; --j) {
+                if(matrix[i][j] == '1') {
+                    int right = dp[i][j+1], dia = dp[i+1][j+1], bottom = dp[i+1][j];
+
+                    dp[i][j] = 1 + min(right, min(dia, bottom));
+                    maxi = max(maxi, dp[i][j]);
+                }
+                else {
+                    dp[i][j] = 0;
+                }
+            }
+        }
+        return maxi*maxi;
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+    // dp bottom up
+    public int maximalSquare(char[][] matrix) {
+        int[][] dp = new int[matrix.length + 1][matrix[0].length + 1];
+        int maxLen = 0;
+        for (int row = matrix.length - 1; row >= 0; row--) {
+            for (int col = matrix[0].length - 1; col >= 0; col--) {
+                if (matrix[row][col] == '1') {
+                    dp[row][col] = 1 + Math.min(Math.min(dp[row + 1][col], dp[row][col + 1]), dp[row + 1][col + 1]);
+                    maxLen = Math.max(maxLen, dp[row][col]);
+                }
+            }
+        }
+
+        return maxLen * maxLen;
+    }
+}
+```

@@ -6,7 +6,7 @@ difficulty: Easy
 
 <Callout>
 
-[125.Valid Palindrome - Leetcode](https://leetcode.com/problems/valid-palindrome/)
+[Leetcode Link](https://leetcode.com/problems/valid-palindrome)
 
 </Callout>
 
@@ -14,39 +14,40 @@ difficulty: Easy
 
 A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers.
 
-Given a string `s`, return `true` if it is a palindrome, or `false` otherwise.
+Given a string <code>s</code>, return <code>true</code>_ if it is a palindrome, or _<code>false</code>_ otherwise_.
 
-- Example 1
+Example 1:
 
-```mdx
-Input: s = "A man, a plan, a canal: Panama"
-Output: true
-Explanation: "amanaplanacanalpanama" is a palindrome.
-```
+<br />
 
-- Example 2
+<pre className="overflow-x-auto">
+	Input: s = &quot;A man, a plan, a canal: Panama&quot; Output: true
+	Explanation: &quot;amanaplanacanalpanama&quot; is a palindrome.
+</pre>
 
-```mdx
-Input: s = "race a car"
-Output: false
-Explanation: "raceacar" is not a palindrome.
-```
+Example 2:
 
-- Example 3
+<br />
 
-```mdx
-Input: s = " "
-Output: true
-Explanation: s is an empty string "" after removing non-alphanumeric characters.
-Since an empty string reads the same forward and backward, it is a palindrome.
-```
+<pre className="overflow-x-auto">
+	Input: s = &quot;race a car&quot; Output: false Explanation:
+	&quot;raceacar&quot; is not a palindrome.
+</pre>
+
+Example 3:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot; &quot; Output: true Explanation: s is an empty string
+	&quot;&quot; after removing non-alphanumeric characters. Since an empty string
+	reads the same forward and backward, it is a palindrome.
+</pre>
 
 Constraints:
 
-```mdx
-1 <= s.length <= 2 x 10^5
-s consists only of printable ASCII characters.
-```
+    - <code>1 &lt;= s.length &lt;= 2 * 10<sup>5</sup></code>
+    - <code>s</code> consists only of printable ASCII characters.
 
 ## Solution
 
@@ -186,6 +187,16 @@ class Solution:
 ### C++
 
 ```cpp
+/*
+    Given a string s, return true if it's a palindrome
+    Ex. s = "A man, a plan, a canal: Panama" -> true
+
+    2 pointers, outside in, skip non-letters & compare
+
+    Time: O(n)
+    Space: O(1)
+*/
+
 class Solution {
 public:
     bool isPalindrome(string s) {

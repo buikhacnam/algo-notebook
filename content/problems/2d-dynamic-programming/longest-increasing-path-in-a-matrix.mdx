@@ -1,0 +1,448 @@
+---
+title: Longest Increasing Path in a Matrix
+category: 2d Dynamic Programming
+difficulty: Hard
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/longest-increasing-path-in-a-matrix)
+
+</Callout>
+
+## Description
+
+Given an <code>m x n</code> integers <code>matrix</code>, return _the length of the longest increasing path in _<code>matrix</code>.
+
+From each cell, you can either move in four directions: left, right, up, or down. You may not move diagonally or move outside the boundary (i.e., wrap-around is not allowed).
+
+Example 1:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/01/05/grid1.jpg"
+	width={242}
+	height={242}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: matrix = [[9,9,4],[6,6,8],[2,1,1]] Output: 4 Explanation: The longest
+	increasing path is <code>[1, 2, 6, 9]</code>.
+</pre>
+
+Example 2:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/01/27/tmp-grid.jpg"
+	width={253}
+	height={253}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: matrix = [[3,4,5],[3,2,6],[2,2,1]] Output: 4 Explanation: The longest
+	increasing path is <code>[3, 4, 5, 6]</code>. Moving diagonally is not
+	allowed.
+</pre>
+
+Example 3:
+
+<br />
+
+<pre className="overflow-x-auto">Input: matrix = [[1]] Output: 1</pre>
+
+Constraints:
+
+    - <code>m == matrix.length</code>
+    - <code>n == matrix[i].length</code>
+    - <code>1 &lt;= m, n &lt;= 200</code>
+    - <code>0 &lt;= matrix[i][j] &lt;= 2<sup>31</sup> - 1</code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * Brute Force - DFS
+ * Time O(2^(N + M)) | Space O(N * M)
+ * https://leetcode.com/problems/longest-increasing-path-in-a-matrix/
+ * @param {number[][]} matrix
+ * @return {number}
+ */
+var longestIncreasingPath = (matrix, maxPath = 0) => {
+	const [rows, cols] = [matrix.length, matrix[0].length]
+
+	for (let row = 0; row < rows; row++) {
+		/* Time O(N) */
+		for (let col = 0; col < cols; col++) {
+			/* Time O(M) */
+			const path = dfs(
+				matrix,
+				row,
+				rows,
+				col,
+				cols,
+			) /* Time O(2^(N + M)) | Space O(HEIGHT) */
+
+			maxPath = Math.max(maxPath, path)
+		}
+	}
+
+	return maxPath
+}
+
+var dfs = (matrix, row, rows, col, cols, ans = 0) => {
+	for (const [_row, _col] of getNeighbors(row, rows, col, cols)) {
+		/* Time O(4) */
+		const path = dfs(
+			matrix,
+			_row,
+			rows,
+			_col,
+			cols,
+		) /* Time O(2^(N + M)) | Space O(HEIGHT) */
+
+		ans = Math.max(ans, path)
+	}
+
+	ans += 1
+	return ans
+}
+
+var getNeighbors = (row, rows, col, cols) =>
+	[
+		[0, 1],
+		[0, -1],
+		[1, 0],
+		[-1, 0],
+	]
+		.map(([_row, _col]) => [row + _row, col + _col])
+		.filter(
+			([_row, _col]) => 0 <= _row && _row < rows && 0 <= _col && _col < cols,
+		)
+
+/**
+ * DP - Top Down
+ * Matrix - Memoization
+ * Time O(N * M) | Space O(N * M)
+ * https://leetcode.com/problems/longest-increasing-path-in-a-matrix/
+ * @param {number[][]} matrix
+ * @return {number}
+ */
+var longestIncreasingPath = (matrix, maxPath = 0, memo = initMemo(matrix)) => {
+	const [rows, cols] = [matrix.length, matrix[0].length]
+
+	for (let row = 0; row < rows; row++) {
+		/* Time O(N) */
+		for (let col = 0; col < cols; col++) {
+			/* Time O(M) */
+			const path =
+				/* Time O(N * M) | Space O((N * M) + HEIGHT) */
+				search(matrix, row, rows, col, cols, memo)
+
+			maxPath = Math.max(maxPath, path)
+		}
+	}
+
+	return maxPath
+}
+
+var initMemo = (matrix) =>
+	new Array(matrix.length)
+		.fill() /* Time O(N) | Space O(N)*/
+		.map(() => new Array(matrix[0].length).fill(0)) /* Time O(M) | Space O(M)*/
+
+const search = (matrix, row, rows, col, cols, memo) => {
+	const hasSeen = memo[row][col] !== 0
+	if (hasSeen) return memo[row][col]
+
+	return dfs(
+		matrix,
+		row,
+		rows,
+		col,
+		cols,
+		memo,
+	) /* Time O(N * M) | Space O((N * M) + HEIGHT) */
+}
+
+var dfs = (matrix, row, rows, col, cols, memo) => {
+	for (const [_row, _col] of getNeighbors(row, rows, col, cols)) {
+		/* Time O(4) */
+		const [parent, node] = [matrix[row][col], matrix[_row][_col]]
+
+		const isLess = node <= parent
+		if (isLess) continue
+
+		const path = search(
+			matrix,
+			_row,
+			rows,
+			_col,
+			cols,
+			memo,
+		) /* Time O(N * M) | Space O(HEIGHT) */
+
+		memo[row][col] = Math.max(memo[row][col], path)
+	}
+
+	memo[row][col] += 1 /*               | Space O(N * M) */
+	return memo[row][col]
+}
+
+var getNeighbors = (row, rows, col, cols) =>
+	[
+		[0, 1],
+		[0, -1],
+		[1, 0],
+		[-1, 0],
+	]
+		.map(([_row, _col]) => [row + _row, col + _col])
+		.filter(
+			([_row, _col]) => 0 <= _row && _row < rows && 0 <= _col && _col < cols,
+		)
+
+/**
+ * Topological Sort
+ * Matrix - Graph
+ * Matrix - In-Degree
+ * Queue - BFS
+ * Time O(N * M) | Space O(N * M)
+ * https://leetcode.com/problems/longest-increasing-path-in-a-matrix/
+ * @param {number[][]} matrix
+ * @return {number}
+ */
+var longestIncreasingPath = (matrix) => {
+	const { graph, indegree, sources } =
+		/* Time O(N * M) | Space O(N * M) */
+		buildGraph(matrix)
+
+	findSources(graph, indegree, sources) /* Time O(N * M) | Space O(N * M) */
+
+	return bfs(
+		graph,
+		indegree,
+		sources,
+	) /* Time O((N * M) + WIDTH) | Space O((N * M) + WIDTH) */
+}
+
+const initGraph = (rows, cols) => ({
+	graph: new Array(rows + 2)
+		.fill() /* Time O(N) | Space O(N) */
+		.map(() => new Array(cols + 2).fill(0)) /* Time O(M) | Space O(M) */,
+	indegree: new Array(rows + 2)
+		.fill() /* Time O(N) | Space O(N) */
+		.map(() => new Array(cols + 2).fill(0)) /* Time O(M) | Space O(M) */,
+	sources: new Queue(),
+})
+
+var buildGraph = (matrix) => {
+	const [rows, cols] = [matrix.length, matrix[0].length]
+	const { graph, indegree, sources } =
+		/* Time O(N * M) | Space O(N * M) */
+		initGraph(rows, cols)
+
+	for (let row = 1; row < rows + 1; row++) {
+		/* Time O(N) */
+		graph[row] = [0, ...matrix[row - 1], 0] /*           | Space O(N * M) */
+	}
+
+	for (let row = 1; row <= rows; row++) {
+		/* Time O(N) */
+		for (let col = 1; col <= cols; col++) {
+			/* Time O(M) */
+			for (const [_row, _col] of getNeighbors(row, col)) {
+				/* Time O(4) */
+				const isSink = graph[row][col] < graph[_row][_col]
+				if (isSink) indegree[row][col] += 1 /*       | Space O(N * M) */
+			}
+		}
+	}
+
+	return { graph, indegree, sources }
+}
+
+var getNeighbors = (row, col) =>
+	[
+		[0, 1],
+		[0, -1],
+		[1, 0],
+		[-1, 0],
+	].map(([_row, _col]) => [row + _row, col + _col])
+
+var findSources = (graph, indegree, sources) => {
+	const [rows, cols] = [graph.length, graph[0].length]
+
+	for (let row = 1; row < rows - 1; ++row) {
+		/* Time O(N) */
+		for (let col = 1; col < cols - 1; ++col) {
+			/* Time O(M) */
+			const isSource = indegree[row][col] === 0
+			if (isSource) sources.enqueue([row, col]) /* Space O(N * M) */
+		}
+	}
+}
+
+const bfs = (graph, indegree, sources, path = 0) => {
+	while (!sources.isEmpty()) {
+		/* Time(N * M) */
+		for (let level = sources.size() - 1; 0 <= level; level--) {
+			/* Time(WIDTH) */
+			checkNeighbors(graph, indegree, sources) /* Space((N * M) + WIDTH) */
+		}
+
+		path += 1
+	}
+
+	return path
+}
+
+const checkNeighbors = (graph, indegree, sources) => {
+	const [row, col] = sources.dequeue()
+
+	for (const [_row, _col] of getNeighbors(row, col)) {
+		const canDisconnect = graph[_row][_col] < graph[row][col]
+		if (!canDisconnect) continue
+
+		indegree[_row][_col] -= 1 /* Space O(N * M) */
+
+		const isSource = indegree[_row][_col] === 0
+		if (isSource) sources.enqueue([_row, _col]) /* Space O(WIDTH) */
+	}
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
+        ROWS, COLS = len(matrix), len(matrix[0])
+        dp = {}  # (r, c) -> LIP
+
+        def dfs(r, c, prevVal):
+            if r < 0 or r == ROWS or c < 0 or c == COLS or matrix[r][c] <= prevVal:
+                return 0
+            if (r, c) in dp:
+                return dp[(r, c)]
+
+            res = 1
+            res = max(res, 1 + dfs(r + 1, c, matrix[r][c]))
+            res = max(res, 1 + dfs(r - 1, c, matrix[r][c]))
+            res = max(res, 1 + dfs(r, c + 1, matrix[r][c]))
+            res = max(res, 1 + dfs(r, c - 1, matrix[r][c]))
+            dp[(r, c)] = res
+            return res
+
+        for r in range(ROWS):
+            for c in range(COLS):
+                dfs(r, c, -1)
+        return max(dp.values())
+
+```
+
+### C++
+
+```cpp
+/*
+    Given matrix, return length of longest increasing path
+    Ex. matrix = [[9,9,4],[6,6,8],[2,1,1]] -> 4, [1,2,6,9]
+
+    DFS + memo, cache on indices, compare to prev for increasing check
+
+    Time: O(m x n)
+    Space: O(m x n)
+*/
+
+class Solution {
+public:
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        int m = matrix.size();
+        int n = matrix[0].size();
+
+        int result = 0;
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                result = max(result, dfs(matrix, -1, i, j, m, n));
+            }
+        }
+
+        return result;
+    }
+private:
+    // {(i, j) -> longest increasing path at (i, j)}
+    map<pair<int, int>, int> dp;
+
+    int dfs(vector<vector<int>>& matrix, int prev, int i, int j, int m, int n) {
+        if (i < 0 || i >= m || j < 0 || j >= n || matrix[i][j] <= prev) {
+            return 0;
+        }
+        if (dp.find({i, j}) != dp.end()) {
+            return dp[{i, j}];
+        }
+
+        int result = 1;
+        result = max(result, 1 + dfs(matrix, matrix[i][j], i - 1, j, m, n));
+        result = max(result, 1 + dfs(matrix, matrix[i][j], i + 1, j, m, n));
+        result = max(result, 1 + dfs(matrix, matrix[i][j], i, j - 1, m, n));
+        result = max(result, 1 + dfs(matrix, matrix[i][j], i, j + 1, m, n));
+        dp[{i, j}] = result;
+
+        return dp[{i, j}];
+    }
+};
+
+```
+
+### Java
+
+```java
+//Another similar problem: https://leetcode.com/contest/weekly-contest-300/problems/number-of-increasing-paths-in-a-grid/
+
+class Solution {
+
+    public int longestIncreasingPath(int[][] matrix) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int[][] dp = new int[m][n];
+        for (int d[] : dp) Arrays.fill(d, -1);
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (dp[i][j] == -1) dfs(matrix, dp, m, n, i, j, -1);
+            }
+        }
+        int max = Integer.MIN_VALUE;
+        for (int[] d : dp) {
+            for (int i : d) max = Math.max(i, max);
+        }
+        return max;
+    }
+
+    public int dfs(
+        int[][] matrix,
+        int[][] dp,
+        int m,
+        int n,
+        int i,
+        int j,
+        int parent
+    ) {
+        if (
+            i >= m || j >= n || i < 0 || j < 0 || matrix[i][j] <= parent
+        ) return 0;
+        parent = matrix[i][j];
+        if (dp[i][j] != -1) return dp[i][j];
+        int left = dfs(matrix, dp, m, n, i, j - 1, parent);
+        int right = dfs(matrix, dp, m, n, i, j + 1, parent);
+        int bottom = dfs(matrix, dp, m, n, i + 1, j, parent);
+        int top = dfs(matrix, dp, m, n, i - 1, j, parent);
+        dp[i][j] = 1 + Math.max(Math.max(left, right), Math.max(top, bottom));
+        return dp[i][j];
+    }
+}
+
+```

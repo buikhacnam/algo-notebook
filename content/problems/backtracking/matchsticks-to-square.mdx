@@ -1,0 +1,185 @@
+---
+title: Matchsticks to Square
+category: Backtracking
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/matchsticks-to-square)
+
+</Callout>
+
+## Description
+
+You are given an integer array <code>matchsticks</code> where <code>matchsticks[i]</code> is the length of the <code>i<sup>th</sup></code> matchstick. You want to use all the matchsticks to make one square. You should not break any stick, but you can link them up, and each matchstick must be used exactly one time.
+
+Return <code>true</code> if you can make this square and <code>false</code> otherwise.
+
+Example 1:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/04/09/matchsticks1-grid.jpg"
+	width={253}
+	height={253}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: matchsticks = [1,1,2,2,2] Output: true Explanation: You can form a
+	square with length 2, one side of the square came two sticks with length 1.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: matchsticks = [3,3,3,3,4] Output: false Explanation: You cannot find a
+	way to form a square with all the matchsticks.
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= matchsticks.length &lt;= 15</code>
+    - <code>1 &lt;= matchsticks[i] &lt;= 10<sup>8</sup></code>
+
+## Solution
+
+### Javascript
+
+```javascript
+function check(arr) {
+	let temp = arr[0]
+	for (let i = 1; i < arr.length; i++) {
+		if (arr[i] !== temp) {
+			return false
+		}
+	}
+	return true
+}
+
+/**
+ * @param {number[]} matchsticks
+ * @return {boolean}
+ */
+var makesquare = function (matchsticks) {
+	let sides = new Array(4).fill(0),
+		ans = false,
+		size = 0
+
+	for (let i = 0; i < matchsticks.length; i++) {
+		size += matchsticks[i]
+	}
+	let max_size = size / 4
+	if (max_size - Math.floor(max_size) !== 0) return false
+
+	matchsticks = matchsticks.sort((a, b) => b - a)
+
+	function backtrack(i) {
+		if (ans) return
+		if (i >= matchsticks.length) {
+			if (check(sides)) {
+				ans = true
+			}
+			return
+		}
+		for (let j = 0; j < 4; j++) {
+			if (sides[j] + matchsticks[i] > max_size) {
+				continue
+			}
+			sides[j] += matchsticks[i]
+
+			backtrack(i + 1)
+			sides[j] -= matchsticks[i]
+		}
+	}
+	backtrack(0)
+
+	return ans
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def makesquare(self, matchsticks: List[int]) -> bool:
+        length = sum(matchsticks) // 4
+        sides = [0] * 4
+
+        if sum(matchsticks) / 4 != length:
+            return False
+        matchsticks.sort(reverse=True)
+
+        def backtrack(i):
+            if i == len(matchsticks):
+                return True
+
+            for j in range(4):
+                if sides[j] + matchsticks[i] <= length:
+                    sides[j] += matchsticks[i]
+                    if backtrack(i + 1):
+                        return True
+                    sides[j] -= matchsticks[i]
+            return False
+
+        return backtrack(0)
+
+```
+
+### C++
+
+```cpp
+class Solution {
+    int a,b,c,d;
+    bool fun(vector<int>& matchsticks,int i){
+        if(i==matchsticks.size()){
+            if(a==0 && b==0 && c==0 && d==0) return true;
+            else return false;
+        }
+
+        if(matchsticks[i]<=a){
+            a-=matchsticks[i];
+            if(fun(matchsticks,i+1)) return true;
+            a+=matchsticks[i];
+        }
+
+        if(matchsticks[i]<=b){
+            b-=matchsticks[i];
+            if(fun(matchsticks,i+1)) return true;
+            b+=matchsticks[i];
+        }
+
+        if(matchsticks[i]<=c){
+            c-=matchsticks[i];
+            if(fun(matchsticks,i+1)) return true;
+            c+=matchsticks[i];
+        }
+
+        if(matchsticks[i]<=d){
+            d-=matchsticks[i];
+            if(fun(matchsticks,i+1)) return true;
+            d+=matchsticks[i];
+        }
+
+        return false;
+    }
+public:
+    bool makesquare(vector<int>& matchsticks) {
+        if(matchsticks.size()<4) return false;
+		int sum = accumulate(matchsticks.begin(), matchsticks.end(),0);
+        if(sum % 4 != 0) return false;
+		int sizeSum=sum/4;
+        a=sizeSum,b=sizeSum,c=sizeSum,d=sizeSum;
+		sort(matchsticks.rbegin(), matchsticks.rend());
+		return fun(matchsticks,0);
+    }
+};
+
+```
+
+### Java
+
+```java
+Solution will be updated soon
+```

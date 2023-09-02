@@ -1,0 +1,274 @@
+---
+title: Maximum Product of the Length of Two Palindromic Subsequences
+category: Arrays And Hashing
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/maximum-product-of-the-length-of-two-palindromic-subsequences)
+
+</Callout>
+
+## Description
+
+Given a string <code>s</code>, find two disjoint palindromic subsequences of <code>s</code> such that the product of their lengths is maximized. The two subsequences are disjoint if they do not both pick a character at the same index.
+
+Return _the maximum possible product of the lengths of the two palindromic subsequences_.
+
+A subsequence is a string that can be derived from another string by deleting some or no characters without changing the order of the remaining characters. A string is palindromic if it reads the same forward and backward.
+
+Example 1:
+
+<Image
+	alt="example-1"
+	src="https://assets.leetcode.com/uploads/2021/08/24/two-palindromic-subsequences.png"
+	width={550}
+	height={124}
+/>
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;leetcodecom&quot; Output: 9 Explanation: An optimal solution
+	is to choose &quot;ete&quot; for the 1<sup>st</sup> subsequence and
+	&quot;cdc&quot; for the 2<sup>nd</sup> subsequence. The product of their
+	lengths is: 3 * 3 = 9.
+</pre>
+
+Example 2:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;bb&quot; Output: 1 Explanation: An optimal solution is to
+	choose &quot;b&quot; (the first character) for the 1<sup>st</sup> subsequence
+	and &quot;b&quot; (the second character) for the 2<sup>nd</sup> subsequence.
+	The product of their lengths is: 1 * 1 = 1.
+</pre>
+
+Example 3:
+
+<br />
+
+<pre className="overflow-x-auto">
+	Input: s = &quot;accbcaxxcxx&quot; Output: 25 Explanation: An optimal solution
+	is to choose &quot;accca&quot; for the 1<sup>st</sup> subsequence and
+	&quot;xxcxx&quot; for the 2<sup>nd</sup> subsequence. The product of their
+	lengths is: 5 * 5 = 25.
+</pre>
+
+Constraints:
+
+    - <code>2 &lt;= s.length &lt;= 12</code>
+    - <code>s</code> consists of lowercase English letters only.
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * @param {string} s
+ * @return {number}
+ * Time Complexity: O(2^N)
+ * Space Complexity: O(2^N)
+ */
+var maxProduct = function (s) {
+	const N = s.length
+	const first = new Array(1 << N).fill(0),
+		last = new Array(1 << N).fill(0)
+	for (let i = 0; i < N; i++) {
+		for (let j = 1 << i; j < 1 << (i + 1); j++) {
+			first[j] = i
+		}
+	}
+	for (let i = 0; i < N; i++) {
+		for (let j = 1 << i; j < 1 << N; j += 1 << (i + 1)) {
+			last[j] = i
+		}
+	}
+	const dp = Memo((m) => {
+		if ((m & (m - 1)) === 0) {
+			return m != 0
+		}
+		const l = last[m],
+			f = first[m]
+		const lb = 1 << l,
+			fb = 1 << f
+		return Math.max(
+			dp(m - lb),
+			dp(m - fb),
+			dp(m - lb - fb) + (s[l] == s[f]) * 2,
+		)
+	})
+	let ans = 0
+	for (let m = 1; m < 1 << N; m++) {
+		ans = Math.max(ans, dp(m) * dp((1 << N) - 1 - m))
+	}
+	return ans
+}
+
+var Memo = (func) => {
+	const map = new Map()
+	var wrapper = (m) => {
+		if (!map.get(m)) {
+			map.set(m, func(m))
+		}
+		return map.get(m)
+	}
+	return wrapper
+}
+```
+
+### Python
+
+```python
+"""
+Time Complexity: O(2^N)
+Space Complexity: O(2^N)
+"""
+class Solution:
+    def maxProduct(self, s):
+        n = len(s)
+
+        first, last = [0]*(1<<n), [0]*(1<<n)
+
+        for i in range(n):
+            for j in range(1<<i, 1<<(i+1)):
+                first[j] = i
+
+        for i in range(n):
+            for j in range(1<<i, 1<<n, 1<<(i+1)):
+                last[j] = i
+
+        @lru_cache(None)
+        def dp(m):
+            if m & (m-1) == 0: return m != 0
+            l, f = last[m], first[m]
+            lb, fb = 1<<l, 1<<f
+            return max(dp(m-lb), dp(m-fb), dp(m-lb-fb) + (s[l] == s[f]) * 2)
+
+        ans = 0
+        for m in range(1, 1<<n):
+            ans = max(ans, dp(m)*dp((1<<n) - 1 - m))
+
+        return ans
+```
+
+### C++
+
+```cpp
+ /*
+    Approach:
+    Need to create all the disjoin subsequence and check if they are palindrome.
+    keep track of maximum product
+
+    Time complexity : O(N*N^3)
+    Space complexity: O(N)
+
+    N is length of the string
+*/
+
+
+class Solution {
+public:
+
+    int answer = INT_MIN;
+
+    // function to check if the string is a palindrome
+    bool isPalindrome(string &s){
+        int start = 0;
+        int end = s.length() - 1;
+
+        while(start<end){
+            if(s[start]!=s[end]){
+                return false;
+            }
+            start++;
+            end--;
+        }
+
+        return true;
+    }
+
+    // function to generate all the disjoint subsequence
+    void generateAll(int idx, string &s1, string &s2, string& s){
+
+        if(idx >= s.length())
+        {
+            if(isPalindrome(s1)&&isPalindrome(s2)){
+                int l = s1.length()*s2.length();
+                answer = max(answer,l);
+            }
+            return;
+        }
+
+        char c = s[idx];
+
+        /*
+        we have three options
+        1. Add the char to the first string
+        2. Add the char to the second string
+        3. Add the char to none of the string
+        */
+
+        // add the character in the first string
+        s1.push_back(c);
+        generateAll(idx+1,s1,s2,s);
+        s1.pop_back();
+
+        // add the character in the second string
+        s2.push_back(c);
+        generateAll(idx+1,s1,s2,s);
+        s2.pop_back();
+
+        // add character in no string
+        generateAll(idx+1,s1,s2,s);
+    }
+
+    int maxProduct(string s) {
+
+        string s1 = "";
+        string s2 = "";
+        int idx = 0;
+
+        generateAll(idx,s1,s2,s);
+
+        return answer;
+    }
+
+
+};
+```
+
+### Java
+
+```java
+class Solution {
+    public int maxProduct(String s) {
+    int[] dp = new int[4096];
+    int res = 0, mask = (1 << s.length()) - 1;
+    for (int m = 1; m <= mask; ++m)
+        dp[m] = palSize(s, m);
+    for (int m1 = mask; m1 > 0; --m1)
+        if (dp[m1] * (s.length() - dp[m1]) > res)
+            for(int m2 = mask ^ m1; m2 > 0; m2 = (m2 - 1) & (mask ^ m1))
+                res = Math.max(res, dp[m1] * dp[m2]);
+    return res;
+}
+private int palSize(String s, int mask) {
+    int p1 = 0, p2 = s.length(), res = 0;
+    while (p1 <= p2) {
+        if ((mask & (1 << p1)) == 0)
+            ++p1;
+        else if ((mask & (1 << p2)) == 0)
+            --p2;
+        else if (s.charAt(p1) != s.charAt(p2))
+            return 0;
+        else
+            res += 1 + (p1++ != p2-- ? 1 : 0);
+    }
+    return res;
+}
+}
+```
