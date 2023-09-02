@@ -5,7 +5,7 @@ const nextConfig = {
 		appDir: true,
 	},
 	images: {
-		domains: ['assets.leetcode.com'],
+		domains: ['assets.leetcode.com', 's3-lc-upload.s3.amazonaws.com'],
 	},
 }
 

@@ -23,18 +23,22 @@ Implement the Trie class:
 
 Example 1:
 
-<br />
+<br /><pre className="overflow-x-auto">
+Input
+[&quot;Trie&quot;, &quot;insert&quot;, &quot;search&quot;, &quot;search&quot;, &quot;startsWith&quot;, &quot;insert&quot;, &quot;search&quot;]
+[[], [&quot;apple&quot;], [&quot;apple&quot;], [&quot;app&quot;], [&quot;app&quot;], [&quot;app&quot;], [&quot;app&quot;]]
+Output
+[null, null, true, false, true, null, true]
 
-<pre className="overflow-x-auto">
-	Input [&quot;Trie&quot;, &quot;insert&quot;, &quot;search&quot;,
-	&quot;search&quot;, &quot;startsWith&quot;, &quot;insert&quot;,
-	&quot;search&quot;] [[], [&quot;apple&quot;], [&quot;apple&quot;],
-	[&quot;app&quot;], [&quot;app&quot;], [&quot;app&quot;], [&quot;app&quot;]]
-	Output [null, null, true, false, true, null, true] Explanation Trie trie = new
-	Trie(); trie.insert(&quot;apple&quot;); trie.search(&quot;apple&quot;); //
-	return True trie.search(&quot;app&quot;); // return False
-	trie.startsWith(&quot;app&quot;); // return True trie.insert(&quot;app&quot;);
-	trie.search(&quot;app&quot;); // return True
+Explanation
+Trie trie = new Trie();
+trie.insert(&quot;apple&quot;);
+trie.search(&quot;apple&quot;); // return True
+trie.search(&quot;app&quot;); // return False
+trie.startsWith(&quot;app&quot;); // return True
+trie.insert(&quot;app&quot;);
+trie.search(&quot;app&quot;); // return True
+
 </pre>
 
 Constraints:

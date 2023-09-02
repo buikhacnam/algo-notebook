@@ -11,11 +11,13 @@ difficulty: Easy
 </Callout>
 
 ## Description
+
 This problem is on Premium plan or is not available
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/meeting-rooms/
@@ -24,31 +26,32 @@ This problem is on Premium plan or is not available
  * @return {boolean}
  */
 var canAttendMeetings = function (intervals) {
-    intervals.sort(([aStart, aEnd], [bStart, bEnd]) =>
-        aStart !== bStart ? aStart - bStart : aEnd - bEnd
-    );
+	intervals.sort(([aStart, aEnd], [bStart, bEnd]) =>
+		aStart !== bStart ? aStart - bStart : aEnd - bEnd,
+	)
 
-    return canAttend(intervals);
-};
+	return canAttend(intervals)
+}
 
 const canAttend = (intervals) => {
-    let prev = intervals.shift();
+	let prev = intervals.shift()
 
-    for (const curr of intervals) {
-        const [prevStart, prevEnd] = prev;
-        const [currStart, currEnd] = curr;
+	for (const curr of intervals) {
+		const [prevStart, prevEnd] = prev
+		const [currStart, currEnd] = curr
 
-        const hasOverlap = currStart < prevEnd;
-        if (hasOverlap) return false;
+		const hasOverlap = currStart < prevEnd
+		if (hasOverlap) return false
 
-        prev = curr;
-    }
+		prev = curr
+	}
 
-    return true;
-};
-
+	return true
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     """
@@ -68,7 +71,9 @@ class Solution:
         return True
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given array of time intervals, determine if can attend all meetings
@@ -86,7 +91,7 @@ public:
         if (intervals.empty()) {
             return true;
         }
-        
+
         sort(intervals.begin(), intervals.end());
         for (int i = 0; i < intervals.size() - 1; i++) {
             if (intervals[i][1] > intervals[i + 1][0]) {
@@ -98,7 +103,9 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
 /**
  * Definition of Interval:
@@ -157,5 +164,3 @@ public class Solution {
 }
 
 ```
-
-

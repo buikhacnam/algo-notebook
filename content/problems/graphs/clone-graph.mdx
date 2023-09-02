@@ -1,0 +1,297 @@
+---
+title: Clone Graph
+category: Graphs
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/clone-graph)
+
+</Callout>
+
+## Description
+
+Given a reference of a node in a <a href="https://en.wikipedia.org/wiki/Connectivity_(graph_theory)#Connected_graph" target="_blank">connected</a> undirected graph.
+
+Return a <a href="https://en.wikipedia.org/wiki/Object_copying#Deep_copy" target="_blank">deep copy</a> (clone) of the graph.
+
+Each node in the graph contains a value (<code>int</code>) and a list (<code>List[Node]</code>) of its neighbors.
+
+<br />
+
+```mdx
+class Node {
+public int val;
+public List&lt;Node&gt; neighbors;
+}
+```
+
+Test case format:
+
+For simplicity, each node&#39;s value is the same as the node&#39;s index (1-indexed). For example, the first node with <code>val == 1</code>, the second node with <code>val == 2</code>, and so on. The graph is represented in the test case using an adjacency list.
+
+<b>An adjacency list</b> is a collection of unordered <b>lists</b> used to represent
+a finite graph. Each list describes the set of neighbors of a node in the graph.
+
+The given node will always be the first node with <code>val = 1</code>. You must return the copy of the given node as a reference to the cloned graph.
+
+Example 1:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2019/11/04/133_clone_graph_question.png"
+	width={454}
+	height={500}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: adjList = [[2,4],[1,3],[2,4],[1,3]] Output: [[2,4],[1,3],[2,4],[1,3]]
+	Explanation: There are 4 nodes in the graph. 1st node (val = 1)&#39;s
+	neighbors are 2nd node (val = 2) and 4th node (val = 4). 2nd node (val =
+	2)&#39;s neighbors are 1st node (val = 1) and 3rd node (val = 3). 3rd node
+	(val = 3)&#39;s neighbors are 2nd node (val = 2) and 4th node (val = 4). 4th
+	node (val = 4)&#39;s neighbors are 1st node (val = 1) and 3rd node (val = 3).
+</pre>
+
+Example 2:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/01/07/graph.png"
+	width={163}
+	height={148}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: adjList = [[]] Output: [[]] Explanation: Note that the input contains
+	one empty list. The graph consists of only one node with val = 1 and it does
+	not have any neighbors.
+</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: adjList = [] Output: [] Explanation: This an empty graph, it does not
+	have any nodes.
+</pre>
+
+Constraints:
+
+    - The number of nodes in the graph is in the range <code>[0, 100]</code>.
+    - <code>1 &lt;= Node.val &lt;= 100</code>
+    - <code>Node.val</code> is unique for each node.
+    - There are no repeated edges and no self-loops in the graph.
+    - The Graph is connected and all nodes can be visited starting from the given node.
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/clone-graph/
+ * Time O(V + E) | Space O(N)
+ * @param {Node} node
+ * @return {Node}
+ */
+var cloneGraph = function (node, seen = new Map()) {
+	const isBaseCase = node === null
+	if (isBaseCase) return null
+
+	if (seen.has(node)) return seen.get(node)
+
+	return dfs(node, seen) /* Time O(V + E) | Space O(N) */
+}
+
+const dfs = (node, seen) => {
+	const clone = new Node(node.val)
+
+	seen.set(node, clone) /*               | Space O(N) */
+
+	for (const neighbor of node.neighbors) {
+		const cloneNeighbor = cloneGraph(
+			neighbor,
+			seen,
+		) /* Time O(V + E) | Space O(H) */
+
+		clone.neighbors.push(cloneNeighbor) /*               | Space O(V + E) */
+	}
+
+	return clone
+}
+
+/**
+ * https://leetcode.com/problems/clone-graph/
+ * Time O(V + E) | Space O(N)
+ * @param {Node} node
+ * @return {Node}
+ */
+var cloneGraph = function (node, seen = new Map()) {
+	const isBaseCase = node === null
+	if (isBaseCase) return null
+
+	seen.set(node, new Node(node.val)) /*               | Space O(N) */
+
+	bfs(new Queue([node]), seen) /* Time O(V + E) | Space O(N) */
+
+	return seen.get(node)
+}
+
+const bfs = (queue, seen) => {
+	while (!queue.isEmpty()) {
+		/* Time O(V + E) */
+		for (let i = queue.size() - 1; 0 <= i; i--) {
+			/* Time O(W) */
+			const node = queue.dequeue()
+
+			cloneNeighbors(node, seen, queue) /* Space O(N) */
+		}
+	}
+}
+
+const cloneNeighbors = (node, seen, queue) => {
+	for (const neighbor of node.neighbors) {
+		if (!seen.has(neighbor)) {
+			seen.set(neighbor, new Node(neighbor.val)) /* Space O(N) */
+			queue.enqueue(neighbor) /* Space O(W) */
+		}
+
+		const [parentClone, neighborClone] = [seen.get(node), seen.get(neighbor)]
+
+		parentClone.neighbors.push(neighborClone) /* Space O(V + E) */
+	}
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def cloneGraph(self, node: "Node") -> "Node":
+        oldToNew = {}
+
+        def dfs(node):
+            if node in oldToNew:
+                return oldToNew[node]
+
+            copy = Node(node.val)
+            oldToNew[node] = copy
+            for nei in node.neighbors:
+                copy.neighbors.append(dfs(nei))
+            return copy
+
+        return dfs(node) if node else None
+
+```
+
+### C++
+
+```cpp
+/*
+    Given ref of a node in connected undirected graph, return deep copy
+
+    Both BFS & DFS work, map original node to its copy
+
+    Time: O(m + n)
+    Space: O(n)
+*/
+
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    vector<Node*> neighbors;
+    Node() {
+        val = 0;
+        neighbors = vector<Node*>();
+    }
+    Node(int _val) {
+        val = _val;
+        neighbors = vector<Node*>();
+    }
+    Node(int _val, vector<Node*> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+};
+*/
+
+// class Solution {
+// public:
+//     Node* cloneGraph(Node* node) {
+//         if (node == NULL) {
+//             return NULL;
+//         }
+//         if (m.find(node) == m.end()) {
+//             m[node] = new Node(node->val);
+//             for (int i = 0; i < node->neighbors.size(); i++) {
+//                 Node* neighbor = node->neighbors[i];
+//                 m[node]->neighbors.push_back(cloneGraph(neighbor));
+//             }
+//         }
+//         return m[node];
+//     }
+// private:
+//     unordered_map<Node*, Node*> m;
+// };
+
+class Solution {
+public:
+    Node* cloneGraph(Node* node) {
+        if (node == NULL) {
+            return NULL;
+        }
+
+        Node* copy = new Node(node->val);
+        m[node] = copy;
+
+        queue<Node*> q;
+        q.push(node);
+
+        while (!q.empty()) {
+            Node* curr = q.front();
+            q.pop();
+
+            for (int i = 0; i < curr->neighbors.size(); i++) {
+                Node* neighbor = curr->neighbors[i];
+
+                if (m.find(neighbor) == m.end()) {
+                    m[neighbor] = new Node(neighbor->val);
+                    q.push(neighbor);
+                }
+
+                m[curr]->neighbors.push_back(m[neighbor]);
+            }
+        }
+
+        return copy;
+    }
+private:
+    unordered_map<Node*, Node*> m;
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+
+    public HashMap<Integer, Node> map = new HashMap<>();
+
+    public Node cloneGraph(Node node) {
+        if (node == null) return null;
+        if (map.containsKey(node.val)) return map.get(node.val);
+        Node newNode = new Node(node.val, new ArrayList<Node>());
+        map.put(node.val, newNode);
+        for (Node neighbor : node.neighbors) {
+            newNode.neighbors.add(cloneGraph(neighbor));
+        }
+        return newNode;
+    }
+}
+
+```

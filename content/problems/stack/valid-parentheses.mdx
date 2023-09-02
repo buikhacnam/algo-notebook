@@ -1,0 +1,230 @@
+---
+title: Valid Parentheses
+category: Stack
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/valid-parentheses/)
+
+</Callout>
+
+## Description
+
+Given a string `s` containing just the characters `'('`, `')'`, `'{'`, `'}'`, `'['` and `']'`, determine if the input string is valid.
+
+An input string is valid if:
+
+1.  Open brackets must be closed by the same type of brackets.
+2.  Open brackets must be closed in the correct order.
+3.  Every close bracket has a corresponding open bracket of the same type.
+
+- Example 1
+
+```mdx
+Input: s = "()"
+Output: true
+```
+
+- Example 2
+
+```mdx
+Input: s = "()[]{}"
+Output: true
+```
+
+- Example 3
+
+```mdx
+Input: s = "(]"
+Output: false
+```
+
+Constraints:
+
+- 1 `<=` s.length `<=` <code>10<sup>4</sup></code>
+- s consists of parentheses only `'()[]{}'`.
+
+## Solution
+
+### Javascript
+
+```js
+/**
+ * Time O(N) | Space O(N)
+ * https://leetcode.com/problems/valid-parentheses/
+ * @param {string} s
+ * @return {boolean}
+ */
+var isValid = (s, stack = []) => {
+	for (const bracket of s.split('')) {
+		/* Time O(N) */
+		const isParenthesis = bracket === '('
+		if (isParenthesis) stack.push(')') /* Space O(N) */
+
+		const isCurlyBrace = bracket === '{'
+		if (isCurlyBrace) stack.push('}') /* Space O(N) */
+
+		const isSquareBracket = bracket === '['
+		if (isSquareBracket) stack.push(']') /* Space O(N) */
+
+		const isOpenPair = isParenthesis || isCurlyBrace || isSquareBracket
+		if (isOpenPair) continue
+
+		const isEmpty = !stack.length
+		const isWrongPair = stack.pop() !== bracket
+		const isInvalid = isEmpty || isWrongPair
+		if (isInvalid) return false
+	}
+
+	return stack.length === 0
+}
+
+/**
+ * Time O(N) | Space O(N)
+ * https://leetcode.com/problems/valid-parentheses/
+ * @param {string} s
+ * @return {boolean}
+ */
+var isValid = (s, stack = []) => {
+	const map = {
+		'}': '{',
+		']': '[',
+		')': '(',
+	}
+
+	for (const char of s) {
+		/* Time O(N) */
+		const isBracket = char in map
+		if (!isBracket) {
+			stack.push(char)
+			continue
+		} /* Space O(N) */
+
+		const isEqual = stack[stack.length - 1] === map[char]
+		if (isEqual) {
+			stack.pop()
+			continue
+		}
+
+		return false
+	}
+
+	return stack.length === 0
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def isValid(self, s: str) -> bool:
+        Map = {")": "(", "]": "[", "}": "{"}
+        stack = []
+
+        for c in s:
+            if c not in Map:
+                stack.append(c)
+                continue
+            if not stack or stack[-1] != Map[c]:
+                return False
+            stack.pop()
+
+        return not stack
+
+```
+
+### C++
+
+```cpp
+class Solution {
+public:
+    bool isValid(string s) {
+        stack<char> open;
+        unordered_map<char, char> parens = {
+            {')', '('},
+            {']', '['},
+            {'}', '{'},
+        };
+
+        for (const auto& c : s) {
+            if (parens.find(c) != parens.end()) {
+                // if input starts with a closing bracket.
+                if (open.empty()) {
+                    return false;
+                }
+
+                if (open.top() != parens[c]) {
+                    return false;
+                }
+
+                open.pop();
+            } else {
+                open.push(c);
+            }
+        }
+
+        return open.empty();
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+
+    public boolean isValid(String s) {
+        if (s.length() % 2 != 0) return false;
+        Stack<Character> stack = new Stack<>();
+        for (int i = 0; i < s.length(); i++) {
+            if (
+                stack.isEmpty() &&
+                (s.charAt(i) == ')' || s.charAt(i) == '}' || s.charAt(i) == ']')
+            ) return false; else {
+                if (!stack.isEmpty()) {
+                    if (
+                        stack.peek() == '(' && s.charAt(i) == ')'
+                    ) stack.pop(); else if (
+                        stack.peek() == '{' && s.charAt(i) == '}'
+                    ) stack.pop(); else if (
+                        stack.peek() == '[' && s.charAt(i) == ']'
+                    ) stack.pop(); else stack.add(s.charAt(i));
+                } else stack.add(s.charAt(i));
+            }
+        }
+        return stack.isEmpty();
+    }
+}
+
+//Solution with HashMap Lookup table as described in the video
+
+class Solution {
+    public boolean isValid(String s) {
+        Stack<Character> brackets = new Stack<>();
+        Map<Character, Character> bracketLookup = new HashMap<>(3);
+
+        bracketLookup.put(')', '(');
+        bracketLookup.put('}', '{');
+        bracketLookup.put(']', '[');
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (bracketLookup.containsKey(c)) {
+                if (!brackets.isEmpty() && bracketLookup.get(c).equals(brackets.peek())) {
+                    brackets.pop();
+                } else {
+                    return false;
+                }
+            } else {
+                brackets.push(c);
+            }
+        }
+
+        return brackets.isEmpty();
+    }
+}
+
+```

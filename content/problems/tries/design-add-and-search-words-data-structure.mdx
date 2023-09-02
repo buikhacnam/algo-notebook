@@ -22,21 +22,23 @@ Implement the <code>WordDictionary</code> class:
 
 Example:
 
-<br />
+<br /><pre className="overflow-x-auto">
+Input
+[&quot;WordDictionary&quot;,&quot;addWord&quot;,&quot;addWord&quot;,&quot;addWord&quot;,&quot;search&quot;,&quot;search&quot;,&quot;search&quot;,&quot;search&quot;]
+[[],[&quot;bad&quot;],[&quot;dad&quot;],[&quot;mad&quot;],[&quot;pad&quot;],[&quot;bad&quot;],[&quot;.ad&quot;],[&quot;b..&quot;]]
+Output
+[null,null,null,null,false,true,true,true]
 
-<pre className="overflow-x-auto">
-	Input
-	[&quot;WordDictionary&quot;,&quot;addWord&quot;,&quot;addWord&quot;,&quot;addWord&quot;,&quot;search&quot;,&quot;search&quot;,&quot;search&quot;,&quot;search&quot;]
-	[[],[&quot;bad&quot;],[&quot;dad&quot;],[&quot;mad&quot;],[&quot;pad&quot;],[&quot;bad&quot;],[&quot;.ad&quot;],[&quot;b..&quot;]]
-	Output [null,null,null,null,false,true,true,true] Explanation WordDictionary
-	wordDictionary = new WordDictionary();
-	wordDictionary.addWord(&quot;bad&quot;);
-	wordDictionary.addWord(&quot;dad&quot;);
-	wordDictionary.addWord(&quot;mad&quot;);
-	wordDictionary.search(&quot;pad&quot;); // return False
-	wordDictionary.search(&quot;bad&quot;); // return True
-	wordDictionary.search(&quot;.ad&quot;); // return True
-	wordDictionary.search(&quot;b..&quot;); // return True
+Explanation
+WordDictionary wordDictionary = new WordDictionary();
+wordDictionary.addWord(&quot;bad&quot;);
+wordDictionary.addWord(&quot;dad&quot;);
+wordDictionary.addWord(&quot;mad&quot;);
+wordDictionary.search(&quot;pad&quot;); // return False
+wordDictionary.search(&quot;bad&quot;); // return True
+wordDictionary.search(&quot;.ad&quot;); // return True
+wordDictionary.search(&quot;b..&quot;); // return True
+
 </pre>
 
 Constraints:
