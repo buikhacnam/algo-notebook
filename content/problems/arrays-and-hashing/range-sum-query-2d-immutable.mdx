@@ -11,23 +11,20 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 Given a 2D matrix <code>matrix</code>, handle multiple queries of the following type:
 
-
-	- Calculate the sum of the elements of <code>matrix</code> inside the rectangle defined by its upper left corner <code>(row1, col1)</code> and lower right corner <code>(row2, col2)</code>.
-
+    - Calculate the sum of the elements of <code>matrix</code> inside the rectangle defined by its upper left corner <code>(row1, col1)</code> and lower right corner <code>(row2, col2)</code>.
 
 Implement the <code>NumMatrix</code> class:
 
-
-	- <code>NumMatrix(int[][] matrix)</code> Initializes the object with the integer matrix <code>matrix</code>.
-	- <code>int sumRegion(int row1, int col1, int row2, int col2)</code> Returns the sum of the elements of <code>matrix</code> inside the rectangle defined by its upper left corner <code>(row1, col1)</code> and lower right corner <code>(row2, col2)</code>.
-
+    - <code>NumMatrix(int[][] matrix)</code> Initializes the object with the integer matrix <code>matrix</code>.
+    - <code>int sumRegion(int row1, int col1, int row2, int col2)</code> Returns the sum of the elements of <code>matrix</code> inside the rectangle defined by its upper left corner <code>(row1, col1)</code> and lower right corner <code>(row2, col2)</code>.
 
 You must design an algorithm where <code>sumRegion</code> works on <code>O(1)</code> time complexity.
 
- 
 Example 1:
+
 <Image alt="" src="https://assets.leetcode.com/uploads/2021/03/14/sum-grid.jpg" width={415} height={415} />
 <br /><pre className="overflow-x-auto">
 Input
@@ -41,25 +38,23 @@ NumMatrix numMatrix = new NumMatrix([[3, 0, 1, 4, 2], [5, 6, 3, 2, 1], [1, 2, 0,
 numMatrix.sumRegion(2, 1, 4, 3); // return 8 (i.e sum of the red rectangle)
 numMatrix.sumRegion(1, 1, 2, 2); // return 11 (i.e sum of the green rectangle)
 numMatrix.sumRegion(1, 2, 2, 4); // return 12 (i.e sum of the blue rectangle)
+
 </pre>
 
- 
 Constraints:
 
-
-	- <code>m == matrix.length</code>
-	- <code>n == matrix[i].length</code>
-	- <code>1 &lt;= m, n &lt;= 200</code>
-	- <code>-10<sup>4</sup> &lt;= matrix[i][j] &lt;= 10<sup>4</sup></code>
-	- <code>0 &lt;= row1 &lt;= row2 &lt; m</code>
-	- <code>0 &lt;= col1 &lt;= col2 &lt; n</code>
-	- At most <code>10<sup>4</sup></code> calls will be made to <code>sumRegion</code>.
-
-
+    - <code>m == matrix.length</code>
+    - <code>n == matrix[i].length</code>
+    - <code>1 &lt;= m, n &lt;= 200</code>
+    - <code>-10<sup>4</sup> &lt;= matrix[i][j] &lt;= 10<sup>4</sup></code>
+    - <code>0 &lt;= row1 &lt;= row2 &lt; m</code>
+    - <code>0 &lt;= col1 &lt;= col2 &lt; n</code>
+    - At most <code>10<sup>4</sup></code> calls will be made to <code>sumRegion</code>.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/range-sum-query-2d-immutable/
@@ -67,39 +62,40 @@ Constraints:
  * @param {number[][]} matrix
  */
 class NumMatrix {
-  constructor(matrix) {
-    this.matrix = matrix;
-  }
+	constructor(matrix) {
+		this.matrix = matrix
+	}
 
-  /** 
-   * 
-   * m = row2 - row1; n = col2 - col1
-   * Time O(m*n) | Space O(1)
-   * @param {number} row1 
-   * @param {number} col1 
-   * @param {number} row2 
-   * @param {number} col2
-   * @return {number}
-   */
-  sumRegion(row1, col1, row2, col2) {
-    let sum = 0;
-    for (let i = row1; i < row2 + 1; i++) {
-      for (let j = col1; j < col2 + 1; j++) {
-        sum += this.matrix[i][j];
-      }
-    }
-    return sum;
-  }
+	/**
+	 *
+	 * m = row2 - row1; n = col2 - col1
+	 * Time O(m*n) | Space O(1)
+	 * @param {number} row1
+	 * @param {number} col1
+	 * @param {number} row2
+	 * @param {number} col2
+	 * @return {number}
+	 */
+	sumRegion(row1, col1, row2, col2) {
+		let sum = 0
+		for (let i = row1; i < row2 + 1; i++) {
+			for (let j = col1; j < col2 + 1; j++) {
+				sum += this.matrix[i][j]
+			}
+		}
+		return sum
+	}
 }
 
-/** 
+/**
  * Your NumMatrix object will be instantiated and called as such:
  * var obj = new NumMatrix(matrix)
  * var param_1 = obj.sumRegion(row1,col1,row2,col2)
  */
-
 ```
+
 ### Python
+
 ```python
 class NumMatrix:
     def __init__(self, matrix):
@@ -117,7 +113,9 @@ class NumMatrix:
         return sum_col2 - sum_col1
 
 ```
+
 ### C++
+
 ```cpp
 class NumMatrix {
 public:
@@ -138,7 +136,7 @@ public:
             }
         }
     }
-    
+
     int sumRegion(int row1, int col1, int row2, int col2) {
         int answer = dp[row2][col2];
 
@@ -157,9 +155,9 @@ public:
  * int param_1 = obj->sumRegion(row1,col1,row2,col2);
  */
 ```
+
 ### Java
+
 ```java
-404: Not Found
+Solution will be updated soon
 ```
-
-

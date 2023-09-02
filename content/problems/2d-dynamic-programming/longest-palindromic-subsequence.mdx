@@ -11,51 +11,50 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given a string <code>s</code>, find *the longest palindromic subsequence&#39;s length in* <code>s</code>.
+
+Given a string <code>s</code>, find _the longest palindromic subsequence&#39;s length in_ <code>s</code>.
 
 A subsequence is a sequence that can be derived from another sequence by deleting some or no elements without changing the order of the remaining elements.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;bbbab&quot;
-Output: 4
-Explanation: One possible longest palindromic subsequence is &quot;bbbb&quot;.
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;bbbab&quot; Output: 4 Explanation: One possible longest
+	palindromic subsequence is &quot;bbbb&quot;.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;cbbd&quot;
-Output: 2
-Explanation: One possible longest palindromic subsequence is &quot;bb&quot;.
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;cbbd&quot; Output: 2 Explanation: One possible longest
+	palindromic subsequence is &quot;bb&quot;.
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= s.length &lt;= 1000</code>
-	- <code>s</code> consists only of lowercase English letters.
-
-
+    - <code>1 &lt;= s.length &lt;= 1000</code>
+    - <code>s</code> consists only of lowercase English letters.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
 # Time: O(n^2) Space: O(n^2) - For all three solutions
 class Solution:
-    def longestPalindromeSubseq(self, s: str) -> int:   
+    def longestPalindromeSubseq(self, s: str) -> int:
         # Dynamic Programming
         dp = [ [0] * (len(s) + 1) for i in range(len(s) + 1)]
         res = 0
-        
+
         for i in range(len(s)):
             for j in range(len(s) - 1, i - 1, -1):
                 if s[i] == s[j]:
@@ -85,19 +84,19 @@ class Solution:
             else:
                 cache[(i, j)] = max(dfs(i - 1, j), dfs(i, j + 1))
             return cache[(i, j)]
-        
+
         for i in range(len(s)):
             dfs(i, i) # odd length
             dfs(i, i + 1) # even length
 
         return max(cache.values())
-        
+
 # LCS Solution
 class Solution:
     def longestPalindromeSubseq(self, s: str) -> int:
         return self.longestCommonSubsequence(s, s[::-1])
-        
-    
+
+
     def longestCommonSubsequence(self, s1: str, s2: str) -> int:
         N, M = len(s1), len(s2)
         dp = [[0] * (M+1) for _ in range(N+1)]
@@ -111,13 +110,15 @@ class Solution:
         return dp[N][M]
 
 ```
+
 ### C++
+
 ```cpp
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Java
+
 ```java
-404: Not Found
+Solution will be updated soon
 ```
-
-

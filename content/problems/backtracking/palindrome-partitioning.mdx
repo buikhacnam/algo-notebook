@@ -11,28 +11,30 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given a string <code>s</code>, partition <code>s</code> such that every <span data-keyword="substring-nonempty">substring</span> of the partition is a <span data-keyword="palindrome-string">palindrome</span>. Return *all possible palindrome partitioning of *<code>s</code>.
 
- 
+Given a string <code>s</code>, partition <code>s</code> such that every <span data-keyword="substring-nonempty">substring</span> of the partition is a <span data-keyword="palindrome-string">palindrome</span>. Return _all possible palindrome partitioning of _<code>s</code>.
+
 Example 1:
-<br /><pre className="overflow-x-auto">Input: s = "aab"
-Output: [["a","a","b"],["aa","b"]]
-</pre>Example 2:
-<br /><pre className="overflow-x-auto">Input: s = "a"
-Output: [["a"]]
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = "aab" Output: [["a","a","b"],["aa","b"]]
 </pre>
- 
+</br>
+Example 2:
+<br />
+<pre className="overflow-x-auto">
+Input: s = "a" Output: [["a"]]
+</pre>
 Constraints:
 
-
-	- <code>1 &lt;= s.length &lt;= 16</code>
-	- <code>s</code> contains only lowercase English letters.
-
-
+    - <code>1 &lt;= s.length &lt;= 16</code>
+    - <code>s</code> contains only lowercase English letters.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/palindrome-partitioning/
@@ -41,41 +43,43 @@ Constraints:
  * @return {string[][]}
  */
 function partition(s, left = 0, _partition = [], partitions = []) {
-    const isBaseCase = s.length <= left
-    if (isBaseCase) {
-        if (_partition.length) partitions.push(_partition.slice());
+	const isBaseCase = s.length <= left
+	if (isBaseCase) {
+		if (_partition.length) partitions.push(_partition.slice())
 
-        return partitions
-    }
+		return partitions
+	}
 
-    for (let right = left; right < s.length; right++) {
-        if (!isPalindrome(s, left, right)) continue;
+	for (let right = left; right < s.length; right++) {
+		if (!isPalindrome(s, left, right)) continue
 
-        backTrack(s, left, right, _partition, partitions)
-    }
+		backTrack(s, left, right, _partition, partitions)
+	}
 
-    return partitions
+	return partitions
 }
 
 const backTrack = (s, left, right, _partition, partitions) => {
-    _partition.push(s.slice(left, (right + 1)));
-        partition(s, (right + 1), _partition, partitions);
-    _partition.pop();
+	_partition.push(s.slice(left, right + 1))
+	partition(s, right + 1, _partition, partitions)
+	_partition.pop()
 }
 
 const isPalindrome = (str, left, right) => {
-    while (left < right) {
-        const isSame = str[left] === str[right];
-        if (!isSame) return false;
+	while (left < right) {
+		const isSame = str[left] === str[right]
+		if (!isSame) return false
 
-        left++; right--;
-    }
+		left++
+		right--
+	}
 
-    return true;
+	return true
 }
-
 ```
+
 ### Python
+
 ```python
 class Solution:
     def partition(self, s: str) -> List[List[str]]:
@@ -102,7 +106,9 @@ class Solution:
         return True
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given a string, partition such that every substring is a palindrome, return all possible ones
@@ -150,7 +156,9 @@ private:
 };
 
 ```
+
 ### Java
+
 ```java
 public class Solution {
 
@@ -180,5 +188,3 @@ public class Solution {
 }
 
 ```
-
-

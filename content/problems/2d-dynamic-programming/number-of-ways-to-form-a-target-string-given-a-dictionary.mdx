@@ -11,77 +11,84 @@ difficulty: Hard
 </Callout>
 
 ## Description
+
 You are given a list of strings of the same length <code>words</code> and a string <code>target</code>.
 
 Your task is to form <code>target</code> using the given <code>words</code> under the following rules:
 
-
-	- <code>target</code> should be formed from left to right.
-	- To form the <code>i<sup>th</sup></code> character (0-indexed) of <code>target</code>, you can choose the <code>k<sup>th</sup></code> character of the <code>j<sup>th</sup></code> string in <code>words</code> if <code>target[i] = words[j][k]</code>.
-	- Once you use the <code>k<sup>th</sup></code> character of the <code>j<sup>th</sup></code> string of <code>words</code>, you can no longer use the <code>x<sup>th</sup></code> character of any string in <code>words</code> where <code>x &lt;= k</code>. In other words, all characters to the left of or at index <code>k</code> become unusuable for every string.
-	- Repeat the process until you form the string <code>target</code>.
-
+    - <code>target</code> should be formed from left to right.
+    - To form the <code>i<sup>th</sup></code> character (0-indexed) of <code>target</code>, you can choose the <code>k<sup>th</sup></code> character of the <code>j<sup>th</sup></code> string in <code>words</code> if <code>target[i] = words[j][k]</code>.
+    - Once you use the <code>k<sup>th</sup></code> character of the <code>j<sup>th</sup></code> string of <code>words</code>, you can no longer use the <code>x<sup>th</sup></code> character of any string in <code>words</code> where <code>x &lt;= k</code>. In other words, all characters to the left of or at index <code>k</code> become unusuable for every string.
+    - Repeat the process until you form the string <code>target</code>.
 
 Notice that you can use multiple characters from the same string in <code>words</code> provided the conditions above are met.
 
-Return *the number of ways to form <code>target</code> from <code>words</code>*. Since the answer may be too large, return it modulo <code>10<sup>9</sup> + 7</code>.
+Return _the number of ways to form <code>target</code> from <code>words</code>_. Since the answer may be too large, return it modulo <code>10<sup>9</sup> + 7</code>.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: words = [&quot;acca&quot;,&quot;bbbb&quot;,&quot;caca&quot;], target = &quot;aba&quot;
-Output: 6
-Explanation: There are 6 ways to form target.
-&quot;aba&quot; -&gt; index 0 (&quot;<u>a</u>cca&quot;), index 1 (&quot;b<u>b</u>bb&quot;), index 3 (&quot;cac<u>a</u>&quot;)
-&quot;aba&quot; -&gt; index 0 (&quot;<u>a</u>cca&quot;), index 2 (&quot;bb<u>b</u>b&quot;), index 3 (&quot;cac<u>a</u>&quot;)
-&quot;aba&quot; -&gt; index 0 (&quot;<u>a</u>cca&quot;), index 1 (&quot;b<u>b</u>bb&quot;), index 3 (&quot;acc<u>a</u>&quot;)
-&quot;aba&quot; -&gt; index 0 (&quot;<u>a</u>cca&quot;), index 2 (&quot;bb<u>b</u>b&quot;), index 3 (&quot;acc<u>a</u>&quot;)
-&quot;aba&quot; -&gt; index 1 (&quot;c<u>a</u>ca&quot;), index 2 (&quot;bb<u>b</u>b&quot;), index 3 (&quot;acc<u>a</u>&quot;)
-&quot;aba&quot; -&gt; index 1 (&quot;c<u>a</u>ca&quot;), index 2 (&quot;bb<u>b</u>b&quot;), index 3 (&quot;cac<u>a</u>&quot;)
+<br />
+<pre className="overflow-x-auto">
+	Input: words = [&quot;acca&quot;,&quot;bbbb&quot;,&quot;caca&quot;], target =
+	&quot;aba&quot; Output: 6 Explanation: There are 6 ways to form target.
+	&quot;aba&quot; -&gt; index 0 (&quot;<u>a</u>cca&quot;), index 1 (&quot;b
+	<u>b</u>bb&quot;), index 3 (&quot;cac<u>a</u>&quot;) &quot;aba&quot; -&gt;
+	index 0 (&quot;<u>a</u>cca&quot;), index 2 (&quot;bb<u>b</u>b&quot;), index 3
+	(&quot;cac<u>a</u>&quot;) &quot;aba&quot; -&gt; index 0 (&quot;<u>a</u>
+	cca&quot;), index 1 (&quot;b<u>b</u>bb&quot;), index 3 (&quot;acc<u>a</u>
+	&quot;) &quot;aba&quot; -&gt; index 0 (&quot;<u>a</u>cca&quot;), index 2
+	(&quot;bb<u>b</u>b&quot;), index 3 (&quot;acc<u>a</u>&quot;) &quot;aba&quot;
+	-&gt; index 1 (&quot;c<u>a</u>ca&quot;), index 2 (&quot;bb<u>b</u>b&quot;),
+	index 3 (&quot;acc<u>a</u>&quot;) &quot;aba&quot; -&gt; index 1 (&quot;c
+	<u>a</u>ca&quot;), index 2 (&quot;bb<u>b</u>b&quot;), index 3 (&quot;cac
+	<u>a</u>&quot;)
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: words = [&quot;abba&quot;,&quot;baab&quot;], target = &quot;bab&quot;
-Output: 4
-Explanation: There are 4 ways to form target.
-&quot;bab&quot; -&gt; index 0 (&quot;<u>b</u>aab&quot;), index 1 (&quot;b<u>a</u>ab&quot;), index 2 (&quot;ab<u>b</u>a&quot;)
-&quot;bab&quot; -&gt; index 0 (&quot;<u>b</u>aab&quot;), index 1 (&quot;b<u>a</u>ab&quot;), index 3 (&quot;baa<u>b</u>&quot;)
-&quot;bab&quot; -&gt; index 0 (&quot;<u>b</u>aab&quot;), index 2 (&quot;ba<u>a</u>b&quot;), index 3 (&quot;baa<u>b</u>&quot;)
-&quot;bab&quot; -&gt; index 1 (&quot;a<u>b</u>ba&quot;), index 2 (&quot;ba<u>a</u>b&quot;), index 3 (&quot;baa<u>b</u>&quot;)
+<br />
+<pre className="overflow-x-auto">
+	Input: words = [&quot;abba&quot;,&quot;baab&quot;], target = &quot;bab&quot;
+	Output: 4 Explanation: There are 4 ways to form target. &quot;bab&quot; -&gt;
+	index 0 (&quot;<u>b</u>aab&quot;), index 1 (&quot;b<u>a</u>ab&quot;), index 2
+	(&quot;ab<u>b</u>a&quot;) &quot;bab&quot; -&gt; index 0 (&quot;<u>b</u>
+	aab&quot;), index 1 (&quot;b<u>a</u>ab&quot;), index 3 (&quot;baa<u>b</u>
+	&quot;) &quot;bab&quot; -&gt; index 0 (&quot;<u>b</u>aab&quot;), index 2
+	(&quot;ba<u>a</u>b&quot;), index 3 (&quot;baa<u>b</u>&quot;) &quot;bab&quot;
+	-&gt; index 1 (&quot;a<u>b</u>ba&quot;), index 2 (&quot;ba<u>a</u>b&quot;),
+	index 3 (&quot;baa<u>b</u>&quot;)
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= words.length &lt;= 1000</code>
-	- <code>1 &lt;= words[i].length &lt;= 1000</code>
-	- All strings in <code>words</code> have the same length.
-	- <code>1 &lt;= target.length &lt;= 1000</code>
-	- <code>words[i]</code> and <code>target</code> contain only lowercase English letters.
-
-
+    - <code>1 &lt;= words.length &lt;= 1000</code>
+    - <code>1 &lt;= words[i].length &lt;= 1000</code>
+    - All strings in <code>words</code> have the same length.
+    - <code>1 &lt;= target.length &lt;= 1000</code>
+    - <code>words[i]</code> and <code>target</code> contain only lowercase English letters.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
-404: Not Found
+Solution will be updated soon
 ```
+
 ### C++
+
 ```cpp
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Java
+
 ```java
-404: Not Found
+Solution will be updated soon
 ```
-
-

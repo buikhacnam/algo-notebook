@@ -11,48 +11,62 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given an <code>m x n</code> binary <code>matrix</code> filled with <code>0</code>&#39;s and <code>1</code>&#39;s, *find the largest square containing only* <code>1</code>&#39;s *and return its area*.
 
- 
+Given an <code>m x n</code> binary <code>matrix</code> filled with <code>0</code>&#39;s and <code>1</code>&#39;s, _find the largest square containing only_ <code>1</code>&#39;s _and return its area_.
+
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2020/11/26/max1grid.jpg" width={400} height={319} />
-<br /><pre className="overflow-x-auto">
-Input: matrix = [[&quot;1&quot;,&quot;0&quot;,&quot;1&quot;,&quot;0&quot;,&quot;0&quot;],[&quot;1&quot;,&quot;0&quot;,&quot;1&quot;,&quot;1&quot;,&quot;1&quot;],[&quot;1&quot;,&quot;1&quot;,&quot;1&quot;,&quot;1&quot;,&quot;1&quot;],[&quot;1&quot;,&quot;0&quot;,&quot;0&quot;,&quot;1&quot;,&quot;0&quot;]]
-Output: 4
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/11/26/max1grid.jpg"
+	width={400}
+	height={319}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: matrix =
+	[[&quot;1&quot;,&quot;0&quot;,&quot;1&quot;,&quot;0&quot;,&quot;0&quot;],[&quot;1&quot;,&quot;0&quot;,&quot;1&quot;,&quot;1&quot;,&quot;1&quot;],[&quot;1&quot;,&quot;1&quot;,&quot;1&quot;,&quot;1&quot;,&quot;1&quot;],[&quot;1&quot;,&quot;0&quot;,&quot;0&quot;,&quot;1&quot;,&quot;0&quot;]]
+	Output: 4
 </pre>
 
 Example 2:
-<Image alt="" src="https://assets.leetcode.com/uploads/2020/11/26/max2grid.jpg" width={165} height={165} />
-<br /><pre className="overflow-x-auto">
-Input: matrix = [[&quot;0&quot;,&quot;1&quot;],[&quot;1&quot;,&quot;0&quot;]]
-Output: 1
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/11/26/max2grid.jpg"
+	width={165}
+	height={165}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: matrix = [[&quot;0&quot;,&quot;1&quot;],[&quot;1&quot;,&quot;0&quot;]]
+	Output: 1
 </pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: matrix = [[&quot;0&quot;]]
-Output: 0
+<br />
+<pre className="overflow-x-auto">
+	Input: matrix = [[&quot;0&quot;]] Output: 0
 </pre>
 
- 
 Constraints:
 
-
-	- <code>m == matrix.length</code>
-	- <code>n == matrix[i].length</code>
-	- <code>1 &lt;= m, n &lt;= 300</code>
-	- <code>matrix[i][j]</code> is <code>&#39;0&#39;</code> or <code>&#39;1&#39;</code>.
-
-
+    - <code>m == matrix.length</code>
+    - <code>n == matrix[i].length</code>
+    - <code>1 &lt;= m, n &lt;= 300</code>
+    - <code>matrix[i][j]</code> is <code>&#39;0&#39;</code> or <code>&#39;1&#39;</code>.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
 class Solution:
     def maximalSquare(self, matrix: List[List[str]]) -> int:
@@ -77,7 +91,9 @@ class Solution:
         return max(cache.values()) ** 2
 
 ```
+
 ### C++
+
 ```cpp
 /*
   Given an m x n binary matrix filled with 0's and 1's, find the largest square containing only 1's and return its area.
@@ -100,7 +116,7 @@ public:
             for(int j = cols-1 ; j >=0 ; --j) {
                 if(matrix[i][j] == '1') {
                     int right = dp[i][j+1], dia = dp[i+1][j+1], bottom = dp[i+1][j];
-                    
+
                     dp[i][j] = 1 + min(right, min(dia, bottom));
                     maxi = max(maxi, dp[i][j]);
                 }
@@ -114,7 +130,9 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
     // dp bottom up
@@ -134,5 +152,3 @@ class Solution {
     }
 }
 ```
-
-

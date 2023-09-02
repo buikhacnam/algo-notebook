@@ -11,16 +11,14 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 Given an asynchronous function <code>fn</code> and a time <code>t</code> in milliseconds, return a new time limited version of the input function. <code>fn</code> takes arguments provided to the time limited function.
 
 The time limited function should follow these rules:
 
+    - If the <code>fn</code> completes within the time limit of <code>t</code> milliseconds, the time limited function should resolve with the result.
+    - If the execution of the <code>fn</code> exceeds the time limit, the time limited function should reject with the string <code>&quot;Time Limit Exceeded&quot;</code>.
 
-	- If the <code>fn</code> completes within the time limit of <code>t</code> milliseconds, the time limited function should resolve with the result.
-	- If the execution of the <code>fn</code> exceeds the time limit, the time limited function should reject with the string <code>&quot;Time Limit Exceeded&quot;</code>.
-
-
- 
 Example 1:
 
 <br /><pre className="overflow-x-auto">
@@ -45,6 +43,7 @@ try {
 console.log(result) // Output
 
 The provided function is set to resolve after 100ms. However, the time limit is set to 50ms. It rejects at t=50ms because the time limit was reached.
+
 </pre>
 
 Example 2:
@@ -90,33 +89,34 @@ Output: {&quot;rejected&quot;:&quot;Error&quot;,&quot;time&quot;:0}
 Explanation:
 The function immediately throws an error.</pre>
 
- 
 Constraints:
 
-
-	- <code>0 &lt;= inputs.length &lt;= 10</code>
-	- <code>0 &lt;= t &lt;= 1000</code>
-	- <code>fn returns a promise</code>
-
-
+    - <code>0 &lt;= inputs.length &lt;= 10</code>
+    - <code>0 &lt;= t &lt;= 1000</code>
+    - <code>fn returns a promise</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
-404: Not Found
+Solution will be updated soon
 ```
+
 ### C++
+
 ```cpp
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Java
+
 ```java
-404: Not Found
+Solution will be updated soon
 ```
-
-

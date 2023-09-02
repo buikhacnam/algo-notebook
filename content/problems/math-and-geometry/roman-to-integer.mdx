@@ -11,164 +11,154 @@ difficulty: Easy
 </Callout>
 
 ## Description
+
 Roman numerals are represented by seven different symbols: <code>I</code>, <code>V</code>, <code>X</code>, <code>L</code>, <code>C</code>, <code>D</code> and <code>M</code>.
 
-<br /><pre className="overflow-x-auto">
-Symbol       Value
-I             1
-V             5
-X             10
-L             50
-C             100
-D             500
-M             1000</pre>
+<br />
+<pre className="overflow-x-auto">
+	Symbol Value I 1 V 5 X 10 L 50 C 100 D 500 M 1000
+</pre>
 
 For example, <code>2</code> is written as <code>II</code> in Roman numeral, just two ones added together. <code>12</code> is written as <code>XII</code>, which is simply <code>X + II</code>. The number <code>27</code> is written as <code>XXVII</code>, which is <code>XX + V + II</code>.
 
 Roman numerals are usually written largest to smallest from left to right. However, the numeral for four is not <code>IIII</code>. Instead, the number four is written as <code>IV</code>. Because the one is before the five we subtract it making four. The same principle applies to the number nine, which is written as <code>IX</code>. There are six instances where subtraction is used:
 
-
-	- <code>I</code> can be placed before <code>V</code> (5) and <code>X</code> (10) to make 4 and 9. 
-	- <code>X</code> can be placed before <code>L</code> (50) and <code>C</code> (100) to make 40 and 90. 
-	- <code>C</code> can be placed before <code>D</code> (500) and <code>M</code> (1000) to make 400 and 900.
-
+    - <code>I</code> can be placed before <code>V</code> (5) and <code>X</code> (10) to make 4 and 9.
+    - <code>X</code> can be placed before <code>L</code> (50) and <code>C</code> (100) to make 40 and 90.
+    - <code>C</code> can be placed before <code>D</code> (500) and <code>M</code> (1000) to make 400 and 900.
 
 Given a roman numeral, convert it to an integer.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;III&quot;
-Output: 3
-Explanation: III = 3.
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;III&quot; Output: 3 Explanation: III = 3.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;LVIII&quot;
-Output: 58
-Explanation: L = 50, V= 5, III = 3.
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;LVIII&quot; Output: 58 Explanation: L = 50, V= 5, III = 3.
 </pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;MCMXCIV&quot;
-Output: 1994
-Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;MCMXCIV&quot; Output: 1994 Explanation: M = 1000, CM = 900,
+	XC = 90 and IV = 4.
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= s.length &lt;= 15</code>
-	- <code>s</code> contains only the characters <code>(&#39;I&#39;, &#39;V&#39;, &#39;X&#39;, &#39;L&#39;, &#39;C&#39;, &#39;D&#39;, &#39;M&#39;)</code>.
-	- It is guaranteed that <code>s</code> is a valid roman numeral in the range <code>[1, 3999]</code>.
-
-
+    - <code>1 &lt;= s.length &lt;= 15</code>
+    - <code>s</code> contains only the characters <code>(&#39;I&#39;, &#39;V&#39;, &#39;X&#39;, &#39;L&#39;, &#39;C&#39;, &#39;D&#39;, &#39;M&#39;)</code>.
+    - It is guaranteed that <code>s</code> is a valid roman numeral in the range <code>[1, 3999]</code>.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * @param {string} s
  * @return {number}
  */
 var romanToInt = function (s) {
-    let romans = {
-        I: 1,
-        V: 5,
-        X: 10,
-        L: 50,
-        C: 100,
-        D: 500,
-        M: 1000,
-    };
+	let romans = {
+		I: 1,
+		V: 5,
+		X: 10,
+		L: 50,
+		C: 100,
+		D: 500,
+		M: 1000,
+	}
 
-    let arr = s.split('');
+	let arr = s.split('')
 
-    let sum = 0;
+	let sum = 0
 
-    for (let i = arr.length - 1; i >= 0; i--) {
-        // IV : 4
-        if (romans[arr[i]] === romans['V']) {
-            if (romans[arr[i - 1]] === romans['I']) {
-                sum -= 1 * 2;
-            }
-        }
-        // IX : 4
-        if (romans[arr[i]] === romans['X']) {
-            if (romans[arr[i - 1]] === romans['I']) {
-                sum -= 1 * 2;
-            }
-        }
-        // XL : 40
-        if (romans[arr[i]] === romans['L']) {
-            if (romans[arr[i - 1]] === romans['X']) {
-                sum -= 10 * 2;
-            }
-        }
-        // XC : 90
-        if (romans[arr[i]] === romans['C']) {
-            if (romans[arr[i - 1]] === romans['X']) {
-                sum -= 10 * 2;
-            }
-        }
-        // CD : 400
-        if (romans[arr[i]] === romans['D']) {
-            if (romans[arr[i - 1]] === romans['C']) {
-                sum -= 100 * 2;
-            }
-        }
-        // CM : 900
-        if (romans[arr[i]] === romans['M']) {
-            if (romans[arr[i - 1]] === romans['C']) {
-                sum -= 100 * 2;
-            }
-        }
+	for (let i = arr.length - 1; i >= 0; i--) {
+		// IV : 4
+		if (romans[arr[i]] === romans['V']) {
+			if (romans[arr[i - 1]] === romans['I']) {
+				sum -= 1 * 2
+			}
+		}
+		// IX : 4
+		if (romans[arr[i]] === romans['X']) {
+			if (romans[arr[i - 1]] === romans['I']) {
+				sum -= 1 * 2
+			}
+		}
+		// XL : 40
+		if (romans[arr[i]] === romans['L']) {
+			if (romans[arr[i - 1]] === romans['X']) {
+				sum -= 10 * 2
+			}
+		}
+		// XC : 90
+		if (romans[arr[i]] === romans['C']) {
+			if (romans[arr[i - 1]] === romans['X']) {
+				sum -= 10 * 2
+			}
+		}
+		// CD : 400
+		if (romans[arr[i]] === romans['D']) {
+			if (romans[arr[i - 1]] === romans['C']) {
+				sum -= 100 * 2
+			}
+		}
+		// CM : 900
+		if (romans[arr[i]] === romans['M']) {
+			if (romans[arr[i - 1]] === romans['C']) {
+				sum -= 100 * 2
+			}
+		}
 
-        sum += romans[arr[i]];
-    }
+		sum += romans[arr[i]]
+	}
 
-    return sum;
-};
+	return sum
+}
 
 // Runtime: 148 ms, faster than 80.16% of JavaScript online submissions for Roman to Integer.
 // Memory Usage: 47.5 MB, less than 18.15% of JavaScript online submissions for Roman to Integer.
 
 function romanToInt(s) {
-    let sum = 0
-    let next = null
-    const romanArr = {
-        "I": 1,
-        "V": 5,
-        "X": 10,
-        "L": 50,
-        "C": 100,
-        "D": 500,
-        "M": 1000
-    }
-    for (let i = 0; i < s.length; i++ ) {
-        next = s[i + 1] || null
-        const curr = s[i]
-        if (romanArr[next] > romanArr[curr]) {
-            sum -= romanArr[curr]
-            continue
-        }
-        sum += romanArr[curr]
-    }
-    return sum
-};
+	let sum = 0
+	let next = null
+	const romanArr = {
+		I: 1,
+		V: 5,
+		X: 10,
+		L: 50,
+		C: 100,
+		D: 500,
+		M: 1000,
+	}
+	for (let i = 0; i < s.length; i++) {
+		next = s[i + 1] || null
+		const curr = s[i]
+		if (romanArr[next] > romanArr[curr]) {
+			sum -= romanArr[curr]
+			continue
+		}
+		sum += romanArr[curr]
+	}
+	return sum
+}
 
 // Runtime 97 ms
 // Memory usage: 47.8 MB
 // https://leetcode.com/problems/roman-to-integer/submissions/1020204566/
 ```
+
 ### Python
+
 ```python
 class Solution:
     def romanToInt(self, s: str) -> int:
@@ -182,11 +172,15 @@ class Solution:
         return res
 
 ```
+
 ### C++
+
 ```cpp
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Java
+
 ```java
 class Solution {
     public int romanToInt(String s) {
@@ -212,5 +206,3 @@ class Solution {
 }
 
 ```
-
-

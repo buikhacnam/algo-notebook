@@ -11,20 +11,19 @@ difficulty: Easy
 </Callout>
 
 ## Description
+
 Design a HashSet without using any built-in hash table libraries.
 
 Implement <code>MyHashSet</code> class:
 
+    - <code>void add(key)</code> Inserts the value <code>key</code> into the HashSet.
+    - <code>bool contains(key)</code> Returns whether the value <code>key</code> exists in the HashSet or not.
+    - <code>void remove(key)</code> Removes the value <code>key</code> in the HashSet. If <code>key</code> does not exist in the HashSet, do nothing.
 
-	- <code>void add(key)</code> Inserts the value <code>key</code> into the HashSet.
-	- <code>bool contains(key)</code> Returns whether the value <code>key</code> exists in the HashSet or not.
-	- <code>void remove(key)</code> Removes the value <code>key</code> in the HashSet. If <code>key</code> does not exist in the HashSet, do nothing.
-
-
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
+<br />
+<pre className="overflow-x-auto">
 Input
 [&quot;MyHashSet&quot;, &quot;add&quot;, &quot;add&quot;, &quot;contains&quot;, &quot;contains&quot;, &quot;add&quot;, &quot;contains&quot;, &quot;remove&quot;, &quot;contains&quot;]
 [[], [1], [2], [1], [3], [2], [2], [2], [2]]
@@ -33,72 +32,72 @@ Output
 
 Explanation
 MyHashSet myHashSet = new MyHashSet();
-myHashSet.add(1);      // set = [1]
-myHashSet.add(2);      // set = [1, 2]
+myHashSet.add(1); // set = [1]
+myHashSet.add(2); // set = [1, 2]
 myHashSet.contains(1); // return True
 myHashSet.contains(3); // return False, (not found)
-myHashSet.add(2);      // set = [1, 2]
+myHashSet.add(2); // set = [1, 2]
 myHashSet.contains(2); // return True
-myHashSet.remove(2);   // set = [1]
-myHashSet.contains(2); // return False, (already removed)</pre>
+myHashSet.remove(2); // set = [1]
+myHashSet.contains(2); // return False, (already removed)
 
- 
+</pre>
+
 Constraints:
 
-
-	- <code>0 &lt;= key &lt;= 10<sup>6</sup></code>
-	- At most <code>10<sup>4</sup></code> calls will be made to <code>add</code>, <code>remove</code>, and <code>contains</code>.
-
-
+    - <code>0 &lt;= key &lt;= 10<sup>6</sup></code>
+    - At most <code>10<sup>4</sup></code> calls will be made to <code>add</code>, <code>remove</code>, and <code>contains</code>.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 // https://leetcode.com/problems/design-hashset
 class MyHashSet {
-    constructor() {
-        this.set = [];
-    }
+	constructor() {
+		this.set = []
+	}
 
-    /** 
-     * Time O(1) | Space O(1)
-     * @param {number} key
-     * @return {void}
-     */
-    add(key) {
-        this.set[key] = key;
-    }
+	/**
+	 * Time O(1) | Space O(1)
+	 * @param {number} key
+	 * @return {void}
+	 */
+	add(key) {
+		this.set[key] = key
+	}
 
-    /** 
-     * Time O(1) | Space O(1)
-     * @param {number} key
-     * @return {void}
-     */
-    remove(key) {
-        this.set[key] = undefined;
-    }
+	/**
+	 * Time O(1) | Space O(1)
+	 * @param {number} key
+	 * @return {void}
+	 */
+	remove(key) {
+		this.set[key] = undefined
+	}
 
-    /** 
-     * Time O(1) | Space O(1)
-     * @param {number} key
-     * @return {boolean}
-     */
-    contains(key) {
-        return this.set[key] !== undefined;
-    }
+	/**
+	 * Time O(1) | Space O(1)
+	 * @param {number} key
+	 * @return {boolean}
+	 */
+	contains(key) {
+		return this.set[key] !== undefined
+	}
 }
 
-/** 
+/**
  * Your MyHashSet object will be instantiated and called as such:
  * var obj = new MyHashSet()
  * obj.add(key)
  * obj.remove(key)
  * var param_3 = obj.contains(key)
  */
-
 ```
+
 ### Python
+
 ```python
 class MyHashSet:
 
@@ -124,11 +123,15 @@ class MyHashSet:
 # param_3 = obj.contains(key)
 
 ```
+
 ### C++
+
 ```cpp
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Java
+
 ```java
 class MyHashSet {
     final int mod = 10000;
@@ -149,7 +152,7 @@ class MyHashSet {
             set[i] = new ListNode(0);
         }
     }
-    
+
     public void add(int key) {
         ListNode head = set[key % mod];
         while (head.next != null) {
@@ -158,7 +161,7 @@ class MyHashSet {
         }
         head.next = new ListNode(key);
     }
-    
+
     public void remove(int key) {
         ListNode head = set[key % mod];
         while (head.next != null) {
@@ -169,7 +172,7 @@ class MyHashSet {
             head = head.next;
         }
     }
-    
+
     public boolean contains(int key) {
         ListNode head = set[key % mod];
         while (head.next != null) {
@@ -188,5 +191,3 @@ class MyHashSet {
  * boolean param_3 = obj.contains(key);
  */
 ```
-
-

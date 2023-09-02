@@ -11,11 +11,12 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 Given an integer array <code>nums</code> sorted in non-decreasing order, remove some duplicates <a href="https://en.wikipedia.org/wiki/In-place_algorithm" target="_blank">in-place</a> such that each unique element appears at most twice. The relative order of the elements should be kept the same.
 
 Since it is impossible to change the length of the array in some languages, you must instead have the result be placed in the first part of the array <code>nums</code>. More formally, if there are <code>k</code> elements after removing the duplicates, then the first <code>k</code> elements of <code>nums</code> should hold the final result. It does not matter what you leave beyond the first <code>k</code> elements.
 
-Return <code>k</code>* after placing the final result in the first *<code>k</code>* slots of *<code>nums</code>.
+Return <code>k</code>_ after placing the final result in the first _<code>k</code>_ slots of _<code>nums</code>.
 
 Do not allocate extra space for another array. You must do this by modifying the input array <a href="https://en.wikipedia.org/wiki/In-place_algorithm" target="_blank">in-place</a> with O(1) extra memory.
 
@@ -31,98 +32,98 @@ int k = removeDuplicates(nums); // Calls your implementation
 
 assert k == expectedNums.length;
 for (int i = 0; i &lt; k; i++) {
-    assert nums[i] == expectedNums[i];
+assert nums[i] == expectedNums[i];
 }
+
 </pre>
 
 If all assertions pass, then your solution will be accepted.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [1,1,1,2,2,3]
-Output: 5, nums = [1,1,2,2,3,_]
-Explanation: Your function should return k = 5, with the first five elements of nums being 1, 1, 2, 2 and 3 respectively.
-It does not matter what you leave beyond the returned k (hence they are underscores).
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [1,1,1,2,2,3] Output: 5, nums = [1,1,2,2,3,_] Explanation: Your
+	function should return k = 5, with the first five elements of nums being 1, 1,
+	2, 2 and 3 respectively. It does not matter what you leave beyond the returned
+	k (hence they are underscores).
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [0,0,1,1,1,1,2,3,3]
-Output: 7, nums = [0,0,1,1,2,3,3,_,_]
-Explanation: Your function should return k = 7, with the first seven elements of nums being 0, 0, 1, 1, 2, 3 and 3 respectively.
-It does not matter what you leave beyond the returned k (hence they are underscores).
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [0,0,1,1,1,1,2,3,3] Output: 7, nums = [0,0,1,1,2,3,3,_,_]
+	Explanation: Your function should return k = 7, with the first seven elements
+	of nums being 0, 0, 1, 1, 2, 3 and 3 respectively. It does not matter what you
+	leave beyond the returned k (hence they are underscores).
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= nums.length &lt;= 3 * 10<sup>4</sup></code>
-	- <code>-10<sup>4</sup> &lt;= nums[i] &lt;= 10<sup>4</sup></code>
-	- <code>nums</code> is sorted in non-decreasing order.
-
-
+    - <code>1 &lt;= nums.length &lt;= 3 * 10<sup>4</sup></code>
+    - <code>-10<sup>4</sup> &lt;= nums[i] &lt;= 10<sup>4</sup></code>
+    - <code>nums</code> is sorted in non-decreasing order.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
-* https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii/
-* 
-* Time O(n) | Space O(1)
-* @param {number[]} nums
-* @return {number}
-*/
-var removeDuplicates = function(nums) {
-  let current = nums[0];
-  let sameElCount = 0;
+ * https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii/
+ *
+ * Time O(n) | Space O(1)
+ * @param {number[]} nums
+ * @return {number}
+ */
+var removeDuplicates = function (nums) {
+	let current = nums[0]
+	let sameElCount = 0
 
-  for(let i = 0; i < nums.length; i++) {
-    if(current === nums[i]) {
-        sameElCount++;
-    } 
-    if(current !== nums[i]) {
-        current = nums[i];
-        sameElCount = 1;
-    }
-   if(sameElCount > 2) {
-       nums.splice(i,1);
-       i--;
-    }
-  }
-};
-
+	for (let i = 0; i < nums.length; i++) {
+		if (current === nums[i]) {
+			sameElCount++
+		}
+		if (current !== nums[i]) {
+			current = nums[i]
+			sameElCount = 1
+		}
+		if (sameElCount > 2) {
+			nums.splice(i, 1)
+			i--
+		}
+	}
+}
 
 /**
-* Two pointer
-* Time O(n^2) | Space O(1)
-* @param {number[]} nums
-* @return {number}
-*/
-var removeDuplicates2 = function(nums) {
-    const isEdgeCase = (nums.length < 2)
-    if (isEdgeCase) return nums.length;
+ * Two pointer
+ * Time O(n^2) | Space O(1)
+ * @param {number[]} nums
+ * @return {number}
+ */
+var removeDuplicates2 = function (nums) {
+	const isEdgeCase = nums.length < 2
+	if (isEdgeCase) return nums.length
 
-    let [ left, right ] = [ 2, 2 ];
+	let [left, right] = [2, 2]
 
-    while (right < nums.length) {/* Time O(N) */
-        const isEqual = (nums[(left - 2)] === nums[right]);
-        if (!isEqual) {
-            nums[left] = nums[right];
-            left += 1;
-        }
+	while (right < nums.length) {
+		/* Time O(N) */
+		const isEqual = nums[left - 2] === nums[right]
+		if (!isEqual) {
+			nums[left] = nums[right]
+			left += 1
+		}
 
-        right += 1;
-    }
-    return left;
-};
-
+		right += 1
+	}
+	return left
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def removeDuplicates(self, nums: List[int]) -> int:
@@ -133,7 +134,7 @@ class Solution:
             while r + 1 < len(nums) and nums[r] == nums[r + 1]:
                 r += 1
                 count += 1
-            
+
             for i in range(min(2, count)):
                 nums[l] = nums[r]
                 l += 1
@@ -141,7 +142,9 @@ class Solution:
         return l
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given a sorted array nums, remove some duplicates in-place such that each unique element appears at most twice.
@@ -160,7 +163,7 @@ class Solution {
 public:
     int removeDuplicates(vector<int>& nums) {
         int k = 2; // define at most k times of duplicate numbers
-        
+
         int l = 1, count = 1;
 
         for(int r = 1; r < nums.size(); r++){
@@ -179,9 +182,9 @@ public:
     }
 };
 ```
+
 ### Java
+
 ```java
-404: Not Found
+Solution will be updated soon
 ```
-
-

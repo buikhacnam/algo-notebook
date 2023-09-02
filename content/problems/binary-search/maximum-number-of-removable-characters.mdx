@@ -11,73 +11,77 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 You are given two strings <code>s</code> and <code>p</code> where <code>p</code> is a subsequence of <code>s</code>. You are also given a distinct 0-indexed integer array <code>removable</code> containing a subset of indices of <code>s</code> (<code>s</code> is also 0-indexed).
 
 You want to choose an integer <code>k</code> (<code>0 &lt;= k &lt;= removable.length</code>) such that, after removing <code>k</code> characters from <code>s</code> using the first <code>k</code> indices in <code>removable</code>, <code>p</code> is still a subsequence of <code>s</code>. More formally, you will mark the character at <code>s[removable[i]]</code> for each <code>0 &lt;= i &lt; k</code>, then remove all marked characters and check if <code>p</code> is still a subsequence.
 
-Return *the maximum *<code>k</code>* you can choose such that *<code>p</code>* is still a subsequence of *<code>s</code>* after the removals*.
+Return _the maximum _<code>k</code>_ you can choose such that _<code>p</code>_ is still a subsequence of _<code>s</code>_ after the removals_.
 
 A subsequence of a string is a new string generated from the original string with some characters (can be none) deleted without changing the relative order of the remaining characters.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;abcacb&quot;, p = &quot;ab&quot;, removable = [3,1,0]
-Output: 2
-Explanation: After removing the characters at indices 3 and 1, &quot;a<s>b</s>c<s>a</s>cb&quot; becomes &quot;accb&quot;.
-&quot;ab&quot; is a subsequence of &quot;<u>a</u>cc<u>b</u>&quot;.
-If we remove the characters at indices 3, 1, and 0, &quot;<s>ab</s>c<s>a</s>cb&quot; becomes &quot;ccb&quot;, and &quot;ab&quot; is no longer a subsequence.
-Hence, the maximum k is 2.
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;abcacb&quot;, p = &quot;ab&quot;, removable = [3,1,0] Output:
+	2 Explanation: After removing the characters at indices 3 and 1, &quot;a
+	<s>b</s>c<s>a</s>cb&quot; becomes &quot;accb&quot;. &quot;ab&quot; is a
+	subsequence of &quot;<u>a</u>cc<u>b</u>&quot;. If we remove the characters at
+	indices 3, 1, and 0, &quot;<s>ab</s>c<s>a</s>cb&quot; becomes &quot;ccb&quot;,
+	and &quot;ab&quot; is no longer a subsequence. Hence, the maximum k is 2.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;abcbddddd&quot;, p = &quot;abcd&quot;, removable = [3,2,1,4,5,6]
-Output: 1
-Explanation: After removing the character at index 3, &quot;abc<s>b</s>ddddd&quot; becomes &quot;abcddddd&quot;.
-&quot;abcd&quot; is a subsequence of &quot;<u>abcd</u>dddd&quot;.
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;abcbddddd&quot;, p = &quot;abcd&quot;, removable =
+	[3,2,1,4,5,6] Output: 1 Explanation: After removing the character at index 3,
+	&quot;abc<s>b</s>ddddd&quot; becomes &quot;abcddddd&quot;. &quot;abcd&quot; is
+	a subsequence of &quot;<u>abcd</u>dddd&quot;.
 </pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;abcab&quot;, p = &quot;abc&quot;, removable = [0,1,2,3,4]
-Output: 0
-Explanation: If you remove the first index in the array removable, &quot;abc&quot; is no longer a subsequence.
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;abcab&quot;, p = &quot;abc&quot;, removable = [0,1,2,3,4]
+	Output: 0 Explanation: If you remove the first index in the array removable,
+	&quot;abc&quot; is no longer a subsequence.
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= p.length &lt;= s.length &lt;= 10<sup>5</sup></code>
-	- <code>0 &lt;= removable.length &lt; s.length</code>
-	- <code>0 &lt;= removable[i] &lt; s.length</code>
-	- <code>p</code> is a subsequence of <code>s</code>.
-	- <code>s</code> and <code>p</code> both consist of lowercase English letters.
-	- The elements in <code>removable</code> are distinct.
-
-
+    - <code>1 &lt;= p.length &lt;= s.length &lt;= 10<sup>5</sup></code>
+    - <code>0 &lt;= removable.length &lt; s.length</code>
+    - <code>0 &lt;= removable[i] &lt; s.length</code>
+    - <code>p</code> is a subsequence of <code>s</code>.
+    - <code>s</code> and <code>p</code> both consist of lowercase English letters.
+    - The elements in <code>removable</code> are distinct.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
-404: Not Found
+Solution will be updated soon
 ```
+
 ### C++
+
 ```cpp
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Java
+
 ```java
-404: Not Found
+Solution will be updated soon
 ```
-
-

@@ -11,53 +11,48 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 You are given an integer array <code>nums</code>. You want to maximize the number of points you get by performing the following operation any number of times:
 
+    - Pick any <code>nums[i]</code> and delete it to earn <code>nums[i]</code> points. Afterwards, you must delete <b>every</b> element equal to <code>nums[i] - 1</code> and every element equal to <code>nums[i] + 1</code>.
 
-	- Pick any <code>nums[i]</code> and delete it to earn <code>nums[i]</code> points. Afterwards, you must delete <b>every</b> element equal to <code>nums[i] - 1</code> and every element equal to <code>nums[i] + 1</code>.
+Return _the maximum number of points you can earn by applying the above operation some number of times_.
 
-
-Return *the maximum number of points you can earn by applying the above operation some number of times*.
-
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [3,4,2]
-Output: 6
-Explanation: You can perform the following operations:
-- Delete 4 to earn 4 points. Consequently, 3 is also deleted. nums = [2].
-- Delete 2 to earn 2 points. nums = [].
-You earn a total of 6 points.
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [3,4,2] Output: 6 Explanation: You can perform the following
+	operations: - Delete 4 to earn 4 points. Consequently, 3 is also deleted. nums
+	= [2]. - Delete 2 to earn 2 points. nums = []. You earn a total of 6 points.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [2,2,3,3,3,4]
-Output: 9
-Explanation: You can perform the following operations:
-- Delete a 3 to earn 3 points. All 2&#39;s and 4&#39;s are also deleted. nums = [3,3].
-- Delete a 3 again to earn 3 points. nums = [3].
-- Delete a 3 once more to earn 3 points. nums = [].
-You earn a total of 9 points.</pre>
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [2,2,3,3,3,4] Output: 9 Explanation: You can perform the
+	following operations: - Delete a 3 to earn 3 points. All 2&#39;s and 4&#39;s
+	are also deleted. nums = [3,3]. - Delete a 3 again to earn 3 points. nums =
+	[3]. - Delete a 3 once more to earn 3 points. nums = []. You earn a total of 9
+	points.
+</pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= nums.length &lt;= 2 * 10<sup>4</sup></code>
-	- <code>1 &lt;= nums[i] &lt;= 10<sup>4</sup></code>
-
-
+    - <code>1 &lt;= nums.length &lt;= 2 * 10<sup>4</sup></code>
+    - <code>1 &lt;= nums[i] &lt;= 10<sup>4</sup></code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
 # House Robber Style
 # Time Complexity O(n)
@@ -69,7 +64,7 @@ class Solution(object):
         :rtype: int
         """
 
-        upperLimit = max(nums) + 1 
+        upperLimit = max(nums) + 1
         store = [0] * upperLimit
 
         for num in nums:
@@ -83,7 +78,9 @@ class Solution(object):
 
         return dp[-1]
 ```
+
 ### C++
+
 ```cpp
 class Solution {
 public:
@@ -105,9 +102,9 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
-404: Not Found
+Solution will be updated soon
 ```
-
-

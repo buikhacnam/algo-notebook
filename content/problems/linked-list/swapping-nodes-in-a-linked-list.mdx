@@ -11,42 +11,47 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 You are given the <code>head</code> of a linked list, and an integer <code>k</code>.
 
-Return *the head of the linked list after swapping the values of the *<code>k<sup>th</sup></code> *node from the beginning and the *<code>k<sup>th</sup></code> *node from the end (the list is 1-indexed).*
+Return _the head of the linked list after swapping the values of the _<code>k<sup>th</sup></code> _node from the beginning and the _<code>k<sup>th</sup></code> _node from the end (the list is 1-indexed)._
 
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2020/09/21/linked1.jpg" width={400} height={112} />
-<br /><pre className="overflow-x-auto">
-Input: head = [1,2,3,4,5], k = 2
-Output: [1,4,3,2,5]
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/09/21/linked1.jpg"
+	width={400}
+	height={112}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: head = [1,2,3,4,5], k = 2 Output: [1,4,3,2,5]
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: head = [7,9,6,6,7,8,3,0,9,5], k = 5
-Output: [7,9,6,6,8,7,3,0,9,5]
+<br />
+<pre className="overflow-x-auto">
+	Input: head = [7,9,6,6,7,8,3,0,9,5], k = 5 Output: [7,9,6,6,8,7,3,0,9,5]
 </pre>
 
- 
 Constraints:
 
-
-	- The number of nodes in the list is <code>n</code>.
-	- <code>1 &lt;= k &lt;= n &lt;= 10<sup>5</sup></code>
-	- <code>0 &lt;= Node.val &lt;= 100</code>
-
-
+    - The number of nodes in the list is <code>n</code>.
+    - <code>1 &lt;= k &lt;= n &lt;= 10<sup>5</sup></code>
+    - <code>0 &lt;= Node.val &lt;= 100</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
 # Definition for singly-linked list.
 # class ListNode:
@@ -70,7 +75,9 @@ class Solution:
         return head
 
 ```
+
 ### C++
+
 ```cpp
 /*
   You are given the head of a linked list, and an integer k.
@@ -96,16 +103,16 @@ class Solution:
 class Solution {
 public:
     ListNode* swapNodes(ListNode* head, int k) {
-        if(head == NULL || head -> next == NULL) 
+        if(head == NULL || head -> next == NULL)
             return head;
 
         ListNode *ptr = head, *beg = head, *end = head;
         int a = 0;
         while(ptr != NULL) {
             a++;
-            if(a == k) 
+            if(a == k)
                 beg = ptr;
-            if(a >= k + 1) 
+            if(a >= k + 1)
                 end = end -> next;
             ptr = ptr -> next;
         }
@@ -117,9 +124,9 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
-404: Not Found
+Solution will be updated soon
 ```
-
-

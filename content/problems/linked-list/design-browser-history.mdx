@@ -11,18 +11,16 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 You have a browser of one tab where you start on the <code>homepage</code> and you can visit another <code>url</code>, get back in the history number of <code>steps</code> or move forward in the history number of <code>steps</code>.
 
 Implement the <code>BrowserHistory</code> class:
 
+    - <code>BrowserHistory(string homepage)</code> Initializes the object with the <code>homepage</code> of the browser.
+    - <code>void visit(string url)</code> Visits <code>url</code> from the current page. It clears up all the forward history.
+    - <code>string back(int steps)</code> Move <code>steps</code> back in history. If you can only return <code>x</code> steps in the history and <code>steps &gt; x</code>, you will return only <code>x</code> steps. Return the current <code>url</code> after moving back in history at most <code>steps</code>.
+    - <code>string forward(int steps)</code> Move <code>steps</code> forward in history. If you can only forward <code>x</code> steps in the history and <code>steps &gt; x</code>, you will forward only <code>x</code> steps. Return the current <code>url</code> after forwarding in history at most <code>steps</code>.
 
-	- <code>BrowserHistory(string homepage)</code> Initializes the object with the <code>homepage</code> of the browser.
-	- <code>void visit(string url)</code> Visits <code>url</code> from the current page. It clears up all the forward history.
-	- <code>string back(int steps)</code> Move <code>steps</code> back in history. If you can only return <code>x</code> steps in the history and <code>steps &gt; x</code>, you will return only <code>x</code> steps. Return the current <code>url</code> after moving back in history at most <code>steps</code>.
-	- <code>string forward(int steps)</code> Move <code>steps</code> forward in history. If you can only forward <code>x</code> steps in the history and <code>steps &gt; x</code>, you will forward only <code>x</code> steps. Return the current <code>url</code> after forwarding in history at most <code>steps</code>.
-
-
- 
 Example:
 
 <br /><pre className="overflow-x-auto">
@@ -46,59 +44,57 @@ browserHistory.back(2);                   // You are in &quot;linkedin.com&quot;
 browserHistory.back(7);                   // You are in &quot;google.com&quot;, you can move back only one step to &quot;leetcode.com&quot;. return &quot;leetcode.com&quot;
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= homepage.length &lt;= 20</code>
-	- <code>1 &lt;= url.length &lt;= 20</code>
-	- <code>1 &lt;= steps &lt;= 100</code>
-	- <code>homepage</code> and <code>url</code> consist of  &#39;.&#39; or lower case English letters.
-	- At most <code>5000</code> calls will be made to <code>visit</code>, <code>back</code>, and <code>forward</code>.
-
-
+    - <code>1 &lt;= homepage.length &lt;= 20</code>
+    - <code>1 &lt;= url.length &lt;= 20</code>
+    - <code>1 &lt;= steps &lt;= 100</code>
+    - <code>homepage</code> and <code>url</code> consist of  &#39;.&#39; or lower case English letters.
+    - At most <code>5000</code> calls will be made to <code>visit</code>, <code>back</code>, and <code>forward</code>.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 class BrowserHistory {
-    constructor(homepage) {
-        this.history = [homepage];
-        this.current = 0;
-    }
+	constructor(homepage) {
+		this.history = [homepage]
+		this.current = 0
+	}
 
-    /**
-     * @param {string} url
-     * @return {void}
-     */
+	/**
+	 * @param {string} url
+	 * @return {void}
+	 */
 
-    visit(url) {
-        this.history[++this.current] = url;
-        this.history.length = this.current + 1;
-    }
+	visit(url) {
+		this.history[++this.current] = url
+		this.history.length = this.current + 1
+	}
 
-    /**
-     * @param {number} steps
-     * @return {string}
-     */
-    back(steps) {
-        this.current = Math.max(this.current - steps, 0);
-        return this.history[this.current];
-    }
+	/**
+	 * @param {number} steps
+	 * @return {string}
+	 */
+	back(steps) {
+		this.current = Math.max(this.current - steps, 0)
+		return this.history[this.current]
+	}
 
-    /**
-     * @param {number} steps
-     * @return {string}
-     */
-    forward(steps) {
-        this.current = Math.min(this.current + steps, this.history.length - 1);
-        return this.history[this.current];
-    }
+	/**
+	 * @param {number} steps
+	 * @return {string}
+	 */
+	forward(steps) {
+		this.current = Math.min(this.current + steps, this.history.length - 1)
+		return this.history[this.current]
+	}
 }
-
 ```
+
 ### Python
+
 ```python
 # Linked List Implementation
 class ListNode:
@@ -132,7 +128,7 @@ class BrowserHistory:
 
 
 # Array Implementation
-class BrowserHistory:    
+class BrowserHistory:
     def __init__(self, homepage: str):
         self.i = 0
         self.len = 1
@@ -158,11 +154,15 @@ class BrowserHistory:
         return self.history[self.i]
 
 ```
+
 ### C++
+
 ```cpp
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Java
+
 ```java
 class ListNode{
     ListNode back;
@@ -183,13 +183,13 @@ class BrowserHistory {
         head = new ListNode(homepage);
         current = head;
     }
-    
+
     public void visit(String url) {
         current.forward = new ListNode(url);
         current.forward.back = current;
         current = current.forward;
     }
-    
+
     public String back(int steps) {
         while(steps>0 && current.back!=null){
             current = current.back;
@@ -197,7 +197,7 @@ class BrowserHistory {
         }
         return current.url;
     }
-    
+
     public String forward(int steps) {
         while(steps>0 && current.forward!=null){
             current = current.forward;
@@ -207,5 +207,3 @@ class BrowserHistory {
     }
 }
 ```
-
-

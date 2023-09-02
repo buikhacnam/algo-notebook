@@ -11,37 +11,44 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 Given an array of integers <code>nums</code> sorted in non-decreasing order, find the starting and ending position of a given <code>target</code> value.
 
 If <code>target</code> is not found in the array, return <code>[-1, -1]</code>.
 
 You must write an algorithm with <code>O(log n)</code> runtime complexity.
 
- 
 Example 1:
-<br /><pre className="overflow-x-auto">Input: nums = [5,7,7,8,8,10], target = 8
-Output: [3,4]
-</pre>Example 2:
-<br /><pre className="overflow-x-auto">Input: nums = [5,7,7,8,8,10], target = 6
-Output: [-1,-1]
-</pre>Example 3:
-<br /><pre className="overflow-x-auto">Input: nums = [], target = 0
-Output: [-1,-1]
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [5,7,7,8,8,10], target = 8 Output: [3,4]
 </pre>
- 
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [5,7,7,8,8,10], target = 6 Output: [-1,-1]
+</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [], target = 0 Output: [-1,-1]
+</pre>
 Constraints:
 
-
-	- <code>0 &lt;= nums.length &lt;= 10<sup>5</sup></code>
-	- <code>-10<sup>9</sup> &lt;= nums[i] &lt;= 10<sup>9</sup></code>
-	- <code>nums</code> is a non-decreasing array.
-	- <code>-10<sup>9</sup> &lt;= target &lt;= 10<sup>9</sup></code>
-
-
+    - <code>0 &lt;= nums.length &lt;= 10<sup>5</sup></code>
+    - <code>-10<sup>9</sup> &lt;= nums[i] &lt;= 10<sup>9</sup></code>
+    - <code>nums</code> is a non-decreasing array.
+    - <code>-10<sup>9</sup> &lt;= target &lt;= 10<sup>9</sup></code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * Binary Search
@@ -51,48 +58,47 @@ Constraints:
  * @param {number} target
  * @return {number[]}
  */
-var searchRange = function(nums, target) {
-    
-    const result = [];
+var searchRange = function (nums, target) {
+	const result = []
 
-    result.push(binarySearch(true, nums, target));
-    result.push(binarySearch(false, nums, target));
+	result.push(binarySearch(true, nums, target))
+	result.push(binarySearch(false, nums, target))
 
-    return result;
-};
-
-var binarySearch = (isLeftBias, nums, target) => {
-      let left = 0;
-      let right = nums.length - 1;
-      let index = -1;
-
-      while(left <= right) {
-        
-        const mid = (left + right) >> 1;
-
-        if(target > nums[mid]) {
-          left = mid+1;
-        }
-        if(target < nums[mid]) {
-          right = mid-1;
-        }
-        
-        const isTarget = target === nums[mid];
-        if(isTarget) {
-          if(isLeftBias) {
-            index = mid;
-            right = mid - 1;
-          } else {
-            index = mid;
-            left = mid + 1;
-          }
-        }
-      }
-      return index;
+	return result
 }
 
+var binarySearch = (isLeftBias, nums, target) => {
+	let left = 0
+	let right = nums.length - 1
+	let index = -1
+
+	while (left <= right) {
+		const mid = (left + right) >> 1
+
+		if (target > nums[mid]) {
+			left = mid + 1
+		}
+		if (target < nums[mid]) {
+			right = mid - 1
+		}
+
+		const isTarget = target === nums[mid]
+		if (isTarget) {
+			if (isLeftBias) {
+				index = mid
+				right = mid - 1
+			} else {
+				index = mid
+				left = mid + 1
+			}
+		}
+	}
+	return index
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def searchRange(self, nums: List[int], target: int) -> List[int]:
@@ -119,7 +125,9 @@ class Solution:
         return i
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given an array of integers nums sorted in non-decreasing order, find the starting and ending position of a given target value.
@@ -154,7 +162,9 @@ public:
     }
 };
 ```
+
 ### Java
+
 ```java
 class Solution {
     public int[] searchRange(int[] nums, int target) {
@@ -201,5 +211,3 @@ class Solution {
     }
 }
 ```
-
-

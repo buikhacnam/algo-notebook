@@ -11,48 +11,60 @@ difficulty: Hard
 </Callout>
 
 ## Description
-Given two strings <code>s</code> and <code>t</code>, return *the number of distinct* <span data-keyword="subsequence-string">*subsequences*</span>* of *<code>s</code>* which equals *<code>t</code>.
+
+Given two strings <code>s</code> and <code>t</code>, return _the number of distinct_ <span data-keyword="subsequence-string">_subsequences_</span>_ of _<code>s</code>_ which equals _<code>t</code>.
 
 The test cases are generated so that the answer fits on a 32-bit signed integer.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;rabbbit&quot;, t = &quot;rabbit&quot;
-Output: 3
-Explanation:
-As shown below, there are 3 ways you can generate &quot;rabbit&quot; from s.
-<code><u>rabb</u>b<u>it</u></code>
-<code><u>ra</u>b<u>bbit</u></code>
-<code><u>rab</u>b<u>bit</u></code>
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;rabbbit&quot;, t = &quot;rabbit&quot; Output: 3 Explanation:
+	As shown below, there are 3 ways you can generate &quot;rabbit&quot; from s.
+	<code>
+		<u>rabb</u>b<u>it</u>
+	</code>
+	<code>
+		<u>ra</u>b<u>bbit</u>
+	</code>
+	<code>
+		<u>rab</u>b<u>bit</u>
+	</code>
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;babgbag&quot;, t = &quot;bag&quot;
-Output: 5
-Explanation:
-As shown below, there are 5 ways you can generate &quot;bag&quot; from s.
-<code><u>ba</u>b<u>g</u>bag</code>
-<code><u>ba</u>bgba<u>g</u></code>
-<code><u>b</u>abgb<u>ag</u></code>
-<code>ba<u>b</u>gb<u>ag</u></code>
-<code>babg<u>bag</u></code></pre>
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;babgbag&quot;, t = &quot;bag&quot; Output: 5 Explanation: As
+	shown below, there are 5 ways you can generate &quot;bag&quot; from s.
+	<code>
+		<u>ba</u>b<u>g</u>bag
+	</code>
+	<code>
+		<u>ba</u>bgba<u>g</u>
+	</code>
+	<code>
+		<u>b</u>abgb<u>ag</u>
+	</code>
+	<code>
+		ba<u>b</u>gb<u>ag</u>
+	</code>
+	<code>
+		babg<u>bag</u>
+	</code>
+</pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= s.length, t.length &lt;= 1000</code>
-	- <code>s</code> and <code>t</code> consist of English letters.
-
-
+    - <code>1 &lt;= s.length, t.length &lt;= 1000</code>
+    - <code>s</code> and <code>t</code> consist of English letters.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * DP - Top Down
@@ -63,36 +75,48 @@ Constraints:
  * @param {string} t
  * @return {number}
  */
- var numDistinct = (s, t, i = 0, j = 0, memo = initMemo(s, t)) => {
-    const isBaseCase1 = (s.length < t.length);
-    if (isBaseCase1) return 0;
+var numDistinct = (s, t, i = 0, j = 0, memo = initMemo(s, t)) => {
+	const isBaseCase1 = s.length < t.length
+	if (isBaseCase1) return 0
 
-    const isBaseCase2 = (j === t.length);
-    if (isBaseCase2) return 1;
+	const isBaseCase2 = j === t.length
+	if (isBaseCase2) return 1
 
-    const isBaseCase3 = (i === s.length);
-    if (isBaseCase3) return 0;
+	const isBaseCase3 = i === s.length
+	if (isBaseCase3) return 0
 
-    const hasSeen = (memo[i][j] !== null);
-    if (hasSeen) return memo[i][j];
+	const hasSeen = memo[i][j] !== null
+	if (hasSeen) return memo[i][j]
 
-    return dfs(s, t, i, j, memo);/* Time O(N * M) | Space O((N * M) + HEIGHT) */
+	return dfs(s, t, i, j, memo) /* Time O(N * M) | Space O((N * M) + HEIGHT) */
 }
 
-var initMemo = (s, t) => new Array(s.length).fill()
-    .map(() => new Array(t.length).fill(null));
+var initMemo = (s, t) =>
+	new Array(s.length).fill().map(() => new Array(t.length).fill(null))
 
 var dfs = (s, t, i, j, memo) => {
-    const left = numDistinct(s, t, (i + 1), j, memo);/* Time O(N * M) | Space O(HEIGHT) */
+	const left = numDistinct(
+		s,
+		t,
+		i + 1,
+		j,
+		memo,
+	) /* Time O(N * M) | Space O(HEIGHT) */
 
-    const isEqual = (s[i] === t[j]);
+	const isEqual = s[i] === t[j]
 
-    const right = isEqual
-        ? numDistinct(s, t, (i + 1), (j + 1), memo)  /* Time O(N * M) | Space O(HEIGHT) */
-        : 0;
+	const right = isEqual
+		? numDistinct(
+				s,
+				t,
+				i + 1,
+				j + 1,
+				memo,
+		  ) /* Time O(N * M) | Space O(HEIGHT) */
+		: 0
 
-    memo[i][j] = (left + right);                     /*               | Space O(N * M) */
-    return memo[i][j];
+	memo[i][j] = left + right /*               | Space O(N * M) */
+	return memo[i][j]
 }
 
 /**
@@ -105,40 +129,42 @@ var dfs = (s, t, i, j, memo) => {
  * @return {number}
  */
 var numDistinct = (s, t) => {
-    const tabu = initTabu(s, t);/* Time O(N * M) | Space O(N * M) */
+	const tabu = initTabu(s, t) /* Time O(N * M) | Space O(N * M) */
 
-    search(s, t, tabu);         /* Time O(N * M) | Space O(N * M) */
+	search(s, t, tabu) /* Time O(N * M) | Space O(N * M) */
 
-    return tabu[0][0];
+	return tabu[0][0]
 }
 
 var initTabu = (s, t) => {
-    const tabu = new Array(s.length + 1).fill()/* Time O(N) | Space O(N) */
-        .map(() => new Array(t.length + 1));       /* Time O(M) | Space O(M) */
+	const tabu = new Array(s.length + 1)
+		.fill() /* Time O(N) | Space O(N) */
+		.map(() => new Array(t.length + 1)) /* Time O(M) | Space O(M) */
 
-    tabu[s.length].fill(0);                    /*           | Space O(N * M) */
+	tabu[s.length].fill(0) /*           | Space O(N * M) */
 
-    for (let r = 0; r <= s.length; ++r) {      /* Time O(N) */
-        tabu[r][t.length] = 1;                     /*       | Space O(N * M) */
-    }
+	for (let r = 0; r <= s.length; ++r) {
+		/* Time O(N) */
+		tabu[r][t.length] = 1 /*       | Space O(N * M) */
+	}
 
-    return tabu;
+	return tabu
 }
 
 var search = (s, t, tabu) => {
-    for (let r = (s.length - 1); (0 <= r); r--) {/* Time O(N) */
-        for (let c = (t.length - 1); (0 <= c); c--) {/* Time O(M) */
-            const left = tabu[r + 1][c];
+	for (let r = s.length - 1; 0 <= r; r--) {
+		/* Time O(N) */
+		for (let c = t.length - 1; 0 <= c; c--) {
+			/* Time O(M) */
+			const left = tabu[r + 1][c]
 
-            const isEqual = (s[r] === t[c]);
+			const isEqual = s[r] === t[c]
 
-            const right = isEqual
-                ? tabu[r + 1][c + 1] 
-                : 0
-            
-            tabu[r][c] = left + right;                     /* Space O(N * M) */
-        }
-    }
+			const right = isEqual ? tabu[r + 1][c + 1] : 0
+
+			tabu[r][c] = left + right /* Space O(N * M) */
+		}
+	}
 }
 
 /**
@@ -151,32 +177,35 @@ var search = (s, t, tabu) => {
  * @return {number}
  */
 var numDistinct = (s, t) => {
-    const tabu = initTabu(t);/* Time O(M) | Space O(M) */
+	const tabu = initTabu(t) /* Time O(M) | Space O(M) */
 
-    search(s, t, tabu);      /* Time O(N * M) | Space O(M) */
+	search(s, t, tabu) /* Time O(N * M) | Space O(M) */
 
-    return tabu[0];
+	return tabu[0]
 }
 
-var initTabu = (t) => new Array(t.length).fill(0);/* Time O(M) | Space O(M) */
+var initTabu = (t) => new Array(t.length).fill(0) /* Time O(M) | Space O(M) */
 
 var search = (s, t, tabu) => {
-    for (let row = (s.length - 1); (0 <= row); row--) {/* Time O(N) */
-        let prev = 1;
+	for (let row = s.length - 1; 0 <= row; row--) {
+		/* Time O(N) */
+		let prev = 1
 
-        for (let col = (t.length - 1); (0 <= col); col--) {/* Time O(M) */
-            const curr = tabu[col];
+		for (let col = t.length - 1; 0 <= col; col--) {
+			/* Time O(M) */
+			const curr = tabu[col]
 
-            const isEqual = (s[row] === t[col]);
-            if (isEqual) tabu[col] += prev;                     /* Space O(M) */
+			const isEqual = s[row] === t[col]
+			if (isEqual) tabu[col] += prev /* Space O(M) */
 
-            prev = curr;
-        }
-    }
+			prev = curr
+		}
+	}
 }
-
 ```
+
 ### Python
+
 ```python
 class Solution:
     def numDistinct(self, s: str, t: str) -> int:
@@ -196,7 +225,9 @@ class Solution:
         return cache[(0, 0)]
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given 2 strings s & t:
@@ -219,7 +250,7 @@ public:
 private:
     // {(i, j) -> # of distinct subsequences}
     map<pair<int, int>, int> dp;
-    
+
     int dfs(string& s, string& t, int i, int j) {
         if (j == t.size()) {
             return 1;
@@ -230,7 +261,7 @@ private:
         if (dp.find({i, j}) != dp.end()) {
             return dp[{i, j}];
         }
-        
+
         if (s[i] == t[j]) {
             dp[{i, j}] = dfs(s, t, i + 1, j + 1) + dfs(s, t, i + 1, j);
         } else {
@@ -241,7 +272,9 @@ private:
 };
 
 ```
+
 ### Java
+
 ```java
 // Dynammic Programming - Memoization
 // Time Complexity O(s * t) | Space Complexity O(s * t)
@@ -285,5 +318,3 @@ class Solution {
 }
 
 ```
-
-

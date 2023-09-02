@@ -11,62 +11,66 @@ difficulty: Hard
 </Callout>
 
 ## Description
+
 Your music player contains <code>n</code> different songs. You want to listen to <code>goal</code> songs (not necessarily different) during your trip. To avoid boredom, you will create a playlist so that:
 
+    - Every song is played at least once.
+    - A song can only be played again only if <code>k</code> other songs have been played.
 
-	- Every song is played at least once.
-	- A song can only be played again only if <code>k</code> other songs have been played.
+Given <code>n</code>, <code>goal</code>, and <code>k</code>, return _the number of possible playlists that you can create_. Since the answer can be very large, return it modulo <code>10<sup>9</sup> + 7</code>.
 
-
-Given <code>n</code>, <code>goal</code>, and <code>k</code>, return *the number of possible playlists that you can create*. Since the answer can be very large, return it modulo <code>10<sup>9</sup> + 7</code>.
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: n = 3, goal = 3, k = 1
-Output: 6
-Explanation: There are 6 possible playlists: [1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], and [3, 2, 1].
+<br />
+<pre className="overflow-x-auto">
+	Input: n = 3, goal = 3, k = 1 Output: 6 Explanation: There are 6 possible
+	playlists: [1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], and [3, 2,
+	1].
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: n = 2, goal = 3, k = 0
-Output: 6
-Explanation: There are 6 possible playlists: [1, 1, 2], [1, 2, 1], [2, 1, 1], [2, 2, 1], [2, 1, 2], and [1, 2, 2].
+<br />
+<pre className="overflow-x-auto">
+	Input: n = 2, goal = 3, k = 0 Output: 6 Explanation: There are 6 possible
+	playlists: [1, 1, 2], [1, 2, 1], [2, 1, 1], [2, 2, 1], [2, 1, 2], and [1, 2,
+	2].
 </pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: n = 2, goal = 3, k = 1
-Output: 2
-Explanation: There are 2 possible playlists: [1, 2, 1] and [2, 1, 2].
+<br />
+<pre className="overflow-x-auto">
+	Input: n = 2, goal = 3, k = 1 Output: 2 Explanation: There are 2 possible
+	playlists: [1, 2, 1] and [2, 1, 2].
 </pre>
 
- 
 Constraints:
 
-
-	- <code>0 &lt;= k &lt; n &lt;= goal &lt;= 100</code>
-
-
+    - <code>0 &lt;= k &lt; n &lt;= goal &lt;= 100</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
-404: Not Found
+Solution will be updated soon
 ```
+
 ### C++
+
 ```cpp
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Java
+
 ```java
 class Solution {
     public int numMusicPlaylists(int n, int goal, int k) {
@@ -128,5 +132,3 @@ class Solution {
 }
 
 ```
-
-

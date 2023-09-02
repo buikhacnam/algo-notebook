@@ -11,32 +11,37 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given an array <code>nums</code> of distinct integers, return *all the possible permutations*. You can return the answer in any order.
 
- 
+Given an array <code>nums</code> of distinct integers, return _all the possible permutations_. You can return the answer in any order.
+
 Example 1:
-<br /><pre className="overflow-x-auto">Input: nums = [1,2,3]
-Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
-</pre>Example 2:
-<br /><pre className="overflow-x-auto">Input: nums = [0,1]
-Output: [[0,1],[1,0]]
-</pre>Example 3:
-<br /><pre className="overflow-x-auto">Input: nums = [1]
-Output: [[1]]
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [1,2,3] Output:
+	[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
 </pre>
- 
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">Input: nums = [0,1] Output: [[0,1],[1,0]]</pre>
+
+Example
+3:
+
+<br />
+<pre className="overflow-x-auto">Input: nums = [1] Output: [[1]]</pre>
 Constraints:
 
-
-	- <code>1 &lt;= nums.length &lt;= 6</code>
-	- <code>-10 &lt;= nums[i] &lt;= 10</code>
-	- All the integers of <code>nums</code> are unique.
-
-
+    - <code>1 &lt;= nums.length &lt;= 6</code>
+    - <code>-10 &lt;= nums[i] &lt;= 10</code>
+    - All the integers of <code>nums</code> are unique.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/permutations/solution/
@@ -44,27 +49,27 @@ Constraints:
  * @param {number[]} nums
  * @return {number[][]}
  */
- var permute = function(nums) {
-    return dfs(nums)
+var permute = function (nums) {
+	return dfs(nums)
 }
 
-var dfs = function(nums, permutation = [], permutations = []) {
-    const isBaseCase = nums.length === permutation.length
-    if (isBaseCase) return permutations.push(permutation.slice())
+var dfs = function (nums, permutation = [], permutations = []) {
+	const isBaseCase = nums.length === permutation.length
+	if (isBaseCase) return permutations.push(permutation.slice())
 
-    for (let i = 0; i < nums.length; i++) {
-        if (permutation.includes(nums[i])) continue;
+	for (let i = 0; i < nums.length; i++) {
+		if (permutation.includes(nums[i])) continue
 
-        backTrack(nums, i, permutation, permutations);
-     }
+		backTrack(nums, i, permutation, permutations)
+	}
 
-    return permutations;
+	return permutations
 }
 
 const backTrack = (nums, i, permutation, permutations) => {
-    permutation.push(nums[i])
-        dfs(nums, permutation, permutations)
-    permutation.pop()
+	permutation.push(nums[i])
+	dfs(nums, permutation, permutations)
+	permutation.pop()
 }
 
 /**
@@ -73,40 +78,44 @@ const backTrack = (nums, i, permutation, permutations) => {
  * @param {number[]} nums
  * @return {number[][]}
  */
-var permute = function(nums) {
-    return bfs(nums)
+var permute = function (nums) {
+	return bfs(nums)
 }
 
 const bfs = (nums, levels = [[]], permutations = []) => {
-    for (const num of nums) {
-        for (let i = (levels.length - 1); 0 <= i; i--) {
-            const previousLevel = levels.shift()
+	for (const num of nums) {
+		for (let i = levels.length - 1; 0 <= i; i--) {
+			const previousLevel = levels.shift()
 
-            for (let index = 0; index < (previousLevel.length + 1); index++) {
-                const level = reArrangeSet(previousLevel, num, index)
+			for (let index = 0; index < previousLevel.length + 1; index++) {
+				const level = reArrangeSet(previousLevel, num, index)
 
-                const isBaseCase = level.length === nums.length;
-                if (isBaseCase) {
-                    permutations.push(level);
-                    continue
-                }
+				const isBaseCase = level.length === nums.length
+				if (isBaseCase) {
+					permutations.push(level)
+					continue
+				}
 
-                levels.push(level)
-            }
-        }
-    }
+				levels.push(level)
+			}
+		}
+	}
 
-    return permutations
+	return permutations
 }
 
 const reArrangeSet = (previousLevel, num, index) => {
-    const [ before, after ] = [ previousLevel.slice(0, index), previousLevel.slice(index) ]
+	const [before, after] = [
+		previousLevel.slice(0, index),
+		previousLevel.slice(index),
+	]
 
-    return [...before, num, ...after]
+	return [...before, num, ...after]
 }
-
 ```
+
 ### Python
+
 ```python
 class Solution:
     def permute(self, nums: List[int]) -> List[List[int]]:
@@ -127,7 +136,9 @@ class Solution:
         return res
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given array of distinct integers, return all the possible permutations
@@ -161,7 +172,9 @@ private:
 };
 
 ```
+
 ### Java
+
 ```java
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -197,5 +210,3 @@ class Solution {
 }
 
 ```
-
-

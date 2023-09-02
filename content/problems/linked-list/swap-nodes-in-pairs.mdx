@@ -11,46 +11,45 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 Given a linked list, swap every two adjacent nodes and return its head. You must solve the problem without modifying the values in the list&#39;s nodes (i.e., only nodes themselves may be changed.)
 
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2020/10/03/swap_ex1.jpg" width={422} height={222} />
-<br /><pre className="overflow-x-auto">
-Input: head = [1,2,3,4]
-Output: [2,1,4,3]
-</pre>
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/10/03/swap_ex1.jpg"
+	width={422}
+	height={222}
+/>
+<br />
+<pre className="overflow-x-auto">Input: head = [1,2,3,4] Output: [2,1,4,3]</pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: head = []
-Output: []
-</pre>
+<br />
+<pre className="overflow-x-auto">Input: head = [] Output: []</pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: head = [1]
-Output: [1]
-</pre>
+<br />
+<pre className="overflow-x-auto">Input: head = [1] Output: [1]</pre>
 
- 
 Constraints:
 
-
-	- The number of nodes in the list is in the range <code>[0, 100]</code>.
-	- <code>0 &lt;= Node.val &lt;= 100</code>
-
-
+    - The number of nodes in the list is in the range <code>[0, 100]</code>.
+    - <code>0 &lt;= Node.val &lt;= 100</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
 # Definition for singly-linked list.
 # class ListNode:
@@ -79,10 +78,12 @@ class Solution:
         return dummy.next
 
 ```
+
 ### C++
+
 ```cpp
 /*
-  Given a linked list, swap every two adjacent nodes and return its head. 
+  Given a linked list, swap every two adjacent nodes and return its head.
   You must solve the problem without modifying the values in the list's nodes (i.e., only nodes themselves may be changed.)
 
   Ex. Input: head = [1,2,3,4]
@@ -104,8 +105,8 @@ class Solution:
  */
 class Solution {
 public:
-    ListNode* swapPairs(ListNode* head) {  
-        if (!head || !head->next) 
+    ListNode* swapPairs(ListNode* head) {
+        if (!head || !head->next)
             return head;
 
         ListNode *new_head = head->next;
@@ -129,7 +130,9 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
 //Iterative version
 class Solution {
@@ -164,5 +167,3 @@ class Solution {
 }
 
 ```
-
-

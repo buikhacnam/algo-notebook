@@ -11,46 +11,47 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given the <code>root</code> of a binary tree, return *the zigzag level order traversal of its nodes&#39; values*. (i.e., from left to right, then right to left for the next level and alternate between).
 
- 
+Given the <code>root</code> of a binary tree, return _the zigzag level order traversal of its nodes&#39; values_. (i.e., from left to right, then right to left for the next level and alternate between).
+
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/02/19/tree1.jpg" width={277} height={302} />
-<br /><pre className="overflow-x-auto">
-Input: root = [3,9,20,null,null,15,7]
-Output: [[3],[20,9],[15,7]]
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/02/19/tree1.jpg"
+	width={277}
+	height={302}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: root = [3,9,20,null,null,15,7] Output: [[3],[20,9],[15,7]]
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: root = [1]
-Output: [[1]]
-</pre>
+<br />
+<pre className="overflow-x-auto">Input: root = [1] Output: [[1]]</pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: root = []
-Output: []
-</pre>
+<br />
+<pre className="overflow-x-auto">Input: root = [] Output: []</pre>
 
- 
 Constraints:
 
-
-	- The number of nodes in the tree is in the range <code>[0, 2000]</code>.
-	- <code>-100 &lt;= Node.val &lt;= 100</code>
-
-
+    - The number of nodes in the tree is in the range <code>[0, 2000]</code>.
+    - <code>-100 &lt;= Node.val &lt;= 100</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
 # Definition for a binary tree node.
 # class TreeNode:
@@ -78,10 +79,12 @@ class Solution:
         return result
 
 ```
+
 ### C++
+
 ```cpp
 /*
-  Given the root of a binary tree, return the zigzag level order traversal of its nodes' values. 
+  Given the root of a binary tree, return the zigzag level order traversal of its nodes' values.
   (i.e., from left to right, then right to left for the next level and alternate between).
 
   Ex. Input: root = [3,9,20,null,null,15,7]
@@ -108,26 +111,26 @@ public:
         vector <vector <int>> v;
         if(root == NULL)
             return v;
-      
+
         queue <TreeNode *> q;
         q.push(root);
         bool changeDirection = true;
-      
+
         while(!q.empty()) {
             vector <int> v1;
             int siz = q.size();
-          
+
             for(int i = 0 ; i < siz ; i++) {
                 if(changeDirection)
                     v1.push_back(q.front() -> val);
-                else 
+                else
                     v1.insert(v1.begin(), q.front() -> val);
-              
+
                 if(q.front() -> left != NULL)
                     q.push(q.front() -> left);
                 if(q.front() -> right != NULL)
                     q.push(q.front() -> right);
-              
+
                 q.pop();
             }
             changeDirection = !changeDirection;
@@ -138,9 +141,9 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
-404: Not Found
+Solution will be updated soon
 ```
-
-

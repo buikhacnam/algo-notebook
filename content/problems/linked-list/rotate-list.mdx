@@ -11,40 +11,51 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 Given the <code>head</code> of a linked list, rotate the list to the right by <code>k</code> places.
 
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2020/11/13/rotate1.jpg" width={450} height={191} />
-<br /><pre className="overflow-x-auto">
-Input: head = [1,2,3,4,5], k = 2
-Output: [4,5,1,2,3]
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/11/13/rotate1.jpg"
+	width={450}
+	height={191}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: head = [1,2,3,4,5], k = 2 Output: [4,5,1,2,3]
 </pre>
 
 Example 2:
-<Image alt="" src="https://assets.leetcode.com/uploads/2020/11/13/roate2.jpg" width={305} height={350} />
-<br /><pre className="overflow-x-auto">
-Input: head = [0,1,2], k = 4
-Output: [2,0,1]
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/11/13/roate2.jpg"
+	width={305}
+	height={350}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: head = [0,1,2], k = 4 Output: [2,0,1]
 </pre>
 
- 
 Constraints:
 
-
-	- The number of nodes in the list is in the range <code>[0, 500]</code>.
-	- <code>-100 &lt;= Node.val &lt;= 100</code>
-	- <code>0 &lt;= k &lt;= 2 * 10<sup>9</sup></code>
-
-
+    - The number of nodes in the list is in the range <code>[0, 500]</code>.
+    - <code>-100 &lt;= Node.val &lt;= 100</code>
+    - <code>0 &lt;= k &lt;= 2 * 10<sup>9</sup></code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
 class Solution:
     def rotateRight(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
@@ -74,13 +85,15 @@ class Solution:
         return new_head
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given the head of a linked list, rotate the list to the right by k places.
     Example: list = [1,2,3,4,5] and k = 2
     Output: [4,5,1,2,3]
-    
+
     Time complexity: O(n)
     Space complexity: O(1)
 */
@@ -122,7 +135,9 @@ public:
     }
 };
 ```
+
 ### Java
+
 ```java
 //TC: O(n) + O(n- (n % k)) ~ O(n)
 //SC: O(1)
@@ -156,5 +171,3 @@ class Solution {
     }
 }
 ```
-
-

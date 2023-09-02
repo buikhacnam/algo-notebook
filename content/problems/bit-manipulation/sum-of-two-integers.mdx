@@ -11,27 +11,26 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given two integers <code>a</code> and <code>b</code>, return *the sum of the two integers without using the operators* <code>+</code> *and* <code>-</code>.
 
- 
+Given two integers <code>a</code> and <code>b</code>, return _the sum of the two integers without using the operators_ <code>+</code> _and_ <code>-</code>.
+
 Example 1:
-<br /><pre className="overflow-x-auto">Input: a = 1, b = 2
-Output: 3
-</pre>Example 2:
-<br /><pre className="overflow-x-auto">Input: a = 2, b = 3
-Output: 5
-</pre>
- 
+
+<br />
+<pre className="overflow-x-auto">Input: a = 1, b = 2 Output: 3</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">Input: a = 2, b = 3 Output: 5</pre>
 Constraints:
 
-
-	- <code>-1000 &lt;= a, b &lt;= 1000</code>
-
-
+    - <code>-1000 &lt;= a, b &lt;= 1000</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/sum-of-two-integers/
@@ -40,18 +39,20 @@ Constraints:
  * @param {number} b
  * @return {number}
  */
- var getSum = function(a, b) {
-    while (b !== 0) {
-        const [ xor, carry ] = [ (a ^ b), ((a & b) << 1) ];
+var getSum = function (a, b) {
+	while (b !== 0) {
+		const [xor, carry] = [a ^ b, (a & b) << 1]
 
-        a = xor;
-        b = carry;
-    }
-    
-    return a
-};
+		a = xor
+		b = carry
+	}
+
+	return a
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def getSum(self, a: int, b: int) -> int:
@@ -71,7 +72,9 @@ class Solution:
         return add(a, b)  # a*b >= 0 or (-a) > b > 0
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given 2 ints, return sum w/o using +/-
@@ -96,7 +99,9 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -111,5 +116,3 @@ class Solution {
 }
 
 ```
-
-

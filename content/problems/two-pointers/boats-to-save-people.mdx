@@ -11,47 +11,43 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 You are given an array <code>people</code> where <code>people[i]</code> is the weight of the <code>i<sup>th</sup></code> person, and an infinite number of boats where each boat can carry a maximum weight of <code>limit</code>. Each boat carries at most two people at the same time, provided the sum of the weight of those people is at most <code>limit</code>.
 
-Return *the minimum number of boats to carry every given person*.
+Return _the minimum number of boats to carry every given person_.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: people = [1,2], limit = 3
-Output: 1
-Explanation: 1 boat (1, 2)
+<br />
+<pre className="overflow-x-auto">
+	Input: people = [1,2], limit = 3 Output: 1 Explanation: 1 boat (1, 2)
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: people = [3,2,2,1], limit = 3
-Output: 3
-Explanation: 3 boats (1, 2), (2) and (3)
+<br />
+<pre className="overflow-x-auto">
+	Input: people = [3,2,2,1], limit = 3 Output: 3 Explanation: 3 boats (1, 2),
+	(2) and (3)
 </pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: people = [3,5,3,4], limit = 5
-Output: 4
-Explanation: 4 boats (3), (3), (4), (5)
+<br />
+<pre className="overflow-x-auto">
+	Input: people = [3,5,3,4], limit = 5 Output: 4 Explanation: 4 boats (3), (3),
+	(4), (5)
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= people.length &lt;= 5 * 10<sup>4</sup></code>
-	- <code>1 &lt;= people[i] &lt;= limit &lt;= 3 * 10<sup>4</sup></code>
-
-
+    - <code>1 &lt;= people.length &lt;= 5 * 10<sup>4</sup></code>
+    - <code>1 &lt;= people[i] &lt;= limit &lt;= 3 * 10<sup>4</sup></code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * @param {number[]} people
@@ -59,26 +55,27 @@ Constraints:
  * @return {number}
  */
 var numRescueBoats = function (people, limit) {
-    const sortedPeople = people.sort((a, b) => a - b);
-    let left = 0;
-    let right = people.length - 1;
-    let boats = 0;
+	const sortedPeople = people.sort((a, b) => a - b)
+	let left = 0
+	let right = people.length - 1
+	let boats = 0
 
-    while (left <= right) {
-        const weight = sortedPeople[left] + sortedPeople[right];
-        if (left === right || weight <= limit) {
-            left++;
-            right--;
-        } else {
-            right--;
-        }
-        boats++;
-    }
-    return boats;
-};
-
+	while (left <= right) {
+		const weight = sortedPeople[left] + sortedPeople[right]
+		if (left === right || weight <= limit) {
+			left++
+			right--
+		} else {
+			right--
+		}
+		boats++
+	}
+	return boats
+}
 ```
+
 ### Python
+
 ```python
 class Solution(object):
     def numRescueBoats(self, people: list[int], limit: int) -> int:
@@ -93,15 +90,17 @@ class Solution(object):
         return res
 
 ```
+
 ### C++
+
 ```cpp
 /*
-    Given an array of people's weight, people[i] is the weight of the ith person, 
-    and there is an infinite number of boats where each boat can carry a maximum weight of limit. 
+    Given an array of people's weight, people[i] is the weight of the ith person,
+    and there is an infinite number of boats where each boat can carry a maximum weight of limit.
     Each boat carries at most two people at the same time, provided the sum of the weight of those people is at most limit.
     Return minimum number of boats to carry every given person.
 
-    sort, while there is people to carry 
+    sort, while there is people to carry
     carry the heaviest and lightest person provided their weight doesn't exceed limit.
     otherwise, carry the heaviest person only
 
@@ -113,7 +112,7 @@ class Solution {
 public:
     int numRescueBoats(vector<int>& people, int limit) {
         sort(people.begin(), people.end());
-        
+
         int boatRequired = 0;
         int lightestPerson = 0;
         int heaviestPerson = people.size()-1;
@@ -135,9 +134,9 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
-404: Not Found
+Solution will be updated soon
 ```
-
-

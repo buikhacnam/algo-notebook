@@ -11,6 +11,7 @@ difficulty: Hard
 </Callout>
 
 ## Description
+
 There is a tree (i.e. a connected, undirected graph with no cycles) consisting of <code>n</code> nodes numbered from <code>0</code> to <code>n - 1</code> and exactly <code>n - 1</code> edges.
 
 You are given a 0-indexed integer array <code>vals</code> of length <code>n</code> where <code>vals[i]</code> denotes the value of the <code>i<sup>th</sup></code> node. You are also given a 2D integer array <code>edges</code> where <code>edges[i] = [a<sub>i</sub>, b<sub>i</sub>]</code> denotes that there exists an undirected edge connecting nodes <code>a<sub>i</sub></code> and <code>b<sub>i</sub></code>.
@@ -18,102 +19,118 @@ You are given a 0-indexed integer array <code>vals</code> of length <code>n</cod
 A good path is a simple path that satisfies the following conditions:
 
 <ol>
-	- The starting node and the ending node have the same value.
-	- All nodes between the starting node and the ending node have values less than or equal to the starting node (i.e. the starting node&#39;s value should be the maximum value along the path).
+	- The starting node and the ending node have the same value. - All nodes
+	between the starting node and the ending node have values less than or equal
+	to the starting node (i.e. the starting node&#39;s value should be the maximum
+	value along the path).
 </ol>
 
-Return *the number of distinct good paths*.
+Return _the number of distinct good paths_.
 
 Note that a path and its reverse are counted as the same path. For example, <code>0 -&gt; 1</code> is considered to be the same as <code>1 -&gt; 0</code>. A single node is also considered as a valid path.
 
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2022/08/04/f9caaac15b383af9115c5586779dec5.png" width={400} height={333} />
-<br /><pre className="overflow-x-auto">
-Input: vals = [1,3,2,1,3], edges = [[0,1],[0,2],[2,3],[2,4]]
-Output: 6
-Explanation: There are 5 good paths consisting of a single node.
-There is 1 additional good path: 1 -&gt; 0 -&gt; 2 -&gt; 4.
-(The reverse path 4 -&gt; 2 -&gt; 0 -&gt; 1 is treated as the same as 1 -&gt; 0 -&gt; 2 -&gt; 4.)
-Note that 0 -&gt; 2 -&gt; 3 is not a good path because vals[2] &gt; vals[0].
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2022/08/04/f9caaac15b383af9115c5586779dec5.png"
+	width={400}
+	height={333}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: vals = [1,3,2,1,3], edges = [[0,1],[0,2],[2,3],[2,4]] Output: 6
+	Explanation: There are 5 good paths consisting of a single node. There is 1
+	additional good path: 1 -&gt; 0 -&gt; 2 -&gt; 4. (The reverse path 4 -&gt; 2
+	-&gt; 0 -&gt; 1 is treated as the same as 1 -&gt; 0 -&gt; 2 -&gt; 4.) Note
+	that 0 -&gt; 2 -&gt; 3 is not a good path because vals[2] &gt; vals[0].
 </pre>
 
 Example 2:
-<Image alt="" src="https://assets.leetcode.com/uploads/2022/08/04/149d3065ec165a71a1b9aec890776ff.png" width={273} height={350} />
-<br /><pre className="overflow-x-auto">
-Input: vals = [1,1,2,2,3], edges = [[0,1],[1,2],[2,3],[2,4]]
-Output: 7
-Explanation: There are 5 good paths consisting of a single node.
-There are 2 additional good paths: 0 -&gt; 1 and 2 -&gt; 3.
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2022/08/04/149d3065ec165a71a1b9aec890776ff.png"
+	width={273}
+	height={350}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: vals = [1,1,2,2,3], edges = [[0,1],[1,2],[2,3],[2,4]] Output: 7
+	Explanation: There are 5 good paths consisting of a single node. There are 2
+	additional good paths: 0 -&gt; 1 and 2 -&gt; 3.
 </pre>
 
 Example 3:
-<Image alt="" src="https://assets.leetcode.com/uploads/2022/08/04/31705e22af3d9c0a557459bc7d1b62d.png" width={100} height={88} />
-<br /><pre className="overflow-x-auto">
-Input: vals = [1], edges = []
-Output: 1
-Explanation: The tree consists of only one node, so there is one good path.
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2022/08/04/31705e22af3d9c0a557459bc7d1b62d.png"
+	width={100}
+	height={88}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: vals = [1], edges = [] Output: 1 Explanation: The tree consists of only
+	one node, so there is one good path.
 </pre>
 
- 
 Constraints:
 
-
-	- <code>n == vals.length</code>
-	- <code>1 &lt;= n &lt;= 3 * 10<sup>4</sup></code>
-	- <code>0 &lt;= vals[i] &lt;= 10<sup>5</sup></code>
-	- <code>edges.length == n - 1</code>
-	- <code>edges[i].length == 2</code>
-	- <code>0 &lt;= a<sub>i</sub>, b<sub>i</sub> &lt; n</code>
-	- <code>a<sub>i</sub> != b<sub>i</sub></code>
-	- <code>edges</code> represents a valid tree.
-
-
+    - <code>n == vals.length</code>
+    - <code>1 &lt;= n &lt;= 3 * 10<sup>4</sup></code>
+    - <code>0 &lt;= vals[i] &lt;= 10<sup>5</sup></code>
+    - <code>edges.length == n - 1</code>
+    - <code>edges[i].length == 2</code>
+    - <code>0 &lt;= a<sub>i</sub>, b<sub>i</sub> &lt; n</code>
+    - <code>a<sub>i</sub> != b<sub>i</sub></code>
+    - <code>edges</code> represents a valid tree.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 class UnionFind {
-    constructor(n) {
-        this.parent = new Array(n).fill(0).map((_, i) => i);
-        this.rank = new Array(n).fill(0);
-    }
+	constructor(n) {
+		this.parent = new Array(n).fill(0).map((_, i) => i)
+		this.rank = new Array(n).fill(0)
+	}
 
-    /**
-     *
-     * @param {number} i
-     * @returns {number}
-     */
-    find(i) {
-        while (i !== this.parent[i]) {
-            this.parent[i] = this.parent[this.parent[i]];
-            i = this.parent[i];
-        }
-        return i;
-    }
+	/**
+	 *
+	 * @param {number} i
+	 * @returns {number}
+	 */
+	find(i) {
+		while (i !== this.parent[i]) {
+			this.parent[i] = this.parent[this.parent[i]]
+			i = this.parent[i]
+		}
+		return i
+	}
 
-    /**
-     *
-     * @param {number} a
-     * @param {number} b
-     * @returns {boolean}
-     */
-    union(a, b) {
-        let [aRoot, bRoot] = [this.find(a), this.find(b)];
+	/**
+	 *
+	 * @param {number} a
+	 * @param {number} b
+	 * @returns {boolean}
+	 */
+	union(a, b) {
+		let [aRoot, bRoot] = [this.find(a), this.find(b)]
 
-        if (aRoot == bRoot) return false;
+		if (aRoot == bRoot) return false
 
-        if (this.rank[aRoot] < this.rank[bRoot]) {
-            this.parent[aRoot] = bRoot;
-            this.rank[bRoot] += this.rank[aRoot];
-        } else {
-            this.parent[bRoot] = aRoot;
-            this.rank[aRoot] += this.rank[bRoot];
-        }
+		if (this.rank[aRoot] < this.rank[bRoot]) {
+			this.parent[aRoot] = bRoot
+			this.rank[bRoot] += this.rank[aRoot]
+		} else {
+			this.parent[bRoot] = aRoot
+			this.rank[aRoot] += this.rank[bRoot]
+		}
 
-        return true;
-    }
+		return true
+	}
 }
 
 /**
@@ -122,35 +139,35 @@ class UnionFind {
  * @returns {Map<number, number[]>}
  */
 const getAdjList = (edges) => {
-    let adj = new Map();
+	let adj = new Map()
 
-    for (e of edges) {
-        let [a, b] = [e[0], e[1]];
+	for (e of edges) {
+		let [a, b] = [e[0], e[1]]
 
-        let [adjA, adjB] = [adj.get(a) || [], adj.get(b) || []];
+		let [adjA, adjB] = [adj.get(a) || [], adj.get(b) || []]
 
-        adjA.push(b);
-        adjB.push(a);
+		adjA.push(b)
+		adjB.push(a)
 
-        adj.set(a, adjA);
-        adj.set(b, adjB);
-    }
+		adj.set(a, adjA)
+		adj.set(b, adjB)
+	}
 
-    return adj;
-};
+	return adj
+}
 
 const getValToIndex = (vals) => {
-    let valToIndex = new Map();
+	let valToIndex = new Map()
 
-    for (i in vals) {
-        let val = vals[i];
-        let arr = valToIndex.get(val) || [];
-        arr.push(+i);
-        valToIndex.set(val, arr);
-    }
+	for (i in vals) {
+		let val = vals[i]
+		let arr = valToIndex.get(val) || []
+		arr.push(+i)
+		valToIndex.set(val, arr)
+	}
 
-    return valToIndex;
-};
+	return valToIndex
+}
 
 /**
  *
@@ -159,47 +176,50 @@ const getValToIndex = (vals) => {
  * @returns {number}
  */
 const numberOfGoodPaths = (vals, edges) => {
-    let adj = getAdjList(edges);
-    let valToIndex = getValToIndex(vals);
+	let adj = getAdjList(edges)
+	let valToIndex = getValToIndex(vals)
 
-    let res = 0;
-    let uf = new UnionFind(vals.length);
+	let res = 0
+	let uf = new UnionFind(vals.length)
 
-    let keys = Array.from(valToIndex.keys());
-    keys.sort((a, b) => a - b);
+	let keys = Array.from(valToIndex.keys())
+	keys.sort((a, b) => a - b)
 
-    for (let val of keys) {
-        for (let i of valToIndex.get(val)) {
-            for (let nei of adj.get(i) || []) {
-                if (vals[nei] <= vals[i]) {
-                    uf.union(nei, i);
-                }
-            }
-        }
-        let count = new Map();
+	for (let val of keys) {
+		for (let i of valToIndex.get(val)) {
+			for (let nei of adj.get(i) || []) {
+				if (vals[nei] <= vals[i]) {
+					uf.union(nei, i)
+				}
+			}
+		}
+		let count = new Map()
 
-        for (let i of valToIndex.get(val)) {
-            let c = count.get(uf.find(i)) || 0;
-            count.set(uf.find(i), c + 1);
-            res += count.get(uf.find(i));
-        }
-    }
+		for (let i of valToIndex.get(val)) {
+			let c = count.get(uf.find(i)) || 0
+			count.set(uf.find(i), c + 1)
+			res += count.get(uf.find(i))
+		}
+	}
 
-    return res;
-};
-
+	return res
+}
 ```
+
 ### Python
+
 ```python
-404: Not Found
+Solution will be updated soon
 ```
+
 ### C++
+
 ```cpp
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Java
+
 ```java
-404: Not Found
+Solution will be updated soon
 ```
-
-

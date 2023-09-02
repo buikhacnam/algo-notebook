@@ -11,11 +11,10 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 There are a total of <code>numCourses</code> courses you have to take, labeled from <code>0</code> to <code>numCourses - 1</code>. You are given an array <code>prerequisites</code> where <code>prerequisites[i] = [a<sub>i</sub>, b<sub>i</sub>]</code> indicates that you must take course <code>a<sub>i</sub></code> first if you want to take course <code>b<sub>i</sub></code>.
 
-
-	- For example, the pair <code>[0, 1]</code> indicates that you have to take course <code>0</code> before you can take course <code>1</code>.
-
+    - For example, the pair <code>[0, 1]</code> indicates that you have to take course <code>0</code> before you can take course <code>1</code>.
 
 Prerequisites can also be indirect. If course <code>a</code> is a prerequisite of course <code>b</code>, and course <code>b</code> is a prerequisite of course <code>c</code>, then course <code>a</code> is a prerequisite of course <code>c</code>.
 
@@ -23,62 +22,75 @@ You are also given an array <code>queries</code> where <code>queries[j] = [u<sub
 
 Return <i>a boolean array </i><code>answer</code><i>, where </i><code>answer[j]</code><i> is the answer to the </i><code>j<sup>th</sup></code><i> query.</i>
 
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/05/01/courses4-1-graph.jpg" width={222} height={62} />
-<br /><pre className="overflow-x-auto">
-Input: numCourses = 2, prerequisites = [[1,0]], queries = [[0,1],[1,0]]
-Output: [false,true]
-Explanation: The pair [1, 0] indicates that you have to take course 1 before you can take course 0.
-Course 0 is not a prerequisite of course 1, but the opposite is true.
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/05/01/courses4-1-graph.jpg"
+	width={222}
+	height={62}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: numCourses = 2, prerequisites = [[1,0]], queries = [[0,1],[1,0]]
+	Output: [false,true] Explanation: The pair [1, 0] indicates that you have to
+	take course 1 before you can take course 0. Course 0 is not a prerequisite of
+	course 1, but the opposite is true.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: numCourses = 2, prerequisites = [], queries = [[1,0],[0,1]]
-Output: [false,false]
-Explanation: There are no prerequisites, and each course is independent.
+<br />
+<pre className="overflow-x-auto">
+	Input: numCourses = 2, prerequisites = [], queries = [[1,0],[0,1]] Output:
+	[false,false] Explanation: There are no prerequisites, and each course is
+	independent.
 </pre>
 
 Example 3:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/05/01/courses4-3-graph.jpg" width={222} height={222} />
-<br /><pre className="overflow-x-auto">
-Input: numCourses = 3, prerequisites = [[1,2],[1,0],[2,0]], queries = [[1,0],[1,2]]
-Output: [true,true]
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/05/01/courses4-3-graph.jpg"
+	width={222}
+	height={222}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: numCourses = 3, prerequisites = [[1,2],[1,0],[2,0]], queries =
+	[[1,0],[1,2]] Output: [true,true]
 </pre>
 
- 
 Constraints:
 
-
-	- <code>2 &lt;= numCourses &lt;= 100</code>
-	- <code>0 &lt;= prerequisites.length &lt;= (numCourses * (numCourses - 1) / 2)</code>
-	- <code>prerequisites[i].length == 2</code>
-	- <code>0 &lt;= a<sub>i</sub>, b<sub>i</sub> &lt;= n - 1</code>
-	- <code>a<sub>i</sub> != b<sub>i</sub></code>
-	- All the pairs <code>[a<sub>i</sub>, b<sub>i</sub>]</code> are unique.
-	- The prerequisites graph has no cycles.
-	- <code>1 &lt;= queries.length &lt;= 10<sup>4</sup></code>
-	- <code>0 &lt;= u<sub>i</sub>, v<sub>i</sub> &lt;= n - 1</code>
-	- <code>u<sub>i</sub> != v<sub>i</sub></code>
-
-
+    - <code>2 &lt;= numCourses &lt;= 100</code>
+    - <code>0 &lt;= prerequisites.length &lt;= (numCourses * (numCourses - 1) / 2)</code>
+    - <code>prerequisites[i].length == 2</code>
+    - <code>0 &lt;= a<sub>i</sub>, b<sub>i</sub> &lt;= n - 1</code>
+    - <code>a<sub>i</sub> != b<sub>i</sub></code>
+    - All the pairs <code>[a<sub>i</sub>, b<sub>i</sub>]</code> are unique.
+    - The prerequisites graph has no cycles.
+    - <code>1 &lt;= queries.length &lt;= 10<sup>4</sup></code>
+    - <code>0 &lt;= u<sub>i</sub>, v<sub>i</sub> &lt;= n - 1</code>
+    - <code>u<sub>i</sub> != v<sub>i</sub></code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
 class Solution:
     def checkIfPrerequisite(self, numCourses: int, prerequisites: List[List[int]], queries: List[List[int]]) -> List[bool]:
         adj = defaultdict(list)
         for prereq, crs in prerequisites:
             adj[crs].append(prereq)
-        
+
         def dfs(crs):
             if crs not in prereqMap:
                 prereqMap[crs] = set()
@@ -97,13 +109,15 @@ class Solution:
         return res
 
 ```
+
 ### C++
+
 ```cpp
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Java
+
 ```java
-404: Not Found
+Solution will be updated soon
 ```
-
-

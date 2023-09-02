@@ -11,62 +11,78 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 You are given an <code>m x n</code> binary matrix <code>grid</code>, where <code>0</code> represents a sea cell and <code>1</code> represents a land cell.
 
 A move consists of walking from one land cell to another adjacent (4-directionally) land cell or walking off the boundary of the <code>grid</code>.
 
-Return *the number of land cells in* <code>grid</code> *for which we cannot walk off the boundary of the grid in any number of moves*.
+Return _the number of land cells in_ <code>grid</code> _for which we cannot walk off the boundary of the grid in any number of moves_.
 
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/02/18/enclaves1.jpg" width={333} height={333} />
-<br /><pre className="overflow-x-auto">
-Input: grid = [[0,0,0,0],[1,0,1,0],[0,1,1,0],[0,0,0,0]]
-Output: 3
-Explanation: There are three 1s that are enclosed by 0s, and one 1 that is not enclosed because its on the boundary.
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/02/18/enclaves1.jpg"
+	width={333}
+	height={333}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: grid = [[0,0,0,0],[1,0,1,0],[0,1,1,0],[0,0,0,0]] Output: 3 Explanation:
+	There are three 1s that are enclosed by 0s, and one 1 that is not enclosed
+	because its on the boundary.
 </pre>
 
 Example 2:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/02/18/enclaves2.jpg" width={333} height={333} />
-<br /><pre className="overflow-x-auto">
-Input: grid = [[0,1,1,0],[0,0,1,0],[0,0,1,0],[0,0,0,0]]
-Output: 0
-Explanation: All 1s are either on the boundary or can reach the boundary.
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/02/18/enclaves2.jpg"
+	width={333}
+	height={333}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: grid = [[0,1,1,0],[0,0,1,0],[0,0,1,0],[0,0,0,0]] Output: 0 Explanation:
+	All 1s are either on the boundary or can reach the boundary.
 </pre>
 
- 
 Constraints:
 
-
-	- <code>m == grid.length</code>
-	- <code>n == grid[i].length</code>
-	- <code>1 &lt;= m, n &lt;= 500</code>
-	- <code>grid[i][j]</code> is either <code>0</code> or <code>1</code>.
-
-
+    - <code>m == grid.length</code>
+    - <code>n == grid[i].length</code>
+    - <code>1 &lt;= m, n &lt;= 500</code>
+    - <code>grid[i][j]</code> is either <code>0</code> or <code>1</code>.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
-404: Not Found
+Solution will be updated soon
 ```
+
 ### C++
+
 ```cpp
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Java
+
 ```java
 /*
 The basic idea is to iterate through the boundary
 If we encounter any island i.e. 1 then we will run DFS
 And update all those islands as 2
 
-Then check for the number of 1s remaining in the board 
+Then check for the number of 1s remaining in the board
 Since those are the ones that have not been visited and return
 */
 
@@ -109,5 +125,3 @@ class Solution {
 }
 
 ```
-
-

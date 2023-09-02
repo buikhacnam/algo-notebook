@@ -11,9 +11,11 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 You are given a perfect binary tree where all leaves are on the same level, and every parent has two children. The binary tree has the following definition:
 
-<br /><pre className="overflow-x-auto">
+<br />
+<pre className="overflow-x-auto">
 struct Node {
   int val;
   Node *left;
@@ -26,47 +28,47 @@ Populate each next pointer to point to its next right node. If there is no next 
 
 Initially, all next pointers are set to <code>NULL</code>.
 
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2019/02/14/116_sample.png" width={500} height={171} />
-<br /><pre className="overflow-x-auto">
-Input: root = [1,2,3,4,5,6,7]
-Output: [1,#,2,3,#,4,5,6,7,#]
-Explanation: Given the above perfect binary tree (Figure A), your function should populate each next pointer to point to its next right node, just like in Figure B. The serialized output is in level order as connected by the next pointers, with &#39;#&#39; signifying the end of each level.
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2019/02/14/116_sample.png"
+	width={500}
+	height={171}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: root = [1,2,3,4,5,6,7] Output: [1,#,2,3,#,4,5,6,7,#] Explanation: Given
+	the above perfect binary tree (Figure A), your function should populate each
+	next pointer to point to its next right node, just like in Figure B. The
+	serialized output is in level order as connected by the next pointers, with
+	'#' signifying the end of each level.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: root = []
-Output: []
-</pre>
+<br />
+<pre className="overflow-x-auto">Input: root = [] Output: []</pre>
 
- 
 Constraints:
 
+    - The number of nodes in the tree is in the range <code>[0, 2<sup>12</sup> - 1]</code>.
+    - <code>-1000 &lt;= Node.val &lt;= 1000</code>
 
-	- The number of nodes in the tree is in the range <code>[0, 2<sup>12</sup> - 1]</code>.
-	- <code>-1000 &lt;= Node.val &lt;= 1000</code>
-
-
- 
 Follow-up:
 
-
-	- You may only use constant extra space.
-	- The recursive approach is fine. You may assume implicit stack space does not count as extra space for this problem.
-
-
+    - You may only use constant extra space.
+    - The recursive approach is fine. You may assume implicit stack space does not count as extra space for this problem.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * BFS
  * Time O(n) | Space O(1)
- * 
+ *
  * https://leetcode.com/problems/populating-next-right-pointers-in-each-node/
  * // Definition for a Node.
  * function Node(val, left, right, next) {
@@ -81,43 +83,45 @@ Follow-up:
  * @return {Node}
  */
 
-var connect = function(root) {
+var connect = function (root) {
+	let currentNode = root
+	let nextLevelNode = root && root.left
 
-    let currentNode = root;
-    let nextLevelNode = root && root.left;
+	while (currentNode && nextLevelNode) {
+		currentNode.left.next = currentNode.right
+		if (currentNode.next) {
+			currentNode.right.next = currentNode.next.left
+		}
+		currentNode = currentNode.next
+		if (!currentNode) {
+			currentNode = nextLevelNode
+			nextLevelNode = currentNode.left
+		}
+	}
 
-    while(currentNode && nextLevelNode) {
-        currentNode.left.next = currentNode.right;
-        if(currentNode.next) {
-            currentNode.right.next = currentNode.next.left;
-        }
-        currentNode = currentNode.next;
-        if(!currentNode) {
-            currentNode = nextLevelNode;
-            nextLevelNode = currentNode.left;
-        }
-    }
-
-    return root;
-};
-
+	return root
+}
 ```
+
 ### Python
+
 ```python
-404: Not Found
+Solution will be updated soon
 ```
+
 ### C++
+
 ```cpp
 /*
   You are given a perfect binary tree where all leaves are on the same level, and every parent has two children. The binary tree has the following definition:
-  
+
   struct Node {
     int val;
     Node *left;
     Node *right;
     Node *next;
   }
-  
+
   Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to NULL.
   Initially, all next pointers are set to NULL.
 
@@ -179,9 +183,9 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
-404: Not Found
+Solution will be updated soon
 ```
-
-

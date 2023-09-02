@@ -11,6 +11,7 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 Given an encoded string, return its decoded string.
 
 The encoding rule is: <code>k[encoded_string]</code>, where the <code>encoded_string</code> inside the square brackets is being repeated exactly <code>k</code> times. Note that <code>k</code> is guaranteed to be a positive integer.
@@ -19,46 +20,44 @@ You may assume that the input string is always valid; there are no extra white s
 
 The test cases are generated so that the length of the output will never exceed <code>10<sup>5</sup></code>.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;3[a]2[bc]&quot;
-Output: &quot;aaabcbc&quot;
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;3[a]2[bc]&quot; Output: &quot;aaabcbc&quot;
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;3[a2[c]]&quot;
-Output: &quot;accaccacc&quot;
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;3[a2[c]]&quot; Output: &quot;accaccacc&quot;
 </pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: s = &quot;2[abc]3[cd]ef&quot;
-Output: &quot;abcabccdcdcdef&quot;
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;2[abc]3[cd]ef&quot; Output: &quot;abcabccdcdcdef&quot;
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= s.length &lt;= 30</code>
-	- <code>s</code> consists of lowercase English letters, digits, and square brackets <code>&#39;[]&#39;</code>.
-	- <code>s</code> is guaranteed to be a valid input.
-	- All the integers in <code>s</code> are in the range <code>[1, 300]</code>.
-
-
+    - <code>1 &lt;= s.length &lt;= 30</code>
+    - <code>s</code> consists of lowercase English letters, digits, and square brackets <code>&#39;[]&#39;</code>.
+    - <code>s</code> is guaranteed to be a valid input.
+    - All the integers in <code>s</code> are in the range <code>[1, 300]</code>.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
 class Solution:
     def decodeString(self, s: str) -> str:
@@ -82,38 +81,42 @@ class Solution:
         return "".join(stack)
 
 ```
+
 ### C++
+
 ```cpp
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Java
+
 ```java
 class Solution {
-    
-    int index = 0; 
-    
+
+    int index = 0;
+
     public String decodeString(String s) {
-        
+
         StringBuilder decoded = new StringBuilder();
         while (index < s.length() && s.charAt(index) != ']') {
-            
+
             // character is a letter of encoded
             if (!Character.isDigit(s.charAt(index))) decoded.append(s.charAt(index++));
-            
+
             // character is number or [ ]
             else {
                 int k = 0;
-                
+
                 // case: number
                 while (index < s.length() && Character.isDigit(s.charAt(index))) k = k * 10 + s.charAt(index++) - '0';
-                
+
                 // case: [
                 index++;
                 String answer = decodeString(s);
-                
+
                 // case: ]
                 index++;
-                
+
                 // add k*encoded to decoded
                 while (k-- > 0) decoded.append(answer);
             }
@@ -123,5 +126,3 @@ class Solution {
 }
 
 ```
-
-

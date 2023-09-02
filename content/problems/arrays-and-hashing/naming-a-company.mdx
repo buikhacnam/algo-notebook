@@ -11,18 +11,45 @@ difficulty: Hard
 </Callout>
 
 ## Description
+
 You are given an array of strings <code>ideas</code> that represents a list of names to be used in the process of naming a company. The process of naming a company is as follows:
 
 <ol>
-	- Choose 2 distinct names from <code>ideas</code>, call them <code>idea<sub>A</sub></code> and <code>idea<sub>B</sub></code>.
-	- Swap the first letters of <code>idea<sub>A</sub></code> and <code>idea<sub>B</sub></code> with each other.
-	- If both of the new names are not found in the original <code>ideas</code>, then the name <code>idea<sub>A</sub> idea<sub>B</sub></code> (the concatenation of <code>idea<sub>A</sub></code> and <code>idea<sub>B</sub></code>, separated by a space) is a valid company name.
-	- Otherwise, it is not a valid name.
+	- Choose 2 distinct names from <code>ideas</code>, call them{' '}
+	<code>
+		idea<sub>A</sub>
+	</code>{' '}
+	and{' '}
+	<code>
+		idea<sub>B</sub>
+	</code>
+	. - Swap the first letters of{' '}
+	<code>
+		idea<sub>A</sub>
+	</code>{' '}
+	and{' '}
+	<code>
+		idea<sub>B</sub>
+	</code>{' '}
+	with each other. - If both of the new names are not found in the original{' '}
+	<code>ideas</code>, then the name{' '}
+	<code>
+		idea<sub>A</sub> idea<sub>B</sub>
+	</code>{' '}
+	(the concatenation of{' '}
+	<code>
+		idea<sub>A</sub>
+	</code>{' '}
+	and{' '}
+	<code>
+		idea<sub>B</sub>
+	</code>
+	, separated by a space) is a valid company name. - Otherwise, it is not a
+	valid name.
 </ol>
 
-Return *the number of distinct valid names for the company*.
+Return _the number of distinct valid names for the company_.
 
- 
 Example 1:
 
 <br /><pre className="overflow-x-auto">
@@ -38,45 +65,49 @@ Explanation: The following selections are valid:
 Therefore, there are a total of 6 distinct company names.
 
 The following are some examples of invalid selections:
+
 - (&quot;coffee&quot;, &quot;time&quot;): The name &quot;toffee&quot; formed after swapping already exists in the original array.
 - (&quot;time&quot;, &quot;toffee&quot;): Both names are still the same after swapping and exist in the original array.
 - (&quot;coffee&quot;, &quot;toffee&quot;): Both names formed after swapping already exist in the original array.
-</pre>
+  </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: ideas = [&quot;lack&quot;,&quot;back&quot;]
-Output: 0
-Explanation: There are no valid selections. Therefore, 0 is returned.
+<br />
+<pre className="overflow-x-auto">
+	Input: ideas = [&quot;lack&quot;,&quot;back&quot;] Output: 0 Explanation:
+	There are no valid selections. Therefore, 0 is returned.
 </pre>
 
- 
 Constraints:
 
-
-	- <code>2 &lt;= ideas.length &lt;= 5 * 10<sup>4</sup></code>
-	- <code>1 &lt;= ideas[i].length &lt;= 10</code>
-	- <code>ideas[i]</code> consists of lowercase English letters.
-	- All the strings in <code>ideas</code> are unique.
-
-
+    - <code>2 &lt;= ideas.length &lt;= 5 * 10<sup>4</sup></code>
+    - <code>1 &lt;= ideas[i].length &lt;= 10</code>
+    - <code>ideas[i]</code> consists of lowercase English letters.
+    - All the strings in <code>ideas</code> are unique.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
-404: Not Found
+Solution will be updated soon
 ```
+
 ### C++
+
 ```cpp
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Java
+
 ```java
 class Solution {
     public long distinctNames(String[] ideas) {
@@ -107,5 +138,3 @@ class Solution {
 }
 
 ```
-
-

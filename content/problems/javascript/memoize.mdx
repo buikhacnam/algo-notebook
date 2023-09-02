@@ -11,19 +11,17 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 Given a function <code>fn</code>, return a memoized version of that function.
 
 A memoized function is a function that will never be called twice with the same inputs. Instead it will return a cached value.
 
 You can assume there are 3 possible input functions: <code>sum</code>, <code>fib</code>, and <code>factorial</code>.
 
+    - <code>sum</code> accepts two integers <code>a</code> and <code>b</code> and returns <code>a + b</code>.
+    - <code>fib</code> accepts a single integer <code>n</code> and returns <code>1</code> if <font face="monospace"><code>n &lt;= 1</code> </font>or<font face="monospace"> <code>fib(n - 1) + fib(n - 2)</code> </font>otherwise.
+    - <code>factorial</code> accepts a single integer <code>n</code> and returns <code>1</code> if <code>n &lt;= 1</code> or <code>factorial(n - 1) * n</code> otherwise.
 
-	- <code>sum</code> accepts two integers <code>a</code> and <code>b</code> and returns <code>a + b</code>.
-	- <code>fib</code> accepts a single integer <code>n</code> and returns <code>1</code> if <font face="monospace"><code>n &lt;= 1</code> </font>or<font face="monospace"> <code>fib(n - 1) + fib(n - 2)</code> </font>otherwise.
-	- <code>factorial</code> accepts a single integer <code>n</code> and returns <code>1</code> if <code>n &lt;= 1</code> or <code>factorial(n - 1) * n</code> otherwise.
-
-
- 
 Example 1:
 
 <br /><pre className="overflow-x-auto">
@@ -42,6 +40,7 @@ memoizedSum(2, 2); // Returns 4. However sum() was not called because the same i
 // Total call count: 1
 memoizedSum(1, 2); // Returns 3. sum() was called as (1, 2) was not seen before.
 // Total call count: 2
+
 </pre>
 
 Example 2:
@@ -55,7 +54,7 @@ Output
 [2,6,2,2,6,2]
 
 Explanation
-const factorial = (n) =&gt; (n &lt;= 1) ? 1 : (n * factorial(n - 1));
+const factorial = (n) =&gt; (n &lt;= 1) ? 1 : (n \* factorial(n - 1));
 const memoFactorial = memoize(factorial);
 memoFactorial(2); // Returns 2.
 memoFactorial(3); // Returns 6.
@@ -63,6 +62,7 @@ memoFactorial(2); // Returns 2. However factorial was not called because 2 was s
 // Total call count: 2
 memoFactorial(3); // Returns 6. However factorial was not called because 3 was seen before.
 // Total call count: 2
+
 </pre>
 
 Example 3:
@@ -81,35 +81,36 @@ fib(5) = 8
 
 </pre>
 
- 
 Constraints:
 
-
-	- <code>0 &lt;= a, b &lt;= 10<sup>5</sup></code>
-	- <code>1 &lt;= n &lt;= 10</code>
-	- <code>at most 10<sup>5</sup> function calls</code>
-	- <code>at most 10<sup>5</sup> attempts to access callCount</code>
-	- <code>input function is sum, fib, or factorial</code>
-
-
+    - <code>0 &lt;= a, b &lt;= 10<sup>5</sup></code>
+    - <code>1 &lt;= n &lt;= 10</code>
+    - <code>at most 10<sup>5</sup> function calls</code>
+    - <code>at most 10<sup>5</sup> attempts to access callCount</code>
+    - <code>input function is sum, fib, or factorial</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
-404: Not Found
+Solution will be updated soon
 ```
+
 ### C++
+
 ```cpp
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Java
+
 ```java
-404: Not Found
+Solution will be updated soon
 ```
-
-

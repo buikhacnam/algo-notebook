@@ -11,44 +11,43 @@ difficulty: Easy
 </Callout>
 
 ## Description
+
 For two strings <code>s</code> and <code>t</code>, we say &quot;<code>t</code> divides <code>s</code>&quot; if and only if <code>s = t + ... + t</code> (i.e., <code>t</code> is concatenated with itself one or more times).
 
-Given two strings <code>str1</code> and <code>str2</code>, return *the largest string *<code>x</code>* such that *<code>x</code>* divides both *<code>str1</code>* and *<code>str2</code>.
+Given two strings <code>str1</code> and <code>str2</code>, return _the largest string _<code>x</code>_ such that _<code>x</code>_ divides both _<code>str1</code>_ and _<code>str2</code>.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: str1 = &quot;ABCABC&quot;, str2 = &quot;ABC&quot;
-Output: &quot;ABC&quot;
+<br />
+<pre className="overflow-x-auto">
+	Input: str1 = &quot;ABCABC&quot;, str2 = &quot;ABC&quot; Output:
+	&quot;ABC&quot;
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: str1 = &quot;ABABAB&quot;, str2 = &quot;ABAB&quot;
-Output: &quot;AB&quot;
+<br />
+<pre className="overflow-x-auto">
+	Input: str1 = &quot;ABABAB&quot;, str2 = &quot;ABAB&quot; Output:
+	&quot;AB&quot;
 </pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: str1 = &quot;LEET&quot;, str2 = &quot;CODE&quot;
-Output: &quot;&quot;
+<br />
+<pre className="overflow-x-auto">
+	Input: str1 = &quot;LEET&quot;, str2 = &quot;CODE&quot; Output: &quot;&quot;
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= str1.length, str2.length &lt;= 1000</code>
-	- <code>str1</code> and <code>str2</code> consist of English uppercase letters.
-
-
+    - <code>1 &lt;= str1.length, str2.length &lt;= 1000</code>
+    - <code>str1</code> and <code>str2</code> consist of English uppercase letters.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * @param {string} str1
@@ -56,41 +55,44 @@ Constraints:
  * @return {string}
  */
 var gcdOfStrings = function (str1, str2) {
-  let [len1, len2] = [str1.length, str2.length];
+	let [len1, len2] = [str1.length, str2.length]
 
-  function isDivisor(l) {
-    if (len1 % l || len2 % l) {
-      return false;
-    }
+	function isDivisor(l) {
+		if (len1 % l || len2 % l) {
+			return false
+		}
 
-    let [f1, f2] = [Math.floor(len1 / l), Math.floor(len2 / l)];
+		let [f1, f2] = [Math.floor(len1 / l), Math.floor(len2 / l)]
 
-    return (
-      str1.slice(0, l).repeat(f1) == str1 && str1.slice(0, l).repeat(f2) == str2
-    );
-  }
+		return (
+			str1.slice(0, l).repeat(f1) == str1 && str1.slice(0, l).repeat(f2) == str2
+		)
+	}
 
-  for (let l = Math.min(len1, len2); l > 0; l--) {
-    if (isDivisor(l)) {
-      return str1.slice(0, l);
-    }
-  }
+	for (let l = Math.min(len1, len2); l > 0; l--) {
+		if (isDivisor(l)) {
+			return str1.slice(0, l)
+		}
+	}
 
-  return "";
-};
-
+	return ''
+}
 ```
+
 ### Python
+
 ```python
-404: Not Found
+Solution will be updated soon
 ```
+
 ### C++
+
 ```cpp
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Java
+
 ```java
-404: Not Found
+Solution will be updated soon
 ```
-
-

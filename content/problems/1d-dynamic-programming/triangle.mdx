@@ -11,51 +11,46 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given a <code>triangle</code> array, return *the minimum path sum from top to bottom*.
+
+Given a <code>triangle</code> array, return _the minimum path sum from top to bottom_.
 
 For each step, you may move to an adjacent number of the row below. More formally, if you are on index <code>i</code> on the current row, you may move to either index <code>i</code> or index <code>i + 1</code> on the next row.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: triangle = [[2],[3,4],[6,5,7],[4,1,8,3]]
-Output: 11
-Explanation: The triangle looks like:
-   <u>2</u>
-  <u>3</u> 4
- 6 <u>5</u> 7
-4 <u>1</u> 8 3
-The minimum path sum from top to bottom is 2 + 3 + 5 + 1 = 11 (underlined above).
+<br />
+<pre className="overflow-x-auto">
+	Input: triangle = [[2],[3,4],[6,5,7],[4,1,8,3]] Output: 11 Explanation: The
+	triangle looks like:
+	<u>2</u>
+	<u>3</u> 4 6 <u>5</u> 7 4 <u>1</u> 8 3 The minimum path sum from top to bottom
+	is 2 + 3 + 5 + 1 = 11 (underlined above).
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: triangle = [[-10]]
-Output: -10
-</pre>
+<br />
+<pre className="overflow-x-auto">Input: triangle = [[-10]] Output: -10</pre>
 
- 
 Constraints:
 
+    - <code>1 &lt;= triangle.length &lt;= 200</code>
+    - <code>triangle[0].length == 1</code>
+    - <code>triangle[i].length == triangle[i - 1].length + 1</code>
+    - <code>-10<sup>4</sup> &lt;= triangle[i][j] &lt;= 10<sup>4</sup></code>
 
-	- <code>1 &lt;= triangle.length &lt;= 200</code>
-	- <code>triangle[0].length == 1</code>
-	- <code>triangle[i].length == triangle[i - 1].length + 1</code>
-	- <code>-10<sup>4</sup> &lt;= triangle[i][j] &lt;= 10<sup>4</sup></code>
-
-
- 
 Follow up: Could you do this using only <code>O(n)</code> extra space, where <code>n</code> is the total number of rows in the triangle?
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
 class Solution:
     def minimumTotal(self, triangle: List[List[int]]) -> int:
@@ -68,32 +63,36 @@ class Solution:
         return dp[0]
 
 ```
+
 ### C++
+
 ```cpp
-class Solution{    
-    public:    
-        int minimumTotal(vector<vector<int>>& triangle){            
-            for(int i = 0; i < triangle.size() - 1; i++){                
-                for(int k = 0; k < triangle[i + 1].size(); k++){                    
-                    if(k == 0){                        
-                        triangle[i + 1][0] = triangle[i + 1][0] + triangle[i][0];                    
+class Solution{
+    public:
+        int minimumTotal(vector<vector<int>>& triangle){
+            for(int i = 0; i < triangle.size() - 1; i++){
+                for(int k = 0; k < triangle[i + 1].size(); k++){
+                    if(k == 0){
+                        triangle[i + 1][0] = triangle[i + 1][0] + triangle[i][0];
                     }
-                    else{                        
-                        if(k == triangle[i + 1].size() - 1){                           
-                            triangle[i + 1][k] = triangle[i + 1][k] + triangle[i][k - 1];                           
+                    else{
+                        if(k == triangle[i + 1].size() - 1){
+                            triangle[i + 1][k] = triangle[i + 1][k] + triangle[i][k - 1];
                         }
-                        else{                            
-                            triangle[i + 1][k] = triangle[i + 1][k] + min(triangle[i][k - 1], triangle[i][k]);                            
-                        }                       
-                    }                    
-                }                
-            }            
-            return *min_element(triangle[triangle.size() - 1].begin(), triangle[triangle.size() - 1].end());        
-        }    
+                        else{
+                            triangle[i + 1][k] = triangle[i + 1][k] + min(triangle[i][k - 1], triangle[i][k]);
+                        }
+                    }
+                }
+            }
+            return *min_element(triangle[triangle.size() - 1].begin(), triangle[triangle.size() - 1].end());
+        }
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
     public int minimumTotal(List<List<Integer>> triangle) {
@@ -111,5 +110,3 @@ class Solution {
 }
 
 ```
-
-

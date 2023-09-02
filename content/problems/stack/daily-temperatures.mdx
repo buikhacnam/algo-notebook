@@ -11,31 +11,38 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given an array of integers <code>temperatures</code> represents the daily temperatures, return *an array* <code>answer</code> *such that* <code>answer[i]</code> *is the number of days you have to wait after the* <code>i<sup>th</sup></code> *day to get a warmer temperature*. If there is no future day for which this is possible, keep <code>answer[i] == 0</code> instead.
 
- 
+Given an array of integers <code>temperatures</code> represents the daily temperatures, return _an array_ <code>answer</code> _such that_ <code>answer[i]</code> _is the number of days you have to wait after the_ <code>i<sup>th</sup></code> _day to get a warmer temperature_. If there is no future day for which this is possible, keep <code>answer[i] == 0</code> instead.
+
 Example 1:
-<br /><pre className="overflow-x-auto">Input: temperatures = [73,74,75,71,69,72,76,73]
-Output: [1,1,4,2,1,1,0,0]
-</pre>Example 2:
-<br /><pre className="overflow-x-auto">Input: temperatures = [30,40,50,60]
-Output: [1,1,1,0]
-</pre>Example 3:
-<br /><pre className="overflow-x-auto">Input: temperatures = [30,60,90]
-Output: [1,1,0]
+
+<br />
+<pre className="overflow-x-auto">
+	Input: temperatures = [73,74,75,71,69,72,76,73] Output: [1,1,4,2,1,1,0,0]
 </pre>
- 
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: temperatures = [30,40,50,60] Output: [1,1,1,0]
+</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: temperatures = [30,60,90] Output: [1,1,0]
+</pre>
 Constraints:
 
-
-	- <code>1 &lt;= temperatures.length &lt;= 10<sup>5</sup></code>
-	- <code>30 &lt;= temperatures[i] &lt;= 100</code>
-
-
+    - <code>1 &lt;= temperatures.length &lt;= 10<sup>5</sup></code>
+    - <code>30 &lt;= temperatures[i] &lt;= 100</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/daily-temperatures
@@ -43,29 +50,34 @@ Constraints:
  * @param {number[]} temperatures
  * @return {number[]}
  */
-var dailyTemperatures = function(temperatures, stack = []) {
-    const days = Array(temperatures.length).fill(0);
+var dailyTemperatures = function (temperatures, stack = []) {
+	const days = Array(temperatures.length).fill(0)
 
-    for (let day = 0; day < temperatures.length; day++) {/* Time O(N + N) */
-        while (canShrink(stack, temperatures, day)) {    /* Time O(N + N) */
-            const prevColdDay = stack.pop();
-            const daysToWait = (day - prevColdDay);
+	for (let day = 0; day < temperatures.length; day++) {
+		/* Time O(N + N) */
+		while (canShrink(stack, temperatures, day)) {
+			/* Time O(N + N) */
+			const prevColdDay = stack.pop()
+			const daysToWait = day - prevColdDay
 
-            days[prevColdDay] = daysToWait;              /* Ignore Space O(N) */
-        }
+			days[prevColdDay] = daysToWait /* Ignore Space O(N) */
+		}
 
-        stack.push(day);                                 /* Space O(N) */
-    }
+		stack.push(day) /* Space O(N) */
+	}
 
-    return days;
-};
+	return days
+}
 
 const canShrink = (stack, temperatures, day) => {
-    const previousDay = stack[stack.length - 1];
-    const [ prevTemperature, currTemperature ] = [ temperatures[previousDay], temperatures[day] ];
-    const isWarmer = prevTemperature < currTemperature;
+	const previousDay = stack[stack.length - 1]
+	const [prevTemperature, currTemperature] = [
+		temperatures[previousDay],
+		temperatures[day],
+	]
+	const isWarmer = prevTemperature < currTemperature
 
-    return stack.length && isWarmer;
+	return stack.length && isWarmer
 }
 
 /**
@@ -74,32 +86,40 @@ const canShrink = (stack, temperatures, day) => {
  * @param {number[]} temperatures
  * @return {number[]}
  */
-var dailyTemperatures = function(temperatures, hottest = 0) {
-    const days = new Array(temperatures.length).fill(0);
+var dailyTemperatures = function (temperatures, hottest = 0) {
+	const days = new Array(temperatures.length).fill(0)
 
-    for (let day = (temperatures.length - 1); (0 <= day); day--) {/* Time O(N + N) */
-        const temperature = temperatures[day];
+	for (let day = temperatures.length - 1; 0 <= day; day--) {
+		/* Time O(N + N) */
+		const temperature = temperatures[day]
 
-        const isHotter = hottest <= temperature
-        if (isHotter) {
-            hottest = temperature;
-            continue;                                             /* Time O(N + N) */
-        }
+		const isHotter = hottest <= temperature
+		if (isHotter) {
+			hottest = temperature
+			continue /* Time O(N + N) */
+		}
 
-        search(temperatures, day, temperature, days);             /* Time O(N + N) | Ignore Space O(N) */
-    }
+		search(
+			temperatures,
+			day,
+			temperature,
+			days,
+		) /* Time O(N + N) | Ignore Space O(N) */
+	}
 
-    return days;
+	return days
 }
 
 const search = (temperatures, day, temperature, days, dayCount = 1) => {
-    const isHotter = () => temperatures[day + dayCount] <= temperature;
-    while (isHotter()) dayCount += days[day + dayCount];          /* Time O(N + N) */
+	const isHotter = () => temperatures[day + dayCount] <= temperature
+	while (isHotter()) dayCount += days[day + dayCount] /* Time O(N + N) */
 
-    days[day] = dayCount;                                         /* Ignore Space O(N) */
+	days[day] = dayCount /* Ignore Space O(N) */
 }
 ```
+
 ### Python
+
 ```python
 class Solution:
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
@@ -114,7 +134,9 @@ class Solution:
         return res
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given array of temps, return an array w/ # of days until warmer
@@ -130,32 +152,34 @@ class Solution {
 public:
     vector<int> dailyTemperatures(vector<int>& temperatures) {
         int n = temperatures.size();
-        
+
         // pair: [index, temp]
         stack<pair<int, int>> stk;
         vector<int> result(n);
-        
+
         for (int i = 0; i < n; i++) {
             int currDay = i;
             int currTemp = temperatures[i];
-            
+
             while (!stk.empty() && stk.top().second < currTemp) {
                 int prevDay = stk.top().first;
                 int prevTemp = stk.top().second;
                 stk.pop();
-                
+
                 result[prevDay] = currDay - prevDay;
             }
-            
+
             stk.push({currDay, currTemp});
         }
-        
+
         return result;
     }
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -177,5 +201,3 @@ class Solution {
 }
 
 ```
-
-

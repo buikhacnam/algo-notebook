@@ -11,42 +11,53 @@ difficulty: Easy
 </Callout>
 
 ## Description
+
 You have <code>n</code> coins and you want to build a staircase with these coins. The staircase consists of <code>k</code> rows where the <code>i<sup>th</sup></code> row has exactly <code>i</code> coins. The last row of the staircase may be incomplete.
 
-Given the integer <code>n</code>, return *the number of complete rows of the staircase you will build*.
+Given the integer <code>n</code>, return _the number of complete rows of the staircase you will build_.
 
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/04/09/arrangecoins1-grid.jpg" width={253} height={253} />
-<br /><pre className="overflow-x-auto">
-Input: n = 5
-Output: 2
-Explanation: Because the 3<sup>rd</sup> row is incomplete, we return 2.
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/04/09/arrangecoins1-grid.jpg"
+	width={253}
+	height={253}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: n = 5 Output: 2 Explanation: Because the 3<sup>rd</sup> row is
+	incomplete, we return 2.
 </pre>
 
 Example 2:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/04/09/arrangecoins2-grid.jpg" width={333} height={333} />
-<br /><pre className="overflow-x-auto">
-Input: n = 8
-Output: 3
-Explanation: Because the 4<sup>th</sup> row is incomplete, we return 3.
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/04/09/arrangecoins2-grid.jpg"
+	width={333}
+	height={333}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: n = 8 Output: 3 Explanation: Because the 4<sup>th</sup> row is
+	incomplete, we return 3.
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= n &lt;= 2<sup>31</sup> - 1</code>
-
-
+    - <code>1 &lt;= n &lt;= 2<sup>31</sup> - 1</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
 class Solution:
     def arrangeCoins(self, n: int) -> int:
@@ -63,7 +74,9 @@ class Solution:
         return res
 
 ```
+
 ### C++
+
 ```cpp
 class Solution {
 public:
@@ -93,11 +106,13 @@ public:
     }
 };
 ```
+
 ### Java
+
 ```java
 class Solution {
     public int arrangeCoins(int n) {
-        
+
         int completedRows = 0;
         long left = 1;
         long right = n;
@@ -111,12 +126,10 @@ class Solution {
                 completedRows = Math.max(completedRows, mid);
                 left = mid + 1;
             }
-            
+
         }
 
         return completedRows;
     }
 }
 ```
-
-

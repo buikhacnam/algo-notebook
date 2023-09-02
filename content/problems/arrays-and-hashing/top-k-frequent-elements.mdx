@@ -11,33 +11,33 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given an integer array <code>nums</code> and an integer <code>k</code>, return *the* <code>k</code> *most frequent elements*. You may return the answer in any order.
 
- 
+Given an integer array <code>nums</code> and an integer <code>k</code>, return _the_ <code>k</code> _most frequent elements_. You may return the answer in any order.
+
 Example 1:
-<br /><pre className="overflow-x-auto">Input: nums = [1,1,1,2,2,3], k = 2
-Output: [1,2]
-</pre>Example 2:
-<br /><pre className="overflow-x-auto">Input: nums = [1], k = 1
-Output: [1]
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [1,1,1,2,2,3], k = 2 Output: [1,2]
 </pre>
- 
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">Input: nums = [1], k = 1 Output: [1]</pre>
 Constraints:
 
+    - <code>1 &lt;= nums.length &lt;= 10<sup>5</sup></code>
+    - <code>-10<sup>4</sup> &lt;= nums[i] &lt;= 10<sup>4</sup></code>
+    - <code>k</code> is in the range <code>[1, the number of unique elements in the array]</code>.
+    - It is guaranteed that the answer is unique.
 
-	- <code>1 &lt;= nums.length &lt;= 10<sup>5</sup></code>
-	- <code>-10<sup>4</sup> &lt;= nums[i] &lt;= 10<sup>4</sup></code>
-	- <code>k</code> is in the range <code>[1, the number of unique elements in the array]</code>.
-	- It is guaranteed that the answer is unique.
-
-
- 
 Follow up: Your algorithm&#39;s time complexity must be better than <code>O(n log n)</code>, where n is the array&#39;s size.
-
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * Set - Frequency Counter | Using sort
@@ -47,22 +47,25 @@ Follow up: Your algorithm&#39;s time complexity must be better than <code>O(n lo
  * @param {number} k
  * @return {number[]}
  */
-var topKFrequent = function(nums, k) {
-    let frequency = {}
-    for( let i = 0; i < nums.length; i++){
-        if(frequency.hasOwnProperty(nums[i])) frequency[nums[i]] += 1;
-        else frequency[nums[i]] = 1;
-    }
-    let result = Object.keys(frequency).map((key) => [Number(key), frequency[key]]);
-    let sortedResult = result.sort((a,b) => {
-        return b[1]-a[1]
-    })
-    let output = []
-    for ( let i = 0; i < k; i++){
-        output.push(sortedResult[i][0])
-    }
-    return output;
-};
+var topKFrequent = function (nums, k) {
+	let frequency = {}
+	for (let i = 0; i < nums.length; i++) {
+		if (frequency.hasOwnProperty(nums[i])) frequency[nums[i]] += 1
+		else frequency[nums[i]] = 1
+	}
+	let result = Object.keys(frequency).map((key) => [
+		Number(key),
+		frequency[key],
+	])
+	let sortedResult = result.sort((a, b) => {
+		return b[1] - a[1]
+	})
+	let output = []
+	for (let i = 0; i < k; i++) {
+		output.push(sortedResult[i][0])
+	}
+	return output
+}
 
 /**
  * Without Sort
@@ -73,39 +76,39 @@ var topKFrequent = function(nums, k) {
  * @return {number[]}
  */
 
-var topKFrequent = function(nums, k) {
-    const mp = new Map();
-    const arr = new Array(nums.length + 1).fill(0);
-    const ans = [];
+var topKFrequent = function (nums, k) {
+	const mp = new Map()
+	const arr = new Array(nums.length + 1).fill(0)
+	const ans = []
 
-    nums.forEach(el => {
-        const val = mp.get(el) || 0;
-        mp.set(el, val + 1);
-    });
+	nums.forEach((el) => {
+		const val = mp.get(el) || 0
+		mp.set(el, val + 1)
+	})
 
-    for ( let [key, value] of mp ) {
-        const prev = arr[value] || [];
-        prev.push(key);
-        arr[value] = prev;
-    }
+	for (let [key, value] of mp) {
+		const prev = arr[value] || []
+		prev.push(key)
+		arr[value] = prev
+	}
 
+	arr.reverse()
+	for (let el of arr) {
+		if (k < 1) break
+		if (el) {
+			for (let el2 of el) {
+				ans.push(el2)
+				k--
+			}
+		}
+	}
 
-    arr.reverse();
-    for (let el of arr) {
-        if (k < 1) break;
-        if (el) {
-            for (let el2 of el) {
-                ans.push(el2);
-                k--;
-            }
-        }
-    }
-
-    return ans;
-};
-
+	return ans
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
@@ -127,12 +130,14 @@ class Solution:
         # O(n)
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given an integer array nums & an integer k, return the k most frequent elements
     Ex. nums = [1,1,1,2,2,3] k = 2 -> [1,2], nums = [1] k = 1 -> [1]
-    
+
     Heap -> optimize w/ freq map & bucket sort (no freq can be > n), get results from end
 */
 
@@ -169,19 +174,19 @@ class Solution {
 public:
     vector<int> topKFrequent(vector<int>& nums, int k) {
         int n = nums.size();
-        
+
         unordered_map<int, int> m;
         for (int i = 0; i < n; i++) {
             m[nums[i]]++;
         }
-        
+
         vector<vector<int>> buckets(n + 1);
         for (auto it = m.begin(); it != m.end(); it++) {
             buckets[it->second].push_back(it->first);
         }
-        
+
         vector<int> result;
-        
+
         for (int i = n; i >= 0; i--) {
             if (result.size() >= k) {
                 break;
@@ -190,13 +195,15 @@ public:
                 result.insert(result.end(), buckets[i].begin(), buckets[i].end());
             }
         }
-        
+
         return result;
     }
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution1 {
 
@@ -296,18 +303,18 @@ class Solution3 {
      */
      public int[] topKFrequent(int[] nums, int k) {
         Map<Integer, Integer> count = new HashMap<>();
-        List<Integer> bucket[] = new ArrayList[nums.length + 1];                
-        
+        List<Integer> bucket[] = new ArrayList[nums.length + 1];
+
         for (int num : nums)
             count.merge(num, 1, Integer::sum);
-        
+
         for (int key : count.keySet()){
             int freq = count.get(key);
             if (bucket[freq] == null)
                 bucket[freq] = new ArrayList<>();
             bucket[freq].add(key);
         }
-        
+
         int index = 0;
         int[] res = new int[k];
         for (int i = nums.length; i >= 0; i--)
@@ -319,8 +326,6 @@ class Solution3 {
                 }
         return res;
     }
-       
+
 
 ```
-
-

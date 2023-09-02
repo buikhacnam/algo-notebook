@@ -11,64 +11,58 @@ difficulty: Easy
 </Callout>
 
 ## Description
-The Tribonacci sequence T<sub>n</sub> is defined as follows: 
+
+The Tribonacci sequence T<sub>n</sub> is defined as follows:
 
 T<sub>0</sub> = 0, T<sub>1</sub> = 1, T<sub>2</sub> = 1, and T<sub>n+3</sub> = T<sub>n</sub> + T<sub>n+1</sub> + T<sub>n+2</sub> for n &gt;= 0.
 
 Given <code>n</code>, return the value of T<sub>n</sub>.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: n = 4
-Output: 4
-Explanation:
-T_3 = 0 + 1 + 1 = 2
-T_4 = 1 + 1 + 2 = 4
+<br />
+<pre className="overflow-x-auto">
+	Input: n = 4 Output: 4 Explanation: T_3 = 0 + 1 + 1 = 2 T_4 = 1 + 1 + 2 = 4
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: n = 25
-Output: 1389537
-</pre>
+<br />
+<pre className="overflow-x-auto">Input: n = 25 Output: 1389537</pre>
 
- 
 Constraints:
 
-
-	- <code>0 &lt;= n &lt;= 37</code>
-	- The answer is guaranteed to fit within a 32-bit integer, ie. <code>answer &lt;= 2^31 - 1</code>.
-
+    - <code>0 &lt;= n &lt;= 37</code>
+    - The answer is guaranteed to fit within a 32-bit integer, ie. <code>answer &lt;= 2^31 - 1</code>.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * @param {number} n
  * @return {number}
  */
 var tribonacci = function (n) {
-    let t = [0, 1, 1];
+	let t = [0, 1, 1]
 
-    if (n < 3) return t[n];
+	if (n < 3) return t[n]
 
-    for (let i = 3; i < n + 1; i++) {
-        [t[0], t[1], t[2]] = [t[1], t[2], sum(t)];
-    }
+	for (let i = 3; i < n + 1; i++) {
+		;[t[0], t[1], t[2]] = [t[1], t[2], sum(t)]
+	}
 
-    return t[2];
-};
-
-function sum(arr) {
-    return arr.reduce((a, b) => a + b);
+	return t[2]
 }
 
+function sum(arr) {
+	return arr.reduce((a, b) => a + b)
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     Memo = {}
@@ -88,13 +82,15 @@ class Solution:
         return self.Memo[n]
 
 ```
+
 ### C++
+
 ```cpp
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Java
+
 ```java
-404: Not Found
+Solution will be updated soon
 ```
-
-

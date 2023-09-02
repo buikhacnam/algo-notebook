@@ -11,74 +11,76 @@ difficulty: Hard
 </Callout>
 
 ## Description
+
 The n-queens puzzle is the problem of placing <code>n</code> queens on an <code>n x n</code> chessboard such that no two queens attack each other.
 
-Given an integer <code>n</code>, return *the number of distinct solutions to the n-queens puzzle*.
+Given an integer <code>n</code>, return _the number of distinct solutions to the n-queens puzzle_.
 
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2020/11/13/queens.jpg" width={600} height={268} />
-<br /><pre className="overflow-x-auto">
-Input: n = 4
-Output: 2
-Explanation: There are two distinct solutions to the 4-queens puzzle as shown.
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/11/13/queens.jpg"
+	width={600}
+	height={268}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: n = 4 Output: 2 Explanation: There are two distinct solutions to the
+	4-queens puzzle as shown.
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: n = 1
-Output: 1
-</pre>
+<br />
+<pre className="overflow-x-auto">Input: n = 1 Output: 1</pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= n &lt;= 9</code>
-
-
+    - <code>1 &lt;= n &lt;= 9</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 var totalNQueens = function (n) {
-    let col = new Set();
-    let posDiag = new Set(); // (r + c)
-    let negDiag = new Set(); // (r - c)
+	let col = new Set()
+	let posDiag = new Set() // (r + c)
+	let negDiag = new Set() // (r - c)
 
-    let board = new Array(n).fill().map(() => new Array(n).fill('.'));
-    let res = 0;
+	let board = new Array(n).fill().map(() => new Array(n).fill('.'))
+	let res = 0
 
-    function backtrack(r) {
-        if (r === n) {
-            res += 1;
-            return;
-        }
+	function backtrack(r) {
+		if (r === n) {
+			res += 1
+			return
+		}
 
-        for (let c = 0; c < n; c++) {
-            if (col.has(c) || posDiag.has(r + c) || negDiag.has(r - c)) {
-                continue;
-            }
+		for (let c = 0; c < n; c++) {
+			if (col.has(c) || posDiag.has(r + c) || negDiag.has(r - c)) {
+				continue
+			}
 
-            col.add(c);
-            posDiag.add(r + c);
-            negDiag.add(r - c);
+			col.add(c)
+			posDiag.add(r + c)
+			negDiag.add(r - c)
 
-            backtrack(r + 1);
+			backtrack(r + 1)
 
-            col.delete(c);
-            posDiag.delete(r + c);
-            negDiag.delete(r - c);
-        }
-    }
-    backtrack(0);
-    return res;
-};
-
+			col.delete(c)
+			posDiag.delete(r + c)
+			negDiag.delete(r - c)
+		}
+	}
+	backtrack(0)
+	return res
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def totalNQueens(self, n: int) -> int:
@@ -93,7 +95,7 @@ class Solution:
                 nonlocal answer
                 answer += 1
                 return
-            
+
             for j in range(n):
                 if j in cols or (i+j) in posdiag or (i-j) in negdiag:
                     continue
@@ -103,15 +105,17 @@ class Solution:
                 negdiag.add(i-j)
 
                 backtrack(i+1)
-                
+
                 cols.remove(j)
                 posdiag.remove(i+j)
                 negdiag.remove(i-j)
-        
+
         backtrack(0)
         return answer
 ```
+
 ### C++
+
 ```cpp
 class Solution {
 public:
@@ -128,10 +132,10 @@ public:
     }
     int bt(int level,int n){
         // base conditon
-        
+
         if(level==n) return 1;
         // return 1 as u made a board and placing queens from 0 to n-1 so u came out of board
-        
+
         int ans=0;
         // exploring choices and computation
         for(int col=0;col<n;col++){
@@ -153,9 +157,9 @@ public:
 };
 
 ```
+
 ### Java
+
 ```java
-404: Not Found
+Solution will be updated soon
 ```
-
-

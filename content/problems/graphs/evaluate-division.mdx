@@ -11,69 +11,79 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 You are given an array of variable pairs <code>equations</code> and an array of real numbers <code>values</code>, where <code>equations[i] = [A<sub>i</sub>, B<sub>i</sub>]</code> and <code>values[i]</code> represent the equation <code>A<sub>i</sub> / B<sub>i</sub> = values[i]</code>. Each <code>A<sub>i</sub></code> or <code>B<sub>i</sub></code> is a string that represents a single variable.
 
 You are also given some <code>queries</code>, where <code>queries[j] = [C<sub>j</sub>, D<sub>j</sub>]</code> represents the <code>j<sup>th</sup></code> query where you must find the answer for <code>C<sub>j</sub> / D<sub>j</sub> = ?</code>.
 
-Return *the answers to all queries*. If a single answer cannot be determined, return <code>-1.0</code>.
+Return _the answers to all queries_. If a single answer cannot be determined, return <code>-1.0</code>.
 
 Note: The input is always valid. You may assume that evaluating the queries will not result in division by zero and that there is no contradiction.
 
 Note: The variables that do not occur in the list of equations are undefined, so the answer cannot be determined for them.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: equations = [[&quot;a&quot;,&quot;b&quot;],[&quot;b&quot;,&quot;c&quot;]], values = [2.0,3.0], queries = [[&quot;a&quot;,&quot;c&quot;],[&quot;b&quot;,&quot;a&quot;],[&quot;a&quot;,&quot;e&quot;],[&quot;a&quot;,&quot;a&quot;],[&quot;x&quot;,&quot;x&quot;]]
-Output: [6.00000,0.50000,-1.00000,1.00000,-1.00000]
-Explanation: 
-Given: *a / b = 2.0*, *b / c = 3.0*
-queries are: *a / c = ?*, *b / a = ?*, *a / e = ?*, *a / a = ?*, *x / x = ? *
-return: [6.0, 0.5, -1.0, 1.0, -1.0 ]
-note: x is undefined =&gt; -1.0</pre>
+<br />
+<pre className="overflow-x-auto">
+	Input: equations =
+	[[&quot;a&quot;,&quot;b&quot;],[&quot;b&quot;,&quot;c&quot;]], values =
+	[2.0,3.0], queries =
+	[[&quot;a&quot;,&quot;c&quot;],[&quot;b&quot;,&quot;a&quot;],[&quot;a&quot;,&quot;e&quot;],[&quot;a&quot;,&quot;a&quot;],[&quot;x&quot;,&quot;x&quot;]]
+	Output: [6.00000,0.50000,-1.00000,1.00000,-1.00000] Explanation: Given: *a / b
+	= 2.0*, *b / c = 3.0* queries are: *a / c = ?*, *b / a = ?*, *a / e = ?*, *a /
+	a = ?*, *x / x = ? * return: [6.0, 0.5, -1.0, 1.0, -1.0 ] note: x is undefined
+	=&gt; -1.0
+</pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: equations = [[&quot;a&quot;,&quot;b&quot;],[&quot;b&quot;,&quot;c&quot;],[&quot;bc&quot;,&quot;cd&quot;]], values = [1.5,2.5,5.0], queries = [[&quot;a&quot;,&quot;c&quot;],[&quot;c&quot;,&quot;b&quot;],[&quot;bc&quot;,&quot;cd&quot;],[&quot;cd&quot;,&quot;bc&quot;]]
-Output: [3.75000,0.40000,5.00000,0.20000]
+<br />
+<pre className="overflow-x-auto">
+	Input: equations =
+	[[&quot;a&quot;,&quot;b&quot;],[&quot;b&quot;,&quot;c&quot;],[&quot;bc&quot;,&quot;cd&quot;]],
+	values = [1.5,2.5,5.0], queries =
+	[[&quot;a&quot;,&quot;c&quot;],[&quot;c&quot;,&quot;b&quot;],[&quot;bc&quot;,&quot;cd&quot;],[&quot;cd&quot;,&quot;bc&quot;]]
+	Output: [3.75000,0.40000,5.00000,0.20000]
 </pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: equations = [[&quot;a&quot;,&quot;b&quot;]], values = [0.5], queries = [[&quot;a&quot;,&quot;b&quot;],[&quot;b&quot;,&quot;a&quot;],[&quot;a&quot;,&quot;c&quot;],[&quot;x&quot;,&quot;y&quot;]]
-Output: [0.50000,2.00000,-1.00000,-1.00000]
+<br />
+<pre className="overflow-x-auto">
+	Input: equations = [[&quot;a&quot;,&quot;b&quot;]], values = [0.5], queries =
+	[[&quot;a&quot;,&quot;b&quot;],[&quot;b&quot;,&quot;a&quot;],[&quot;a&quot;,&quot;c&quot;],[&quot;x&quot;,&quot;y&quot;]]
+	Output: [0.50000,2.00000,-1.00000,-1.00000]
 </pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= equations.length &lt;= 20</code>
-	- <code>equations[i].length == 2</code>
-	- <code>1 &lt;= A<sub>i</sub>.length, B<sub>i</sub>.length &lt;= 5</code>
-	- <code>values.length == equations.length</code>
-	- <code>0.0 &lt; values[i] &lt;= 20.0</code>
-	- <code>1 &lt;= queries.length &lt;= 20</code>
-	- <code>queries[i].length == 2</code>
-	- <code>1 &lt;= C<sub>j</sub>.length, D<sub>j</sub>.length &lt;= 5</code>
-	- <code>A<sub>i</sub>, B<sub>i</sub>, C<sub>j</sub>, D<sub>j</sub></code> consist of lower case English letters and digits.
-
-
+    - <code>1 &lt;= equations.length &lt;= 20</code>
+    - <code>equations[i].length == 2</code>
+    - <code>1 &lt;= A<sub>i</sub>.length, B<sub>i</sub>.length &lt;= 5</code>
+    - <code>values.length == equations.length</code>
+    - <code>0.0 &lt; values[i] &lt;= 20.0</code>
+    - <code>1 &lt;= queries.length &lt;= 20</code>
+    - <code>queries[i].length == 2</code>
+    - <code>1 &lt;= C<sub>j</sub>.length, D<sub>j</sub>.length &lt;= 5</code>
+    - <code>A<sub>i</sub>, B<sub>i</sub>, C<sub>j</sub>, D<sub>j</sub></code> consist of lower case English letters and digits.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
-404: Not Found
+Solution will be updated soon
 ```
+
 ### C++
+
 ```cpp
 class Solution {
     unordered_map<string, vector<pair<string, double>>> graph;
@@ -85,16 +95,16 @@ public:
         if(graph.find(startNode) == graph.end() || graph.find(endNode) == graph.end()) {
             return false;
         }
-        
+
         if(startNode == endNode && graph.find(startNode)!=graph.end()) {
             queryAns = runningProduct;
             return true;
-            
+
         }
-        
+
         bool tempAns = false;
         visited[startNode] = true;
-        
+
         for(int i = 0; i < graph[startNode].size(); i++){
             if(!visited[graph[startNode][i].first]){
                 tempAns = dfs(graph[startNode][i].first, endNode, runningProduct*graph[startNode][i].second);
@@ -104,39 +114,39 @@ public:
             }
         }
         visited[startNode] = false;
-        
+
         return tempAns;
     }
-    
+
     vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries) {
         int n = equations.size(), m = queries.size();
         vector<double> ans(m);
-        
+
         for(int i = 0; i < n ; i++){
-            
+
             graph[equations[i][0]].push_back({equations[i][1], values[i]});
             graph[equations[i][1]].push_back({equations[i][0], 1/values[i]});
             visited[equations[i][0]] = false;
             visited[equations[i][1]] = false;
 
         }
-        
+
         for(int i = 0; i < m ; i++){
-            
+
             queryAns = 1;
-            bool pathFound = dfs(queries[i][0], queries[i][1], 1);            
+            bool pathFound = dfs(queries[i][0], queries[i][1], 1);
             if(pathFound) ans[i] = queryAns;
             else ans[i] = -1;
-            
+
         }
         return ans;
     }
 };
 
 ```
+
 ### Java
+
 ```java
-404: Not Found
+Solution will be updated soon
 ```
-
-

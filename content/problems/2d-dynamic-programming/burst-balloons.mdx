@@ -11,42 +11,37 @@ difficulty: Hard
 </Callout>
 
 ## Description
+
 You are given <code>n</code> balloons, indexed from <code>0</code> to <code>n - 1</code>. Each balloon is painted with a number on it represented by an array <code>nums</code>. You are asked to burst all the balloons.
 
-If you burst the <code>i<sup>th</sup></code> balloon, you will get <code>nums[i - 1] * nums[i] * nums[i + 1]</code> coins. If <code>i - 1</code> or <code>i + 1</code> goes out of bounds of the array, then treat it as if there is a balloon with a <code>1</code> painted on it.
+If you burst the <code>i<sup>th</sup></code> balloon, you will get <code>nums[i - 1] _ nums[i] _ nums[i + 1]</code> coins. If <code>i - 1</code> or <code>i + 1</code> goes out of bounds of the array, then treat it as if there is a balloon with a <code>1</code> painted on it.
 
-Return *the maximum coins you can collect by bursting the balloons wisely*.
+Return _the maximum coins you can collect by bursting the balloons wisely_.
 
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [3,1,5,8]
-Output: 167
-Explanation:
-nums = [3,1,5,8] --&gt; [3,5,8] --&gt; [3,8] --&gt; [8] --&gt; []
-coins =  3*1*5    +   3*5*8   +  1*3*8  + 1*8*1 = 167</pre>
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [3,1,5,8] Output: 167 Explanation: nums = [3,1,5,8] --&gt;
+	[3,5,8] --&gt; [3,8] --&gt; [8] --&gt; [] coins = 3*1*5 + 3*5*8 + 1*3*8 +
+	1*8*1 = 167
+</pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: nums = [1,5]
-Output: 10
-</pre>
+<br />
+<pre className="overflow-x-auto">Input: nums = [1,5] Output: 10</pre>
 
- 
 Constraints:
 
-
-	- <code>n == nums.length</code>
-	- <code>1 &lt;= n &lt;= 300</code>
-	- <code>0 &lt;= nums[i] &lt;= 100</code>
-
-
+    - <code>n == nums.length</code>
+    - <code>1 &lt;= n &lt;= 300</code>
+    - <code>0 &lt;= nums[i] &lt;= 100</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * DP - Top Down
@@ -56,37 +51,61 @@ Constraints:
  * @param {number[]} nums
  * @return {number}
  */
- var maxCoins = (nums) => {
-    const _nums = [ 1, ...nums, 1 ];/* Time O(N)         | Space O(N) */
+var maxCoins = (nums) => {
+	const _nums = [1, ...nums, 1] /* Time O(N)         | Space O(N) */
 
-    return search(_nums);           /* Time O(N * N * N) | Space O((N * N) + HEIGHT) */
+	return search(_nums) /* Time O(N * N * N) | Space O((N * N) + HEIGHT) */
 }
 
-var search = (nums, left = 1 , right = (nums.length - 2), memo = initMemo(nums)) => {
-    const isBaseCase = (right - left < 0);
-    if (isBaseCase) return 0;
+var search = (
+	nums,
+	left = 1,
+	right = nums.length - 2,
+	memo = initMemo(nums),
+) => {
+	const isBaseCase = right - left < 0
+	if (isBaseCase) return 0
 
-    const hasSeen = (memo[left][right] !== -1);
-    if (hasSeen) return memo[left][right];
+	const hasSeen = memo[left][right] !== -1
+	if (hasSeen) return memo[left][right]
 
-    return dfs(nums, left, right, memo);/* Time O(N * N * N) | Space O((N * N) + HEIGHT) */
+	return dfs(
+		nums,
+		left,
+		right,
+		memo,
+	) /* Time O(N * N * N) | Space O((N * N) + HEIGHT) */
 }
 
-var initMemo = (nums) => new Array(nums.length).fill()/* Time O(N) | Space O(N) */
-    .map(() => new Array(nums.length).fill(-1));          /* Time O(N) | Space O(N) */
+var initMemo = (nums) =>
+	new Array(nums.length)
+		.fill() /* Time O(N) | Space O(N) */
+		.map(() => new Array(nums.length).fill(-1)) /* Time O(N) | Space O(N) */
 
 var dfs = (nums, left, right, memo, result = 0) => {
-    for (let i = left; (i <= right); i++) {/* Time O(N) */
-        const gain = ((nums[left - 1] * nums[i]) * nums[right + 1]);
-        const _left = search(nums, left, (i - 1), memo);  /* Time O(N * N) | Space O(HEIGHT) */
-        const _right = search(nums, (i + 1), right, memo);/* Time O(N * N) | Space O(HEIGHT) */
-        const remaining = (_left + _right);
+	for (let i = left; i <= right; i++) {
+		/* Time O(N) */
+		const gain = nums[left - 1] * nums[i] * nums[right + 1]
+		const _left = search(
+			nums,
+			left,
+			i - 1,
+			memo,
+		) /* Time O(N * N) | Space O(HEIGHT) */
+		const _right = search(
+			nums,
+			i + 1,
+			right,
+			memo,
+		) /* Time O(N * N) | Space O(HEIGHT) */
+		const remaining = _left + _right
 
-        result = Math.max(result, remaining + gain);
-    }
+		result = Math.max(result, remaining + gain)
+	}
 
-    memo[left][right] = result;           /*                               | Space O(N * N) */
-    return result;
+	memo[left][right] =
+		result /*                               | Space O(N * N) */
+	return result
 }
 
 /**
@@ -97,34 +116,41 @@ var dfs = (nums, left, right, memo, result = 0) => {
  * @param {number[]} nums
  * @return {number}
  */
- var maxCoins = (nums) => {
-    const tabu = initTabu(nums);/* Time O(N * N)     | Space O(N * N) */
+var maxCoins = (nums) => {
+	const tabu = initTabu(nums) /* Time O(N * N)     | Space O(N * N) */
 
-    search(nums, tabu);         /* Time O(N * N * N) | Space O(N * N) */
+	search(nums, tabu) /* Time O(N * N * N) | Space O(N * N) */
 
-    return tabu[1][(nums.length)];
+	return tabu[1][nums.length]
 }
 
-var initTabu = (nums) => new Array(nums.length + 2).fill()/* Time O(N) | Space O(N) */
-    .map(() => new Array(nums.length + 2).fill(0))            /* Time O(N) | Space O(N) */
+var initTabu = (nums) =>
+	new Array(nums.length + 2)
+		.fill() /* Time O(N) | Space O(N) */
+		.map(() => new Array(nums.length + 2).fill(0)) /* Time O(N) | Space O(N) */
 
 var search = (nums, tabu) => {
-    const _nums = [ 1, ...nums, 1 ];                         /* Time O(N) | Space O(N) */
-    
-    for (let left = nums.length; (1 <= left); left--) {      /* Time O(N) */
-        for (let right = left; (right <= nums.length); right++) {/* Time O(N) */
-            for (let i = left; (i <= right); i++) {
-                const gain = ((_nums[left - 1] * _nums[i]) * _nums[right + 1]);
-                const remaining = (tabu[left][i - 1] + tabu[i + 1][right]);
+	const _nums = [1, ...nums, 1] /* Time O(N) | Space O(N) */
 
-                tabu[left][right] =                                  /*   | Space O(N * N) */
-                    Math.max(remaining + gain, tabu[left][right]);
-            }
-        }
-    }
+	for (let left = nums.length; 1 <= left; left--) {
+		/* Time O(N) */
+		for (let right = left; right <= nums.length; right++) {
+			/* Time O(N) */
+			for (let i = left; i <= right; i++) {
+				const gain = _nums[left - 1] * _nums[i] * _nums[right + 1]
+				const remaining = tabu[left][i - 1] + tabu[i + 1][right]
+
+				tabu[left][right] =
+					/*   | Space O(N * N) */
+					Math.max(remaining + gain, tabu[left][right])
+			}
+		}
+	}
 }
 ```
+
 ### Python
+
 ```python
 class Solution:
     def maxCoins(self, nums: List[int]) -> int:
@@ -141,7 +167,9 @@ class Solution:
         return cache.get((0, len(nums) - 1), 0)
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given array of balloons w/ coins, if burst ith, get (i-1) + i + (i+1) coins
@@ -162,10 +190,10 @@ public:
         nums.insert(nums.begin(), 1);
         nums.insert(nums.end(), 1);
         int n = nums.size();
-        
+
         // cache results of dp
         vector<vector<int>> memo(n, vector<int>(n, 0));
-        
+
         // 1 & n - 2 since we can't burst our fake balloons
         return dp(nums, memo, 1, n - 2);
     }
@@ -175,12 +203,12 @@ private:
         if (right - left < 0) {
             return 0;
         }
-        
+
         // we've already seen this, return from cache
         if (memo[left][right] > 0) {
             return memo[left][right];
         }
-        
+
         // find the last burst in nums[left]...nums[right]
         int result = 0;
         for (int i = left; i <= right; i++) {
@@ -197,7 +225,9 @@ private:
 };
 
 ```
+
 ### Java
+
 ```java
 // Solution: Dynamic Programming with Memoization
 
@@ -239,5 +269,3 @@ class Solution {
 }
 
 ```
-
-

@@ -11,43 +11,58 @@ difficulty: Easy
 </Callout>
 
 ## Description
+
 Given the <code>root</code> of a binary tree, construct a string consisting of parenthesis and integers from a binary tree with the preorder traversal way, and return it.
 
 Omit all the empty parenthesis pairs that do not affect the one-to-one mapping relationship between the string and the original binary tree.
 
- 
 Example 1:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/05/03/cons1-tree.jpg" width={292} height={301} />
-<br /><pre className="overflow-x-auto">
-Input: root = [1,2,3,4]
-Output: &quot;1(2(4))(3)&quot;
-Explanation: Originally, it needs to be &quot;1(2(4)())(3()())&quot;, but you need to omit all the unnecessary empty parenthesis pairs. And it will be &quot;1(2(4))(3)&quot;
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/05/03/cons1-tree.jpg"
+	width={292}
+	height={301}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: root = [1,2,3,4] Output: &quot;1(2(4))(3)&quot; Explanation:
+	Originally, it needs to be &quot;1(2(4)())(3()())&quot;, but you need to omit
+	all the unnecessary empty parenthesis pairs. And it will be
+	&quot;1(2(4))(3)&quot;
 </pre>
 
 Example 2:
-<Image alt="" src="https://assets.leetcode.com/uploads/2021/05/03/cons2-tree.jpg" width={207} height={293} />
-<br /><pre className="overflow-x-auto">
-Input: root = [1,2,3,null,4]
-Output: &quot;1(2()(4))(3)&quot;
-Explanation: Almost the same as the first example, except we cannot omit the first parenthesis pair to break the one-to-one mapping relationship between the input and the output.
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/05/03/cons2-tree.jpg"
+	width={207}
+	height={293}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: root = [1,2,3,null,4] Output: &quot;1(2()(4))(3)&quot; Explanation:
+	Almost the same as the first example, except we cannot omit the first
+	parenthesis pair to break the one-to-one mapping relationship between the
+	input and the output.
 </pre>
 
- 
 Constraints:
 
-
-	- The number of nodes in the tree is in the range <code>[1, 10<sup>4</sup>]</code>.
-	- <code>-1000 &lt;= Node.val &lt;= 1000</code>
-
-
+    - The number of nodes in the tree is in the range <code>[1, 10<sup>4</sup>]</code>.
+    - <code>-1000 &lt;= Node.val &lt;= 1000</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
 class Solution:
     def tree2str(self, root: Optional[TreeNode]) -> str:
@@ -78,13 +93,17 @@ class Solution:
             # Recursively call the DFS function for the right child
             self.dfs(t.right, res)
             res.append(')')
-            
+
 ```
+
 ### C++
+
 ```cpp
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Java
+
 ```java
 class Solution {
     public String tree2str(TreeNode root) {
@@ -92,15 +111,13 @@ class Solution {
         String output = String.valueOf(root.val);
         if(root.left != null || root.right != null)
             output += "(" + tree2str(root.left) + ")";
-        if(root.right != null) 
+        if(root.right != null)
             output += "(" + tree2str(root.right) + ")";
 
         return output;
     }
 
-    
+
 }
 
 ```
-
-

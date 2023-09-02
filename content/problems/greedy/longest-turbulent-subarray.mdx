@@ -11,67 +11,58 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given an integer array <code>arr</code>, return *the length of a maximum size turbulent subarray of* <code>arr</code>.
+
+Given an integer array <code>arr</code>, return _the length of a maximum size turbulent subarray of_ <code>arr</code>.
 
 A subarray is turbulent if the comparison sign flips between each adjacent pair of elements in the subarray.
 
 More formally, a subarray <code>[arr[i], arr[i + 1], ..., arr[j]]</code> of <code>arr</code> is said to be turbulent if and only if:
 
-
-	- For <code>i &lt;= k &lt; j</code>:
-
-	
-		- <code>arr[k] &gt; arr[k + 1]</code> when <code>k</code> is odd, and
-		- <code>arr[k] &lt; arr[k + 1]</code> when <code>k</code> is even.
-	
-	
-	- Or, for <code>i &lt;= k &lt; j</code>:
-	
-		- <code>arr[k] &gt; arr[k + 1]</code> when <code>k</code> is even, and
-		- <code>arr[k] &lt; arr[k + 1]</code> when <code>k</code> is odd.
-	
-	
+    - For <code>i &lt;= k &lt; j</code>:
 
 
- 
+    	- <code>arr[k] &gt; arr[k + 1]</code> when <code>k</code> is odd, and
+    	- <code>arr[k] &lt; arr[k + 1]</code> when <code>k</code> is even.
+
+
+    - Or, for <code>i &lt;= k &lt; j</code>:
+
+    	- <code>arr[k] &gt; arr[k + 1]</code> when <code>k</code> is even, and
+    	- <code>arr[k] &lt; arr[k + 1]</code> when <code>k</code> is odd.
+
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: arr = [9,4,2,10,7,8,8,1,9]
-Output: 5
-Explanation: arr[1] &gt; arr[2] &lt; arr[3] &gt; arr[4] &lt; arr[5]
+<br />
+<pre className="overflow-x-auto">
+	Input: arr = [9,4,2,10,7,8,8,1,9] Output: 5 Explanation: arr[1] &gt; arr[2]
+	&lt; arr[3] &gt; arr[4] &lt; arr[5]
 </pre>
 
 Example 2:
 
-<br /><pre className="overflow-x-auto">
-Input: arr = [4,8,12,16]
-Output: 2
-</pre>
+<br />
+<pre className="overflow-x-auto">Input: arr = [4,8,12,16] Output: 2</pre>
 
 Example 3:
 
-<br /><pre className="overflow-x-auto">
-Input: arr = [100]
-Output: 1
-</pre>
+<br />
+<pre className="overflow-x-auto">Input: arr = [100] Output: 1</pre>
 
- 
 Constraints:
 
-
-	- <code>1 &lt;= arr.length &lt;= 4 * 10<sup>4</sup></code>
-	- <code>0 &lt;= arr[i] &lt;= 10<sup>9</sup></code>
-
-
+    - <code>1 &lt;= arr.length &lt;= 4 * 10<sup>4</sup></code>
+    - <code>0 &lt;= arr[i] &lt;= 10<sup>9</sup></code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
 class Solution:
     def maxTurbulenceSize(self, arr: List[int]) -> int:
@@ -94,13 +85,15 @@ class Solution:
         return res
 
 ```
+
 ### C++
+
 ```cpp
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Java
+
 ```java
-404: Not Found
+Solution will be updated soon
 ```
-
-

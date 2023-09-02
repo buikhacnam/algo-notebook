@@ -11,19 +11,24 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 Given a function <code>fn</code> and a time in milliseconds <code>t</code>, return a debounced version of that function.
 
 A debounced function is a function whose execution is delayed by <code>t</code> milliseconds and whose execution is cancelled if it is called again within that window of time. The debounced function should also receive the passed parameters.
 
-For example, let&#39;s say <code>t = 50ms</code>, and the function was called at <code>30ms</code>, <code>60ms</code>, and <code>100ms</code>. The first 2 function calls would be cancelled, and the 3rd function call would be executed at <code>150ms</code>. If instead <code>t = 35ms</code>, The 1st call would be cancelled, the 2nd would be executed at <code>95ms</code>, and the 3rd would be executed at <code>135ms</code>.
+For example, let's say <code>t = 50ms</code>, and the function was called at <code>30ms</code>, <code>60ms</code>, and <code>100ms</code>. The first 2 function calls would be cancelled, and the 3rd function call would be executed at <code>150ms</code>. If instead <code>t = 35ms</code>, The 1st call would be cancelled, the 2nd would be executed at <code>95ms</code>, and the 3rd would be executed at <code>135ms</code>.
 
-<Image alt="Debounce Schematic" src="https://assets.leetcode.com/uploads/2023/04/08/screen-shot-2023-04-08-at-11048-pm.png" width={800} height={242} />
+<Image
+	alt="Debounce Schematic"
+	src="https://assets.leetcode.com/uploads/2023/04/08/screen-shot-2023-04-08-at-11048-pm.png"
+	width={800}
+	height={242}
+/>
 
 The above diagram shows how debounce will transform events. Each rectangle represents 100ms and the debounce time is 400ms. Each color represents a different set of inputs.
 
-Please solve it without using lodash&#39;s <code>_.debounce()</code> function.
+Please solve it without using lodash <code>\_.debounce()</code> function.
 
- 
 Example 1:
 
 <br /><pre className="overflow-x-auto">
@@ -45,6 +50,7 @@ setTimeout(() =&gt; dlog(2), 75);
 
 The 1st call is cancelled by the 2nd call because the 2nd call occurred before 100ms
 The 2nd call is delayed by 50ms and executed at 125ms. The inputs were (2).
+
 </pre>
 
 Example 2:
@@ -79,34 +85,35 @@ The 2nd call is cancelled by the 3rd call
 The 3rd call is delayed by 150ms and ran at 450ms. The inputs were (5, 6).
 </pre>
 
- 
 Constraints:
 
-
-	- <code>0 &lt;= t &lt;= 1000</code>
-	- <code>1 &lt;= calls.length &lt;= 10</code>
-	- <code>0 &lt;= calls[i].t &lt;= 1000</code>
-	- <code>0 &lt;= calls[i].inputs.length &lt;= 10</code>
-
-
+    - <code>0 &lt;= t &lt;= 1000</code>
+    - <code>1 &lt;= calls.length &lt;= 10</code>
+    - <code>0 &lt;= calls[i].t &lt;= 1000</code>
+    - <code>0 &lt;= calls[i].inputs.length &lt;= 10</code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
-404: Not Found
+Solution will be updated soon
 ```
+
 ### C++
+
 ```cpp
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Java
+
 ```java
-404: Not Found
+Solution will be updated soon
 ```
-
-

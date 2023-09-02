@@ -11,40 +11,45 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 There is an integer array <code>nums</code> sorted in ascending order (with distinct values).
 
 Prior to being passed to your function, <code>nums</code> is possibly rotated at an unknown pivot index <code>k</code> (<code>1 &lt;= k &lt; nums.length</code>) such that the resulting array is <code>[nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]</code> (0-indexed). For example, <code>[0,1,2,4,5,6,7]</code> might be rotated at pivot index <code>3</code> and become <code>[4,5,6,7,0,1,2]</code>.
 
-Given the array <code>nums</code> after the possible rotation and an integer <code>target</code>, return *the index of *<code>target</code>* if it is in *<code>nums</code>*, or *<code>-1</code>* if it is not in *<code>nums</code>.
+Given the array <code>nums</code> after the possible rotation and an integer <code>target</code>, return _the index of _<code>target</code>_ if it is in _<code>nums</code>_, or _<code>-1</code>_ if it is not in _<code>nums</code>.
 
 You must write an algorithm with <code>O(log n)</code> runtime complexity.
 
- 
 Example 1:
-<br /><pre className="overflow-x-auto">Input: nums = [4,5,6,7,0,1,2], target = 0
-Output: 4
-</pre>Example 2:
-<br /><pre className="overflow-x-auto">Input: nums = [4,5,6,7,0,1,2], target = 3
-Output: -1
-</pre>Example 3:
-<br /><pre className="overflow-x-auto">Input: nums = [1], target = 0
-Output: -1
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [4,5,6,7,0,1,2], target = 0 Output: 4
 </pre>
- 
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [4,5,6,7,0,1,2], target = 3 Output: -1
+</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">Input: nums = [1], target = 0 Output: -1</pre>
 Constraints:
 
-
-	- <code>1 &lt;= nums.length &lt;= 5000</code>
-	- <code>-10<sup>4</sup> &lt;= nums[i] &lt;= 10<sup>4</sup></code>
-	- All values of <code>nums</code> are unique.
-	- <code>nums</code> is an ascending array that is possibly rotated.
-	- <code>-10<sup>4</sup> &lt;= target &lt;= 10<sup>4</sup></code>
-
-
+    - <code>1 &lt;= nums.length &lt;= 5000</code>
+    - <code>-10<sup>4</sup> &lt;= nums[i] &lt;= 10<sup>4</sup></code>
+    - All values of <code>nums</code> are unique.
+    - <code>nums</code> is an ascending array that is possibly rotated.
+    - <code>-10<sup>4</sup> &lt;= target &lt;= 10<sup>4</sup></code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * @param {number[]} nums
@@ -53,46 +58,47 @@ Constraints:
  * @return {number}
  */
 var search = (nums, target) => {
-    let [left, right] = [0, nums.length - 1];
+	let [left, right] = [0, nums.length - 1]
 
-    while (left <= right) {
-        const mid = (left + right) >> 1;
-        const guess = nums[mid];
-        const [leftNum, rightNum] = [nums[left], nums[right]];
+	while (left <= right) {
+		const mid = (left + right) >> 1
+		const guess = nums[mid]
+		const [leftNum, rightNum] = [nums[left], nums[right]]
 
-        const isTarget = guess === target;
-        if (isTarget) return mid;
+		const isTarget = guess === target
+		if (isTarget) return mid
 
-        const isAscending = leftNum <= guess;
-        if (isAscending) {
-            const isInRange = leftNum <= target;
-            const isLess = target < guess;
+		const isAscending = leftNum <= guess
+		if (isAscending) {
+			const isInRange = leftNum <= target
+			const isLess = target < guess
 
-            const isTargetGreater = !(isInRange && isLess);
-            if (isTargetGreater) left = mid + 1;
+			const isTargetGreater = !(isInRange && isLess)
+			if (isTargetGreater) left = mid + 1
 
-            const isTargetLess = isInRange && isLess;
-            if (isTargetLess) right = mid - 1;
-        }
+			const isTargetLess = isInRange && isLess
+			if (isTargetLess) right = mid - 1
+		}
 
-        const isDescending = guess < leftNum;
-        if (isDescending) {
-            const isGreater = guess < target;
-            const isInRange = target <= rightNum;
+		const isDescending = guess < leftNum
+		if (isDescending) {
+			const isGreater = guess < target
+			const isInRange = target <= rightNum
 
-            const isTargetGreater = isGreater && isInRange;
-            if (isTargetGreater) left = mid + 1;
+			const isTargetGreater = isGreater && isInRange
+			if (isTargetGreater) left = mid + 1
 
-            const isTargetLess = !(isGreater && isInRange);
-            if (isTargetLess) right = mid - 1;
-        }
-    }
+			const isTargetLess = !(isGreater && isInRange)
+			if (isTargetLess) right = mid - 1
+		}
+	}
 
-    return -1;
-};
-
+	return -1
+}
 ```
+
 ### Python
+
 ```python
 class Solution:
     def search(self, nums: List[int], target: int) -> int:
@@ -118,7 +124,9 @@ class Solution:
         return -1
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given array after some possible rotation, find if target is in nums
@@ -135,7 +143,7 @@ public:
     int search(vector<int>& nums, int target) {
         int low = 0;
         int high = nums.size() - 1;
-        
+
         while (low <= high) {
             int mid = low + (high - low) / 2;
             if (nums[mid] == target) {
@@ -155,13 +163,15 @@ public:
                 }
             }
         }
-        
+
         return -1;
     }
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
     public int search(int[] nums, int target) {
@@ -198,5 +208,3 @@ class Solution {
 }
 
 ```
-
-

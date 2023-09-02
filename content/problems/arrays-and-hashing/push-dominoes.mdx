@@ -11,6 +11,7 @@ difficulty: Medium
 </Callout>
 
 ## Description
+
 There are <code>n</code> dominoes in a line, and we place each domino vertically upright. In the beginning, we simultaneously push some of the dominoes either to the left or to the right.
 
 After each second, each domino that is falling to the left pushes the adjacent domino on the left. Similarly, the dominoes falling to the right push their adjacent dominoes standing on the right.
@@ -21,47 +22,50 @@ For the purposes of this question, we will consider that a falling domino expend
 
 You are given a string <code>dominoes</code> representing the initial state where:
 
+    - <code>dominoes[i] = &#39;L&#39;</code>, if the <code>i<sup>th</sup></code> domino has been pushed to the left,
+    - <code>dominoes[i] = &#39;R&#39;</code>, if the <code>i<sup>th</sup></code> domino has been pushed to the right, and
+    - <code>dominoes[i] = &#39;.&#39;</code>, if the <code>i<sup>th</sup></code> domino has not been pushed.
 
-	- <code>dominoes[i] = &#39;L&#39;</code>, if the <code>i<sup>th</sup></code> domino has been pushed to the left,
-	- <code>dominoes[i] = &#39;R&#39;</code>, if the <code>i<sup>th</sup></code> domino has been pushed to the right, and
-	- <code>dominoes[i] = &#39;.&#39;</code>, if the <code>i<sup>th</sup></code> domino has not been pushed.
+Return _a string representing the final state_.
 
-
-Return *a string representing the final state*.
-
- 
 Example 1:
 
-<br /><pre className="overflow-x-auto">
-Input: dominoes = &quot;RR.L&quot;
-Output: &quot;RR.L&quot;
-Explanation: The first domino expends no additional force on the second domino.
+<br />
+<pre className="overflow-x-auto">
+	Input: dominoes = &quot;RR.L&quot; Output: &quot;RR.L&quot; Explanation: The
+	first domino expends no additional force on the second domino.
 </pre>
 
 Example 2:
-<Image alt="" src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/05/18/domino.png" height={196} width={512} />
-<br /><pre className="overflow-x-auto">
-Input: dominoes = &quot;.L.R...LR..L..&quot;
-Output: &quot;LL.RR.LLRRLL..&quot;
+
+<Image
+	alt=""
+	src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/05/18/domino.png"
+	height={196}
+	width={512}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: dominoes = &quot;.L.R...LR..L..&quot; Output:
+	&quot;LL.RR.LLRRLL..&quot;
 </pre>
 
- 
 Constraints:
 
-
-	- <code>n == dominoes.length</code>
-	- <code>1 &lt;= n &lt;= 10<sup>5</sup></code>
-	- <code>dominoes[i]</code> is either <code>&#39;L&#39;</code>, <code>&#39;R&#39;</code>, or <code>&#39;.&#39;</code>.
-
-
+    - <code>n == dominoes.length</code>
+    - <code>1 &lt;= n &lt;= 10<sup>5</sup></code>
+    - <code>dominoes[i]</code> is either <code>&#39;L&#39;</code>, <code>&#39;R&#39;</code>, or <code>&#39;.&#39;</code>.
 
 ## Solution
 
 ### Javascript
+
 ```javascript
-404: Not Found
+Solution will be updated soon
 ```
+
 ### Python
+
 ```python
 class Solution:
     def pushDominoes(self, dominoes: str) -> str:
@@ -70,7 +74,7 @@ class Solution:
         for i, d in enumerate(dom):
             if d != '.':
                 q.append((i, d))
-        
+
         while q:
             i, d = q.popleft()
 
@@ -88,7 +92,9 @@ class Solution:
         return ''.join(dom)
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Time: O(n)
@@ -98,25 +104,25 @@ class Solution:
 class Solution {
 public:
     string pushDominoes(string dominoes) {
-        
+
         string res = "";
         char prev;
         int n = dominoes.size(), count = 1;
-        
+
         vector<int> left(n, 0), right(n, 0);
         for (int i = 0; i < n; i++) {
             if (dominoes[i] == 'R') { count = 1; prev = 'R'; }
             else if (dominoes[i] != '.')    prev = dominoes[i];
             if (prev == 'R' && dominoes[i] == '.')   right[i] = count++;
         }
-        
+
         prev = '.';
         for (int i = n-1; i >= 0; i--) {
             if (dominoes[i] == 'L') { count = 1; prev = 'L'; }
             else if (dominoes[i] != '.')    prev = dominoes[i];
             if (prev == 'L' && dominoes[i] == '.')   left[i] = count++;
         }
-        
+
         for (int i = 0; i < n; i++) {
             if (!left[i] && !right[i]) res += dominoes[i];
             else if (!left[i]) res += 'R';
@@ -125,13 +131,15 @@ public:
             else if (left[i] < right[i]) res += 'L';
             else res += 'R';
         }
-        
+
         return res;
     }
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
     public String pushDominoes(String dominoes) {
@@ -162,5 +170,3 @@ class Solution {
     }
 }
 ```
-
-

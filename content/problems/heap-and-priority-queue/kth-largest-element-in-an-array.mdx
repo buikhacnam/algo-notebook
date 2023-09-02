@@ -11,32 +11,35 @@ difficulty: Medium
 </Callout>
 
 ## Description
-Given an integer array <code>nums</code> and an integer <code>k</code>, return *the* <code>k<sup>th</sup></code> *largest element in the array*.
+
+Given an integer array <code>nums</code> and an integer <code>k</code>, return _the_ <code>k<sup>th</sup></code> _largest element in the array_.
 
 Note that it is the <code>k<sup>th</sup></code> largest element in the sorted order, not the <code>k<sup>th</sup></code> distinct element.
 
 Can you solve it without sorting?
 
- 
 Example 1:
-<br /><pre className="overflow-x-auto">Input: nums = [3,2,1,5,6,4], k = 2
-Output: 5
-</pre>Example 2:
-<br /><pre className="overflow-x-auto">Input: nums = [3,2,3,1,2,4,5,5,6], k = 4
-Output: 4
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [3,2,1,5,6,4], k = 2 Output: 5
 </pre>
- 
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [3,2,3,1,2,4,5,5,6], k = 4 Output: 4
+</pre>
 Constraints:
 
-
-	- <code>1 &lt;= k &lt;= nums.length &lt;= 10<sup>5</sup></code>
-	- <code>-10<sup>4</sup> &lt;= nums[i] &lt;= 10<sup>4</sup></code>
-
-
+    - <code>1 &lt;= k &lt;= nums.length &lt;= 10<sup>5</sup></code>
+    - <code>-10<sup>4</sup> &lt;= nums[i] &lt;= 10<sup>4</sup></code>
 
 ## Solution
 
 ### Javascript
+
 ```javascript
 /**
  * https://leetcode.com/problems/kth-largest-element-in-an-array/
@@ -45,12 +48,13 @@ Constraints:
  * @param {number} k
  * @return {number}
  */
- var findKthLargest = function(nums, k) { return nums
-    .sort((a, b) => a - b)
-    .reverse()
-    .slice(k - 1)
-    .shift()
-};
+var findKthLargest = function (nums, k) {
+	return nums
+		.sort((a, b) => a - b)
+		.reverse()
+		.slice(k - 1)
+		.shift()
+}
 
 /**
  * https://leetcode.com/problems/kth-largest-element-in-an-array/
@@ -59,21 +63,22 @@ Constraints:
  * @param {number} k
  * @return {number}
  */
- var findKthLargest = function(nums, k) {
-    const minHeap = new MinPriorityQueue()
+var findKthLargest = function (nums, k) {
+	const minHeap = new MinPriorityQueue()
 
-    for (const num of nums) {
-        minHeap.enqueue(num);
+	for (const num of nums) {
+		minHeap.enqueue(num)
 
-        const isAtCapacity = k < minHeap.size();
-        if (isAtCapacity) minHeap.dequeue();
-    }
+		const isAtCapacity = k < minHeap.size()
+		if (isAtCapacity) minHeap.dequeue()
+	}
 
-    return minHeap.front().element
-};
-
+	return minHeap.front().element
+}
 ```
+
 ### Python
+
 ```python
 # Solution: Sorting
 # Time Complexity:
@@ -123,7 +128,9 @@ class Solution2:
         return nums[k]
 
 ```
+
 ### C++
+
 ```cpp
 /*
     Given array and int k, return kth largest element in array
@@ -156,7 +163,7 @@ public:
         int low = 0;
         int high = nums.size() - 1;
         int pivotIndex = nums.size();
-        
+
         while (pivotIndex != k - 1) {
             pivotIndex = partition(nums, low, high);
             if (pivotIndex < k - 1) {
@@ -165,16 +172,16 @@ public:
                 high = pivotIndex - 1;
             }
         }
-        
+
         return nums[k - 1];
     }
 private:
     int partition(vector<int>& nums, int low, int high) {
         int pivot = nums[low];
-        
+
         int i = low + 1;
         int j = high;
-        
+
         while (i <= j) {
             if (nums[i] < pivot && pivot < nums[j]) {
                 swap(nums[i], nums[j]);
@@ -188,7 +195,7 @@ private:
                 j--;
             }
         }
-        
+
         swap(nums[low], nums[j]);
         return j;
     }
@@ -222,7 +229,9 @@ private:
 };
 
 ```
+
 ### Java
+
 ```java
 class Solution {
 
@@ -246,5 +255,3 @@ class Solution {
 }
 
 ```
-
-
