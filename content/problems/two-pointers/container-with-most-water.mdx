@@ -1,0 +1,168 @@
+---
+title: Container With Most Water
+category: Two Pointers
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/container-with-most-water)
+
+</Callout>
+
+## Description
+
+You are given an integer array <code>height</code> of length <code>n</code>. There are <code>n</code> vertical lines drawn such that the two endpoints of the <code>i<sup>th</sup></code> line are <code>(i, 0)</code> and <code>(i, height[i])</code>.
+
+Find two lines that together with the x-axis form a container, such that the container contains the most water.
+
+Return _the maximum amount of water a container can store_.
+
+Notice that you may not slant the container.
+
+Example 1:
+
+<Image
+	alt=""
+	src="https://s3-lc-upload.s3.amazonaws.com/uploads/2018/07/17/question_11.jpg"
+	width={600}
+	height={287}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: height = [1,8,6,2,5,4,8,3,7] Output: 49 Explanation: The above vertical
+	lines are represented by array [1,8,6,2,5,4,8,3,7]. In this case, the max area
+	of water (blue section) the container can contain is 49.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">Input: height = [1,1] Output: 1</pre>
+
+Constraints:
+
+    - <code>n == height.length</code>
+    - <code>2 &lt;= n &lt;= 10<sup>5</sup></code>
+    - <code>0 &lt;= height[i] &lt;= 10<sup>4</sup></code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/container-with-most-water/
+ * Two pointers, Time O(N) | Space(1)
+ * @param {number[]} height
+ * @return {number}
+ */
+
+var maxArea = function (height) {
+	let [left, right, max] = [0, height.length - 1, 0]
+
+	while (left < right) {
+		let containerHeight, area
+		let containerWidth = right - left
+
+		if (height[left] < height[right]) {
+			containerHeight = height[left]
+			left++
+		} else {
+			containerHeight = height[right]
+			right--
+		}
+
+		area = containerWidth * containerHeight
+
+		if (area > max) {
+			max = area
+		}
+	}
+
+	return max
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        l, r = 0, len(height) - 1
+        res = 0
+
+        while l < r:
+            res = max(res, min(height[l], height[r]) * (r - l))
+            if height[l] < height[r]:
+                l += 1
+            elif height[r] <= height[l]:
+                r -= 1
+
+        return res
+
+```
+
+### C++
+
+```cpp
+/*
+    Given array of heights, find max water container can store
+    Ex. height = [1,8,6,2,5,4,8,3,7] -> 49, (8 - 1) x min(8, 7)
+
+    2 pointers outside in, greedily iterate pointer w/ lower height
+
+    Time: O(n)
+    Space: O(1)
+*/
+
+class Solution {
+public:
+    int maxArea(vector<int>& height) {
+        int i = 0;
+        int j = height.size() - 1;
+
+        int curr = 0;
+        int result = 0;
+
+        while (i < j) {
+            curr = (j - i) * min(height[i], height[j]);
+            result = max(result, curr);
+
+            if (height[i] <= height[j]) {
+                i++;
+            } else {
+                j--;
+            }
+        }
+
+        return result;
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+
+    public int maxArea(int[] height) {
+        int left = 0;
+        int right = height.length - 1;
+        int res = 0;
+        while (left < right) {
+            int containerLength = right - left;
+            int area = containerLength * Math.min(height[left], height[right]);
+            res = Math.max(res, area);
+            if (height[left] < height[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        return res;
+    }
+}
+
+```

@@ -1,0 +1,350 @@
+---
+title: Decode Ways
+category: 1d Dynamic Programming
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/decode-ways)
+
+</Callout>
+
+## Description
+
+A message containing letters from <code>A-Z</code> can be encoded into numbers using the following mapping:
+
+<br />
+<pre className="overflow-x-auto">
+	&#39;A&#39; -&gt; &quot;1&quot; &#39;B&#39; -&gt; &quot;2&quot; ...
+	&#39;Z&#39; -&gt; &quot;26&quot;
+</pre>
+
+To decode an encoded message, all the digits must be grouped then mapped back into letters using the reverse of the mapping above (there may be multiple ways). For example, <code>&quot;11106&quot;</code> can be mapped into:
+
+    - <code>&quot;AAJF&quot;</code> with the grouping <code>(1 1 10 6)</code>
+    - <code>&quot;KJF&quot;</code> with the grouping <code>(11 10 6)</code>
+
+Note that the grouping <code>(1 11 06)</code> is invalid because <code>&quot;06&quot;</code> cannot be mapped into <code>&#39;F&#39;</code> since <code>&quot;6&quot;</code> is different from <code>&quot;06&quot;</code>.
+
+Given a string <code>s</code> containing only digits, return _the number of ways to decode it_.
+
+The test cases are generated so that the answer fits in a 32-bit integer.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;12&quot; Output: 2 Explanation: &quot;12&quot; could be
+	decoded as &quot;AB&quot; (1 2) or &quot;L&quot; (12).
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;226&quot; Output: 3 Explanation: &quot;226&quot; could be
+	decoded as &quot;BZ&quot; (2 26), &quot;VF&quot; (22 6), or &quot;BBF&quot; (2
+	2 6).
+</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;06&quot; Output: 0 Explanation: &quot;06&quot; cannot be
+	mapped to &quot;F&quot; because of the leading zero (&quot;6&quot; is
+	different from &quot;06&quot;).
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= s.length &lt;= 100</code>
+    - <code>s</code> contains only digits and may contain leading zero(s).
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * DP - Top Down
+ * Hash Map - Memoization
+ * Time O(N) | Space O(N)
+ * https://leetcode.com/problems/decode-ways/
+ * @param {string} s
+ * @return {number}
+ */
+var numDecodings = (str, index = 0, memo = new Map()) => {
+	const isBaseCase1 = !str.length || str[index] === '0'
+	if (isBaseCase1) return 0
+
+	const isisBaseCase2 = index === str.length
+	if (isisBaseCase2) return 1
+
+	if (memo.has(index)) return memo.get(index)
+
+	return dfs(str, index, memo)
+}
+
+const dfs = (str, index, memo) => {
+	let count = numDecodings(str, index + 1, memo)
+
+	if (isTwoDigit(str, index)) {
+		count += numDecodings(str, index + 2, memo)
+	}
+
+	memo.set(index, count)
+
+	return count
+}
+
+var isTwoDigit = (str, index) => {
+	const twoDigit = Number(str.slice(index, index + 2))
+
+	return 10 <= twoDigit && twoDigit <= 26
+}
+
+/**
+ * DP - Bottom Up
+ * Array - Tabulation
+ * Time O(N) | Space O(N)
+ * https://leetcode.com/problems/decode-ways/
+ * @param {string} s
+ * @return {number}
+ */
+var numDecodings = (s) => {
+	const isBaseCase = !s.length || s[0] === '0'
+	if (isBaseCase) return 0
+
+	const tabu = getTabu(s)
+
+	decode(s, tabu)
+
+	return tabu[s.length]
+}
+
+const getTabu = (s) => {
+	const tabu = new Array(s.length + 1).fill(0)
+
+	tabu[0] = 1
+	tabu[1] = s[1] === '0' ? 0 : 1
+
+	return tabu
+}
+
+var decode = (s, tabu) => {
+	for (let curr = 2; curr < tabu.length; curr++) {
+		const [prev, prevPrev] = [curr - 1, curr - 2]
+		const isEqual = s[prev] === '0'
+		if (!isEqual) tabu[curr] += tabu[prev]
+
+		if (isTwoDigit(s, curr)) tabu[curr] += tabu[prevPrev]
+	}
+}
+
+var isTwoDigit = (s, index) => {
+	const twoDigit = Number(s.slice(index - 2, index))
+
+	return 10 <= twoDigit && twoDigit <= 26
+}
+
+/**
+ * 2 Pointer - previous + previousPrevious
+ * Time O(N) | Space O(1)
+ * https://leetcode.com/problems/decode-ways/
+ * @param {string} s
+ * @return {number}
+ */
+var numDecodings = (s) => {
+	const isBaseCase = !s.length || s[0] === '0'
+	if (isBaseCase) return 0
+
+	return decode(s)
+}
+
+var decode = (s) => {
+	let [prev, prevPrev] = [1, 1]
+
+	for (let curr = 1; curr < s.length; curr++) {
+		const temp = prev
+
+		const isEqual = s[curr] === '0'
+		if (isEqual) prev = 0
+
+		if (isTwoDigit(s, curr)) prev += prevPrev
+
+		prevPrev = temp
+	}
+
+	return prev
+}
+
+var isTwoDigit = (s, i) => {
+	const [prevChar, curChar] = [s[i - 1], s[i]]
+	const is10 = prevChar === '1'
+	const is20 = prevChar === '2' && curChar <= '6'
+
+	return is10 || is20
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def numDecodings(self, s: str) -> int:
+        # Memoization
+        dp = {len(s): 1}
+
+        def dfs(i):
+            if i in dp:
+                return dp[i]
+            if s[i] == "0":
+                return 0
+
+            res = dfs(i + 1)
+            if i + 1 < len(s) and (
+                s[i] == "1" or s[i] == "2" and s[i + 1] in "0123456"
+            ):
+                res += dfs(i + 2)
+            dp[i] = res
+            return res
+
+        return dfs(0)
+
+        # Dynamic Programming
+        dp = {len(s): 1}
+        for i in range(len(s) - 1, -1, -1):
+            if s[i] == "0":
+                dp[i] = 0
+            else:
+                dp[i] = dp[i + 1]
+
+            if i + 1 < len(s) and (
+                s[i] == "1" or s[i] == "2" and s[i + 1] in "0123456"
+            ):
+                dp[i] += dp[i + 2]
+        return dp[0]
+
+```
+
+### C++
+
+```cpp
+/*
+    Given a string w/ only digits, return # ways to decode it (letter -> digit)
+    Ex. s = "12" -> 2 (AB 1 2 or L 12), s = "226" -> 3 (2 26 or 22 6 or 2 2 6)
+
+    DP: At each digit, check validity of ones & tens, if valid add to # ways
+    Recurrence relation: dp[i] += dp[i-1] (if valid) + dp[i-2] (if valid)
+
+    Time: O(n)
+    Space: O(n)
+*/
+
+class Solution {
+public:
+    int numDecodings(string s) {
+        if (s[0] == '0') {
+            return 0;
+        }
+
+        int n = s.size();
+
+        vector<int> dp(n + 1);
+        dp[0] = 1;
+        dp[1] = 1;
+
+        for (int i = 2; i <= n; i++) {
+            int ones = stoi(s.substr(i - 1, 1));
+            if (ones >= 1 && ones <= 9) {
+                dp[i] += dp[i - 1];
+            }
+            int tens = stoi(s.substr(i - 2, 2));
+            if (tens >= 10 && tens <= 26) {
+                dp[i] += dp[i - 2];
+            }
+        }
+
+        return dp[n];
+    }
+};
+
+```
+
+### Java
+
+```java
+// Optimal
+class Solution {
+
+    public int numDecodings(String s) {
+        int twoBack = 1; // empty string
+        int oneBack = s.charAt(0) == '0' ? 0 : 1;
+        int current = oneBack;
+        for (int i = 2; i < s.length() + 1; i++) {
+            current = 0;
+            if (s.charAt(i - 1) != '0') {
+                current += oneBack;
+            }
+            if (
+                s.charAt(i - 2) == '1' ||
+                (s.charAt(i - 2) == '2' && s.charAt(i - 1) < '7')
+            ) {
+                current += twoBack;
+            }
+            twoBack = oneBack;
+            oneBack = current;
+        }
+        return current;
+    }
+}
+
+//bottom up
+class Solution {
+
+    public int numDecodings(String s) {
+        int[] dp = new int[s.length() + 1];
+        dp[0] = 1; // empty string
+        dp[1] = s.charAt(0) == '0' ? 0 : 1;
+        for (int i = 2; i < s.length() + 1; i++) {
+            if (s.charAt(i - 1) != '0') {
+                dp[i] += dp[i - 1];
+            }
+            if (
+                s.charAt(i - 2) == '1' ||
+                (s.charAt(i - 2) == '2' && s.charAt(i - 1) < '7')
+            ) {
+                dp[i] += dp[i - 2];
+            }
+        }
+        return dp[s.length()];
+    }
+}
+
+//top down with memoization
+class Solution {
+
+    public int numDecodings(String s) {
+        return numDecodings(s, 0, new Integer[s.length()]);
+    }
+
+    private int numDecodings(String s, int i, Integer[] dp) {
+        if (i == s.length()) return 1;
+        if (s.charAt(i) == '0') return 0;
+        if (dp[i] != null) return dp[i];
+        int count = 0;
+        count += numDecodings(s, i + 1, dp);
+        if (
+            i < s.length() - 1 &&
+            (s.charAt(i) == '1' || s.charAt(i) == '2' && s.charAt(i + 1) < '7')
+        ) {
+            count += numDecodings(s, i + 2, dp);
+        }
+        dp[i] = count;
+        return dp[i];
+    }
+}
+
+```

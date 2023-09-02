@@ -1,0 +1,202 @@
+---
+title: Linked List Cycle
+category: Linked List
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/linked-list-cycle)
+
+</Callout>
+
+## Description
+
+Given <code>head</code>, the head of a linked list, determine if the linked list has a cycle in it.
+
+There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the <code>next</code> pointer. Internally, <code>pos</code> is used to denote the index of the node that tail&#39;s <code>next</code> pointer is connected to. Note that <code>pos</code> is not passed as a parameter.
+
+Return <code>true</code>_ if there is a cycle in the linked list_. Otherwise, return <code>false</code>.
+
+Example 1:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2018/12/07/circularlinkedlist.png"
+	width={300}
+	height={97}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: head = [3,2,0,-4], pos = 1 Output: true Explanation: There is a cycle
+	in the linked list, where the tail connects to the 1st node (0-indexed).
+</pre>
+
+Example 2:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2018/12/07/circularlinkedlist_test2.png"
+	width={141}
+	height={74}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: head = [1,2], pos = 0 Output: true Explanation: There is a cycle in the
+	linked list, where the tail connects to the 0th node.
+</pre>
+
+Example 3:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2018/12/07/circularlinkedlist_test3.png"
+	width={45}
+	height={45}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: head = [1], pos = -1 Output: false Explanation: There is no cycle in
+	the linked list.
+</pre>
+
+Constraints:
+
+    - The number of the nodes in the list is in the range <code>[0, 10<sup>4</sup>]</code>.
+    - <code>-10<sup>5</sup> &lt;= Node.val &lt;= 10<sup>5</sup></code>
+    - <code>pos</code> is <code>-1</code> or a valid index in the linked-list.
+
+Follow up: Can you solve it using <code>O(1)</code> (i.e. constant) memory?
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/linked-list-cycle/
+ * Time O(N) | Space O(N)
+ * @param {ListNode} head
+ * @return {boolean}
+ */
+var hasCycle = function (head, seen = new Set()) {
+	while (head) {
+		/* Time O(N) */
+		if (seen.has(head)) return true
+
+		seen.add(head) /* Space O(N) */
+		head = head.next
+	}
+
+	return false
+}
+
+/**
+ * https://leetcode.com/problems/linked-list-cycle/
+ * Time O(N) | Space O(1)
+ * @param {ListNode} head
+ * @return {boolean}
+ */
+var hasCycle = function (head) {
+	let [slow, fast] = [head, head]
+
+	while (fast && fast.next) {
+		/* Time O(N) */
+		slow = slow.next
+		fast = fast.next.next
+
+		const hasCycle = slow === fast
+		if (hasCycle) return true
+	}
+
+	return false
+}
+```
+
+### Python
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+
+class Solution:
+    def hasCycle(self, head: ListNode) -> bool:
+        slow, fast = head, head
+
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            if slow == fast:
+                return True
+        return False
+
+```
+
+### C++
+
+```cpp
+/*
+    Given head of a linked list, determine if it has a cycle in it
+
+    Slow/fast pointers, if they ever intersect then there's a cycle
+
+    Time: O(n)
+    Space: O(1)
+*/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        if (head == NULL) {
+            return false;
+        }
+
+        ListNode* slow = head;
+        ListNode* fast = head;
+
+        while (fast->next != NULL && fast->next->next != NULL) {
+            slow = slow->next;
+            fast = fast->next->next;
+            if (slow == fast) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+};
+
+```
+
+### Java
+
+```java
+//Fast and slow pointer
+
+public class Solution {
+
+    public boolean hasCycle(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast == slow) return true;
+        }
+        return false;
+    }
+}
+
+```

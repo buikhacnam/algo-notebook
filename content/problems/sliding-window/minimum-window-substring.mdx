@@ -1,0 +1,284 @@
+---
+title: Minimum Window Substring
+category: Sliding Window
+difficulty: Hard
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/minimum-window-substring)
+
+</Callout>
+
+## Description
+
+Given two strings <code>s</code> and <code>t</code> of lengths <code>m</code> and <code>n</code> respectively, return _the minimum window_ <span data-keyword="substring-nonempty">_substring_</span>_ of _<code>s</code>_ such that every character in _<code>t</code>_ (including duplicates) is included in the window_. If there is no such substring, return _the empty string _<code>&quot;&quot;</code>.
+
+The testcases will be generated such that the answer is unique.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;ADOBECODEBANC&quot;, t = &quot;ABC&quot; Output:
+	&quot;BANC&quot; Explanation: The minimum window substring &quot;BANC&quot;
+	includes &#39;A&#39;, &#39;B&#39;, and &#39;C&#39; from string t.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;a&quot;, t = &quot;a&quot; Output: &quot;a&quot; Explanation:
+	The entire string s is the minimum window.
+</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;a&quot;, t = &quot;aa&quot; Output: &quot;&quot; Explanation:
+	Both &#39;a&#39;s from t must be included in the window. Since the largest
+	window of s only has one &#39;a&#39;, return empty string.
+</pre>
+
+Constraints:
+
+    - <code>m == s.length</code>
+    - <code>n == t.length</code>
+    - <code>1 &lt;= m, n &lt;= 10<sup>5</sup></code>
+    - <code>s</code> and <code>t</code> consist of uppercase and lowercase English letters.
+
+Follow up: Could you find an algorithm that runs in <code>O(m + n)</code> time?
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/minimum-window-substring/
+ * Time O(N + M) | SpaceO(N + M)
+ * @param {string} s
+ * @param {string} t
+ * @return {string}
+ */
+var minWindow = function (s, t) {
+	const isMissingArgs = !s.length || !t.length
+	if (isMissingArgs) return ''
+
+	const frequencyMap = getFrequencyMap(t)
+	const { start, end } = getWindowPointers(s, t, frequencyMap)
+
+	return getSubString(s, start, end)
+}
+
+const getFrequencyMap = (str, frequencyMap = new Map()) => {
+	for (const char of str) {
+		frequencyMap.set(char, (frequencyMap.get(char) || 0) + 1)
+	}
+
+	return frequencyMap
+}
+
+const getWindowPointers = (s, t, frequencyMap) => {
+	let [left, right, matched, start, end] = [0, 0, 0, 0, s.length + 1]
+
+	while (right < s.length) {
+		matched = addRightFrequency(s, right, frequencyMap, matched)
+
+		const canSlide = () => matched === t.length
+		while (canSlide()) {
+			const window = right - left + 1
+
+			const isSmaller = window < end
+			if (isSmaller) {
+				;[start, end] = [left, window]
+			}
+
+			matched = subtractLeftFrequency(s, left, frequencyMap, matched)
+			left++
+		}
+
+		right++
+	}
+
+	return { start, end }
+}
+
+const addRightFrequency = (s, right, frequencyMap, matched) => {
+	const char = s[right]
+
+	if (frequencyMap.has(char)) {
+		frequencyMap.set(char, frequencyMap.get(char) - 1)
+
+		const isInWindow = 0 <= frequencyMap.get(char)
+		if (isInWindow) matched++
+	}
+
+	return matched
+}
+
+const subtractLeftFrequency = (s, left, frequencyMap, matched) => {
+	const char = s[left]
+
+	if (frequencyMap.has(char)) {
+		const isOutOfWindow = frequencyMap.get(char) === 0
+		if (isOutOfWindow) matched--
+
+		frequencyMap.set(char, frequencyMap.get(char) + 1)
+	}
+
+	return matched
+}
+
+const getSubString = (s, start, end) =>
+	end <= s.length ? s.slice(start, start + end) : ''
+```
+
+### Python
+
+```python
+class Solution:
+    def minWindow(self, s: str, t: str) -> str:
+        if t == "":
+            return ""
+
+        countT, window = {}, {}
+        for c in t:
+            countT[c] = 1 + countT.get(c, 0)
+
+        have, need = 0, len(countT)
+        res, resLen = [-1, -1], float("infinity")
+        l = 0
+        for r in range(len(s)):
+            c = s[r]
+            window[c] = 1 + window.get(c, 0)
+
+            if c in countT and window[c] == countT[c]:
+                have += 1
+
+            while have == need:
+                # update our result
+                if (r - l + 1) < resLen:
+                    res = [l, r]
+                    resLen = r - l + 1
+                # pop from the left of our window
+                window[s[l]] -= 1
+                if s[l] in countT and window[s[l]] < countT[s[l]]:
+                    have -= 1
+                l += 1
+        l, r = res
+        return s[l : r + 1] if resLen != float("infinity") else ""
+
+```
+
+### C++
+
+```cpp
+/*
+    Given 2 strings s & t, return min window substring
+    of s such that all chars in t are included in window
+    Ex. s = "ADOBECODEBANC" t = "ABC" -> "BANC"
+
+    Sliding window + hash map {char -> count}
+    Move j until valid, move i to find smaller
+
+    Time: O(m + n)
+    Space: O(m + n)
+*/
+
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        // count of char in t
+        unordered_map<char, int> m;
+        for (int i = 0; i < t.size(); i++) {
+            m[t[i]]++;
+        }
+
+        int i = 0;
+        int j = 0;
+
+        // # of chars in t that must be in s
+        int counter = t.size();
+
+        int minStart = 0;
+        int minLength = INT_MAX;
+
+        while (j < s.size()) {
+            // if char in s exists in t, decrease
+            if (m[s[j]] > 0) {
+                counter--;
+            }
+            // if char doesn't exist in t, will be -'ve
+            m[s[j]]--;
+            // move j to find valid window
+            j++;
+
+            // when window found, move i to find smaller
+            while (counter == 0) {
+                if (j - i < minLength) {
+                    minStart = i;
+                    minLength = j - i;
+                }
+
+                m[s[i]]++;
+                // when char exists in t, increase
+                if (m[s[i]] > 0) {
+                    counter++;
+                }
+                i++;
+            }
+        }
+
+        if (minLength != INT_MAX) {
+            return s.substr(minStart, minLength);
+        }
+        return "";
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+
+    //sliding window
+    public String minWindow(String s, String t) {
+        HashMap<Character, Integer> map = new HashMap<>();
+
+        for (char x : t.toCharArray()) {
+            map.put(x, map.getOrDefault(x, 0) + 1);
+        }
+
+        int matched = 0;
+        int start = 0;
+        int minLen = s.length() + 1;
+        int subStr = 0;
+        for (int endWindow = 0; endWindow < s.length(); endWindow++) {
+            char right = s.charAt(endWindow);
+            if (map.containsKey(right)) {
+                map.put(right, map.get(right) - 1);
+                if (map.get(right) == 0) matched++;
+            }
+
+            while (matched == map.size()) {
+                if (minLen > endWindow - start + 1) {
+                    minLen = endWindow - start + 1;
+                    subStr = start;
+                }
+                char deleted = s.charAt(start++);
+                if (map.containsKey(deleted)) {
+                    if (map.get(deleted) == 0) matched--;
+                    map.put(deleted, map.get(deleted) + 1);
+                }
+            }
+        }
+        return minLen > s.length() ? "" : s.substring(subStr, subStr + minLen);
+    }
+}
+
+```

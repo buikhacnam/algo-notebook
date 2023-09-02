@@ -1,0 +1,314 @@
+---
+title: Unique Paths
+category: 2d Dynamic Programming
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/unique-paths)
+
+</Callout>
+
+## Description
+
+There is a robot on an <code>m x n</code> grid. The robot is initially located at the top-left corner (i.e., <code>grid[0][0]</code>). The robot tries to move to the bottom-right corner (i.e., <code>grid[m - 1][n - 1]</code>). The robot can only move either down or right at any point in time.
+
+Given the two integers <code>m</code> and <code>n</code>, return _the number of possible unique paths that the robot can take to reach the bottom-right corner_.
+
+The test cases are generated so that the answer will be less than or equal to <code>2 \* 10<sup>9</sup></code>.
+
+Example 1:
+
+<Image
+	src="https://assets.leetcode.com/uploads/2018/10/22/robot_maze.png"
+	width={400}
+	height={183}
+/>
+<br />
+<pre className="overflow-x-auto">Input: m = 3, n = 7 Output: 28</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: m = 3, n = 2 Output: 3 Explanation: From the top-left corner, there are
+	a total of 3 ways to reach the bottom-right corner: 1. Right -&gt; Down -&gt;
+	Down 2. Down -&gt; Down -&gt; Right 3. Down -&gt; Right -&gt; Down
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= m, n &lt;= 100</code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * Brute Force - DFS
+ * Time O(2^N) | Space O(HEIGHT)
+ * https://leetcode.com/problems/unique-paths/
+ * @param {number} m
+ * @param {number} n
+ * @return {number}
+ */
+var uniquePaths = (row, col) => {
+	const isBaseCase = row == 1 || col == 1
+	if (isBaseCase) return 1
+
+	return dfs(row, col) /* Time O(2^N) | Space O(HEIGHT) */
+}
+
+var dfs = (row, col) => {
+	const left = uniquePaths(row - 1, col) /* Time O(2^N) | Space O(HEIGHT) */
+	const right = uniquePaths(row, col - 1) /* Time O(2^N) | Space O(HEIGHT) */
+
+	return left + right
+}
+
+/**
+ * DP - Top Down
+ * Matrix - Memoization
+ * Time O(ROWS * COLS) | Space O(ROWS * COLS)
+ * https://leetcode.com/problems/unique-paths/
+ * @param {number} m
+ * @param {number} n
+ * @return {number}
+ */
+var uniquePaths = (row, col, memo = getMemo(row, col)) => {
+	const isBaseCase = row === 1 || col === 1
+	if (isBaseCase) return 1
+
+	const hasSeen = memo[row][col] !== 0
+	if (hasSeen) return memo[row][col]
+
+	return dfs(
+		row,
+		col,
+		memo,
+	) /* Time O(ROWS * COLS) | Space O((ROWS * COLS) + HEIGHT) */
+}
+
+var getMemo = (row, col) =>
+	new Array(row + 1)
+		.fill() /* Time O(ROWS)| Space O(ROWS) */
+		.map(() => new Array(col + 1).fill(0)) /* Time O(COLS)| Space O(COLS) */
+
+var dfs = (row, col, memo) => {
+	const left = uniquePaths(
+		row - 1,
+		col,
+		memo,
+	) /* Time O(ROWS * COLS) | Space O(HEIGHT) */
+	const right = uniquePaths(
+		row,
+		col - 1,
+		memo,
+	) /* Time O(ROWS * COLS) | Space O(HEIGHT) */
+
+	memo[row][col] = left + right /*                     | Space O(ROWS * COLS) */
+	return memo[row][col]
+}
+
+/**
+ * DP - Bottom Up
+ * Matrix - Tabulation
+ * Time O(ROWS * COLS) | Space O(ROWS * COLS)
+ * https://leetcode.com/problems/unique-paths/
+ * @param {number} row
+ * @param {number} col
+ * @return {number}
+ */
+var uniquePaths = (row, col) => {
+	const tabu = initTabu(
+		row,
+		col,
+	) /* Time O(ROWS * COLS) | Space O(ROWS * COLS) */
+
+	search(row, col, tabu) /* Time O(ROWS * COLS) | Space O(ROWS * COLS) */
+
+	return tabu[row - 1][col - 1]
+}
+
+var search = (row, col, tabu) => {
+	for (let _row = 1; _row < row; _row++) {
+		/* Time O(ROWS)*/
+		for (let _col = 1; _col < col; _col++) {
+			/* Time O(COLS)*/
+			const left = tabu[_row - 1][_col]
+			const right = tabu[_row][_col - 1]
+
+			tabu[_row][_col] = left + right /* Space O(ROWS * COLS) */
+		}
+	}
+}
+
+var initTabu = (row, col) => {
+	const tabu = new Array(row)
+		.fill() /* Time O(ROWS)     | Space O(ROWS) */
+		.map(() => new Array(col).fill(0)) /* Time O(COLS) | Space O(COLS) */
+
+	for (let _row = 0; _row < row; _row++) {
+		/* Time O(ROWS) */
+		tabu[_row][0] = 1 /*              | Space O(ROWS * COLS) */
+	}
+
+	for (let _col = 0; _col < col; _col++) {
+		/* Time O(COLS) */
+		tabu[0][_col] = 1 /*              | Space O(ROWS * COLS) */
+	}
+
+	return tabu
+}
+
+/**
+ * DP - Bottom Up
+ * Array - Tabulation
+ * Time O(ROWS * COLS) | Space O(COLS)
+ * https://leetcode.com/problems/unique-paths/
+ * @param {number} m
+ * @param {number} n
+ * @return {number}
+ */
+var uniquePaths = (row, col) => {
+	const tabu = initTabu(col) /* Time O(COLS)        | Space O(COLS) */
+
+	search(row, col, tabu) /* Time O(ROWS * COLS) | Space O(COLS) */
+
+	return tabu[col - 1]
+}
+
+var initTabu = (col) =>
+	new Array(col).fill(1) /* Time O(COLS) | Space O(COLS) */
+
+var search = (row, col, tabu) => {
+	for (let _row = 1; _row < row; _row++) {
+		/* Time O(ROWS) */
+		for (let _col = 1; _col < col; _col++) {
+			/* Time O(COLS) */
+			const prev = tabu[_col - 1]
+
+			tabu[_col] += prev /* Space O(COLS) */
+		}
+	}
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        row = [1] * n
+
+        for i in range(m - 1):
+            newRow = [1] * n
+            for j in range(n - 2, -1, -1):
+                newRow[j] = newRow[j + 1] + row[j]
+            row = newRow
+        return row[0]
+
+        # O(n * m) O(n)
+
+```
+
+### C++
+
+```cpp
+/*
+    Given grid, return # of unique paths from top-left to bottom-right
+    Ex. m = 3, n = 2 -> 3 unique paths (R->D->D, D->D->R, D->R->D)
+
+    DP: edges have 1 unique path, inner cells consider where it comes from
+    Recurrence relation: grid[i][j] = grid[i-1][j] + grid[i][j-1]
+
+    Time: O(m x n)
+    Space: O(m x n)
+*/
+
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        vector<vector<int>> grid(m, vector<int>(n, 0));
+
+        for (int i = 0; i < m; i++) {
+            grid[i][0] = 1;
+        }
+        for (int j = 0; j < n; j++) {
+            grid[0][j] = 1;
+        }
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                grid[i][j] = grid[i - 1][j] + grid[i][j - 1];
+            }
+        }
+
+        return grid[m - 1][n - 1];
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+
+    // Dynamic programming: TC = O(m*n), SC = O(m*n)
+    public int uniquePaths(int m, int n) {
+        int[][] dp = new int[m][n];
+
+        // Fill out last row
+        for (int j = 0; j < n; j++) {
+            dp[m - 1][j] = 1;
+        }
+
+        // Fill out last column
+        for (int i = 0; i < m; i++) {
+            dp[i][n - 1] = 1;
+        }
+
+        for (int i = m - 2; i >= 0; i--) {
+            for (int j = n - 2; j >= 0; j--) {
+                dp[i][j] = dp[i][j + 1] + dp[i + 1][j];
+            }
+        }
+        return dp[0][0];
+    }
+
+    // Dynamic programming: TC = O(m*n), SC = O(min(m,n))
+    public int uniquePaths2(int m, int n) {
+        if (m <= 0 || n <= 0) return 0;
+
+        int[] dp = new int[n];
+        for (int i = 0; i < n; i++)
+            dp[i] = 1;
+
+        for (int i = 1; i < m; i++)
+            for (int j = 1; j < n; j++)
+                dp[j] += dp[j - 1];
+
+        return dp[n - 1];
+    }
+
+    // Combinatorics: TC = O(min(m,n)), SC = O(1)
+    // result = C(m + n, n) = (m + n)! / (m! * n!)
+    public int uniquePaths3(int m, int n) {
+        if (m <= 0 || n <= 0) return 0;
+
+        if (m < n) return uniquePaths3(n, m);
+
+        m--;
+        n--;
+        long res = 1;
+        for (int i = 1; i <= n; i++) {
+            res *= (m + i);
+            res /= i;
+        }
+        return (int)res;
+    }
+}
+
+```

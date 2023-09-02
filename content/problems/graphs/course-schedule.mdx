@@ -1,0 +1,392 @@
+---
+title: Course Schedule
+category: Graphs
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/course-schedule)
+
+</Callout>
+
+## Description
+
+There are a total of <code>numCourses</code> courses you have to take, labeled from <code>0</code> to <code>numCourses - 1</code>. You are given an array <code>prerequisites</code> where <code>prerequisites[i] = [a<sub>i</sub>, b<sub>i</sub>]</code> indicates that you must take course <code>b<sub>i</sub></code> first if you want to take course <code>a<sub>i</sub></code>.
+
+    - For example, the pair <code>[0, 1]</code>, indicates that to take course <code>0</code> you have to first take course <code>1</code>.
+
+Return <code>true</code> if you can finish all courses. Otherwise, return <code>false</code>.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: numCourses = 2, prerequisites = [[1,0]] Output: true Explanation: There
+	are a total of 2 courses to take. To take course 1 you should have finished
+	course 0. So it is possible.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: numCourses = 2, prerequisites = [[1,0],[0,1]] Output: false
+	Explanation: There are a total of 2 courses to take. To take course 1 you
+	should have finished course 0, and to take course 0 you should also have
+	finished course 1. So it is impossible.
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= numCourses &lt;= 2000</code>
+    - <code>0 &lt;= prerequisites.length &lt;= 5000</code>
+    - <code>prerequisites[i].length == 2</code>
+    - <code>0 &lt;= a<sub>i</sub>, b<sub>i</sub> &lt; numCourses</code>
+    - All the pairs prerequisites[i] are unique.
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/course-schedule/
+ * Time O((V)^2 + E) | Space O(V + E)
+ * @param {number} numCourses
+ * @param {number[][]} prerequisites
+ * @return {boolean}
+ */
+var canFinish = function (numCourses, prerequisites) {
+	const { graph, path } = buildGraph(numCourses, prerequisites)
+
+	return hasPath(numCourses, graph, path)
+}
+
+var initGraph = (numCourses) => ({
+	graph: new Array(numCourses).fill().map(() => []),
+	path: new Array(numCourses).fill(false),
+})
+
+var buildGraph = (numCourses, prerequisites) => {
+	const { graph, path } = initGraph(numCourses)
+
+	for (const [src, dst] of prerequisites) {
+		const neighbors = graph[dst] || []
+
+		neighbors.push(src)
+
+		graph[dst] = neighbors
+	}
+
+	return { graph, path }
+}
+
+var hasPath = (numCourses, graph, path) => {
+	for (let course = 0; course < numCourses; course++) {
+		if (isCyclic(course, graph, path)) return false
+	}
+
+	return true
+}
+
+var isCyclic = (currCourse, graph, path) => {
+	const hasSeen = path[currCourse]
+	if (hasSeen) return true
+
+	const isMissingNext = !(currCourse in graph)
+	if (isMissingNext) return false
+
+	return backTrack(currCourse, graph, path)
+}
+
+var backTrack = (currCourse, graph, path) => {
+	path[currCourse] = true
+	const _hasCycle = hasCycle(currCourse, graph, path)
+	path[currCourse] = false
+
+	return _hasCycle
+}
+
+var hasCycle = (currCourse, graph, path) => {
+	for (const neighbor of graph[currCourse]) {
+		if (isCyclic(neighbor, graph, path)) return true
+	}
+
+	return false
+}
+
+/**
+ * https://leetcode.com/problems/course-schedule/
+ * Time O(V + E) | Space O(V + E)
+ * @param {number} numCourses
+ * @param {number[][]} prerequisites
+ * @return {boolean}
+ */
+var canFinish = function (numCourses, prerequisites) {
+	const { graph, visited, path } = buildGraph(numCourses, prerequisites)
+
+	for (let currCourse = 0; currCourse < numCourses; currCourse++) {
+		if (isCyclic(currCourse, graph, visited, path)) return false
+	}
+
+	return true
+}
+
+var initGraph = (numCourses) => ({
+	graph: new Array(numCourses).fill().map(() => []),
+	visited: new Array(numCourses).fill(false),
+	path: new Array(numCourses).fill(false),
+})
+
+var buildGraph = (numCourses, prerequisites) => {
+	const { graph, visited, path } = initGraph(numCourses)
+
+	for (const [src, dst] of prerequisites) {
+		const neighbors = graph[dst] || []
+
+		neighbors.push(src)
+
+		graph[dst] = neighbors
+	}
+
+	return { graph, visited, path }
+}
+
+var isCyclic = (currCourse, graph, visited, path) => {
+	const isVisited = visited[currCourse]
+	if (isVisited) return false
+
+	const hasSeen = path[currCourse]
+	if (hasSeen) return true
+
+	const isMissingNext = !(currCourse in graph)
+	if (isMissingNext) return false
+
+	const _isCyclic = backTrack(currCourse, graph, visited, path)
+
+	visited[currCourse] = true
+
+	return _isCyclic
+}
+
+var backTrack = (currCourse, graph, visited, path) => {
+	path[currCourse] = true
+	const _hasCycle = hasCycle(currCourse, graph, visited, path)
+	path[currCourse] = false
+
+	return _hasCycle
+}
+
+var hasCycle = (currCourse, graph, visited, path) => {
+	for (const neighbor of graph[currCourse]) {
+		if (isCyclic(neighbor, graph, visited, path)) return true
+	}
+
+	return false
+}
+
+/**
+ * https://leetcode.com/problems/course-schedule/
+ * Time O(V + E) | Space O(V + E)
+ * @param {number} numCourses
+ * @param {number[][]} prerequisites
+ * @return {boolean}
+ */
+var canFinish = function (numCourses, prerequisites) {
+	const { graph, indegree } = buildGraph(numCourses, prerequisites)
+	const topologicalOrder = topologicalSort(graph, indegree)
+	const isDirectedAcyclicGraph = topologicalOrder.length === numCourses
+
+	return isDirectedAcyclicGraph
+}
+
+var initGraph = (numCourses) => ({
+	graph: new Array(numCourses).fill().map(() => []),
+	indegree: new Array(numCourses).fill(0),
+})
+
+var buildGraph = (numCourses, prerequisites) => {
+	const { graph, indegree } = initGraph(numCourses)
+
+	for (const [src, dst] of prerequisites) {
+		graph[src].push(dst)
+		indegree[dst]++
+	}
+
+	return { graph, indegree }
+}
+
+var topologicalSort = (graph, indegree, order = []) => {
+	const queue = searchGraph(graph, indegree)
+
+	bfs(graph, indegree, queue, order)
+
+	return order
+}
+
+var searchGraph = (graph, indegree, queue = new Queue([])) => {
+	for (const node in graph) {
+		const isSource = indegree[node] === 0
+		if (isSource) queue.enqueue(node)
+	}
+
+	return queue
+}
+
+var bfs = (graph, indegree, queue, order) => {
+	while (!queue.isEmpty()) {
+		for (let i = queue.size() - 1; 0 <= i; i--) {
+			checkNeighbors(graph, indegree, queue, order)
+		}
+	}
+}
+
+var checkNeighbors = (graph, indegree, queue, order) => {
+	const node = queue.dequeue()
+
+	order.push(node)
+
+	for (const neighbor of graph[node]) {
+		indegree[neighbor]--
+
+		const isSource = indegree[neighbor] === 0
+		if (isSource) queue.enqueue(neighbor)
+	}
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        # dfs
+        preMap = {i: [] for i in range(numCourses)}
+
+        # map each course to : prereq list
+        for crs, pre in prerequisites:
+            preMap[crs].append(pre)
+
+        visiting = set()
+
+        def dfs(crs):
+            if crs in visiting:
+                return False
+            if preMap[crs] == []:
+                return True
+
+            visiting.add(crs)
+            for pre in preMap[crs]:
+                if not dfs(pre):
+                    return False
+            visiting.remove(crs)
+            preMap[crs] = []
+            return True
+
+        for c in range(numCourses):
+            if not dfs(c):
+                return False
+        return True
+
+```
+
+### C++
+
+```cpp
+/*
+    Courses & prerequisites, return true if can finish all courses
+    Ex. numCourses = 2, prerequisites = [[1,0]] -> true
+
+    All courses can be completed if there's no cycle (visit already visited)
+
+    Time: O(V + E)
+    Space: O(V + E)
+*/
+
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        // map each course to prereq list
+        unordered_map<int, vector<int>> m;
+        for (int i = 0; i < prerequisites.size(); i++) {
+            m[prerequisites[i][0]].push_back(prerequisites[i][1]);
+        }
+        // all courses along current DFS path
+        unordered_set<int> visited;
+
+        for (int course = 0; course < numCourses; course++) {
+            if (!dfs(course, m, visited)) {
+                return false;
+            }
+        }
+        return true;
+    }
+private:
+    bool dfs(int course, unordered_map<int, vector<int>>& m, unordered_set<int>& visited) {
+        if (visited.find(course) != visited.end()) {
+            return false;
+        }
+        if (m[course].empty()) {
+            return true;
+        }
+        visited.insert(course);
+        for (int i = 0; i < m[course].size(); i++) {
+            int nextCourse = m[course][i];
+            if (!dfs(nextCourse, m, visited)) {
+                return false;
+            }
+        }
+        m[course].clear();
+        visited.erase(course);
+        return true;
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        List<List<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < numCourses; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        for (int i = 0; i < prerequisites.length; i++) {
+            adj.get(prerequisites[i][0]).add(prerequisites[i][1]);
+        }
+
+        int[] visited = new int[numCourses];
+        for (int i = 0; i < numCourses; i++) {
+            if (visited[i] == 0) {
+                if (isCyclic(adj, visited, i)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean isCyclic(List<List<Integer>> adj, int[] visited, int curr) {
+        if (visited[curr] == 2) {
+            return true;
+        }
+
+        visited[curr] = 2;
+        for (int i = 0; i < adj.get(curr).size(); i++) {
+            if (visited[adj.get(curr).get(i)] != 1) {
+                if (isCyclic(adj, visited, adj.get(curr).get(i))) {
+                    return true;
+                }
+            }
+        }
+        visited[curr] = 1;
+        return false;
+    }
+}
+
+```

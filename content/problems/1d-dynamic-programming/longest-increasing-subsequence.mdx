@@ -1,0 +1,276 @@
+---
+title: Longest Increasing Subsequence
+category: 1d Dynamic Programming
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/longest-increasing-subsequence)
+
+</Callout>
+
+## Description
+
+Given an integer array <code>nums</code>, return _the length of the longest strictly increasing _<span data-keyword="subsequence-array">_subsequence_</span>.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [10,9,2,5,3,7,101,18] Output: 4 Explanation: The longest
+	increasing subsequence is [2,3,7,101], therefore the length is 4.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">Input: nums = [0,1,0,3,2,3] Output: 4</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">Input: nums = [7,7,7,7,7,7,7] Output: 1</pre>
+
+Constraints:
+
+    - <code>1 &lt;= nums.length &lt;= 2500</code>
+    - <code>-10<sup>4</sup> &lt;= nums[i] &lt;= 10<sup>4</sup></code>
+
+<b>Follow up:</b> Can you come up with an algorithm that runs in <code>
+	O(n log(n))
+</code> time complexity?
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * DP - Bottom Up
+ * Array - Tabulation
+ * Time O(N^2) | Space O(N)
+ * https://leetcode.com/problems/longest-increasing-subsequence/
+ * @param {number[]} nums
+ * @return {number}
+ */
+var lengthOfLIS = (nums) => {
+	const tabu = initTabu(nums) /*               | Space O(N) */
+
+	linearSearch(nums, tabu) /* Time O(N * N) | Space O(N)*/
+
+	return Math.max(...tabu) /* Time O(N) */
+}
+
+const initTabu = (nums) => new Array(nums.length).fill(1)
+
+var linearSearch = (nums, tabu) => {
+	for (let right = 1; right < nums.length; right++) {
+		/* Time O(N) */
+		for (let left = 0; left < right; left++) {
+			/* Time O(N) */
+			const canUpdate = nums[left] < nums[right]
+			if (!canUpdate) continue
+
+			const [_left, _right] = [tabu[left] + 1, tabu[right]]
+			tabu[right] = Math.max(_right, _left) /* Space O(N) */
+		}
+	}
+}
+
+/**
+ * Array - Subsequence
+ * Time O(N^2) | Space O(N)
+ * https://leetcode.com/problems/longest-increasing-subsequence/
+ * @param {number[]} nums
+ * @return {number}
+ */
+var lengthOfLIS = (nums) => {
+	const subsequence = linearSort(nums) /* Time O(N * N) | Space O(N) */
+
+	return subsequence.length
+}
+
+var linearSort = (nums, subsequence = []) => {
+	for (const num of nums) {
+		/* Time O(N) */
+		const max = subsequence[subsequence.length - 1]
+
+		const canAdd = max < num
+		if (canAdd) {
+			subsequence.push(num)
+			continue
+		} /* Space O(N) */
+
+		const index = getMax(subsequence, num) /* Time O(N) */
+
+		subsequence[index] = num
+	}
+
+	return subsequence
+}
+
+const getMax = (subsequence, num, index = 0) => {
+	const isLess = () => subsequence[index] < num
+	while (isLess()) index++ /* Time O(N) */
+
+	return index
+}
+
+/**
+ * Array - Subsequence
+ * Time O(N * log(N)) | Space O(N)
+ * https://leetcode.com/problems/longest-increasing-subsequence/
+ * @param {number[]} nums
+ * @return {number}
+ */
+var lengthOfLIS = (nums) => {
+	const subsequence = logarithmicSort(nums) /* Time O(N * log(N) */
+
+	return subsequence.length
+}
+
+var logarithmicSort = (nums, subsequence = []) => {
+	for (const num of nums) {
+		/* Time O(N) */
+		const max = subsequence[subsequence.length - 1]
+
+		const canAdd = max < num
+		if (canAdd) {
+			subsequence.push(num)
+			continue
+		} /* Space O(N) */
+
+		const index = binarySearch(num, subsequence) /* Time O(log(N)) */
+
+		subsequence[index] = num
+	}
+
+	return subsequence
+}
+
+const binarySearch = (num, subsequence) => {
+	let [left, right] = [0, subsequence.length - 1]
+
+	while (left < right) {
+		/* Time O(log(N)) */
+		const mid = (left + right) >> 1
+		const guess = subsequence[mid]
+
+		const isNumTarget = num === guess
+		if (isNumTarget) return mid
+
+		const isNumGreater = guess < num
+		if (isNumGreater) left = mid + 1
+
+		const isNumLess = num < guess
+		if (isNumLess) right = mid
+	}
+
+	return left
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        LIS = [1] * len(nums)
+
+        for i in range(len(nums) - 1, -1, -1):
+            for j in range(i + 1, len(nums)):
+                if nums[i] < nums[j]:
+                    LIS[i] = max(LIS[i], 1 + LIS[j])
+        return max(LIS)
+
+```
+
+### C++
+
+```cpp
+/*
+    Given int array, return length of longest increasing subsequence
+    Ex. nums = [10,9,2,5,3,7,101,18] -> 4, [2,3,7,101]
+
+    Why DP? 1) Max/min of smth, 2) make decisions based on prev decisions
+    "Decision": is it worth it to consider this number?
+    If use may contribute to better LIS, but may also eliminate an even better LIS
+
+    Framework to solve DP:
+    1) Need some function or array that represents ans to the problem (dp array)
+    2) Way to transition b/w states (recurrence relation), depends on question
+    3) Need a base case (initial solution for every subproblem)
+
+    Recurrence relation: dp[i] = max(dp[j] + 1)
+    Base case: dp[i] = 1, since every element on its own has an LIS of 1
+
+    Time: O(n^2)
+    Space: O(n)
+*/
+
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> dp(n, 1);
+
+        int result = 1;
+
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[j] < nums[i]) {
+                    dp[i] = max(dp[i], dp[j] + 1);
+                }
+            }
+            result = max(result, dp[i]);
+        }
+
+        return result;
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+
+    // Dynamic programming, O(n^2)
+    public int lengthOfLIS(int[] nums) {
+        if (nums.length == 1) return 1;
+
+        int[] LIS = new int[nums.length];
+        Arrays.fill(LIS, 1);
+        int maximumSoFar = 1;
+
+        for (int i = nums.length - 1; i >= 0; i--) {
+            for (int j = i + 1; j < nums.length; j++) {
+                if (nums[i] < nums[j]) {
+                    LIS[i] = Math.max(1 + LIS[j], LIS[i]);
+                }
+            }
+            maximumSoFar = Math.max(maximumSoFar, LIS[i]);
+        }
+        return maximumSoFar;
+    }
+
+    // Binary search, O(nlogn)
+    public int lengthOfLIS(int[] nums) {
+        List<Integer> lis = new ArrayList<>(nums.length);
+
+        for (int n : nums) {
+            int i = Collections.binarySearch(lis, n);
+            if (i < 0) i = -i - 1;
+
+            if (i == lis.size())
+                lis.add(n);
+            else
+                lis.set(i, n);
+        }
+        return lis.size();
+    }
+}
+
+```

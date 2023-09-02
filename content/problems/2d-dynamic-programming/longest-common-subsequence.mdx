@@ -1,0 +1,358 @@
+---
+title: Longest Common Subsequence
+category: 2d Dynamic Programming
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/longest-common-subsequence)
+
+</Callout>
+
+## Description
+
+Given two strings <code>text1</code> and <code>text2</code>, return *the length of their longest common subsequence. *If there is no common subsequence, return <code>0</code>.
+
+A subsequence of a string is a new string generated from the original string with some characters (can be none) deleted without changing the relative order of the remaining characters.
+
+    - For example, <code>&quot;ace&quot;</code> is a subsequence of <code>&quot;abcde&quot;</code>.
+
+A common subsequence of two strings is a subsequence that is common to both strings.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: text1 = &quot;abcde&quot;, text2 = &quot;ace&quot; Output: 3
+	Explanation: The longest common subsequence is &quot;ace&quot; and its length
+	is 3.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: text1 = &quot;abc&quot;, text2 = &quot;abc&quot; Output: 3 Explanation:
+	The longest common subsequence is &quot;abc&quot; and its length is 3.
+</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: text1 = &quot;abc&quot;, text2 = &quot;def&quot; Output: 0 Explanation:
+	There is no such common subsequence, so the result is 0.
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= text1.length, text2.length &lt;= 1000</code>
+    - <code>text1</code> and <code>text2</code> consist of only lowercase English characters.
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * DP - Top Down
+ * Matrix - Memoization
+ * Time O(N * (M^2)) | Space O(N * M)
+ * https://leetcode.com/problems/longest-common-subsequence/
+ * @param {string} text1
+ * @param {string} text2
+ * @return {number}
+ */
+var longestCommonSubsequence = (
+	text1,
+	text2,
+	p1 = 0,
+	p2 = 0,
+	memo = initMemo(text1, text2),
+) => {
+	const isBaseCase = p1 === text1.length || p2 === text2.length
+	if (isBaseCase) return 0
+
+	const hasSeen = memo[p1][p2] !== null
+	if (hasSeen) return memo[p1][p2]
+
+	return dfs(
+		text1,
+		text2,
+		p1,
+		p2,
+		memo,
+	) /* Time O((N * M) * M)) | Space O((N * M) + HEIGHT) */
+}
+
+var initMemo = (text1, text2) =>
+	new Array(text1.length + 1)
+		.fill() /* Time O(N) | Space O(N) */
+		.map(() =>
+			new Array(text2.length + 1).fill(null),
+		) /* Time O(M) | Space O(M) */
+
+var dfs = (text1, text2, p1, p2, memo) => {
+	const left = longestCommonSubsequence(
+		text1,
+		text2,
+		p1 + 1,
+		p2,
+		memo,
+	) /* Time O(N * M) | Space O(HEIGHT) */
+
+	const index = text2.indexOf(text1[p1], p2) /* Time O(M) */
+	const isPrefix = index !== -1
+
+	const right = isPrefix
+		? longestCommonSubsequence(text1, text2, p1 + 1, index + 1, memo) +
+		  1 /* Time O(N * M) | Space O(HEIGHT) */
+		: 0
+
+	memo[p1][p2] = Math.max(left, right) /*               | Space O(N * M) */
+	return memo[p1][p2]
+}
+
+/**
+ * DP - Top Down
+ * Matrix - Memoization
+ * Time O(N * M) | Space O(N * M)
+ * https://leetcode.com/problems/longest-common-subsequence/
+ * @param {string} text1
+ * @param {string} text2
+ * @return {number}
+ */
+var longestCommonSubsequence = (
+	text1,
+	text2,
+	p1 = 0,
+	p2 = 0,
+	memo = initMemo(text1, text2),
+) => {
+	const isBaseCase = p1 === text1.length || p2 === text2.length
+	if (isBaseCase) return 0
+
+	const hasSeen = memo[p1][p2] !== null
+	if (hasSeen) return memo[p1][p2]
+
+	return dfs(
+		text1,
+		text2,
+		p1,
+		p2,
+		memo,
+	) /* Time O(N * M) | Space O((N * M) + HEIGHT) */
+}
+
+var initMemo = (text1, text2) =>
+	new Array(text1.length + 1)
+		.fill() /* Time O(N) | Space O(N) */
+		.map(() =>
+			new Array(text2.length + 1).fill(null),
+		) /* Time O(M) | Space O(M) */
+
+var dfs = (text1, text2, p1, p2, memo) => {
+	const left =
+		longestCommonSubsequence(text1, text2, p1 + 1, p2 + 1, memo) +
+		1 /* Time O(N * M) | Space O(HEIGHT) */
+	const right =
+		/* Time O(N * M) | Space O(HEIGHT) */
+		Math.max(
+			longestCommonSubsequence(text1, text2, p1, p2 + 1, memo),
+			longestCommonSubsequence(text1, text2, p1 + 1, p2, memo),
+		)
+
+	const isEqual = text1[p1] == text2[p2]
+	const count = isEqual ? left : right
+
+	memo[p1][p2] = count /*               | Space O(N * M) */
+	return memo[p1][p2]
+}
+
+/**
+ * DP - Bottom Up
+ * Matrix - Tabulation
+ * Time O(N * M) | Space O(N * M)
+ * https://leetcode.com/problems/longest-common-subsequence/
+ * @param {string} text1
+ * @param {string} text2
+ * @return {number}
+ */
+var longestCommonSubsequence = (text1, text2) => {
+	const tabu = initTabu(text1, text2) /* Time O(N * M) | Space O(N * M) */
+
+	search(text1, text2, tabu) /* Time O(N * M) | Space O(N * M) */
+
+	return tabu[0][0]
+}
+
+var initTabu = (text1, text2) =>
+	new Array(text1.length + 1)
+		.fill() /* Time O(N) | Space O(N) */
+		.map(() => new Array(text2.length + 1).fill(0)) /* Time O(M) | Space O(M) */
+
+var search = (text1, text2, tabu) => {
+	const [n, m] = [text1.length, text2.length]
+
+	for (let x = n - 1; 0 <= x; x--) {
+		/* Time O(N) */
+		for (let y = m - 1; 0 <= y; y--) {
+			/* Time O(M) */
+			tabu[x][y] =
+				text1[x] === text2[y] /* Space O(N * M) */
+					? tabu[x + 1][y + 1] + 1
+					: Math.max(tabu[x + 1][y], tabu[x][y + 1])
+		}
+	}
+}
+
+/**
+ * DP - Bottom Up
+ * Matrix - Tabulation
+ * Time O(N * M) | Space O(M)
+ * https://leetcode.com/problems/longest-common-subsequence/
+ * @param {string} text1
+ * @param {string} text2
+ * @return {number}
+ */
+var longestCommonSubsequence = (text1, text2) => {
+	const canSwap = text2.length < text1.length
+	if (canSwap) [text1, text2] = [text2, text1]
+
+	let tabu = initTabu(text1) /* Time O(M)     | Space O(M) */
+
+	tabu = search(text1, text2, tabu) /* Time O(N * M) | Space O(M) */
+
+	return tabu[0]
+}
+
+var initTabu = (text1) => new Array(text1.length + 1).fill(0)
+
+var search = (text1, text2, tabu) => {
+	for (let col = text2.length - 1; 0 <= col; col--) {
+		/* Time O(N) */
+		const temp = initTabu(text1) /* Space O(M) */
+
+		for (let row = text1.length - 1; 0 <= row; row--) {
+			/* Time O(M) */
+			const isEqual = text1[row] == text2[col]
+
+			temp[row] = isEqual /* Space O(M) */
+				? tabu[row + 1] + 1
+				: Math.max(tabu[row], temp[row + 1])
+		}
+
+		tabu = temp /* Space O(M) */
+	}
+
+	return tabu
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        dp = [[0 for j in range(len(text2) + 1)] for i in range(len(text1) + 1)]
+
+        for i in range(len(text1) - 1, -1, -1):
+            for j in range(len(text2) - 1, -1, -1):
+                if text1[i] == text2[j]:
+                    dp[i][j] = 1 + dp[i + 1][j + 1]
+                else:
+                    dp[i][j] = max(dp[i][j + 1], dp[i + 1][j])
+
+        return dp[0][0]
+
+```
+
+### C++
+
+```cpp
+/*
+    Given 2 strings, return length of longest common subsequence
+    Ex. text1 = "abcde", text2 = "ace" -> 3, "ace" is LCS
+
+                j
+            a   c   e
+        a   3
+        b       2     --> visualization of below, build DP bottom-up
+    i   c       2
+        d           1
+        e           1
+
+    Time: O(m x n)
+    Space: O(m x n)
+*/
+
+class Solution {
+public:
+    int longestCommonSubsequence(string text1, string text2) {
+        int m = text1.size();
+        int n = text2.size();
+
+        vector<vector<int>> dp(m + 1, vector<int>(n + 1));
+
+        for (int i = m - 1; i >= 0; i--) {
+            for (int j = n - 1; j >= 0; j--) {
+                if (text1[i] == text2[j]) {
+                    dp[i][j] = 1 + dp[i + 1][j + 1];
+                } else {
+                    dp[i][j] = max(dp[i + 1][j], dp[i][j + 1]);
+                }
+            }
+        }
+
+        return dp[0][0];
+    }
+};
+
+```
+
+### Java
+
+```java
+//memoized version
+
+class Solution {
+
+    public int longestCommonSubsequence(String text1, String text2) {
+        int[][] dp = new int[text1.length()][text2.length()];
+        return LCS(text1, text2, 0, 0, dp);
+    }
+
+    public int LCS(String s1, String s2, int i, int j, int[][] dp) {
+        if (i >= s1.length() || j >= s2.length()) return 0; else if (
+            dp[i][j] != 0
+        ) return dp[i][j]; else if (s1.charAt(i) == s2.charAt(j)) return (
+            1 + LCS(s1, s2, i + 1, j + 1, dp)
+        ); else {
+            dp[i][j] =
+                Math.max(LCS(s1, s2, i + 1, j, dp), LCS(s1, s2, i, j + 1, dp));
+            return dp[i][j];
+        }
+    }
+}
+
+// Iterative version
+class Solution {
+
+    public int longestCommonSubsequence(String text1, String text2) {
+        int[][] dp = new int[text1.length() + 1][text2.length() + 1];
+
+        for (int i = text1.length() - 1; i >= 0; i--) {
+            for (int j = text2.length() - 1; j >= 0; j--) {
+                if (text1.charAt(i) == text2.charAt(j)) {
+                    dp[i][j] = 1 + dp[i + 1][j + 1];
+                } else {
+                    dp[i][j] = Math.max(dp[i][j + 1], dp[i + 1][j]);
+                }
+            }
+        }
+
+        return dp[0][0];
+    }
+}
+```

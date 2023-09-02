@@ -1,0 +1,425 @@
+---
+title: Number of Islands
+category: Graphs
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/number-of-islands)
+
+</Callout>
+
+## Description
+
+Given an <code>m x n</code> 2D binary grid <code>grid</code> which represents a map of <code>&#39;1&#39;</code>s (land) and <code>&#39;0&#39;</code>s (water), return _the number of islands_.
+
+An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: grid = [
+	[&quot;1&quot;,&quot;1&quot;,&quot;1&quot;,&quot;1&quot;,&quot;0&quot;],
+	[&quot;1&quot;,&quot;1&quot;,&quot;0&quot;,&quot;1&quot;,&quot;0&quot;],
+	[&quot;1&quot;,&quot;1&quot;,&quot;0&quot;,&quot;0&quot;,&quot;0&quot;],
+	[&quot;0&quot;,&quot;0&quot;,&quot;0&quot;,&quot;0&quot;,&quot;0&quot;] ]
+	Output: 1
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: grid = [
+	[&quot;1&quot;,&quot;1&quot;,&quot;0&quot;,&quot;0&quot;,&quot;0&quot;],
+	[&quot;1&quot;,&quot;1&quot;,&quot;0&quot;,&quot;0&quot;,&quot;0&quot;],
+	[&quot;0&quot;,&quot;0&quot;,&quot;1&quot;,&quot;0&quot;,&quot;0&quot;],
+	[&quot;0&quot;,&quot;0&quot;,&quot;0&quot;,&quot;1&quot;,&quot;1&quot;] ]
+	Output: 3
+</pre>
+
+Constraints:
+
+    - <code>m == grid.length</code>
+    - <code>n == grid[i].length</code>
+    - <code>1 &lt;= m, n &lt;= 300</code>
+    - <code>grid[i][j]</code> is <code>&#39;0&#39;</code> or <code>&#39;1&#39;</code>.
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/number-of-islands/
+ * Time O(ROWS * COLS) | Space O(ROWS * COLS)
+ * @param {character[][]} grid
+ * @return {number}
+ */
+var numIslands = function (grid, connectedComponents = 0) {
+	const [rows, cols] = [grid.length, grid[0].length]
+
+	for (let row = 0; row < rows; row++) {
+		/* Time O(ROWS) */
+		for (let col = 0; col < cols; col++) {
+			/* Time O(COLS) */
+			const isIsland = grid[row][col] === '1'
+			if (isIsland) connectedComponents++
+
+			dfs(grid, row, rows, col, cols) /* Space O(ROWS * COLS) */
+		}
+	}
+
+	return connectedComponents
+}
+
+const dfs = (grid, row, rows, col, cols) => {
+	const isBaseCase = grid[row][col] === '0'
+	if (isBaseCase) return
+
+	grid[row][col] = '0'
+
+	for (const [_row, _col] of getNeighbors(row, rows, col, cols)) {
+		dfs(grid, _row, rows, _col, cols) /* Space O(ROWS * COLS) */
+	}
+}
+
+var getNeighbors = (row, rows, col, cols) =>
+	[
+		[0, 1],
+		[0, -1],
+		[1, 0],
+		[-1, 0],
+	]
+		.map(([_row, _col]) => [row + _row, col + _col])
+		.filter(
+			([_row, _col]) => 0 <= _row && _row < rows && 0 <= _col && _col < cols,
+		)
+
+/**
+ * https://leetcode.com/problems/number-of-islands/
+ * Time O(ROWS * COLS) | Space O(MIN(ROWS,COLS))
+ * @param {character[][]} grid
+ * @return {number}
+ */
+var numIslands = function (grid, connectedComponents = 0) {
+	const [rows, cols] = [grid.length, grid[0].length]
+
+	for (let row = 0; row < rows; row++) {
+		/* Time O(ROWS) */
+		for (let col = 0; col < cols; col++) {
+			/* Time O(COLS) */
+			const isIsland = grid[row][col] === '1'
+			if (isIsland) connectedComponents++
+
+			bfs(
+				grid,
+				rows,
+				cols,
+				new Queue([[row, col]]),
+			) /* Space O(MIN(ROWS,COLS)) */
+		}
+	}
+
+	return connectedComponents
+}
+
+const bfs = (grid, rows, cols, queue) => {
+	while (!queue.isEmpty()) {
+		for (let i = queue.size() - 1; 0 <= i; i--) {
+			/* Time O(WIDTH) */
+			const [row, col] = queue.dequeue()
+
+			const isWater = grid[row][col] === '0'
+			if (isWater) continue
+
+			grid[row][col] = '0'
+
+			for (const [_row, _col] of getNeighbors(row, rows, col, cols)) {
+				queue.enqueue([_row, _col]) /* Space O(MIN(ROWS,COLS)) */
+			}
+		}
+	}
+}
+
+var getNeighbors = (row, rows, col, cols) =>
+	[
+		[0, 1],
+		[0, -1],
+		[1, 0],
+		[-1, 0],
+	]
+		.map(([_row, _col]) => [row + _row, col + _col])
+		.filter(
+			([_row, _col]) => 0 <= _row && _row < rows && 0 <= _col && _col < cols,
+		)
+
+/**
+ * https://leetcode.com/problems/number-of-islands/
+ * Time O(ROWS * COLS) | Space O(ROWS * COLS)
+ * @param {character[][]} grid
+ * @return {number}
+ */
+var numIslands = function (grid) {
+	const unionFind = new UnionFind(
+		grid,
+	) /* Time O(ROWS * COLS) | Space O(ROWS * COLS) */
+
+	searchGrid(grid, unionFind) /* Time O(ROWS * COLS) */
+
+	return unionFind.connectedComponents
+}
+
+var searchGrid = (grid, unionFind) => {
+	const [rows, cols] = [grid.length, grid[0].length]
+
+	for (let row = 0; row < rows; row++) {
+		/* Time O(ROWS) */
+		for (let col = 0; col < cols; col++) {
+			/* Time O(COLS) */
+			const isWater = grid[row][col] === '0'
+			if (isWater) continue
+
+			grid[row][col] = '0'
+
+			searchRows(unionFind, grid, row, rows, col, cols)
+			searchCols(unionFind, grid, row, rows, col, cols)
+		}
+	}
+}
+
+const searchRows = (unionFind, grid, row, rows, col, cols) =>
+	[1, -1]
+		.map((_row) => row + _row)
+		.filter((_row) => isInBound(_row, rows) && isIsland(grid[_row][col]))
+		.map((_row) => [index(row, cols, col), index(_row, cols, col)])
+		.forEach(([x, y]) => unionFind.union(x, y))
+
+const isInBound = (val, vals) => 0 <= val && val < vals
+const isIsland = (cell) => cell === '1'
+const index = (row, cols, col) => row * cols + col
+
+const searchCols = (unionFind, grid, row, rows, col, cols) =>
+	[1, -1]
+		.map((_col) => col + _col)
+		.filter((_col) => isInBound(_col, cols) && isIsland(grid[row][_col]))
+		.map((_col) => [index(row, cols, col), index(row, cols, _col)])
+		.forEach(([x, y]) => unionFind.union(x, y))
+
+class UnionFind {
+	constructor(grid) {
+		const [rows, cols] = [grid.length, grid[0].length]
+
+		this.connectedComponents = 0
+		this.grid = grid
+		this.rows = rows
+		this.cols = cols
+		this.parent = new Array(rows * cols).fill(0)
+		this.rank = new Array(rows * cols).fill(0)
+
+		this.findIslands()
+	}
+
+	findIslands({ grid, rows, cols, parent } = this) {
+		for (let row = 0; row < rows; row++) {
+			/* Time O(ROWS) */
+			for (let col = 0; col < cols; col++) {
+				/* Time O(COLS) */
+				const isWater = grid[row][col] === '0'
+				if (isWater) continue
+
+				const index = row * cols + col
+
+				parent[index] = index /* Space O(ROWS * COLS) */
+				this.connectedComponents++
+			}
+		}
+	}
+
+	find(index, { parent } = this) {
+		const isEqual = () => parent[index] === index
+		while (!isEqual()) {
+			index = parent[index]
+		}
+
+		return parent[index]
+	}
+
+	union(x, y, { parent, rank } = this) {
+		const [rootX, rootY] = [this.find(x), this.find(y)]
+
+		const hasCycle = rootX === rootY
+		if (hasCycle) return
+
+		this.connectedComponents--
+
+		const isXGreater = rank[rootY] < rank[rootX]
+		if (isXGreater) return (parent[rootY] = rootX)
+
+		const isYGreater = rank[rootX] < rank[rootY]
+		if (isYGreater) return (parent[rootX] = rootY)
+
+		parent[rootY] = rootX /* Space O(ROWS * COLS) */
+		rank[rootX]++ /* Space O(ROWS * COLS) */
+	}
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        if not grid or not grid[0]:
+            return 0
+
+        islands = 0
+        visit = set()
+        rows, cols = len(grid), len(grid[0])
+
+        def dfs(r, c):
+            if (
+                r not in range(rows)
+                or c not in range(cols)
+                or grid[r][c] == "0"
+                or (r, c) in visit
+            ):
+                return
+
+            visit.add((r, c))
+            directions = [[0, 1], [0, -1], [1, 0], [-1, 0]]
+            for dr, dc in directions:
+                dfs(r + dr, c + dc)
+
+        for r in range(rows):
+            for c in range(cols):
+                if grid[r][c] == "1" and (r, c) not in visit:
+                    islands += 1
+                    dfs(r, c)
+        return islands
+
+
+# BFS Version From Video
+class SolutionBFS:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        if not grid:
+            return 0
+
+        rows, cols = len(grid), len(grid[0])
+        visited=set()
+        islands=0
+
+         def bfs(r,c):
+             q = deque()
+             visited.add((r,c))
+             q.append((r,c))
+
+             while q:
+                 row,col = q.popleft()
+                 directions= [[1,0],[-1,0],[0,1],[0,-1]]
+
+                 for dr,dc in directions:
+                     r,c = row + dr, col + dc
+                     if (r) in range(rows) and (c) in range(cols) and grid[r][c] == '1' and (r ,c) not in visited:
+
+                         q.append((r , c ))
+                         visited.add((r, c ))
+
+         for r in range(rows):
+             for c in range(cols):
+
+                 if grid[r][c] == "1" and (r,c) not in visited:
+                     bfs(r,c)
+                     islands +=1
+
+         return islands
+
+
+```
+
+### C++
+
+```cpp
+/*
+    Given grid where '1' is land & '0' is water, return # of islands
+
+    DFS, set visited land to '0' to not visit it again, count islands
+
+    Time: O(m x n)
+    Space: O(m x n)
+*/
+
+class Solution {
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+
+        int result = 0;
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == '1') {
+                    dfs(grid, i, j, m, n);
+                    result++;
+                }
+            }
+        }
+
+        return result;
+    }
+private:
+    void dfs(vector<vector<char>>& grid, int i, int j, int m, int n) {
+        if (i < 0 || i >= m || j < 0 || j >= n || grid[i][j] == '0') {
+            return;
+        }
+        grid[i][j] = '0';
+
+        dfs(grid, i - 1, j, m, n);
+        dfs(grid, i + 1, j, m, n);
+        dfs(grid, i, j - 1, m, n);
+        dfs(grid, i, j + 1, m, n);
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+
+    public int numIslands(char[][] grid) {
+        int count = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == '1') {
+                    dfs(grid, i, j);
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    public void dfs(char[][] grid, int i, int j) {
+        if (
+            i < 0 ||
+            j < 0 ||
+            i >= grid.length ||
+            j >= grid[0].length ||
+            grid[i][j] == '0'
+        ) {
+            return;
+        }
+        grid[i][j] = '0';
+        dfs(grid, i + 1, j);
+        dfs(grid, i, j + 1);
+        dfs(grid, i - 1, j);
+        dfs(grid, i, j - 1);
+    }
+}
+
+```

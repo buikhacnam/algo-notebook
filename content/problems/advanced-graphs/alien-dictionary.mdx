@@ -1,0 +1,446 @@
+---
+title: Alien Dictionary
+category: Advanced Graphs
+difficulty: Hard
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/alien-dictionary)
+
+</Callout>
+
+## Description
+
+This problem is on Premium plan or is not available
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * BFS
+ * https://leetcode.com/problems/alien-dictionary/
+ * @param {string[]} words
+ * @return {string}
+ */
+var alienOrder = function (words) {
+	const { graph, frequencyMap, queue, buffer } = buildGraph(words)
+
+	if (!canBuildGraph(words, graph, frequencyMap)) return ''
+
+	queueSources(queue, frequencyMap)
+	bfs(queue, frequencyMap, graph, buffer)
+
+	return frequencyMap.size <= buffer.length ? buffer.join('') : ''
+}
+
+var initGraph = () => ({
+	graph: new Map(),
+	frequencyMap: new Map(),
+	queue: new Queue(),
+	buffer: [],
+})
+
+var buildGraph = (words) => {
+	const { graph, frequencyMap, queue, buffer } = initGraph()
+
+	for (const word of words) {
+		for (const char of word) {
+			frequencyMap.set(char, 0)
+			graph.set(char, [])
+		}
+	}
+
+	return { graph, frequencyMap, queue, buffer }
+}
+
+var canBuildGraph = (words, graph, frequencyMap) => {
+	for (let index = 0; index < words.length - 1; index++) {
+		const [word1, word2] = [words[index], words[index + 1]]
+		const minLength = Math.min(word1.length, word2.length)
+
+		const isWord1Longer = word2.length < word1.length
+		const isPrefix = isWord1Longer && word1.startsWith(word2)
+
+		if (isPrefix) return false
+
+		for (let j = 0; j < minLength; j++) {
+			const [char1, char2] = [word1[j], word2[j]]
+
+			const isEqual = char1 === char2
+			if (isEqual) continue
+
+			graph.get(char1).push(char2)
+			frequencyMap.set(char2, frequencyMap.get(char2) + 1)
+
+			break
+		}
+	}
+
+	return true
+}
+
+const bfs = (queue, frequencyMap, graph, buffer) => {
+	while (!queue.isEmpty()) {
+		for (let level = queue.size() - 1; 0 <= level; level--) {
+			checkNeighbors(queue, frequencyMap, graph, buffer)
+		}
+	}
+}
+
+var checkNeighbors = (queue, frequencyMap, graph, buffer) => {
+	const char = queue.dequeue()
+
+	buffer.push(char)
+
+	for (const next of graph.get(char)) {
+		const value = frequencyMap.get(next) - 1
+
+		frequencyMap.set(next, value)
+
+		const isEmpty = frequencyMap.get(next) === 0
+		if (!isEmpty) continue
+
+		queue.enqueue(next)
+	}
+}
+
+const queueSources = (queue, frequencyMap) => {
+	for (const [key, value] of frequencyMap) {
+		const isEmpty = frequencyMap.get(key) === 0
+		if (!isEmpty) continue
+
+		queue.enqueue(key)
+	}
+}
+
+/**
+ * DFS
+ * https://leetcode.com/problems/alien-dictionary/
+ * @param {string[]} words
+ * @return {string}
+ */
+var alienOrder = function (words) {
+	const { graph, seen, buffer } = buildGraph(words)
+
+	if (!canBuildGraph(words, graph)) return ''
+
+	for (const [char] of graph) {
+		if (!dfs(char, graph, seen, buffer)) return ''
+	}
+
+	return buffer.reverse().join('')
+}
+
+var initGraph = () => ({
+	graph: new Map(),
+	seen: new Map(),
+	buffer: [],
+})
+
+var buildGraph = (words) => {
+	const { graph, seen, buffer } = initGraph()
+
+	for (const word of words) {
+		for (const char of word) {
+			graph.set(char, [])
+		}
+	}
+
+	return { graph, seen, buffer }
+}
+
+var canBuildGraph = (words, graph) => {
+	for (let index = 0; index < words.length - 1; index++) {
+		const [word1, word2] = [words[index], words[index + 1]]
+		const minLength = Math.min(word1.length, word2.length)
+
+		const isWord1Longer = word2.length < word1.length
+		const isPrefix = isWord1Longer && word1.startsWith(word2)
+
+		if (isPrefix) return false
+
+		for (let j = 0; j < minLength; j++) {
+			const [char1, char2] = [word1[j], word2[j]]
+
+			const isEqual = char1 === char2
+			if (isEqual) continue
+
+			graph.get(char1).push(char2)
+
+			break
+		}
+	}
+
+	return true
+}
+
+const dfs = (char, graph, seen, buffer) => {
+	if (seen.has(char)) return seen.get(char)
+
+	if (!backTrack(char, graph, seen, buffer)) return false
+
+	buffer.push(char)
+
+	return true
+}
+
+const backTrack = (char, graph, seen, buffer) => {
+	seen.set(char, false)
+	for (const neighbor of graph.get(char)) {
+		if (!dfs(neighbor, graph, seen, buffer)) return false
+	}
+	seen.set(char, true)
+
+	return true
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def alienOrder(self, words: List[str]) -> str:
+        adj = {char: set() for word in words for char in word}
+
+        for i in range(len(words) - 1):
+            w1, w2 = words[i], words[i + 1]
+            minLen = min(len(w1), len(w2))
+            if len(w1) > len(w2) and w1[:minLen] == w2[:minLen]:
+                return ""
+            for j in range(minLen):
+                if w1[j] != w2[j]:
+                    print(w1[j], w2[j])
+                    adj[w1[j]].add(w2[j])
+                    break
+
+        visited = {}  # {char: bool} False visited, True current path
+        res = []
+
+        def dfs(char):
+            if char in visited:
+                return visited[char]
+
+            visited[char] = True
+
+            for neighChar in adj[char]:
+                if dfs(neighChar):
+                    return True
+
+            visited[char] = False
+            res.append(char)
+
+        for char in adj:
+            if dfs(char):
+                return ""
+
+        res.reverse()
+        return "".join(res)
+
+```
+
+### C++
+
+```cpp
+#include<iostream>
+#include<map>
+#include<vector>
+#include<queue>
+using namespace std;
+
+class Solution {
+public:
+    string alienOrder(vector<string>& words) {
+        map<char,int> degree;
+        map<char, vector<char>> graph;
+        int n = words.size();
+
+        for (auto& word : words) {
+            for (auto& ch : word) {
+                degree[ch] = 0;
+        }
+
+        for (int i = 0; i < n - 1; i++) {
+         int l = min((int)words[i].size(), (int)words[i + 1].size());
+         for (int j = 0; j < l; j++) {
+            char x = words[i][j];
+            char y = words[i + 1][j];
+            if (x != y) {
+               graph[x].push_back(y);
+               degree[y]++;
+               break;
+            }
+         }
+      }
+
+      string ret = "";
+      queue<char> q;
+      map<char, int>::iterator it = degree.begin();
+      while (it != degree.end()) {
+         if (it->second == 0) {
+            q.push(it->first);
+         }
+         it++;
+      }
+
+      while (!q.empty()) {
+         char x = q.front();
+         q.pop();
+         ret += x;
+         vector<char>::iterator sit = graph[x].begin();
+         while (sit != graph[x].end()) {
+            degree[*sit]--;
+            if (degree[*sit] == 0) {
+               q.push(*sit);
+            }
+            sit++;
+         }
+      }
+      return ret.size() == degree.size() ? ret : "";
+      }
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+
+    Map<Character, Set<Character>> adjList;
+    Map<Character, Set<Character>> revList;
+    Map<Character, Integer> degrees;
+
+    // Return false if s.len < t.len condition is not met
+    private boolean createEdges(String left, String right) {
+        int minLen = Math.min(left.length(), right.length());
+
+        for (int i = 0; i < minLen; i++) {
+            char first = left.charAt(i), second = right.charAt(i);
+
+            if (first != second) {
+                Set<Character> edges = this.adjList.get(first);
+                edges.add(second);
+                this.adjList.put(first, edges);
+
+                Set<Character> revEdges = this.revList.get(second);
+                revEdges.add(first);
+                this.revList.put(second, revEdges);
+
+                return true;
+            }
+        }
+
+        // No difference found yet, there is a problem
+        return (left.length() <= right.length());
+    }
+
+    private void initialize(String[] words) {
+        // Initialize
+        int n = words.length;
+        this.adjList = new HashMap<>();
+        this.revList = new HashMap<>();
+        this.degrees = new HashMap<>();
+
+        for (int i = 0; i < n; i++) {
+            for (char c : words[i].toCharArray()) {
+                this.adjList.put(c, new HashSet<>());
+                this.revList.put(c, new HashSet<>());
+                this.degrees.put(c, 0);
+            }
+        }
+    }
+
+    // Return false if creating any edge leads to a problem
+    private boolean createEdges(String[] words) {
+        int n = words.length;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (createEdges(words[i], words[j]) == false) return false;
+            }
+        }
+        return true;
+    }
+
+    private void createDegrees() {
+        for (char c : this.adjList.keySet()) {
+            this.degrees.put(c, this.adjList.get(c).size());
+        }
+    }
+
+    private List<Character> topologicalSort() {
+        // take zero degrees first into a queue
+        Queue<Character> queue = new LinkedList<>();
+
+        Set<Character> taken = new HashSet<>();
+        List<Character> ordering = new ArrayList<>();
+
+        for (char c : this.degrees.keySet()) {
+            if (this.degrees.get(c) == 0) {
+                queue.add(c);
+            }
+        }
+
+        // Case 1: Doesn't exist
+        if (queue.isEmpty()) {
+            return null;
+        }
+
+        while (!queue.isEmpty()) {
+            int qSize = queue.size();
+
+            // Level order traversal
+            for (int i = 0; i < qSize; i++) {
+                char removed = queue.remove();
+
+                // Put into the ordering
+                ordering.add(removed);
+                taken.add(removed);
+
+                // In the reverse list, need to decrement for all neighbors, and if any is zero, need to put into the queue
+                for (char neighbor : this.revList.get(removed)) {
+                    int degree = this.degrees.get(neighbor);
+                    degree--;
+
+                    if (degree == 0) queue.add(neighbor); // add to queue
+
+                    this.degrees.put(neighbor, degree);
+                }
+            }
+        }
+
+        // Case 2: Not all vertices were ordered
+        if (ordering.size() < this.revList.size()) {
+            return null;
+        }
+
+        return ordering;
+    }
+
+    private String getString(List<Character> ordering) {
+        StringBuilder bld = new StringBuilder();
+        for (char c : ordering) bld.append(c);
+        return bld.reverse().toString();
+    }
+
+    // API
+    public String alienOrder(String[] words) {
+        initialize(words);
+
+        // Edge case, s.len < t.len is not met
+        if (createEdges(words) == false) return "";
+
+        createDegrees();
+
+        List<Character> ordering = topologicalSort();
+
+        if (ordering == null) return "";
+
+        return getString(ordering);
+    }
+}
+
+```

@@ -1,0 +1,185 @@
+---
+title: Non-overlapping Intervals
+category: Intervals
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/non-overlapping-intervals)
+
+</Callout>
+
+## Description
+
+Given an array of intervals <code>intervals</code> where <code>intervals[i] = [start<sub>i</sub>, end<sub>i</sub>]</code>, return _the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping_.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: intervals = [[1,2],[2,3],[3,4],[1,3]] Output: 1 Explanation: [1,3] can
+	be removed and the rest of the intervals are non-overlapping.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: intervals = [[1,2],[1,2],[1,2]] Output: 2 Explanation: You need to
+	remove two [1,2] to make the rest of the intervals non-overlapping.
+</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: intervals = [[1,2],[2,3]] Output: 0 Explanation: You don&#39;t need to
+	remove any of the intervals since they&#39;re already non-overlapping.
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= intervals.length &lt;= 10<sup>5</sup></code>
+    - <code>intervals[i].length == 2</code>
+    - <code>-5 * 10<sup>4</sup> &lt;= start<sub>i</sub> &lt; end<sub>i</sub> &lt;= 5 * 10<sup>4</sup></code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/non-overlapping-intervals/
+ * Time O(N * logN) | Space O(1)
+ * @param {number[][]} intervals
+ * @return {number}
+ */
+var eraseOverlapIntervals = function (intervals) {
+	intervals.sort(([aStart, aEnd], [bStart, bEnd]) =>
+		aEnd !== bEnd ? aEnd - bEnd : aStart - bStart,
+	)
+
+	return getGaps(intervals)
+}
+
+const getGaps = (intervals, gaps = 1) => {
+	const prev = intervals.shift()
+
+	for (const curr of intervals) {
+		const [prevStart, prevEnd] = prev
+		const [currStart, currEnd] = curr
+
+		const hasGap = prevEnd <= currStart
+		if (!hasGap) continue
+
+		prev[1] = curr[1]
+		gaps++
+	}
+
+	return intervals.length + 1 - gaps
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:
+        intervals.sort()
+        res = 0
+        prevEnd = intervals[0][1]
+        for start, end in intervals[1:]:
+            if start >= prevEnd:
+                prevEnd = end
+            else:
+                res += 1
+                prevEnd = min(end, prevEnd)
+        return res
+
+```
+
+### C++
+
+```cpp
+/*
+    Given array of intervals, return min # of intervals to remove for all non-overlapping
+    Ex. intervals = [[1,2],[1,3],[2,3],[3,4]] -> 1, remove [1,3] for all non-overlapping
+
+    Remove interval w/ longer end point, since will always overlap more or = vs shorter one
+
+    Time: O(n log n)
+    Space: O(1)
+*/
+
+class Solution {
+public:
+    int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+        int n = intervals.size();
+        if (n == 1) {
+            return 0;
+        }
+
+        sort(intervals.begin(), intervals.end(), [](const auto& a, const auto& b) {
+            return a[0] < b[0];
+        });
+
+        int result = 0;
+
+        int i = 0;
+        while (i < n - 1) {
+            if (intervals[i][1] > intervals[i+1][0]) {
+                if (intervals[i][1] < intervals[i+1][1]) {
+                    intervals[i+1] = intervals[i];
+                }
+                result++;
+            }
+            i++;
+        }
+
+        return result;
+    }
+};
+
+```
+
+### Java
+
+```java
+public class Solution {
+
+    public int eraseOverlapIntervals(int[][] intervals) {
+        int intervalsRemoved = 0;
+
+        Arrays.sort(
+            intervals,
+            (arr1, arr2) -> Integer.compare(arr1[0], arr2[0])
+        );
+
+        int[] intervalFirst = intervals[0];
+
+        for (int i = 1; i < intervals.length; i++) {
+            if (firstIntervalwithinSecond(intervalFirst, intervals[i])) {
+                //mark first interval to be removed
+                intervalsRemoved++;
+                // determine which interval to remove
+                //remove the interval that ends last
+                if (intervalFirst[1] > intervals[i][1]) {
+                    intervalFirst = intervals[i];
+                }
+            } else {
+                intervalFirst = intervals[i];
+            }
+        }
+        return intervalsRemoved;
+    }
+
+    public boolean firstIntervalwithinSecond(
+        int[] intervalFirst,
+        int[] intervalSecond
+    ) {
+        return intervalSecond[0] < intervalFirst[1];
+    }
+}
+
+```

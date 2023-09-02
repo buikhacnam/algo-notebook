@@ -1,0 +1,248 @@
+---
+title: Same Tree
+category: Trees
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/same-tree)
+
+</Callout>
+
+## Description
+
+Given the roots of two binary trees <code>p</code> and <code>q</code>, write a function to check if they are the same or not.
+
+Two binary trees are considered the same if they are structurally identical, and the nodes have the same value.
+
+Example 1:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/12/20/ex1.jpg"
+	width={622}
+	height={182}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: p = [1,2,3], q = [1,2,3] Output: true
+</pre>
+
+Example 2:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/12/20/ex2.jpg"
+	width={382}
+	height={182}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: p = [1,2], q = [1,null,2] Output: false
+</pre>
+
+Example 3:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/12/20/ex3.jpg"
+	width={622}
+	height={182}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: p = [1,2,1], q = [1,1,2] Output: false
+</pre>
+
+Constraints:
+
+    - The number of nodes in both trees is in the range <code>[0, 100]</code>.
+    - <code>-10<sup>4</sup> &lt;= Node.val &lt;= 10<sup>4</sup></code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/same-tree/
+ * TIme O(N) | Space O(H)
+ * @param {TreeNode} p
+ * @param {TreeNode} q
+ * @return {boolean}
+ */
+var isSameTree = function (p, q) {
+	const isBaseCase = !(p || q)
+	if (isBaseCase) return true
+
+	const isBalanced = p && q
+	if (!isBalanced) return false
+
+	const isSame = p.val === q.val
+	if (!isSame) return false
+
+	return dfs(p, q)
+}
+
+const dfs = (p, q) => {
+	const left = isSameTree(p.left, q.left)
+	const right = isSameTree(p.right, q.right)
+
+	return left && right
+}
+
+/**
+ * https://leetcode.com/problems/same-tree/
+ * TIme O(N) | Space O(W)
+ * @param {TreeNode} p
+ * @param {TreeNode} q
+ * @return {boolean}
+ */
+var isSameTree = function (p, q) {
+	if (isSameNode(p, q)) return true
+
+	return bfs([[p, q]])
+}
+
+const bfs = (queue) => {
+	while (queue.length) {
+		for (let i = queue.length - 1; 0 <= i; i--) {
+			const [p, q] = queue.shift()
+
+			if (!isSame(p, q)) return false
+
+			if (p.left) queue.push([p.left, q.left])
+			if (p.right) queue.push([p.right, q.right])
+		}
+	}
+
+	return true
+}
+
+const isSameNode = (p, q) => {
+	const isBaseCase = !(p || q)
+	if (isBaseCase) return true
+
+	const isBalanced = p && q
+	if (!isBalanced) return false
+
+	const isSame = p.val === q.val
+	if (!isSame) return false
+
+	return true
+}
+
+const isSame = (p, q) =>
+	isSameNode(p, q) && isSameNode(p.left, q.left) && isSameNode(p.right, q.right)
+```
+
+### Python
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+
+class Solution:
+    def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
+        if not p and not q:
+            return True
+        if p and q and p.val == q.val:
+            return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
+        else:
+            return False
+
+```
+
+### C++
+
+```cpp
+/*
+    Given roots of 2 binary trees, check if they're the same or not (same structure & values)
+    Ex. p = [1,2,3] q = [1,2,3] -> true, p = [1,2] q = [1,null,2] -> false
+
+    Check: (1) matching nulls, (2) non-matching nulls, (3) non-matching values
+
+    Time: O(n)
+    Space: O(n)
+*/
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if (p == NULL && q == NULL) {
+            return true;
+        }
+        if (p == NULL || q == NULL) {
+            return false;
+        }
+        if (p->val != q->val) {
+            return false;
+        }
+        return isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
+    }
+};
+
+```
+
+### Java
+
+```java
+package java;
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        return dfs(p, q);
+    }
+
+    private boolean dfs(TreeNode p, TreeNode q) {
+        if (p == null && q == null) {
+            return true;
+        }
+
+        if (p == null || q == null) {
+            return false;
+        }
+
+        if (p.val != q.val) return false;
+
+        boolean left = dfs(p.left, q.left);
+        boolean right = dfs(p.right, q.right);
+
+        return left && right;
+    }
+}
+
+```

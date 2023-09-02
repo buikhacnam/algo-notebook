@@ -1,0 +1,437 @@
+---
+title: Word Search II
+category: Tries
+difficulty: Hard
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/word-search-ii)
+
+</Callout>
+
+## Description
+
+Given an <code>m x n</code> <code>board</code> of characters and a list of strings <code>words</code>, return _all words on the board_.
+
+Each word must be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. The same letter cell may not be used more than once in a word.
+
+Example 1:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/11/07/search1.jpg"
+	width={322}
+	height={322}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: board =
+	[[&quot;o&quot;,&quot;a&quot;,&quot;a&quot;,&quot;n&quot;],[&quot;e&quot;,&quot;t&quot;,&quot;a&quot;,&quot;e&quot;],[&quot;i&quot;,&quot;h&quot;,&quot;k&quot;,&quot;r&quot;],[&quot;i&quot;,&quot;f&quot;,&quot;l&quot;,&quot;v&quot;]],
+	words = [&quot;oath&quot;,&quot;pea&quot;,&quot;eat&quot;,&quot;rain&quot;]
+	Output: [&quot;eat&quot;,&quot;oath&quot;]
+</pre>
+
+Example 2:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/11/07/search2.jpg"
+	width={162}
+	height={162}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: board = [[&quot;a&quot;,&quot;b&quot;],[&quot;c&quot;,&quot;d&quot;]],
+	words = [&quot;abcb&quot;] Output: []
+</pre>
+
+Constraints:
+
+    - <code>m == board.length</code>
+    - <code>n == board[i].length</code>
+    - <code>1 &lt;= m, n &lt;= 12</code>
+    - <code>board[i][j]</code> is a lowercase English letter.
+    - <code>1 &lt;= words.length &lt;= 3 * 10<sup>4</sup></code>
+    - <code>1 &lt;= words[i].length &lt;= 10</code>
+    - <code>words[i]</code> consists of lowercase English letters.
+    - All the strings of <code>words</code> are unique.
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * @param {character[][]} board
+ * @param {string[]} words
+ * Time O((ROWS * COLS) * (4 * (3 ^ (WORDS - 1)))) | Space O(N)
+ * @return {string[]}
+ */
+var findWords = function (board, words) {
+	return new Trie(words).searchBoard(board)
+}
+
+class TrieNode {
+	constructor() {
+		this.children = {}
+		this.word = ''
+	}
+}
+
+class Trie {
+	constructor(words) {
+		this.root = new TrieNode()
+		words.forEach((word) => this.insert(word))
+	}
+
+	/* Time O(N) | Space O(N) */
+	insert(word, node = this.root) {
+		for (const char of word) {
+			const child = node.children[char] || new TrieNode()
+
+			node.children[char] = child
+
+			node = child
+		}
+
+		node.word = word
+	}
+
+	/* Time O((ROWS * COLS) * (4 * (3 ^ (WORDS - 1)))) | Space O(N) */
+	searchBoard(board, node = this.root, words = []) {
+		const [rows, cols] = [board.length, board[0].length]
+
+		for (let row = 0; row < rows; row++) {
+			for (let col = 0; col < cols; col++) {
+				this.dfs(board, row, rows, col, cols, node, words)
+			}
+		}
+
+		return words
+	}
+
+	dfs(board, row, rows, col, cols, node, words) {
+		const char = board[row][col]
+		const child = node.children[char] || null
+
+		if (this.canSkip(char, child)) return
+
+		node = child
+		this.checkWord(node, words)
+		this.backTrack(board, row, rows, col, cols, node, words)
+	}
+
+	canSkip(char, child) {
+		const hasSeen = char === '#'
+		const isMissingChild = !child
+
+		return hasSeen || isMissingChild
+	}
+
+	checkWord(node, words) {
+		if (!node.word.length) return
+
+		words.push(node.word)
+		node.word = ''
+	}
+
+	backTrack(board, row, rows, col, cols, node, words) {
+		const char = board[row][col]
+
+		board[row][col] = '#'
+
+		for (const [_row, _col] of this.getNeighbors(row, rows, col, cols)) {
+			this.dfs(board, _row, rows, _col, cols, node, words)
+		}
+
+		board[row][col] = char
+	}
+
+	getNeighbors(row, rows, col, cols) {
+		return [
+			[row - 1, col],
+			[row + 1, col],
+			[row, col - 1],
+			[row, col + 1],
+		].filter(([_row, _col]) => !this.isOutOfBounds(_row, rows, _col, cols))
+	}
+
+	isOutOfBounds(row, rows, col, cols) {
+		const isRowOut = row < 0 || rows <= row
+		const isColOut = col < 0 || cols <= col
+
+		return isRowOut || isColOut
+	}
+}
+```
+
+### Python
+
+```python
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.isWord = False
+        self.refs = 0
+
+    def addWord(self, word):
+        cur = self
+        cur.refs += 1
+        for c in word:
+            if c not in cur.children:
+                cur.children[c] = TrieNode()
+            cur = cur.children[c]
+            cur.refs += 1
+        cur.isWord = True
+
+    def removeWord(self, word):
+        cur = self
+        cur.refs -= 1
+        for c in word:
+            if c in cur.children:
+                cur = cur.children[c]
+                cur.refs -= 1
+
+
+class Solution:
+    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+        root = TrieNode()
+        for w in words:
+            root.addWord(w)
+
+        ROWS, COLS = len(board), len(board[0])
+        res, visit = set(), set()
+
+        def dfs(r, c, node, word):
+            if (
+                r not in range(ROWS)
+                or c not in range(COLS)
+                or board[r][c] not in node.children
+                or node.children[board[r][c]].refs < 1
+                or (r, c) in visit
+            ):
+                return
+
+            visit.add((r, c))
+            node = node.children[board[r][c]]
+            word += board[r][c]
+            if node.isWord:
+                node.isWord = False
+                res.add(word)
+                root.removeWord(word)
+
+            dfs(r + 1, c, node, word)
+            dfs(r - 1, c, node, word)
+            dfs(r, c + 1, node, word)
+            dfs(r, c - 1, node, word)
+            visit.remove((r, c))
+
+        for r in range(ROWS):
+            for c in range(COLS):
+                dfs(r, c, root, "")
+
+        return list(res)
+
+```
+
+### C++
+
+```cpp
+/*
+    Given a board of characters & a list of words, return all words on the board
+
+    Implement trie, for search: iterate thru children until isWord, add to result
+
+    Time: O(m x (4 x 3^(l - 1))) -> m = # of cells, l = max length of words
+    Space: O(n) -> n = total number of letters in dictionary (no overlap in Trie)
+*/
+
+class TrieNode {
+public:
+    TrieNode* children[26];
+    bool isWord;
+
+    TrieNode() {
+        for (int i = 0; i < 26; i++) {
+            children[i] = NULL;
+        }
+        isWord = false;
+    }
+};
+
+class Solution {
+public:
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+        for (int i = 0; i < words.size(); i++) {
+            insert(words[i]);
+        }
+
+        int m = board.size();
+        int n = board[0].size();
+
+        TrieNode* node = root;
+        vector<string> result;
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                search(board, i, j, m, n, node, "", result);
+            }
+        }
+
+        return result;
+    }
+private:
+    TrieNode* root = new TrieNode();
+
+    void insert(string word) {
+        TrieNode* node = root;
+        int curr = 0;
+
+        for (int i = 0; i < word.size(); i++) {
+            curr = word[i] - 'a';
+            if (node->children[curr] == NULL) {
+                node->children[curr] = new TrieNode();
+            }
+            node = node->children[curr];
+        }
+
+        node->isWord = true;
+    }
+
+    void search(vector<vector<char>>& board, int i, int j, int m, int n, TrieNode* node, string word, vector<string>& result) {
+        if (i < 0 || i >= m || j < 0 || j >= n || board[i][j] == '#') {
+            return;
+        }
+
+        char c = board[i][j];
+
+        node = node->children[c - 'a'];
+        if (node == NULL) {
+            return;
+        }
+
+        word += board[i][j];
+        if (node->isWord) {
+            result.push_back(word);
+            node->isWord = false;
+        }
+
+        board[i][j] = '#';
+
+        search(board, i - 1, j, m, n, node, word, result);
+        search(board, i + 1, j, m, n, node, word, result);
+        search(board, i, j - 1, m, n, node, word, result);
+        search(board, i, j + 1, m, n, node, word, result);
+
+        board[i][j] = c;
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+
+    private static int COLS;
+    private static int ROWS;
+    private Trie currentTrie;
+
+    public List<String> findWords(char[][] board, String[] words) {
+        Trie root = new Trie();
+        for (String word : words) {
+            root.addWord(word);
+        }
+
+        ROWS = board.length;
+        COLS = board[0].length;
+        HashSet<String> res = new HashSet<>();
+        HashSet<String> visit = new HashSet<>();
+
+        for (int r = 0; r < ROWS; r++) {
+            for (int c = 0; c < COLS; c++) {
+                dfs(r, c, root, "", res, visit, board, root);
+            }
+        }
+        return new ArrayList<>(res);
+    }
+
+    public void dfs(
+        int r,
+        int c,
+        Trie node,
+        String word,
+        HashSet<String> res,
+        HashSet<String> visit,
+        char[][] board,
+        Trie root
+    ) {
+        if (
+            r < 0 ||
+            c < 0 ||
+            r == ROWS ||
+            c == COLS ||
+            !node.children.containsKey(board[r][c]) ||
+            node.children.get(board[r][c]).refs < 1 ||
+            visit.contains(r + "-" + c)
+        ) {
+            return;
+        }
+
+        visit.add(r + "-" + c);
+        node = node.children.get(board[r][c]);
+        word += board[r][c];
+        if (node.isWord) {
+            node.isWord = false;
+            res.add(word);
+            root.removeWord(word);
+        }
+
+        dfs(r + 1, c, node, word, res, visit, board, root);
+        dfs(r - 1, c, node, word, res, visit, board, root);
+        dfs(r, c + 1, node, word, res, visit, board, root);
+        dfs(r, c - 1, node, word, res, visit, board, root);
+        visit.remove(r + "-" + c);
+    }
+
+    class Trie {
+
+        public HashMap<Character, Trie> children;
+        public boolean isWord;
+        public int refs = 0;
+
+        public Trie() {
+            children = new HashMap<>();
+        }
+
+        public void addWord(String word) {
+            currentTrie = this;
+            currentTrie.refs += 1;
+            for (int i = 0; i < word.length(); i++) {
+                char currentCharacter = word.charAt(i);
+                if (!currentTrie.children.containsKey(currentCharacter)) {
+                    currentTrie.children.put(currentCharacter, new Trie());
+                }
+                currentTrie = currentTrie.children.get(currentCharacter);
+                currentTrie.refs += 1;
+            }
+            currentTrie.isWord = true;
+        }
+
+        public void removeWord(String word) {
+            currentTrie = this;
+            currentTrie.refs -= 1;
+            for (int i = 0; i < word.length(); i++) {
+                char currentCharacter = word.charAt(i);
+                if (currentTrie.children.containsKey(currentCharacter)) {
+                    currentTrie = currentTrie.children.get(currentCharacter);
+                    currentTrie.refs -= 1;
+                }
+            }
+        }
+    }
+}
+
+```

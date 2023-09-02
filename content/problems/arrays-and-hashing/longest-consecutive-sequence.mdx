@@ -1,0 +1,230 @@
+---
+title: Longest Consecutive Sequence
+category: Arrays And Hashing
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/longest-consecutive-sequence)
+
+</Callout>
+
+## Description
+
+Given an unsorted array of integers <code>nums</code>, return _the length of the longest consecutive elements sequence._
+
+You must write an algorithm that runs in <code>O(n)</code> time.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [100,4,200,1,3,2] Output: 4 Explanation: The longest consecutive
+	elements sequence is <code>[1, 2, 3, 4]</code>. Therefore its length is 4.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [0,3,7,2,5,8,4,6,0,1] Output: 9
+</pre>
+
+Constraints:
+
+    - <code>0 &lt;= nums.length &lt;= 10<sup>5</sup></code>
+    - <code>-10<sup>9</sup> &lt;= nums[i] &lt;= 10<sup>9</sup></code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * Brute Force
+ * Greedy - Max Score
+ * Time O (N^3) | Space O(1)
+ * https://leetcode.com/problems/longest-consecutive-sequence/
+ * @param {number[]} nums
+ * @return {number}
+ */
+var longestConsecutive = (nums, maxScore = 0) => {
+	for (const num of nums) {
+		/* Time O(N) */
+		let [currNum, score] = [num, 1]
+
+		while (isStreak(nums, currNum + 1)) {
+			/* Time O(N * N) */
+			currNum++
+			score++
+		}
+
+		maxScore = Math.max(maxScore, score)
+	}
+
+	return maxScore
+}
+
+const isStreak = (nums, num) => {
+	for (let i = 0; i < nums.length; i++) {
+		/* Time O(N) */
+		const isEqual = nums[i] === num
+		if (isEqual) return true
+	}
+
+	return false
+}
+
+/**
+ * Sort - HeapSort Space O(1) | QuickSort Space O(log(K))
+ * Greedy - Max Score
+ * Time O (N * log(N)) | Space O(1)
+ * https://leetcode.com/problems/longest-consecutive-sequence/
+ * @param {number[]} nums
+ * @return {number}
+ */
+var longestConsecutive = (nums) => {
+	if (!nums.length) return 0
+
+	nums.sort((a, b) => a - b) /* Time O(N * log(N)) | Space O(1 || log(N)) */
+
+	return search(nums) /* Time O(N) */
+}
+
+const search = (nums) => {
+	let [maxScore, score] = [1, 1]
+
+	for (let i = 1; i < nums.length; i++) {
+		/* Time O(N) */
+		const isPrevDuplicate = nums[i - 1] === nums[i]
+		if (isPrevDuplicate) continue
+
+		const isStreak = nums[i] === nums[i - 1] + 1
+		if (isStreak) {
+			score++
+			continue
+		}
+
+		maxScore = Math.max(maxScore, score)
+		score = 1
+	}
+
+	return Math.max(maxScore, score)
+}
+
+/**
+ * Hash Set - Intelligent Sequence
+ * Greedy - Max Score
+ * Time O (N) | Space O(N)
+ * https://leetcode.com/problems/longest-consecutive-sequence/
+ * @param {number[]} nums
+ * @return {number}
+ */
+var longestConsecutive = (nums, maxScore = 0) => {
+	const numSet = new Set(nums) /* Time O(N) | Space O(N) */
+
+	for (const num of [...numSet]) {
+		/* Time O(N) */
+		const prevNum = num - 1
+
+		if (numSet.has(prevNum)) continue /* Time O(N) */
+
+		let [currNum, score] = [num, 1]
+
+		const isStreak = () => numSet.has(currNum + 1)
+		while (isStreak()) {
+			/* Time O(N) */
+			currNum++
+			score++
+		}
+
+		maxScore = Math.max(maxScore, score)
+	}
+
+	return maxScore
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def longestConsecutive(self, nums: List[int]) -> int:
+        numSet = set(nums)
+        longest = 0
+
+        for n in numSet:
+            # check if its the start of a sequence
+            if (n - 1) not in numSet:
+                length = 1
+                while (n + length) in numSet:
+                    length += 1
+                longest = max(length, longest)
+        return longest
+
+```
+
+### C++
+
+```cpp
+/*
+    Given unsorted array, return length of longest consecutive sequence
+    Ex. nums = [100,4,200,1,3,2] -> 4, longest is [1,2,3,4]
+
+    Store in hash set, only check for longer seq if it's the beginning
+
+    Time: O(n)
+    Space: O(n)
+*/
+
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        unordered_set<int>s(nums.begin(), nums.end());
+        int longest = 0;
+        for(auto &n: s){
+            //if this is the start of the sequence
+            if(!s.count(n - 1)){
+                int length = 1;
+                while(s.count(n + length))
+                    ++length;
+                longest = max(longest, length);
+            }
+
+        }
+        return longest;
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+    public int longestConsecutive(int[] nums) {
+       if (nums.length == 0) return 0;
+       HashSet<Integer> hs = new HashSet<>();
+       for(int num:nums) hs.add(num);
+       int longest =1;
+       for(int num: nums ){
+           //check if the num is the start of a sequence by checking if left exists
+           if(!hs.contains(num-1)){ // start of a sequence
+                int count =1;
+                while(hs.contains(num + 1)){ // check if hs contains next no.
+                    num++;
+                    count++;
+                }
+                longest = Math.max(longest, count);
+
+           }
+           if(longest > nums.length/2) break;
+
+       }
+       return longest;
+    }
+}
+
+```

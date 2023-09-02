@@ -1,0 +1,175 @@
+---
+title: Number of 1 Bits
+category: Bit Manipulation
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/number-of-1-bits)
+
+</Callout>
+
+## Description
+
+Write a function that takes the binary representation of an unsigned integer and returns the number of &#39;1&#39; bits it has (also known as the <a href="http://en.wikipedia.org/wiki/Hamming_weight" target="_blank">Hamming weight</a>).
+
+Note:
+
+    - Note that in some languages, such as Java, there is no unsigned integer type. In this case, the input will be given as a signed integer type. It should not affect your implementation, as the integer&#39;s internal binary representation is the same, whether it is signed or unsigned.
+    - In Java, the compiler represents the signed integers using <a href="https://en.wikipedia.org/wiki/Two%27s_complement" target="_blank">2&#39;s complement notation</a>. Therefore, in Example 3, the input represents the signed integer. <code>-3</code>.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: n = 00000000000000000000000000001011 Output: 3 Explanation: The input
+	binary string 00000000000000000000000000001011 has a total of three
+	&#39;1&#39; bits.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: n = 00000000000000000000000010000000 Output: 1 Explanation: The input
+	binary string 00000000000000000000000010000000 has a total of one &#39;1&#39;
+	bit.
+</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: n = 11111111111111111111111111111101 Output: 31 Explanation: The input
+	binary string 11111111111111111111111111111101 has a total of thirty one
+	&#39;1&#39; bits.
+</pre>
+
+Constraints:
+
+    - The input must be a binary string of length <code>32</code>.
+
+Follow up: If this function is called many times, how would you optimize it?
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/number-of-1-bits/
+ * Time O(1) | Space (1)
+ * @param {number} n - a positive integer
+ * @return {number}
+ */
+var hammingWeight = function (n) {
+	let [bits, mask] = [0, 1]
+
+	for (let i = 0; i < 32; i++) {
+		const hasBit = (n & mask) !== 0
+		if (hasBit) bits++
+
+		mask <<= 1
+	}
+
+	return bits
+}
+
+/**
+ * https://leetcode.com/problems/number-of-1-bits/
+ * Time O(1) | Space (1)
+ * @param {number} n - a positive integer
+ * @return {number}
+ */
+var hammingWeight = function (n, sum = 0) {
+	while (n !== 0) {
+		n &= n - 1
+		sum++
+	}
+
+	return sum
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def hammingWeight(self, n: int) -> int:
+        res = 0
+        while n:
+            n &= n - 1
+            res += 1
+        return res
+
+```
+
+### C++
+
+```cpp
+/*
+    Return number of '1' bits in an int
+    Ex. n = 00001011 -> 3
+
+    Simply count bit-by-bit & shift it off
+
+    Time: O(1)
+    Space: O(1)
+*/
+
+class Solution {
+public:
+    int hammingWeight(uint32_t n) {
+        int bit = 0;
+        int result = 0;
+
+        while (n != 0) {
+            bit = n & 1;
+            if (bit == 1) {
+                result++;
+            }
+            n = n >> 1;
+        }
+
+        return result;
+    }
+};
+
+```
+
+### Java
+
+```java
+//standard way
+public class Solution {
+
+    // you need to treat n as an unsigned value
+    public int hammingWeight(int n) {
+        int count = 0;
+        int mask = 1;
+        for (int i = 0; i < 32; i++) {
+            if ((n & mask) != 0) {
+                count++;
+            }
+            n >>= 1;
+        }
+        return count;
+    }
+}
+
+//smart way
+public class Solution {
+
+    // you need to treat n as an unsigned value
+    public int hammingWeight(int n) {
+        int count = 0;
+        while (n != 0) {
+            n = n & (n - 1);
+            count++;
+        }
+        return count;
+    }
+}
+
+```

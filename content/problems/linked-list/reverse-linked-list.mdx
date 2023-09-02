@@ -1,0 +1,210 @@
+---
+title: Reverse Linked List
+category: Linked List
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/reverse-linked-list)
+
+</Callout>
+
+## Description
+
+Given the <code>head</code> of a singly linked list, reverse the list, and return _the reversed list_.
+
+Example 1:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/02/19/rev1ex1.jpg"
+	width={542}
+	height={222}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: head = [1,2,3,4,5] Output: [5,4,3,2,1]
+</pre>
+
+Example 2:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2021/02/19/rev1ex2.jpg"
+	width={182}
+	height={222}
+/>
+<br />
+<pre className="overflow-x-auto">Input: head = [1,2] Output: [2,1]</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">Input: head = [] Output: []</pre>
+
+Constraints:
+
+    - The number of nodes in the list is the range <code>[0, 5000]</code>.
+    - <code>-5000 &lt;= Node.val &lt;= 5000</code>
+
+Follow up: A linked list can be reversed either iteratively or recursively. Could you implement both?
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/reverse-linked-list/
+ * Time O(N) | Space O(N)
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var reverseList = function (head) {
+	const isBaseCase = !head?.next
+	if (isBaseCase) return head
+
+	return dfs(head) /* Time O(N) | Space O(N) */
+}
+
+const dfs = (curr) => {
+	const prev = reverseList(curr.next) /* Time O(N) | Space O(N) */
+
+	curr.next.next = curr
+	curr.next = null
+
+	return prev
+}
+
+/**
+ * https://leetcode.com/problems/reverse-linked-list/
+ * Time O(N) | Space O(1)
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var reverseList = function (head) {
+	let [prev, curr, next] = [null, head, null]
+
+	while (curr) {
+		/* Time O(N) */
+		next = curr.next
+		curr.next = prev
+
+		prev = curr
+		curr = next
+	}
+
+	return prev
+}
+```
+
+### Python
+
+```python
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+
+class Solution:
+    def reverseList(self, head: ListNode) -> ListNode:
+        prev, curr = None, head
+
+        while curr:
+            temp = curr.next
+            curr.next = prev
+            prev = curr
+            curr = temp
+        return prev
+
+```
+
+### C++
+
+```cpp
+/*
+    Given the head of a singly linked list, reverse list & return
+    Ex. head = [1,2,3,4,5] -> [5,4,3,2,1], head = [1,2] -> [2,1]
+
+    Maintain prev, curr pointers, iterate thru & reverse
+
+    Time: O(n)
+    Space: O(1)
+*/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution
+{
+public:
+    ListNode *reverseList(ListNode *head)
+    {
+        if (head == NULL || head->next == NULL)
+            return head;
+
+        ListNode *prev = NULL;
+        ListNode *curr = head;
+
+        while (curr != NULL)
+        {
+            ListNode *temp = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = temp;
+        }
+        return prev;
+    }
+};
+
+```
+
+### Java
+
+```java
+//Use three pointers and so you can change the next of the mid to the first one without losing the track of the original left.
+//Iterative version
+class Solution {
+
+    public ListNode reverseList(ListNode head) {
+        ListNode current = head;
+        ListNode previous = null;
+        ListNode nextCurrent = null;
+
+        while (current != null) {
+            nextCurrent = current.next;
+            current.next = previous;
+            previous = current;
+            current = nextCurrent;
+        }
+
+        return previous;
+    }
+}
+
+//Recursive version
+class Solution {
+
+    public ListNode reverseList(ListNode head) {
+        return rev(head, null);
+    }
+
+    public ListNode rev(ListNode node, ListNode pre) {
+        if (node == null) return pre;
+        ListNode temp = node.next;
+        node.next = pre;
+        return rev(temp, node);
+    }
+}
+
+```

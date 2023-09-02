@@ -1,0 +1,234 @@
+---
+title: 3Sum
+category: Two Pointers
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/3sum)
+
+</Callout>
+
+## Description
+
+Given an integer array nums, return all the triplets <code>[nums[i], nums[j], nums[k]]</code> such that <code>i != j</code>, <code>i != k</code>, and <code>j != k</code>, and <code>nums[i] + nums[j] + nums[k] == 0</code>.
+
+Notice that the solution set must not contain duplicate triplets.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [-1,0,1,2,-1,-4] Output: [[-1,-1,2],[-1,0,1]] Explanation:
+	nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0. nums[1] + nums[2] + nums[4] =
+	0 + 1 + (-1) = 0. nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0. The
+	distinct triplets are [-1,0,1] and [-1,-1,2]. Notice that the order of the
+	output and the order of the triplets does not matter.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [0,1,1] Output: [] Explanation: The only possible triplet does
+	not sum up to 0.
+</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [0,0,0] Output: [[0,0,0]] Explanation: The only possible triplet
+	sums up to 0.
+</pre>
+
+Constraints:
+
+    - <code>3 &lt;= nums.length &lt;= 3000</code>
+    - <code>-10<sup>5</sup> &lt;= nums[i] &lt;= 10<sup>5</sup></code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var threeSum = function (nums) {
+	const res = []
+	nums.sort((a, b) => a - b)
+
+	for (let i = 0; i < nums.length; i++) {
+		const a = nums[i]
+		if (a > 0) break
+		if (i > 0 && a === nums[i - 1]) continue
+
+		let l = i + 1
+		let r = nums.length - 1
+		while (l < r) {
+			const threeSum = a + nums[l] + nums[r]
+			if (threeSum > 0) {
+				r--
+			} else if (threeSum < 0) {
+				l++
+			} else {
+				res.push([a, nums[l], nums[r]])
+				l++
+				r--
+				while (nums[l] === nums[l - 1] && l < r) {
+					l++
+				}
+			}
+		}
+	}
+	return res
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        nums.sort()
+
+        for i, a in enumerate(nums):
+            # Skip positive integers
+            if a > 0:
+                break
+
+            if i > 0 and a == nums[i - 1]:
+                continue
+
+            l, r = i + 1, len(nums) - 1
+            while l < r:
+                threeSum = a + nums[l] + nums[r]
+                if threeSum > 0:
+                    r -= 1
+                elif threeSum < 0:
+                    l += 1
+                else:
+                    res.append([a, nums[l], nums[r]])
+                    l += 1
+                    r -= 1
+                    while nums[l] == nums[l - 1] and l < r:
+                        l += 1
+
+        return res
+
+```
+
+### C++
+
+```cpp
+/*
+    Given int array, return all unique triplets that sum to 0
+    Ex. nums = [-1,0,1,2,-1,-4] -> [[-1,-1,2],[-1,0,1]]
+
+    Sort, for each i, have j & k go outside in, check for 0 sums
+
+    Time: O(n^2)
+    Space: O(n)
+*/
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> result;
+
+        int n = nums.size();
+        if (n < 3) {
+            return result;
+        }
+
+        sort(nums.begin(), nums.end());
+
+        for (int i = 0; i < n - 2; i++) {
+            if (nums[i] > 0) {
+                break;
+            }
+            if (i > 0 && nums[i - 1] == nums[i]) {
+                continue;
+            }
+
+            int j = i + 1;
+            int k = n - 1;
+
+            while (j < k) {
+                int sum = nums[i] + nums[j] + nums[k];
+
+                if (sum < 0) {
+                    j++;
+                } else if (sum > 0) {
+                    k--;
+                } else {
+                    result.push_back({nums[i], nums[j], nums[k]});
+
+                    while (j < k && nums[j] == nums[j + 1]) {
+                        j++;
+                    }
+                    j++;
+
+                    while (j < k && nums[k - 1] == nums[k]) {
+                        k--;
+                    }
+                    k--;
+                }
+            }
+        }
+
+        return result;
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+
+    //2 pointers
+    public List<List<Integer>> threeSum(int[] nums) {
+        Arrays.sort(nums);
+        LinkedList<List<Integer>> sol = new LinkedList<List<Integer>>();
+
+        for (int i = 0; i < nums.length - 2; i++) {
+            if (i == 0 || (i > 0 && nums[i] != nums[i - 1])) {
+                int target = 0 - nums[i];
+                int left = i + 1;
+                int right = nums.length - 1;
+
+                while (left < right) {
+                    if (nums[left] + nums[right] == target) {
+                        ArrayList<Integer> miniSol = new ArrayList<>();
+                        miniSol.add(nums[i]);
+                        miniSol.add(nums[left]);
+                        miniSol.add(nums[right]);
+                        sol.add(miniSol);
+                        while (left < right && nums[left] == nums[left + 1]) {
+                            left++;
+                        }
+                        while (left < right && nums[right] == nums[right - 1]) {
+                            right--;
+                        }
+                        left++;
+                        right--;
+                    } else if (nums[left] + nums[right] > target) {
+                        right--;
+                    } else {
+                        left++;
+                    }
+                }
+            }
+        }
+
+        return sol;
+    }
+}
+
+```

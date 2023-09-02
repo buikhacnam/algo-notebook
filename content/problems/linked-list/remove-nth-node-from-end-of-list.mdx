@@ -1,0 +1,255 @@
+---
+title: Remove Nth Node From End of List
+category: Linked List
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/remove-nth-node-from-end-of-list)
+
+</Callout>
+
+## Description
+
+Given the <code>head</code> of a linked list, remove the <code>n<sup>th</sup></code> node from the end of the list and return its head.
+
+Example 1:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/10/03/remove_ex1.jpg"
+	width={542}
+	height={222}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: head = [1,2,3,4,5], n = 2 Output: [1,2,3,5]
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">Input: head = [1], n = 1 Output: []</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">Input: head = [1,2], n = 1 Output: [1]</pre>
+
+Constraints:
+
+    - The number of nodes in the list is <code>sz</code>.
+    - <code>1 &lt;= sz &lt;= 30</code>
+    - <code>0 &lt;= Node.val &lt;= 100</code>
+    - <code>1 &lt;= n &lt;= sz</code>
+
+Follow up: Could you do this in one pass?
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/remove-nth-node-from-end-of-list/
+ * Time O(N) | Space O(N)
+ * @param {ListNode} head
+ * @param {number} n
+ * @return {ListNode}
+ */
+var removeNthFromEnd = function (head, n) {
+	const sentinel = new ListNode()
+
+	sentinel.next = head
+
+	const fast = moveFast(sentinel, n) /* Time O(N) */
+	const slow = moveSlow(sentinel, fast) /* Time O(N) */
+
+	slow.next = slow.next.next || null
+
+	return sentinel.next
+}
+
+const moveFast = (fast, n) => {
+	for (let i = 1; i <= n + 1; i++) {
+		/* Time O(N) */
+		fast = fast.next
+	}
+
+	return fast
+}
+
+const moveSlow = (slow, fast) => {
+	while (fast) {
+		/* Time O(N) */
+		slow = slow.next
+		fast = fast.next
+	}
+
+	return slow
+}
+
+/**
+ * https://leetcode.com/problems/remove-nth-node-from-end-of-list/
+ * Time O(N) | Space O(1)
+ * @param {ListNode} head
+ * @param {number} n
+ * @return {ListNode}
+ */
+var removeNthFromEnd = function (head, n) {
+	const length = getNthFromEnd(head, n) /* Time O(N) */
+
+	const isHead = length < 0
+	if (isHead) return head.next
+
+	const curr = moveNode(head, length) /* Time O(N) */
+
+	curr.next = curr.next.next
+
+	return head
+}
+
+const getNthFromEnd = (curr, n, length = 0) => {
+	while (curr) {
+		/* Time O(N) */
+		curr = curr.next
+		length++
+	}
+
+	return length - n - 1
+}
+
+const moveNode = (curr, length) => {
+	while (length) {
+		/* Time O(N) */
+		curr = curr.next
+		length--
+	}
+
+	return curr
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
+        dummy = ListNode(0, head)
+        left = dummy
+        right = head
+
+        while n > 0:
+            right = right.next
+            n -= 1
+
+        while right:
+            left = left.next
+            right = right.next
+
+        # delete
+        left.next = left.next.next
+        return dummy.next
+
+```
+
+### C++
+
+```cpp
+/*
+    Given head of a linked list, remove nth node from end of list
+    Ex. head = [1,2,3,4,5], n = 2 -> [1,2,3,5]
+
+    Create 2 pointers "n" apart, iterate until end, will be at nth
+
+    Time: O(n)
+    Space: O(1)
+*/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        if (head->next == NULL) {
+            return NULL;
+        }
+
+        ListNode* slow = head;
+        ListNode* fast = head;
+
+        while (n > 0) {
+            fast = fast->next;
+            n--;
+        }
+
+        if (fast == NULL) {
+            return head->next;
+        }
+
+        while (fast->next != NULL) {
+            slow = slow->next;
+            fast = fast->next;
+        }
+
+        slow->next = slow->next->next;
+        return head;
+    }
+};
+
+```
+
+### Java
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+
+//         Using Two Pointer Approach:
+//         Take a pointer second and put it at (n+1)th position from the beginning
+//         Take pointer first and move it forward till second reaches Last Node and second.next points to null
+//         At that point we would have reached the (n-1)th node from the end using the pointer first
+//         Unlink or Skip that node
+
+class Solution {
+
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        if (head == null || head.next == null) return null;
+
+        ListNode temp = new ListNode(0);
+        temp.next = head;
+        ListNode first = temp, second = temp;
+
+        while (n > 0) {
+            second = second.next;
+            n--;
+        }
+
+        while (second.next != null) {
+            second = second.next;
+            first = first.next;
+        }
+
+        first.next = first.next.next;
+        return temp.next;
+    }
+}
+
+```

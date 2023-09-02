@@ -1,0 +1,390 @@
+---
+title: Set Matrix Zeroes
+category: Math And Geometry
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/set-matrix-zeroes)
+
+</Callout>
+
+## Description
+
+Given an <code>m x n</code> integer matrix <code>matrix</code>, if an element is <code>0</code>, set its entire row and column to <code>0</code>&#39;s.
+
+You must do it <a href="https://en.wikipedia.org/wiki/In-place_algorithm" target="_blank">in place</a>.
+
+Example 1:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/08/17/mat1.jpg"
+	width={450}
+	height={169}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: matrix = [[1,1,1],[1,0,1],[1,1,1]] Output: [[1,0,1],[0,0,0],[1,0,1]]
+</pre>
+
+Example 2:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/08/17/mat2.jpg"
+	width={450}
+	height={137}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]] Output:
+	[[0,0,0,0],[0,4,5,0],[0,3,1,0]]
+</pre>
+
+Constraints:
+
+    - <code>m == matrix.length</code>
+    - <code>n == matrix[0].length</code>
+    - <code>1 &lt;= m, n &lt;= 200</code>
+    - <code>-2<sup>31</sup> &lt;= matrix[i][j] &lt;= 2<sup>31</sup> - 1</code>
+
+Follow up:
+
+    - A straightforward solution using <code>O(mn)</code> space is probably a bad idea.
+    - A simple improvement uses <code>O(m + n)</code> space, but still not the best solution.
+    - Could you devise a constant space solution?
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * Additional Space
+ * Array - Tabulation
+ * Time O(ROWS * COLS) | Space (ROWS + COLS)
+ * https://leetcode.com/problems/set-matrix-zeroes/
+ * @param {number[][]} matrix
+ * @return {void} Do not return anything, modify matrix in-place instead.
+ */
+var setZeroes = function (matrix) {
+	const [rows, cols] = [matrix.length, matrix[0].length]
+	const [_row, _col] = initTabu(rows, cols) /* Space (ROWS + COLS) */
+
+	fillPlacements(
+		matrix,
+		_row,
+		_col,
+	) /* Time O(ROWS * COLS) | Space (ROWS + COLS) */
+	setZero(matrix, _row, _col) /* Time O(ROWS * COLS) */
+}
+
+const initTabu = (rows, cols) => [
+	new Array(rows).fill(1) /* Space O(ROWS) */,
+	new Array(cols).fill(1) /* Space O(COLS) */,
+]
+
+const fillPlacements = (matrix, _row, _col) => {
+	const [rows, cols] = [matrix.length, matrix[0].length]
+
+	for (let row = 0; row < rows; row++) {
+		/* Time (ROWS) */
+		for (let col = 0; col < cols; col++) {
+			/* Time (COLS) */
+			const isZero = matrix[row][col] === 0
+			if (!isZero) continue
+
+			_row[row] = 0 /* Space (ROWS) */
+			_col[col] = 0 /* Space (COLS) */
+		}
+	}
+}
+
+const setZero = (matrix, _row, _col) => {
+	const [rows, cols] = [matrix.length, matrix[0].length]
+
+	for (let row = 0; row < rows; row++) {
+		/* Time (ROWS) */
+		for (let col = 0; col < cols; col++) {
+			/* Time (COLS) */
+			const canSet = _row[row] === 0 || _col[col] === 0
+			if (!canSet) continue
+
+			matrix[row][col] = 0
+		}
+	}
+}
+
+/**
+ * Constant Space
+ * Time O(ROWS * COLS) | Space (1)
+ * https://leetcode.com/problems/set-matrix-zeroes/
+ * @param {number[][]} matrix
+ * @return {void} Do not return anything, modify matrix in-place instead.
+ */
+var setZeroes = (matrix) => {
+	const _isColZero = isColZero(matrix) /* Time O(ROWS) */
+
+	setEdgesToZero(matrix) /* Time O(ROWS) */
+	setCellsToZero(matrix, _isColZero) /* Time O(ROWS * COLS) */
+}
+
+var isColZero = (matrix) =>
+	matrix.some((row) => row[0] === 0) /* Time O(ROWS) */
+
+var setEdgesToZero = (matrix) => {
+	const [rows, cols] = [matrix.length, matrix[0].length]
+
+	for (let row = 0; row < rows; row++) {
+		/* Time (ROWS) */
+		for (let col = 1; col < cols; col++) {
+			/* Time (COLS) */
+			const canSet = matrix[row][col] === 0
+			if (!canSet) continue
+
+			matrix[row][0] = 0
+			matrix[0][col] = 0
+		}
+	}
+}
+
+var setCellsToZero = (matrix, isColZero) => {
+	const [rows, cols] = [matrix.length, matrix[0].length]
+
+	for (let row = rows - 1; 0 <= row; row--) {
+		/* Time (ROWS) */
+		for (let col = cols - 1; 1 <= col; col--) {
+			/* Time (COLS) */
+			if (!isZero(matrix, row, col)) continue
+
+			matrix[row][col] = 0
+		}
+
+		if (isColZero) matrix[row][0] = 0
+	}
+}
+
+var isZero = (matrix, row, col) => {
+	const [rowLeftEdge, colTopEdge] = [matrix[row][0], matrix[0][col]]
+
+	return rowLeftEdge === 0 || colTopEdge === 0
+}
+
+/**
+ * Constant Space
+ * Time O(ROWS * COLS) | Space (1)
+ * https://leetcode.com/problems/set-matrix-zeroes/
+ * @param {number[][]} matrix
+ * @return {void} Do not return anything, modify matrix in-place instead.
+ */
+var setZeroes = (matrix) => {
+	const isColZero = setEdgesToZero(matrix) /* Time O(ROWS * COLS) */
+
+	setCellsToZero(matrix) /* Time O(ROWS * COLS) */
+
+	const isZero = matrix[0][0] === 0
+	if (isZero) setFirstRowZero(matrix) /* Time O(COLS) */
+
+	if (isColZero) setFirstColZero(matrix) /* Time O(ROWS) */
+}
+
+var setCellsToZero = (matrix) => {
+	const [rows, cols] = [matrix.length, matrix[0].length]
+
+	for (let row = 1; row < rows; row++) {
+		/* Time O(ROWS) */
+		for (let col = 1; col < cols; col++) {
+			/* Time O(COLS) */
+			const isZero = matrix[row][0] === 0 || matrix[0][col] == 0
+			if (!isZero) continue
+
+			matrix[row][col] = 0
+		}
+	}
+}
+
+var setEdgesToZero = (matrix, isColZero = false) => {
+	const [rows, cols] = [matrix.length, matrix[0].length]
+
+	for (let row = 0; row < rows; row++) {
+		/* Time O(ROWS) */
+		if (matrix[row][0] === 0) isColZero = true
+
+		for (let col = 1; col < cols; col++) {
+			/* Time O(COLS) */
+			const canSet = matrix[row][col] === 0
+			if (!canSet) continue
+
+			matrix[0][col] = 0
+			matrix[row][0] = 0
+		}
+	}
+
+	return isColZero
+}
+
+var setFirstRowZero = (matrix, cols = matrix[0].length) => {
+	for (let col = 0; col < cols; col++) {
+		/* Time O(COLS) */
+		matrix[0][col] = 0
+	}
+}
+
+var setFirstColZero = (matrix, rows = matrix.length) => {
+	for (let row = 0; row < rows; row++) {
+		/* Time O(ROWS) */
+		matrix[row][0] = 0
+	}
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def setZeroes(self, matrix: List[List[int]]) -> None:
+        # O(1)
+        ROWS, COLS = len(matrix), len(matrix[0])
+        rowZero = False
+
+        # determine which rows/cols need to be zero
+        for r in range(ROWS):
+            for c in range(COLS):
+                if matrix[r][c] == 0:
+                    matrix[0][c] = 0
+                    if r > 0:
+                        matrix[r][0] = 0
+                    else:
+                        rowZero = True
+
+        for r in range(1, ROWS):
+            for c in range(1, COLS):
+                if matrix[0][c] == 0 or matrix[r][0] == 0:
+                    matrix[r][c] = 0
+
+        if matrix[0][0] == 0:
+            for r in range(ROWS):
+                matrix[r][0] = 0
+
+        if rowZero:
+            for c in range(COLS):
+                matrix[0][c] = 0
+
+```
+
+### C++
+
+```cpp
+/*
+    Given matrix, if element 0, set entire row/col to 0
+
+    Use 1st row/col as flag to determine if entire row/col 0
+
+    Time: O(mn)
+    Space: O(1)
+*/
+
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        int m = matrix.size();
+        int n = matrix[0].size();
+
+        bool isFirstRowZero = false;
+        bool isFirstColZero = false;
+
+        for (int i = 0; i < m; i++) {
+            if (matrix[i][0] == 0) {
+                isFirstColZero = true;
+                break;
+            }
+        }
+
+        for (int j = 0; j < n; j++) {
+            if (matrix[0][j] == 0) {
+                isFirstRowZero = true;
+                break;
+            }
+        }
+
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if (matrix[i][j] == 0) {
+                    matrix[i][0] = 0;
+                    matrix[0][j] = 0;
+                }
+            }
+        }
+
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if (matrix[i][0] == 0 || matrix[0][j] == 0) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+
+        if (isFirstColZero) {
+            for (int i = 0; i < m; i++) {
+                matrix[i][0] = 0;
+            }
+        }
+
+        if (isFirstRowZero) {
+            for (int j = 0; j < n; j++) {
+                matrix[0][j] = 0;
+            }
+        }
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+
+    public void setZeroes(int[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        boolean firstRow = false;
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (matrix[i][j] == 0) {
+                    matrix[0][j] = 0;
+                    if (i == 0) {
+                        firstRow = true;
+                    } else {
+                        matrix[i][0] = 0;
+                    }
+                }
+            }
+        }
+
+        for (int i = 1; i < rows; i++) {
+            for (int j = 1; j < cols; j++) {
+                if (matrix[0][j] == 0 || matrix[i][0] == 0) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+
+        if (matrix[0][0] == 0) {
+            for (int i = 0; i < rows; i++) {
+                matrix[i][0] = 0;
+            }
+        }
+
+        if (firstRow) {
+            for (int j = 0; j < cols; j++) {
+                matrix[0][j] = 0;
+            }
+        }
+    }
+}
+
+```

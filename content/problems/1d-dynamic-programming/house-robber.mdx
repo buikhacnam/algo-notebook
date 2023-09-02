@@ -1,0 +1,254 @@
+---
+title: House Robber
+category: 1d Dynamic Programming
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/house-robber)
+
+</Callout>
+
+## Description
+
+You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have security systems connected and <b>it will automatically contact the police if two adjacent houses were broken into on the same night</b>.
+
+Given an integer array <code>nums</code> representing the amount of money of each house, return _the maximum amount of money you can rob tonight <b>without alerting the police</b>_.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [1,2,3,1] Output: 4 Explanation: Rob house 1 (money = 1) and
+	then rob house 3 (money = 3). Total amount you can rob = 1 + 3 = 4.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [2,7,9,3,1] Output: 12 Explanation: Rob house 1 (money = 2), rob
+	house 3 (money = 9) and rob house 5 (money = 1). Total amount you can rob = 2
+	+ 9 + 1 = 12.
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= nums.length &lt;= 100</code>
+    - <code>0 &lt;= nums[i] &lt;= 400</code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * Brute Force - DFS
+ * Time O(2^N) | Space O(N)
+ * https://leetcode.com/problems/house-robber/
+ * @param {number[]} nums
+ * @return {number}
+ */
+var rob = (nums, i = 0) => {
+	const isBaseCase = nums <= i
+	if (isBaseCase) return 0
+
+	const [next, nextNext] = [i + 1, i + 2]
+	const right = nums[i]
+	const mid = rob(nums, next) /* Time O(2^N) | Space O(N) */
+	const left = rob(nums, nextNext) /* Time O(2^N) | Space O(N) */
+	const house = left + right
+
+	return Math.max(house, mid)
+}
+
+/**
+ * DP - Top Down
+ * Array - Memoization
+ * Time O(N) | Space O(N)
+ * https://leetcode.com/problems/house-robber/
+ * @param {number[]} nums
+ * @return {number}
+ */
+var rob = (nums, i = 0, memo = initMemo(nums)) => {
+	const isBaseCase = nums.length <= i
+	if (isBaseCase) return 0
+
+	const hasSeen = 0 <= memo[i]
+	if (hasSeen) return memo[i]
+
+	const [next, nextNext] = [i + 1, i + 2]
+	const right = nums[i]
+	const mid = rob(nums, next, memo) /* Time O(N) | Space O(N) */
+	const left = rob(nums, nextNext, memo) /* Time O(N) | Space O(N) */
+	const house = left + right
+
+	memo[i] = Math.max(mid, house) /*           | Space O(N) */
+
+	return memo[i]
+}
+
+const initMemo = (nums) => Array(nums.length + 1).fill(-1)
+
+/**
+ * DP - Bottom Up
+ * Array - Tabulation
+ * Time O(N) | Space O(N)
+ * https://leetcode.com/problems/house-robber/
+ * @param {number[]} nums
+ * @return {number}
+ */
+var rob = (nums) => {
+	if (!nums.length) return 0
+
+	const tabu = initTabu(nums)
+
+	for (let i = 1; i < nums.length; i++) {
+		/* Time O(N) */
+		const right = nums[i]
+		const mid = tabu[i]
+		const left = tabu[i - 1]
+		const house = left + right
+
+		tabu[i + 1] = Math.max(mid, house) /* Space O(N) */
+	}
+
+	return tabu[nums.length]
+}
+
+const initTabu = (nums) => {
+	const tabu = Array(nums.length + 1).fill(0)
+
+	tabu[1] = nums[0]
+
+	return tabu
+}
+
+/**
+ * DP - Bottom Up
+ * Time O(N) | Space O(1)
+ * https://leetcode.com/problems/house-robber/
+ * @param {number[]} nums
+ * @return {number}
+ */
+var rob = (nums) => {
+	if (!nums.length) return 0
+
+	let [left, mid] = [0, 0]
+
+	for (const right of nums) {
+		/* Time O(N) */
+		const temp = mid
+		const house = left + right
+
+		mid = Math.max(mid, house)
+		left = temp
+	}
+
+	return mid
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def rob(self, nums: List[int]) -> int:
+        rob1, rob2 = 0, 0
+
+        for n in nums:
+            temp = max(n + rob1, rob2)
+            rob1 = rob2
+            rob2 = temp
+        return rob2
+
+```
+
+### C++
+
+```cpp
+/*
+    Given int array, return max amount can rob (can't rob adjacent houses)
+    Ex. nums = [1,2,3,1] -> 4, rob house 1 then house 3: 1 + 3 = 4
+
+    Recursion w/ memoization -> DP, rob either 2 away + here, or 1 away
+    Recurrence relation: robFrom[i] = max(robFrom[i-2] + nums[i], robFrom[i-1])
+
+    Time: O(n)
+    Space: O(1)
+*/
+
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        int prev = 0;
+        int curr = 0;
+        int next = 0;
+
+        for (int i = 0; i < nums.size(); i++) {
+            next = max(prev + nums[i], curr);
+            prev = curr;
+            curr = next;
+        }
+
+        return curr;
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+
+    public int rob(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        if (nums.length == 1) return nums[0];
+        if (nums.length == 2) return Math.max(nums[0], nums[1]);
+
+        int robWithOutIncludingLastHouse = 0, robWithIncludingLastHouse = 0;
+
+        for (int n : nums) {
+            int temp = Math.max(
+                robWithOutIncludingLastHouse + n,
+                robWithIncludingLastHouse
+            );
+            robWithOutIncludingLastHouse = robWithIncludingLastHouse;
+            robWithIncludingLastHouse = temp;
+        }
+        return robWithIncludingLastHouse;
+    }
+
+    public int robDP(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        if (nums.length == 1) return nums[0];
+        if (nums.length == 2) return Math.max(nums[0], nums[1]);
+
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        dp[1] = Math.max(nums[0], nums[1]);
+
+        for (int i = 2; i < nums.length; i++) {
+            dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i]);
+        }
+        return dp[nums.length - 1];
+    }
+
+    // DP with O(1) space
+    public int robDP2(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+
+        int dp0 = 0, dp1 = 0, curr;
+
+        for (int i = 0; i < nums.length; i++) {
+            curr = Math.max(dp0 + nums[i], dp1);
+            dp0 = dp1;
+            dp1 = curr;
+        }
+        return Math.max(dp0, dp1);
+    }
+}
+
+```

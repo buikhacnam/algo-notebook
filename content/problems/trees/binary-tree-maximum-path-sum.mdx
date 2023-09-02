@@ -1,0 +1,201 @@
+---
+title: Binary Tree Maximum Path Sum
+category: Trees
+difficulty: Hard
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/binary-tree-maximum-path-sum)
+
+</Callout>
+
+## Description
+
+A path in a binary tree is a sequence of nodes where each pair of adjacent nodes in the sequence has an edge connecting them. A node can only appear in the sequence at most once. Note that the path does not need to pass through the root.
+
+The path sum of a path is the sum of the node&#39;s values in the path.
+
+Given the <code>root</code> of a binary tree, return _the maximum path sum of any non-empty path_.
+
+Example 1:
+
+<Image
+	alt=""
+	src="https://assets.leetcode.com/uploads/2020/10/13/exx1.jpg"
+	width={322}
+	height={182}
+/>
+<br />
+<pre className="overflow-x-auto">
+	Input: root = [1,2,3] Output: 6 Explanation: The optimal path is 2 -&gt; 1
+	-&gt; 3 with a path sum of 2 + 1 + 3 = 6.
+</pre>
+
+Example 2:
+
+<Image alt="" src="https://assets.leetcode.com/uploads/2020/10/13/exx2.jpg" />
+<br />
+<pre className="overflow-x-auto">
+	Input: root = [-10,9,20,null,null,15,7] Output: 42 Explanation: The optimal
+	path is 15 -&gt; 20 -&gt; 7 with a path sum of 15 + 20 + 7 = 42.
+</pre>
+
+Constraints:
+
+    - The number of nodes in the tree is in the range <code>[1, 3 * 10<sup>4</sup>]</code>.
+    - <code>-1000 &lt;= Node.val &lt;= 1000</code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/binary-tree-maximum-path-sum/
+ * Time O(N) | Space O(H)
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var maxPathSum = function (root, maxValue = [-Infinity]) {
+	pathSum(root, maxValue)
+
+	return maxValue[0]
+}
+
+const pathSum = (root, maxValue) => {
+	const isBaseCase = root === null
+	if (isBaseCase) return 0
+
+	return dfs(root, maxValue)
+}
+
+const dfs = (node, maxValue) => {
+	const left = Math.max(0, pathSum(node.left, maxValue))
+	const right = Math.max(0, pathSum(node.right, maxValue))
+	const sum = left + right + node.val
+
+	maxValue[0] = Math.max(maxValue[0], sum)
+
+	return Math.max(left, right) + node.val
+}
+```
+
+### Python
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def maxPathSum(self, root: TreeNode) -> int:
+        res = [root.val]
+
+        # return max path sum without split
+        def dfs(root):
+            if not root:
+                return 0
+
+            leftMax = dfs(root.left)
+            rightMax = dfs(root.right)
+            leftMax = max(leftMax, 0)
+            rightMax = max(rightMax, 0)
+
+            # compute max path sum WITH split
+            res[0] = max(res[0], root.val + leftMax + rightMax)
+            return root.val + max(leftMax, rightMax)
+
+        dfs(root)
+        return res[0]
+
+```
+
+### C++
+
+```cpp
+/*
+    Given root of binary tree, return max path sum (seq of adj node values added together)
+
+    Path can only have <= 1 split point, assume curPath has it, so return can't split again
+
+    Time: O(n)
+    Space: O(n)
+*/
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int maxPathSum(TreeNode* root) {
+        int maxPath = INT_MIN;
+        dfs(root, maxPath);
+        return maxPath;
+    }
+private:
+    int dfs(TreeNode* root, int& maxPath) {
+        if (root == NULL) {
+            return 0;
+        }
+
+        int left = max(dfs(root->left, maxPath), 0);
+        int right = max(dfs(root->right, maxPath), 0);
+
+        int curPath = root->val + left + right;
+        maxPath = max(maxPath, curPath);
+
+        return root->val + max(left, right);
+    }
+};
+
+```
+
+### Java
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+
+    public int maxPathSum(TreeNode root) {
+        int[] res = { Integer.MIN_VALUE };
+        maxPathSum(root, res);
+        return res[0];
+    }
+
+    public int maxPathSum(TreeNode root, int[] res) {
+        if (root == null) return 0;
+
+        int left = Math.max(0, maxPathSum(root.left, res));
+        int right = Math.max(0, maxPathSum(root.right, res));
+        res[0] = Math.max(res[0], root.val + left + right);
+
+        return root.val + Math.max(left, right);
+    }
+}
+
+```

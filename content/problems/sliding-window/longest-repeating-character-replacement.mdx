@@ -1,0 +1,214 @@
+---
+title: Longest Repeating Character Replacement
+category: Sliding Window
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/longest-repeating-character-replacement)
+
+</Callout>
+
+## Description
+
+You are given a string <code>s</code> and an integer <code>k</code>. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most <code>k</code> times.
+
+Return _the length of the longest substring containing the same letter you can get after performing the above operations_.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;ABAB&quot;, k = 2 Output: 4 Explanation: Replace the two
+	&#39;A&#39;s with two &#39;B&#39;s or vice versa.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;AABABBA&quot;, k = 1 Output: 4 Explanation: Replace the one
+	&#39;A&#39; in the middle with &#39;B&#39; and form &quot;AABBBBA&quot;. The
+	substring &quot;BBBB&quot; has the longest repeating letters, which is 4.
+	There may exists other ways to achive this answer too.
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= s.length &lt;= 10<sup>5</sup></code>
+    - <code>s</code> consists of only uppercase English letters.
+    - <code>0 &lt;= k &lt;= s.length</code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/longest-repeating-character-replacement/
+ * Time O(((N + 26) * N) * (M - N)) | Space O(1)
+ * @param {string} s
+ * @param {number} k
+ * @return {number}
+ */
+var characterReplacement = function (s, k) {
+	let res = 0
+	let count = new Map()
+	let l = 0
+
+	for (let r = 0; r < s.length; r++) {
+		let len = r - l + 1
+		count.set(s[r], 1 + (count.get(s[r]) || 0))
+
+		if (len - Math.max(...count.values()) > k) {
+			count.set(s[l], count.get(s[l]) - 1)
+			l++
+		}
+		len = r - l + 1
+		res = Math.max(res, len)
+	}
+
+	return res
+}
+
+/**
+ * https://leetcode.com/problems/longest-repeating-character-replacement/
+ * Time O(((N + 26) * N) * (M - N)) | Space O(1)
+ * @param {string} s
+ * @param {number} k
+ * @return {number}
+ */
+var characterReplacement = function (s, k) {
+	let [left, right, longest, max] = new Array(4).fill(0)
+	const frequencyMap = new Array(26).fill(0)
+
+	while (right < s.length) {
+		const count = addRightFrequency(s, right, frequencyMap)
+
+		longest = Math.max(longest, count)
+
+		let window = right - left + 1
+		const canSlide = k < window - longest
+		if (canSlide) {
+			subtractLeftFrequency(s, left, frequencyMap)
+			left++
+		}
+
+		window = right - left + 1
+		max = Math.max(max, window)
+
+		right++
+	}
+
+	return max
+}
+
+const addRightFrequency = (s, right, map) => {
+	const char = s[right]
+	const index = getCode(char)
+
+	map[index]++
+
+	return map[index]
+}
+
+const subtractLeftFrequency = (s, left, map) => {
+	const char = s[left]
+	const index = getCode(char)
+
+	map[index]--
+
+	return map[index]
+}
+
+const getCode = (char) => char.charCodeAt(0) - 'A'.charCodeAt(0)
+```
+
+### Python
+
+```python
+class Solution:
+    def characterReplacement(self, s: str, k: int) -> int:
+        count = {}
+
+        l = 0
+        maxf = 0
+        for r in range(len(s)):
+            count[s[r]] = 1 + count.get(s[r], 0)
+            maxf = max(maxf, count[s[r]])
+
+            if (r - l + 1) - maxf > k:
+                count[s[l]] -= 1
+                l += 1
+
+        return (r - l + 1)
+
+```
+
+### C++
+
+```cpp
+/*
+    Given a string s & an int k, can change any char k times:
+    Return length of longest substring containing same letter
+    Ex. s = "ABAB" k = 2 -> 4 "AAAA", s = "AABABBA" k = 1 -> 4
+
+    Sliding window, expand if can change char, contract if > k
+
+    Time: O(n)
+    Space: O(26)
+*/
+
+class Solution {
+public:
+    int characterReplacement(string s, int k) {
+        vector<int> count(26);
+        int maxCount = 0;
+
+        int i = 0;
+        int j = 0;
+
+        int result = 0;
+
+        while (j < s.size()) {
+            count[s[j] - 'A']++;
+            maxCount = max(maxCount, count[s[j] - 'A']);
+            if (j - i + 1 - maxCount > k) {
+                count[s[i] - 'A']--;
+                i++;
+            }
+            result = max(result, j - i + 1);
+            j++;
+        }
+
+        return result;
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+
+    public int characterReplacement(String s, int k) {
+        int[] arr = new int[26];
+        int ans = 0;
+        int max = 0;
+        int i = 0;
+        for (int j = 0; j < s.length(); j++) {
+            arr[s.charAt(j) - 'A']++;
+            max = Math.max(max, arr[s.charAt(j) - 'A']);
+            if (j - i + 1 - max > k) {
+                arr[s.charAt(i) - 'A']--;
+                i++;
+            }
+            ans = Math.max(ans, j - i + 1);
+        }
+        return ans;
+    }
+}
+
+```

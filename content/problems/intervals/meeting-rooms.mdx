@@ -1,0 +1,166 @@
+---
+title: Meeting Rooms
+category: Intervals
+difficulty: Easy
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/meeting-rooms)
+
+</Callout>
+
+## Description
+
+This problem is on Premium plan or is not available
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/meeting-rooms/
+ * Time O(N * logN) | Space O(1)
+ * @param {number[][]} intervals
+ * @return {boolean}
+ */
+var canAttendMeetings = function (intervals) {
+	intervals.sort(([aStart, aEnd], [bStart, bEnd]) =>
+		aStart !== bStart ? aStart - bStart : aEnd - bEnd,
+	)
+
+	return canAttend(intervals)
+}
+
+const canAttend = (intervals) => {
+	let prev = intervals.shift()
+
+	for (const curr of intervals) {
+		const [prevStart, prevEnd] = prev
+		const [currStart, currEnd] = curr
+
+		const hasOverlap = currStart < prevEnd
+		if (hasOverlap) return false
+
+		prev = curr
+	}
+
+	return true
+}
+```
+
+### Python
+
+```python
+class Solution:
+    """
+    @param intervals: an array of meeting time intervals
+    @return: if a person could attend all meetings
+    """
+
+    def canAttendMeetings(self, intervals):
+        intervals.sort(key=lambda i: i[0])
+
+        for i in range(1, len(intervals)):
+            i1 = intervals[i - 1]
+            i2 = intervals[i]
+
+            if i1[1] > i2[0]:
+                return False
+        return True
+
+```
+
+### C++
+
+```cpp
+/*
+    Given array of time intervals, determine if can attend all meetings
+    Ex. intervals = [[0,30],[5,10],[15,20]] -> false
+
+    Sort by start time, check adj meetings, if overlap return false
+
+    Time: O(n log n)
+    Space: O(1)
+*/
+
+class Solution {
+public:
+    bool canAttendMeetings(vector<vector<int>>& intervals) {
+        if (intervals.empty()) {
+            return true;
+        }
+
+        sort(intervals.begin(), intervals.end());
+        for (int i = 0; i < intervals.size() - 1; i++) {
+            if (intervals[i][1] > intervals[i + 1][0]) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
+```
+
+### Java
+
+```java
+/**
+ * Definition of Interval:
+ * public class Interval {
+ *     int start, end;
+ *     Interval(int start, int end) {
+ *         this.start = start;
+ *         this.end = end;
+ *     }
+ * }
+ */
+
+public class Solution {
+
+    /**
+     * @param intervals: an array of meeting time intervals
+     * @return: if a person could attend all meetings
+     */
+    public boolean canAttendMeetings(List<Interval> intervals) {
+        int length = intervals.size();
+        if (intervals.size() == 0 || length == 1) return true;
+        // Write your code here
+
+        int[] start = new int[length];
+        int[] end = new int[length];
+        for (int i = 0; i < length; i++) {
+            start[i] = intervals.get(i).start;
+            end[i] = intervals.get(i).end;
+        }
+
+        Arrays.sort(start);
+        Arrays.sort(end);
+
+        int j = 0;
+        while (j + 1 < length) {
+            if (end[j] > start[j + 1]) return false;
+            j++;
+        }
+
+        return true;
+    }
+}
+
+public class Solution {
+
+    public boolean canAttendMeetings(List<Interval> intervals) {
+        Collections.sort(intervals, (a, b) -> a.start - b.start);
+
+        for (int i = 0; i + 1 < intervals.size(); i++) {
+            if (intervals.get(i).end > intervals.get(i + 1).start) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+```

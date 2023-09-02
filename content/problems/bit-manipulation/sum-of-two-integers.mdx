@@ -1,0 +1,115 @@
+---
+title: Sum of Two Integers
+category: Bit Manipulation
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/sum-of-two-integers)
+
+</Callout>
+
+## Description
+
+Given two integers <code>a</code> and <code>b</code>, return _the sum of the two integers without using the operators_ <code>+</code> _and_ <code>-</code>.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">Input: a = 1, b = 2 Output: 3</pre>Example 2:
+<br />
+<pre className="overflow-x-auto">Input: a = 2, b = 3 Output: 5</pre>
+Constraints:
+
+    - <code>-1000 &lt;= a, b &lt;= 1000</code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/sum-of-two-integers/
+ * Time O(1) | Space O(1)
+ * @param {number} a
+ * @param {number} b
+ * @return {number}
+ */
+var getSum = function (a, b) {
+	while (b !== 0) {
+		const [xor, carry] = [a ^ b, (a & b) << 1]
+
+		a = xor
+		b = carry
+	}
+
+	return a
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def getSum(self, a: int, b: int) -> int:
+        def add(a, b):
+            if not a or not b:
+                return a or b
+            return add(a ^ b, (a & b) << 1)
+
+        if a * b < 0:  # assume a < 0, b > 0
+            if a > 0:
+                return self.getSum(b, a)
+            if add(~a, 1) == b:  # -a == b
+                return 0
+            if add(~a, 1) < b:  # -a < b
+                return add(~add(add(~a, 1), add(~b, 1)), 1)  # -add(-a, -b)
+
+        return add(a, b)  # a*b >= 0 or (-a) > b > 0
+
+```
+
+### C++
+
+```cpp
+/*
+    Given 2 ints, return sum w/o using +/-
+    Ex. a = 1 b = 2 -> 3, a = 2 b = 3 -> 5
+
+    XOR for addition, AND for carry bit
+
+    Time: O(n)
+    Space: O(1)
+*/
+
+class Solution {
+public:
+    int getSum(int a, int b) {
+        while (b != 0) {
+            int carry = a & b;
+            a = a ^ b;
+            b = (unsigned)carry << 1;
+        }
+        return a;
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+
+    public int getSum(int a, int b) {
+        while (b != 0) {
+            int tmp = (a & b) << 1;
+            a = (a ^ b);
+            b = tmp;
+        }
+        return a;
+    }
+}
+
+```

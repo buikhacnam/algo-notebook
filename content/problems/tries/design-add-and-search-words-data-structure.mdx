@@ -1,0 +1,319 @@
+---
+title: Design Add and Search Words Data Structure
+category: Tries
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/design-add-and-search-words-data-structure)
+
+</Callout>
+
+## Description
+
+Design a data structure that supports adding new words and finding if a string matches any previously added string.
+
+Implement the <code>WordDictionary</code> class:
+
+    - <code>WordDictionary()</code> Initializes the object.
+    - <code>void addWord(word)</code> Adds <code>word</code> to the data structure, it can be matched later.
+    - <code>bool search(word)</code> Returns <code>true</code> if there is any string in the data structure that matches <code>word</code> or <code>false</code> otherwise. <code>word</code> may contain dots <code>&#39;.&#39;</code> where dots can be matched with any letter.
+
+Example:
+
+<br /><pre className="overflow-x-auto">
+Input
+[&quot;WordDictionary&quot;,&quot;addWord&quot;,&quot;addWord&quot;,&quot;addWord&quot;,&quot;search&quot;,&quot;search&quot;,&quot;search&quot;,&quot;search&quot;]
+[[],[&quot;bad&quot;],[&quot;dad&quot;],[&quot;mad&quot;],[&quot;pad&quot;],[&quot;bad&quot;],[&quot;.ad&quot;],[&quot;b..&quot;]]
+Output
+[null,null,null,null,false,true,true,true]
+
+Explanation
+WordDictionary wordDictionary = new WordDictionary();
+wordDictionary.addWord(&quot;bad&quot;);
+wordDictionary.addWord(&quot;dad&quot;);
+wordDictionary.addWord(&quot;mad&quot;);
+wordDictionary.search(&quot;pad&quot;); // return False
+wordDictionary.search(&quot;bad&quot;); // return True
+wordDictionary.search(&quot;.ad&quot;); // return True
+wordDictionary.search(&quot;b..&quot;); // return True
+
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= word.length &lt;= 25</code>
+    - <code>word</code> in <code>addWord</code> consists of lowercase English letters.
+    - <code>word</code> in <code>search</code> consist of <code>&#39;.&#39;</code> or lowercase English letters.
+    - There will be at most <code>2</code> dots in <code>word</code> for <code>search</code> queries.
+    - At most <code>10<sup>4</sup></code> calls will be made to <code>addWord</code> and <code>search</code>.
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * var obj = new WordDictionary()
+ * obj.addWord(word)
+ * var param_2 = obj.search(word)
+ */
+
+class TrieNode {
+	constructor() {
+		this.children = {}
+		this.isWord = false
+	}
+}
+
+class WordDictionary {
+	constructor() {
+		this.root = new TrieNode()
+	}
+
+	/* Time O(N) | Space O(N) */
+	addWord(word, node = this.root) {
+		for (const char of word) {
+			const child = node.children[char] || new TrieNode()
+
+			node.children[char] = child
+
+			node = child
+		}
+
+		node.isWord = true
+	}
+
+	/* Time O(N) | Space O(N) */
+	search(word) {
+		return this.dfs(word, this.root, 0)
+	}
+
+	dfs(word, node, level) {
+		if (!node) return false
+
+		const isWord = level === word.length
+		if (isWord) return node.isWord
+
+		const isWildCard = word[level] === '.'
+		if (isWildCard) return this.hasWildCard(word, node, level)
+
+		return this.dfs(word, node.children[word[level]], level + 1)
+	}
+
+	hasWildCard(word, node, level) {
+		for (const char of Object.keys(node.children)) {
+			const child = node.children[char]
+
+			const hasWord = this.dfs(word, child, level + 1)
+			if (hasWord) return true
+		}
+
+		return false
+	}
+}
+```
+
+### Python
+
+```python
+class TrieNode:
+    def __init__(self):
+        self.children = {}  # a : TrieNode
+        self.word = False
+
+
+class WordDictionary:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def addWord(self, word: str) -> None:
+        cur = self.root
+        for c in word:
+            if c not in cur.children:
+                cur.children[c] = TrieNode()
+            cur = cur.children[c]
+        cur.word = True
+
+    def search(self, word: str) -> bool:
+        def dfs(j, root):
+            cur = root
+
+            for i in range(j, len(word)):
+                c = word[i]
+                if c == ".":
+                    for child in cur.children.values():
+                        if dfs(i + 1, child):
+                            return True
+                    return False
+                else:
+                    if c not in cur.children:
+                        return False
+                    cur = cur.children[c]
+            return cur.word
+
+        return dfs(0, self.root)
+
+```
+
+### C++
+
+```cpp
+/*
+    Design add & search words data structure
+
+    Implement trie, handle wildcards: traverse all children & search substrings
+
+    Time: O(m x 26^n) -> m = # of words, n = length of words
+    Space: O(n)
+*/
+
+class TrieNode {
+public:
+    TrieNode* children[26];
+    bool isWord;
+
+    TrieNode() {
+        for (int i = 0; i < 26; i++) {
+            children[i] = NULL;
+        }
+        isWord = false;
+    }
+};
+
+class WordDictionary {
+public:
+    WordDictionary() {
+        root = new TrieNode();
+    }
+
+    void addWord(string word) {
+        TrieNode* node = root;
+        int curr = 0;
+
+        for (int i = 0; i < word.size(); i++) {
+            curr = word[i] - 'a';
+            if (node->children[curr] == NULL) {
+                node->children[curr] = new TrieNode();
+            }
+            node = node->children[curr];
+        }
+
+        node->isWord = true;
+    }
+
+    bool search(string word) {
+        TrieNode* node = root;
+        return searchInNode(word, 0, node);
+    }
+private:
+    TrieNode* root;
+
+    bool searchInNode(string& word, int i, TrieNode* node) {
+        if (node == NULL) {
+            return false;
+        }
+        if (i == word.size()) {
+            return node->isWord;
+        }
+        if (word[i] != '.') {
+            return searchInNode(word, i + 1, node->children[word[i] - 'a']);
+        }
+        for (int j = 0; j < 26; j++) {
+            if (searchInNode(word, i + 1, node->children[j])) {
+                return true;
+            }
+        }
+        return false;
+    }
+};
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary* obj = new WordDictionary();
+ * obj->addWord(word);
+ * bool param_2 = obj->search(word);
+ */
+
+```
+
+### Java
+
+```java
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary obj = new WordDictionary();
+ * obj.addWord(word);
+ * boolean param_2 = obj.search(word);
+ */
+
+class WordDictionary {
+
+    Node root;
+
+    private class Node {
+
+        char value;
+        boolean isWord;
+        Node[] children;
+
+        public Node(char value) {
+            this.value = value;
+            isWord = false;
+            children = new Node[26];
+        }
+    }
+
+    public WordDictionary() {
+        root = new Node('\0');
+    }
+
+    public void addWord(String word) {
+        Node curr = root;
+
+        for (int i = 0; i < word.length(); i++) {
+            char ch = word.charAt(i);
+
+            if (curr.children[ch - 'a'] == null) {
+                curr.children[ch - 'a'] = new Node(ch);
+            }
+
+            curr = curr.children[ch - 'a'];
+        }
+
+        curr.isWord = true;
+    }
+
+    // TC O(m^2)
+    public boolean search(String word) {
+        return searchHelper(word, root, 0);
+    }
+
+    private boolean searchHelper(String word, Node curr, int index) {
+        for (int i = index; i < word.length(); i++) {
+            char ch = word.charAt(i);
+
+            if (ch == '.') {
+                for (Node temp : curr.children) {
+                    if (temp != null && searchHelper(word, temp, i + 1)) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            if (curr.children[ch - 'a'] == null) {
+                return false;
+            }
+
+            curr = curr.children[ch - 'a'];
+        }
+
+        return curr.isWord;
+    }
+}
+
+```

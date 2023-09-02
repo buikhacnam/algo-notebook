@@ -1,0 +1,344 @@
+---
+title: Word Break
+category: 1d Dynamic Programming
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/word-break)
+
+</Callout>
+
+## Description
+
+Given a string <code>s</code> and a dictionary of strings <code>wordDict</code>, return <code>true</code> if <code>s</code> can be segmented into a space-separated sequence of one or more dictionary words.
+
+Note that the same word in the dictionary may be reused multiple times in the segmentation.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;leetcode&quot;, wordDict =
+	[&quot;leet&quot;,&quot;code&quot;] Output: true Explanation: Return true
+	because &quot;leetcode&quot; can be segmented as &quot;leet code&quot;.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;applepenapple&quot;, wordDict =
+	[&quot;apple&quot;,&quot;pen&quot;] Output: true Explanation: Return true
+	because &quot;applepenapple&quot; can be segmented as &quot;apple pen
+	apple&quot;. Note that you are allowed to reuse a dictionary word.
+</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: s = &quot;catsandog&quot;, wordDict =
+	[&quot;cats&quot;,&quot;dog&quot;,&quot;sand&quot;,&quot;and&quot;,&quot;cat&quot;]
+	Output: false
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= s.length &lt;= 300</code>
+    - <code>1 &lt;= wordDict.length &lt;= 1000</code>
+    - <code>1 &lt;= wordDict[i].length &lt;= 20</code>
+    - <code>s</code> and <code>wordDict[i]</code> consist of only lowercase English letters.
+    - All the strings of <code>wordDict</code> are unique.
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * Brute Force - DFS
+ * Hash Set - Distinct Keys
+ * Time O(2^N) | Space O(N)
+ * https://leetcode.com/problems/word-break/
+ * @param {string} s
+ * @param {string[]} wordDict
+ * @return {boolean}
+ */
+var wordBreak = (s, wordDict) => {
+	const wordSet = new Set(wordDict) /* Time O(N)   | Space O(N) */
+
+	return canBreak(s, wordSet) /* Time O(2^N) | Space O(N) */
+}
+
+var canBreak = (s, wordSet, start = 0) => {
+	const isBaseCase = start === s.length
+	if (isBaseCase) return true
+
+	return dfs(s, wordSet, start) /* Time O(2^N) | Space O(N) */
+}
+
+var dfs = (s, wordSet, start) => {
+	for (let end = start + 1; end <= s.length; end++) {
+		/* Time O(N) */
+		const word = s.slice(start, end) /* Time O(N)   | Space O(N) */
+
+		const _canBreak =
+			wordSet.has(word) &&
+			canBreak(s, wordSet, end) /* Time O(2^N) | Space O(N) */
+		if (_canBreak) return true
+	}
+
+	return false
+}
+
+/**
+ * DP - Top Down
+ * Array - Memoization
+ * Hash Set - Distinct Keys
+ * Time O(N^3) | Space O(N)
+ * https://leetcode.com/problems/word-break/
+ * @param {string} s
+ * @param {string[]} wordDict
+ * @return {boolean}
+ */
+var wordBreak = (s, wordDict) => {
+	const wordSet = new Set(wordDict) /* Time O(N)         | Space O(N) */
+	const memo = new Array(s.length).fill(
+		null,
+	) /*                   | Space O(N) */
+	const start = 0
+
+	return canBreak(s, wordSet, start, memo) /* Time O(N * N * N) | Space O(N) */
+}
+
+var canBreak = (s, wordSet, start, memo) => {
+	const isBaseCase1 = s.length === start
+	if (isBaseCase1) return true
+
+	const hasSeen = memo[start] !== null
+	if (hasSeen) return memo[start]
+
+	return dfs(s, wordSet, start, memo) /* Time O(N * N * N) | Space O(N) */
+}
+
+var dfs = (s, wordSet, start, memo) => {
+	for (let end = start + 1; end <= s.length; end++) {
+		/* Time O(N) */
+		const word = s.slice(start, end) /* Time O(N) | Space O(N) */
+
+		const _canBreak =
+			wordSet.has(word) && canBreak(s, wordSet, end, memo) /* Time O(N * N) */
+		if (_canBreak) {
+			memo[start] = true
+			return true
+		}
+	}
+
+	memo[start] = false
+	return false
+}
+
+/**
+ * DP - Bottom Up
+ * Array - Tabulation
+ * Hash Set - Distinct Keys
+ * Time O(N^3) | Space O(N)
+ * https://leetcode.com/problems/word-break/
+ * @param {string} s
+ * @param {string[]} wordDict
+ * @return {boolean}
+ */
+var wordBreak = (s, wordDict) => {
+	const wordSet = new Set(wordDict) /* Time O(N)         | Space O(N) */
+	const tabu = initTabu(s) /*                   | Space O(N) */
+
+	canBreak(s, wordSet, tabu) /* Time O(N * N * N) | Space O(N) */
+
+	return tabu[s.length]
+}
+
+const initTabu = (s) => {
+	const tabu = new Array(s.length + 1).fill(false) /* Space O(N) */
+
+	tabu[0] = true
+
+	return tabu
+}
+
+var canBreak = (s, wordSet, tabu) => {
+	for (let end = 1; end <= s.length; end++) {
+		/* Time O(N) */
+		checkWord(s, wordSet, end, tabu) /* Time O(N * N) | Space O(N) */
+	}
+}
+
+var checkWord = (s, wordSet, end, tabu) => {
+	for (let start = 0; start < end; start++) {
+		/* Time O(N) */
+		const word = s.slice(start, end) /* Time O(N) | Space O(N) */
+
+		const canBreak = tabu[start] && wordSet.has(word)
+		if (!canBreak) continue
+
+		tabu[end] = true
+
+		return
+	}
+}
+
+/**
+ * Tree Traversal - BFS
+ * Queue - Level Order Space O(WIDTH)
+ * Hash Set - Distinct Keys
+ * Array - Seen
+ * Time O(N^3) | Space O(N)
+ * https://leetcode.com/problems/word-break/
+ * @param {string} s
+ * @param {string[]} wordDict
+ * @return {boolean}
+ */
+var wordBreak = function (s, wordDict) {
+	const wordSet = new Set(wordDict) /* Time O(N)         | Space O(N) */
+	const queue = new Queue([0]) /*                   | Space O(N) */
+	const seen = new Array(s.length).fill(
+		false,
+	) /*                   | Space O(N) */
+
+	return bfs(
+		queue,
+		s,
+		wordSet,
+		seen,
+	) /* Time O(N * N * N) | Space O(N + WIDTH) */
+}
+
+const bfs = (queue, s, wordSet, seen) => {
+	while (!queue.isEmpty()) {
+		for (let level = queue.size() - 1; 0 <= level; level--) {
+			/* Time O(N) */
+			if (canWordBreak(queue, s, wordSet, seen))
+				return true /* Time O(N * N) | Space O(N + WIDTH) */
+		}
+	}
+
+	return false
+}
+
+var canWordBreak = (queue, s, wordSet, seen) => {
+	const start = queue.dequeue()
+
+	const hasSeen = seen[start]
+	if (hasSeen) return false
+
+	if (canBreak(queue, s, start, wordSet))
+		return true /* Time O(N * N) | Space O(N + WIDTH) */
+
+	seen[start] = true /*               | Space O(N) */
+	return false
+}
+
+var canBreak = (queue, s, start, wordSet) => {
+	for (let end = start + 1; end <= s.length; end++) {
+		/* Time O(N) */
+		const word = s.slice(start, end) /* Time O(N) | Space O(N) */
+
+		if (!wordSet.has(word)) continue
+
+		queue.enqueue(end) /*           | Space O(WIDTH) */
+
+		const _canBreak = end === s.length
+		if (_canBreak) return true
+	}
+
+	return false
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+
+        dp = [False] * (len(s) + 1)
+        dp[len(s)] = True
+
+        for i in range(len(s) - 1, -1, -1):
+            for w in wordDict:
+                if (i + len(w)) <= len(s) and s[i : i + len(w)] == w:
+                    dp[i] = dp[i + len(w)]
+                if dp[i]:
+                    break
+
+        return dp[0]
+
+```
+
+### C++
+
+```cpp
+/*
+    Given a string & dictionary, return true if:
+    Can segment string into 1 or more dictionary words
+
+    DP, at each loop, substring, check if in dict, & store
+
+    Time: O(n^3)
+    Space: O(n)
+*/
+
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> words;
+        for (int i = 0; i < wordDict.size(); i++) {
+            words.insert(wordDict[i]);
+        }
+
+        int n = s.size();
+        vector<bool> dp(n + 1);
+        dp[0] = true;
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = i - 1; j >= 0; j--) {
+                if (dp[j]) {
+                    string word = s.substr(j, i - j);
+                    if (words.find(word) != words.end()) {
+                        dp[i] = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return dp[n];
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        boolean[] dp = new boolean[s.length() + 1];
+        dp[s.length()] = true;
+
+        for(int i = s.length()-1; i >= 0; i--){
+            for(String w: wordDict){
+                if((i + w.length()) <= s.length() && s.startsWith(w, i)){
+                    dp[i] = dp[i + w.length()];
+                }
+                if(dp[i]){
+                    break;
+                }
+            }
+        }
+        return dp[0];
+    }
+}
+
+```

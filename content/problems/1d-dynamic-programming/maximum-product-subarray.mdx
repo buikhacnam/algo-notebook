@@ -1,0 +1,176 @@
+---
+title: Maximum Product Subarray
+category: 1d Dynamic Programming
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/maximum-product-subarray)
+
+</Callout>
+
+## Description
+
+Given an integer array <code>nums</code>, find a <span data-keyword="subarray-nonempty">subarray</span> that has the largest product, and return _the product_.
+
+The test cases are generated so that the answer will fit in a 32-bit integer.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [2,3,-2,4] Output: 6 Explanation: [2,3] has the largest product
+	6.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: nums = [-2,0,-1] Output: 0 Explanation: The result cannot be 2, because
+	[-2,-1] is not a subarray.
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= nums.length &lt;= 2 * 10<sup>4</sup></code>
+    - <code>-10 &lt;= nums[i] &lt;= 10</code>
+    - The product of any prefix or suffix of <code>nums</code> is guaranteed to fit in a 32-bit integer.
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * Brute Force - Linear Search
+ * Time O(N^2) | Space O(1)
+ * https://leetcode.com/problems/maximum-product-subarray/
+ * @param {number[]} nums
+ * @return {number}
+ */
+var maxProduct = (nums) => {
+	const isEmpty = nums.length === 0
+	if (isEmpty) return 0
+
+	return linearSearch(nums) /* Time O(N * N) */
+}
+
+const linearSearch = (nums, max = nums[0]) => {
+	for (let index = 0; index < nums.length; index++) {
+		/* Time O(N) */
+		max = getMax(nums, index, max) /* Time O(N) */
+	}
+
+	return max
+}
+
+const getMax = (nums, index, max, product = 1) => {
+	for (let num = index; num < nums.length; num++) {
+		/* Time O(N) */
+		product *= nums[num]
+		max = Math.max(max, product)
+	}
+
+	return max
+}
+
+/**
+ * Greedy - product
+ * Time O(N) | Space O(1)
+ * https://leetcode.com/problems/maximum-product-subarray/
+ * @param {number[]} nums
+ * @return {number}
+ */
+var maxProduct = (nums) => {
+	const isEmpty = nums.length === 0
+	if (isEmpty) return 0
+
+	return greedySearch(nums) /* Time O(N) */
+}
+
+const greedySearch = (nums) => {
+	let min = (max = product = nums[0])
+
+	for (let num = 1; num < nums.length; num++) {
+		/* Time O(N) */
+		const [minProduct, maxProduct] = [min * nums[num], max * nums[num]]
+
+		min = Math.min(maxProduct, minProduct, nums[num])
+		max = Math.max(maxProduct, minProduct, nums[num])
+
+		product = Math.max(product, max)
+	}
+
+	return product
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def maxProduct(self, nums: List[int]) -> int:
+        # O(n)/O(1) : Time/Memory
+        res = nums[0]
+        curMin, curMax = 1, 1
+
+        for n in nums:
+
+            tmp = curMax * n
+            curMax = max(n * curMax, n * curMin, n)
+            curMin = min(tmp, n * curMin, n)
+            res = max(res, curMax)
+        return res
+
+```
+
+### C++
+
+```cpp
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        int res = nums[0];
+        int curMin = 1, curMax = 1;
+
+        for(int i = 0; i < nums.size(); i++)
+        {
+            int n = nums[i];
+
+            int tmp = curMax * n;
+            curMax = max(max(n * curMax, n * curMin), n);
+            curMin = min(min(tmp, n * curMin), n);
+            res = max(res, curMax);
+        }
+
+        return res;
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+
+    public int maxProduct(int[] nums) {
+        if (nums.length == 1) return nums[0];
+
+        int res = nums[0];
+        int max = 1;
+        int min = 1;
+
+        for (int n : nums) {
+            int tmp = max * n;
+            max = Math.max(n, Math.max(tmp, min * n));
+            min = Math.min(n, Math.min(tmp, min * n));
+            res = Math.max(res, max);
+        }
+        return res;
+    }
+}
+
+```

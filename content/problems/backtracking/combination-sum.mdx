@@ -1,0 +1,196 @@
+---
+title: Combination Sum
+category: Backtracking
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/combination-sum)
+
+</Callout>
+
+## Description
+
+Given an array of distinct integers <code>candidates</code> and a target integer <code>target</code>, return _a list of all unique combinations of _<code>candidates</code>_ where the chosen numbers sum to _<code>target</code>_._ You may return the combinations in any order.
+
+The same number may be chosen from <code>candidates</code> an unlimited number of times. Two combinations are unique if the <span data-keyword="frequency-array">frequency</span> of at least one of the chosen numbers is different.
+
+The test cases are generated such that the number of unique combinations that sum up to <code>target</code> is less than <code>150</code> combinations for the given input.
+
+Example 1:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: candidates = [2,3,6,7], target = 7 Output: [[2,2,3],[7]] Explanation: 2
+	and 3 are candidates, and 2 + 2 + 3 = 7. Note that 2 can be used multiple
+	times. 7 is a candidate, and 7 = 7. These are the only two combinations.
+</pre>
+
+Example 2:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: candidates = [2,3,5], target = 8 Output: [[2,2,2,2],[2,3,3],[3,5]]
+</pre>
+
+Example 3:
+
+<br />
+<pre className="overflow-x-auto">
+	Input: candidates = [2], target = 1 Output: []
+</pre>
+
+Constraints:
+
+    - <code>1 &lt;= candidates.length &lt;= 30</code>
+    - <code>2 &lt;= candidates[i] &lt;= 40</code>
+    - All elements of <code>candidates</code> are distinct.
+    - <code>1 &lt;= target &lt;= 40</code>
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * https://leetcode.com/problems/combination-sum/
+ * Time O(N * ((Target/MIN) + 1)) | Space O(N * (Target/Min))
+ * @param {number[]} candidates
+ * @param {number} target
+ * @return {number[][]}
+ */
+var combinationSum = function (
+	candidates,
+	target,
+	index = 0,
+	combination = [],
+	combinations = [],
+) {
+	const isBaseCase = target < 0
+	if (isBaseCase) return combinations
+
+	const isTarget = target === 0
+	if (isTarget) return combinations.push(combination.slice())
+
+	for (let i = index; i < candidates.length; i++) {
+		backTrack(candidates, target, i, combination, combinations)
+	}
+
+	return combinations
+}
+
+const backTrack = (candidates, target, i, combination, combinations) => {
+	combination.push(candidates[i])
+	combinationSum(
+		candidates,
+		target - candidates[i],
+		i,
+		combination,
+		combinations,
+	)
+	combination.pop()
+}
+```
+
+### Python
+
+```python
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        res = []
+
+        def dfs(i, cur, total):
+            if total == target:
+                res.append(cur.copy())
+                return
+            if i >= len(candidates) or total > target:
+                return
+
+            cur.append(candidates[i])
+            dfs(i, cur, total + candidates[i])
+            cur.pop()
+            dfs(i + 1, cur, total)
+
+        dfs(0, [], 0)
+        return res
+
+```
+
+### C++
+
+```cpp
+/*
+    Given distinct int array & a target, return list of all unique combos that sum to target
+    Ex. candidates = [2,3,6,7] target = 7 -> [[2,2,3],[7]]
+
+    Backtracking, generate all combo sums, push/pop + index checking to explore new combos
+
+    Time: O(n^target)
+    Space: O(target)
+*/
+
+class Solution {
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        sort(candidates.begin(), candidates.end());
+
+        vector<int> curr;
+        vector<vector<int>> result;
+
+        dfs(candidates, target, 0, 0, curr, result);
+        return result;
+    }
+private:
+    void dfs(vector<int>& candidates, int target, int sum, int start, vector<int>& curr, vector<vector<int>>& result) {
+        if (sum > target) {
+            return;
+        }
+        if (sum == target) {
+            result.push_back(curr);
+            return;
+        }
+        for (int i = start; i < candidates.size(); i++) {
+            curr.push_back(candidates[i]);
+            dfs(candidates, target, sum + candidates[i], i, curr, result);
+            curr.pop_back();
+        }
+    }
+};
+
+```
+
+### Java
+
+```java
+class Solution {
+
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> ans = new ArrayList<List<Integer>>();
+        List<Integer> cur = new ArrayList();
+        backtrack(candidates, target, ans, cur, 0);
+        return ans;
+    }
+
+    public void backtrack(
+        int[] candidates,
+        int target,
+        List<List<Integer>> ans,
+        List<Integer> cur,
+        int index
+    ) {
+        if (target == 0) {
+            ans.add(new ArrayList(cur));
+        } else if (target < 0 || index >= candidates.length) {
+            return;
+        } else {
+            cur.add(candidates[index]);
+            backtrack(candidates, target - candidates[index], ans, cur, index);
+
+            cur.remove(cur.get(cur.size() - 1));
+            backtrack(candidates, target, ans, cur, index + 1);
+        }
+    }
+}
+
+```

@@ -1,0 +1,264 @@
+---
+title: Encode and Decode Strings
+category: Arrays And Hashing
+difficulty: Medium
+---
+
+<Callout>
+
+[Leetcode Link](https://leetcode.com/problems/encode-and-decode-strings)
+
+</Callout>
+
+## Description
+
+This problem is on Premium plan or is not available
+
+## Solution
+
+### Javascript
+
+```javascript
+/**
+ * String - Delimiter
+ * Time O(N) | Space O(1)
+ * https://leetcode.com/problems/encode-and-decode-strings/
+ * @param {string[]} strs
+ * @return {string}
+ */
+var encode = (strs) => {
+	return strs
+		.map(
+			(str) => `${str.length}#${str}`,
+		) /* Time O(N) | Ignore Auxillary Space O(N) */
+		.join('') /* Time O(N) | Ignore Auxillary Space O(N) */
+}
+
+/**
+ * String - Delimiter
+ * Time O(N * K) | Space O(N)
+ * https://leetcode.com/problems/encode-and-decode-strings/
+ * @param {string} str
+ * @return {string[]}
+ */
+var decode = (str, index = 0, decodedWords = []) => {
+	while (index < str.length) {
+		/* Time O(N) */
+		const { nextIndex, word } = delimitWord(
+			str,
+			index,
+		) /* Time O(K) | Ignore Auxillary Space Space (K) */
+
+		decodedWords.push(word) /*           | Ignore Auxillary Space O(N * K ) */
+		index = nextIndex
+	}
+
+	return decodedWords
+}
+
+const delimitWord = (str, index) => {
+	const delimiter = str.indexOf('#', index) /* Time O(K) */
+	const length = Number(str.slice(index, delimiter)) /* Time O(K) */
+	const [start, end] = [delimiter + 1, delimiter + length + 1]
+	const word = str.slice(
+		start,
+		end,
+	) /* Time O(K) | Ignore Auxillary Space O(K) */
+
+	return {
+		nextIndex: end,
+		word,
+	}
+}
+
+/**
+ * Non-ASCII Delimiter - Ignore Auxiliary Space
+ * Time O(N) | Space O(1)
+ * https://leetcode.com/problems/encode-and-decode-strings/
+ * @param {string[]} strs
+ * @return {string}
+ */
+var encode = (strs, nonASCIICode = String.fromCharCode(257)) => {
+	return strs.join(nonASCIICode) /* Time O(N) | Ignore Auxillary Space O(N) */
+}
+
+/**
+ * Non-ASCII Delimiter - Ignore Auxiliary Space
+ * Time O(N) | Space O(1)
+ * https://leetcode.com/problems/encode-and-decode-strings/
+ * @param {string[]} strs
+ * @return {string}
+ */
+var decode = (strs, nonASCIICode = String.fromCharCode(257)) => {
+	return strs.split(nonASCIICode) /* Time O(N) | Ignore Auxillary Space O(N) */
+}
+
+/**
+ * Chunk Transfer Encoding
+ * Time O(N) | Space O(1)
+ * https://leetcode.com/problems/encode-and-decode-strings/
+ * @param {string[]} strs
+ * @return {string}
+ */
+var encode = (strs, sb = []) => {
+	for (const str of strs) {
+		/* Time O(N) */
+		const code = getCode(str) /* Time O(1) */
+		const encoding = `${code}${str}`
+
+		sb.push(encoding)
+	}
+
+	return sb.join('') /* Time O(N) | Ignore Auxillary Space O(N) */
+}
+
+const getCode = (str) => str.length.toString(2).padStart(8, '0')
+
+/**
+ * Chunk Transfer Encoding
+ * Time O(N) | Space O(1)
+ * https://leetcode.com/problems/encode-and-decode-strings/
+ * @param {string} str
+ * @return {string[]}
+ */
+var decode = (str, output = []) => {
+	for (
+		let left = 0, right = left + 8, length = 0;
+		left < str.length;
+		left = right + length, right = left + 8
+	) {
+		/* Time O(N) */
+		const countString = str.slice(
+			left,
+			right,
+		) /*           | Ignore Auxillary Space O(K) */
+		length = parseInt(countString, 2)
+
+		const decoding = str.slice(
+			right,
+			right + length,
+		) /* Time O(K) | Ignore Auxillary Space O(N * K) */
+		output.push(decoding) /*           | Ignore Auxillary Space O(N * K) */
+	}
+
+	return output
+}
+```
+
+### Python
+
+```python
+class Solution:
+    """
+    @param: strs: a list of strings
+    @return: encodes a list of strings to a single string.
+    """
+
+    def encode(self, strs):
+        res = ""
+        for s in strs:
+            res += str(len(s)) + "#" + s
+        return res
+
+    """
+    @param: s: A string
+    @return: decodes a single string to a list of strings
+    """
+
+    def decode(self, s):
+        res, i = [], 0
+
+        while i < len(s):
+            j = i
+            while s[j] != "#":
+                j += 1
+            length = int(s[i:j])
+            res.append(s[j + 1 : j + 1 + length])
+            i = j + 1 + length
+        return res
+
+```
+
+### C++
+
+```cpp
+/*
+    Design algorithm to encode/decode: list of strings <-> string
+
+    Encode/decode w/ non-ASCII delimiter: {len of str, "#", str}
+
+    Time: O(n)
+    Space: O(1)
+*/
+
+class Codec {
+public:
+
+    // Encodes a list of strings to a single string.
+    string encode(vector<string>& strs) {
+        string result = "";
+
+        for (int i = 0; i < strs.size(); i++) {
+            string str = strs[i];
+            result += to_string(str.size()) + "#" + str;
+        }
+
+        return result;
+    }
+
+    // Decodes a single string to a list of strings.
+    vector<string> decode(string s) {
+        vector<string> result;
+
+        int i = 0;
+        while (i < s.size()) {
+            int j = i;
+            while (s[j] != '#') {
+                j++;
+            }
+            int length = stoi(s.substr(i, j - i));
+            string str = s.substr(j + 1, length);
+            result.push_back(str);
+            i = j + 1 + length;
+        }
+
+        return result;
+    }
+private:
+};
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec;
+// codec.decode(codec.encode(strs));
+
+```
+
+### Java
+
+```java
+public class Solution {
+
+    public String encode(List<String> strs) {
+        StringBuilder encodedString = new StringBuilder();
+        for (String str : strs) {
+            encodedString.append(str.length()).append("#").append(str);
+        }
+        return encodedString.toString();
+    }
+
+    public List<String> decode(String str) {
+        List<String> list = new ArrayList<>();
+        int i = 0;
+        while (i < str.length()) {
+            int j = i;
+            while (str.charAt(j) != '#') j++;
+
+            int length = Integer.valueOf(str.substring(i, j));
+            i = j + 1 + length;
+            list.add(str.substring(j + 1, i));
+        }
+        return list;
+    }
+}
+
+```
