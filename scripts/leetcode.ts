@@ -76,7 +76,7 @@ process.argv.forEach(async function (val, index, arr) {
 		})
 
 		const data = await response.json()
-		const contentFromApi = data.data.question.content
+		let contentFromApi = data.data.question.content
 		const questionFrontendId = data.data.question.questionFrontendId
 		const title = data.data.question.title
 		const difficulty = data.data.question.difficulty
@@ -89,7 +89,7 @@ process.argv.forEach(async function (val, index, arr) {
 			console.log(
 				'Failed to fetch problem from leetcode. Please check the leetcode link',
 			)
-			return
+			contentFromApi = 'This problem is on Premium plan or is not available'
 		}
 		const javascriptUrl = `${neetCodeRepo}javascript/${neetCodePadNumber(
 			questionFrontendId,
@@ -146,7 +146,7 @@ process.argv.forEach(async function (val, index, arr) {
 			.replace(/<strong>/g, '')
 			.replace(/<\/strong>/g, '')
 			.replace(/<strong class="example">/g, '')
-			.replace(/<pre>/g, '<br /><pre>')
+			.replace(/<pre>/g, '<br /><pre className="overflow-x-auto">')
 			// .replace(/<\/pre>/g, '```')
 			.replace(/<p>/g, '')
 			.replace(/<\/p>/g, '')

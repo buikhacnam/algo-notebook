@@ -2,178 +2,38 @@
   "problems": [
     {
       "title": "Arrays and Hashing",
-      "items": [
-        {
-          "title": "Contains Duplicate",
-          "href": "/problems/arrays-and-hashing/contains-duplicate",
-          "mdId": "arrays-and-hashing/contains-duplicate",
-          "level": "Easy"
-        }
-      ]
+      "items": []
     },
     {
       "title": "Two Pointers",
-      "items": [
-        {
-          "title": "Valid Palindrome",
-          "href": "/problems/two-pointers/valid-palindrome",
-          "mdId": "two-pointers/valid-palindrome",
-          "level": "Easy"
-        }
-      ]
+      "items": []
     },
     {
       "title": "Sliding Window",
-      "items": [
-        {
-          "title": "Best Time to Buy and Sell Stock",
-          "href": "/problems/sliding-window/best-time-to-buy-and-sell-stock",
-          "mdId": "sliding-window/best-time-to-buy-and-sell-stock",
-          "level": "Easy"
-        }
-      ]
+      "items": []
     },
     {
       "title": "Stack",
-      "items": [
-        {
-          "title": "Valid Parentheses",
-          "href": "/problems/stack/valid-parentheses",
-          "mdId": "stack/valid-parentheses",
-          "level": "Easy"
-        }
-      ]
+      "items": []
     },
     {
       "title": "Binary Search",
-      "items": [
-        {
-          "title": "Binary Search",
-          "href": "/problems/binary-search/binary-search",
-          "mdId": "binary-search/binary-search",
-          "level": "Easy"
-        }
-      ]
+      "items": []
     },
     {
       "title": "Linked List",
-      "items": [
-        {
-          "title": "Reverse Linked List",
-          "href": "/problems/linked-list/reverse-linked-list",
-          "mdId": "linked-list/reverse-linked-list",
-          "level": "Easy"
-        },
-        {
-          "title": "Merge Two Sorted Lists",
-          "href": "/problems/linked-list/merge-two-sorted-lists",
-          "mdId": "linked-list/merge-two-sorted-lists",
-          "level": "Easy"
-        },
-        {
-          "title": "Reorder List",
-          "href": "/problems/linked-list/reorder-list",
-          "mdId": "linked-list/reorder-list",
-          "level": "Medium"
-        }
-      ]
+      "items": []
     },
     {
       "title": "Trees",
-      "items": [
-        {
-          "title": "Invert Binary Tree",
-          "href": "/problems/trees/invert-binary-tree",
-          "mdId": "trees/invert-binary-tree",
-          "level": "Easy"
-        },
-        {
-          "title": "Maximum Depth of Binary Tree",
-          "href": "/problems/trees/maximum-depth-of-binary-tree",
-          "mdId": "trees/maximum-depth-of-binary-tree",
-          "level": "Easy"
-        },
-        {
-          "title": "Same Tree",
-          "href": "/problems/trees/same-tree",
-          "mdId": "trees/same-tree",
-          "level": "Easy"
-        },
-        {
-          "title": "Subtree of Another Tree",
-          "href": "/problems/trees/subtree-of-another-tree",
-          "mdId": "trees/subtree-of-another-tree",
-          "level": "Easy"
-        },
-        {
-          "title": "Lowest Common Ancestor of a Binary Search Tree",
-          "href": "/problems/trees/lowest-common-ancestor-of-a-binary-search-tree",
-          "mdId": "trees/lowest-common-ancestor-of-a-binary-search-tree",
-          "level": "Medium"
-        },
-        {
-          "title": "Binary Tree Level Order Traversal",
-          "href": "/problems/trees/binary-tree-level-order-traversal",
-          "mdId": "trees/binary-tree-level-order-traversal",
-          "level": "Medium"
-        },
-        {
-          "title": "Validate Binary Search Tree",
-          "href": "/problems/trees/validate-binary-search-tree",
-          "mdId": "trees/validate-binary-search-tree",
-          "level": "Medium"
-        },
-        {
-          "title": "Kth Smallest Element in a BST",
-          "href": "/problems/trees/kth-smallest-element-in-a-bst",
-          "mdId": "trees/kth-smallest-element-in-a-bst",
-          "level": "Medium"
-        },
-        {
-          "title": "Construct Binary Tree from Preorder and Inorder Traversal",
-          "href": "/problems/trees/construct-binary-tree-from-preorder-and-inorder-traversal",
-          "mdId": "trees/construct-binary-tree-from-preorder-and-inorder-traversal",
-          "level": "Medium"
-        },
-        {
-          "title": "Binary Tree Maximum Path Sum",
-          "href": "/problems/trees/binary-tree-maximum-path-sum",
-          "mdId": "trees/binary-tree-maximum-path-sum",
-          "level": "Hard"
-        },
-        {
-          "title": "Serialize and Deserialize Binary Tree",
-          "href": "/problems/trees/serialize-and-deserialize-binary-tree",
-          "mdId": "trees/serialize-and-deserialize-binary-tree",
-          "level": "Hard"
-        }
-      ]
+      "items": []
     },
     {
       "title": "Tries",
-      "items": [
-        {
-          "title": "Implement Trie (Prefix Tree)",
-          "href": "/problems/tries/implement-trie-prefix-tree",
-          "mdId": "tries/implement-trie-prefix-tree",
-          "level": "Medium"
-        },
-        {
-          "title": "Design Add and Search Words Data Structure",
-          "href": "/problems/tries/design-add-and-search-words-data-structure",
-          "mdId": "tries/design-add-and-search-words-data-structure",
-          "level": "Medium"
-        },
-        {
-          "title": "Word Search II",
-          "href": "/problems/tries/word-search-ii",
-          "mdId": "tries/word-search-ii",
-          "level": "Hard"
-        }
-      ]
+      "items": []
     },
     {
-      "title": "Heap and Priority Queue",
+      "title": "Heap And Priority Queue",
       "items": []
     },
     {
@@ -186,14 +46,46 @@
     },
     {
       "title": "Advanced Graphs",
-      "items": []
+      "items": [
+        {
+          "title": "Alien Dictionary",
+          "href": "/problems/advanced-graphs/alien-dictionary",
+          "mdId": "advanced-graphs/alien-dictionary",
+          "level": "Hard"
+        }
+      ]
     },
     {
-      "title": "1-D Dynamic Programming",
-      "items": []
+      "title": "1d Dynamic Programming",
+      "items": [
+        {
+          "title": "Climbing Stairs",
+          "href": "/problems/1d-dynamic-programming/climbing-stairs",
+          "mdId": "1d-dynamic-programming/climbing-stairs",
+          "level": "Easy"
+        },
+        {
+          "title": "House Robber",
+          "href": "/problems/1d-dynamic-programming/house-robber",
+          "mdId": "1d-dynamic-programming/house-robber",
+          "level": "Medium"
+        },
+        {
+          "title": "House Robber II",
+          "href": "/problems/1d-dynamic-programming/house-robber-ii",
+          "mdId": "1d-dynamic-programming/house-robber-ii",
+          "level": "Medium"
+        },
+        {
+          "title": "Longest Palindromic Substring",
+          "href": "/problems/1d-dynamic-programming/longest-palindromic-substring",
+          "mdId": "1d-dynamic-programming/longest-palindromic-substring",
+          "level": "Medium"
+        }
+      ]
     },
     {
-      "title": "2-D Dynamic Programming",
+      "title": "2d Dynamic Programming",
       "items": []
     },
     {
@@ -210,6 +102,10 @@
     },
     {
       "title": "Bit Manipulation",
+      "items": []
+    },
+    {
+      "title": "Javascipt",
       "items": []
     }
   ]
