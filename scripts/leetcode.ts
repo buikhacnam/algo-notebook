@@ -1,7 +1,6 @@
 const path = require('path')
 const fs = require('fs')
 const leetCodeGraphqlUrl = 'https://leetcode.com/graphql'
-
 const leetCodeRequestBody = {
 	query:
 		'\n    query questionContent($titleSlug: String!) {\n  question(titleSlug: $titleSlug) {\n    content\n    questionFrontendId\n    title\n  difficulty\n }\n}\n    ',
@@ -81,6 +80,10 @@ process.argv.forEach(async function (val, index, arr) {
 		const questionFrontendId = data.data.question.questionFrontendId
 		const title = data.data.question.title
 		const difficulty = data.data.question.difficulty
+		const categoryName = folderName
+			.split('-')
+			.map((word: string) => word[0].toUpperCase() + word.slice(1))
+			.join(' ')
 
 		if (!contentFromApi) {
 			console.log(
@@ -139,11 +142,12 @@ process.argv.forEach(async function (val, index, arr) {
 		const description = contentFromApi
 			// .replace(/<code>/g, '`')
 			// .replace(/<\/code>/g, '`')
+			.replace(/<img /g, '<Image ')
 			.replace(/<strong>/g, '')
 			.replace(/<\/strong>/g, '')
 			.replace(/<strong class="example">/g, '')
-			.replace(/<pre>/g, '```mdx')
-			.replace(/<\/pre>/g, '```')
+			.replace(/<pre>/g, '<br /><pre>')
+			// .replace(/<\/pre>/g, '```')
 			.replace(/<p>/g, '')
 			.replace(/<\/p>/g, '')
 			.replace(/<ul>/g, '')
@@ -154,12 +158,17 @@ process.argv.forEach(async function (val, index, arr) {
 			.replace(/<\/em>/g, '*')
 			.replace(/<br>/g, '\n')
 			.replace(/&nbsp;/g, ' ')
+			.replace(/style="/g, '')
+			.replace(/width: /g, 'width={')
+			.replace(/px;"/g, '}')
+			.replace(/px;/g, '}')
+			.replace(/height: /g, 'height={')
 
 		const solutionTemplate = `### Javascript\n\`\`\`javascript\n${javascriptSolution}\n\`\`\`\n### Python\n\`\`\`python\n${pythonSolution}\n\`\`\`\n### C++\n\`\`\`cpp\n${cppSolution}\n\`\`\`\n### Java\n\`\`\`java\n${javaSolution}\n\`\`\`\n`
 
 		const problemTemplate = `---
 title: ${title}
-category: ${folderName}
+category: ${categoryName}
 difficulty: ${difficulty}
 ---
 
@@ -180,6 +189,35 @@ ${solutionTemplate}
 
 		fs.writeFileSync(problemPath, problemTemplate)
 
+		// Read the content from /list.json file and add the problem to the list
+		const listPath = path.join(__dirname, '.', 'list.json')
+		const list = JSON.parse(fs.readFileSync(listPath, 'utf-8'))
+		const category = list.problems.find(
+			(item: any) => item.title === categoryName,
+		)
+		// check if the problem already exists
+		if (category.items.find((item: any) => item.title === title)) {
+			console.log(`Problem ${folderName}/${problemName} already exists`)
+		} else {
+			category.items.push({
+				title: title,
+				href: `/problems/${folderName}/${problemName}`,
+				mdId: `${folderName}/${problemName}`,
+				level: difficulty,
+			})
+
+			fs.writeFileSync(listPath, JSON.stringify(list, null, 2))
+			fs.writeFileSync(
+				path.join(__dirname, '..', 'config', 'problems.ts'),
+				`
+import { ProblemsConfig } from 'types'
+export const problemsConfig: ProblemsConfig  = ${JSON.stringify(
+					list,
+					null,
+					2,
+				)}`,
+			)
+		}
 		console.log(`Problem ${folderName}/${problemName} created`)
 	} catch (error) {
 		console.log(error)

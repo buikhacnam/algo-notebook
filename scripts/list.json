@@ -1,6 +1,4 @@
-
-import { ProblemsConfig } from 'types'
-export const problemsConfig: ProblemsConfig  = {
+{
   "problems": [
     {
       "title": "Arrays and Hashing",
