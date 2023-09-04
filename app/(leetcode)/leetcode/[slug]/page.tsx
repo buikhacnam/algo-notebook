@@ -4,6 +4,27 @@ import { parse, HTMLChild } from 'himalaya'
 import Image from 'next/image'
 import { ProblemLevel } from '@/constants/problem'
 import { CodeBlock } from '@/components/code-block'
+import { YouTubePlayer } from '@/components/youtube'
+
+const searchYouTubeVideos = async (searchQuery: string) => {
+	try {
+		const response = await fetch(
+			`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${searchQuery}&key=${process.env.GOOGLE_API_KEY}&type=video&maxResults=1`,
+		)
+
+		if (!response.ok) {
+			throw new Error(`HTTP error! Status: ${response.status}`)
+		}
+
+		const data = await response.json()
+
+		// Handle the response data here
+		const videos = data.items
+		return videos[0]
+	} catch (error) {
+		console.error('Error fetching YouTube data:', error.message)
+	}
+}
 
 const leetCodeGraphqlUrl = 'https://leetcode.com/graphql'
 
@@ -124,9 +145,15 @@ export default async function ExperimentPage({
 }) {
 	const slug = params.slug
 	const problem = await getProblemDetail(slug)
+
 	if (!problem) {
 		return <div>Problem not found</div>
 	}
+
+	const video = await searchYouTubeVideos(`
+    ${problem.title} leetcode tutorial
+  `)
+
 	const children = mapElements(parse(problem.body))
 	return (
 		<div className="px-8 py-4">
@@ -146,6 +173,8 @@ export default async function ExperimentPage({
 			</h2>
 
 			<ProblemContent>{children}</ProblemContent>
+
+			{video && <YouTubePlayer videoId={video.id.videoId} />}
 
 			<h2 className="mb-4 text-2xl font-semibold tracking-tight">Solutions</h2>
 			{Object.keys(problem.solutuions).map((key) => {
