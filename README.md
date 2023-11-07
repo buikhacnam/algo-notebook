@@ -1,6 +1,6 @@
 ## Algonotebook
 
-A notebook for quick algorithms and data structures revision.
+A notebook for quick algorithms and data structures revision!
 
 Visit: https://algonotebook.vercel.app/dashboard
 
